@@ -1,0 +1,103 @@
+{
+  "components": [
+    {
+      "name": "Button",
+      "tag": "rr-button",
+      "category": "primitives",
+      "description": "Primary interactive button",
+      "attributes": ["variant", "size", "disabled"],
+      "events": ["rr-click"],
+      "slots": ["default"]
+    },
+    {
+      "name": "Input",
+      "tag": "rr-input",
+      "category": "primitives",
+      "description": "Text input with label and helper slots",
+      "attributes": ["label", "placeholder", "value", "type", "disabled"],
+      "events": ["rr-change"],
+      "slots": ["label", "helper"]
+    },
+    {
+      "name": "Password Input",
+      "tag": "rr-password-input",
+      "category": "primitives",
+      "description": "Password field with visibility toggle",
+      "attributes": ["label", "placeholder", "value", "disabled"],
+      "events": ["rr-change"],
+      "slots": ["label", "helper"]
+    },
+    {
+      "name": "Checkbox",
+      "tag": "rr-checkbox",
+      "category": "primitives",
+      "description": "Checkbox control",
+      "attributes": ["checked", "disabled"],
+      "events": ["rr-change"],
+      "slots": ["default"]
+    },
+    {
+      "name": "Select",
+      "tag": "rr-select",
+      "category": "primitives",
+      "description": "Select control",
+      "attributes": ["label", "value", "disabled", "options"],
+      "events": ["rr-change"],
+      "slots": ["label", "helper"]
+    },
+    {
+      "name": "Alert",
+      "tag": "rr-alert",
+      "category": "primitives",
+      "description": "Status message",
+      "attributes": ["variant"],
+      "events": [],
+      "slots": ["default"]
+    },
+    {
+      "name": "Card",
+      "tag": "rr-card",
+      "category": "primitives",
+      "description": "Surface container",
+      "attributes": [],
+      "events": [],
+      "slots": ["header", "default", "actions"]
+    },
+    {
+      "name": "Modal",
+      "tag": "rr-modal",
+      "category": "primitives",
+      "description": "Dialog overlay",
+      "attributes": ["open", "title"],
+      "events": ["rr-close"],
+      "slots": ["default", "actions"]
+    },
+    {
+      "name": "Spinner",
+      "tag": "rr-spinner",
+      "category": "primitives",
+      "description": "Busy/loading indicator",
+      "attributes": ["size"],
+      "events": [],
+      "slots": []
+    },
+    {
+      "name": "Table Header",
+      "tag": "rr-table-header",
+      "category": "composites",
+      "description": "Header label with optional sort arrow and help icon",
+      "attributes": ["label", "arrow", "state", "help-icon"],
+      "events": ["rr-sort"],
+      "slots": []
+    },
+    {
+      "name": "Table Header Cell",
+      "tag": "rr-table-header-cell",
+      "category": "composites",
+      "description": "Configurable table header cell with text, checkbox, and background style",
+      "attributes": ["label", "text", "checkbox", "color", "dot", "arrow", "state"],
+      "events": ["rr-sort"],
+      "slots": []
+    }
+  ]
+}

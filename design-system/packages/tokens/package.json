@@ -1,0 +1,17 @@
+{
+  "name": "@roundrush/tokens",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/tokens.js",
+  "exports": {
+    ".": "./dist/tokens.js",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-tokens.mjs"
+  }
+}

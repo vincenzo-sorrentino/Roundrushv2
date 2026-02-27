@@ -1,0 +1,46 @@
+{
+  "Button": {
+    "tag": "rr-button",
+    "source": "design-system/packages/components/src/primitives/rr-button.js"
+  },
+  "Input": {
+    "tag": "rr-input",
+    "source": "design-system/packages/components/src/primitives/rr-input.js"
+  },
+  "Password Input": {
+    "tag": "rr-password-input",
+    "source": "design-system/packages/components/src/primitives/rr-password-input.js"
+  },
+  "Checkbox": {
+    "tag": "rr-checkbox",
+    "source": "design-system/packages/components/src/primitives/rr-checkbox.js"
+  },
+  "Select": {
+    "tag": "rr-select",
+    "source": "design-system/packages/components/src/primitives/rr-select.js"
+  },
+  "Alert": {
+    "tag": "rr-alert",
+    "source": "design-system/packages/components/src/primitives/rr-alert.js"
+  },
+  "Card": {
+    "tag": "rr-card",
+    "source": "design-system/packages/components/src/primitives/rr-card.js"
+  },
+  "Modal": {
+    "tag": "rr-modal",
+    "source": "design-system/packages/components/src/primitives/rr-modal.js"
+  },
+  "Spinner": {
+    "tag": "rr-spinner",
+    "source": "design-system/packages/components/src/primitives/rr-spinner.js"
+  },
+  "Table Header": {
+    "tag": "rr-table-header",
+    "source": "design-system/packages/components/src/composites/rr-table-header.js"
+  },
+  "Table Header Cell": {
+    "tag": "rr-table-header-cell",
+    "source": "design-system/packages/components/src/composites/rr-table-header-cell.js"
+  }
+}

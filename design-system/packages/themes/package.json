@@ -1,0 +1,15 @@
+{
+  "name": "@roundrush/themes",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    "./light.css": "./dist/theme-light.css",
+    "./dark.css": "./dist/theme-dark.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-tokens.mjs"
+  }
+}

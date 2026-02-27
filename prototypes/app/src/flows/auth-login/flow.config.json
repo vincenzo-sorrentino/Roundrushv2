@@ -1,0 +1,8 @@
+{
+  "spec_id": "auth-login",
+  "route": "/auth/login/default",
+  "entry_screen": "login-form",
+  "status": "approved",
+  "owner": "product",
+  "last_verified_at": "2026-02-27"
+}

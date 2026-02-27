@@ -1,0 +1,17 @@
+{
+  "name": "@roundrush/components",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/scaffold-components.mjs",
+    "test": "node ./tests/components-contract.test.mjs"
+  }
+}
