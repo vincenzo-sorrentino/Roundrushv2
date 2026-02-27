@@ -1,0 +1,22 @@
+name: Prototypes CI
+
+on:
+  pull_request:
+    paths:
+      - "prototypes/**"
+      - "requirements/**"
+      - "tools/**"
+      - ".github/workflows/prototypes-ci.yml"
+
+jobs:
+  prototype-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm run validate:specs
+      - run: npm run test --workspace prototypes/app
+      - run: node tools/ci/changed-flow-detector.mjs

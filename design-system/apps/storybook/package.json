@@ -1,0 +1,21 @@
+{
+  "name": "@roundrush/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@roundrush/components": "0.1.0",
+    "@roundrush/themes": "0.1.0",
+    "@roundrush/tokens": "0.1.0"
+  },
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build",
+    "test:visual": "echo \"Configure visual regression provider (Chromatic or Playwright snapshots)\""
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.0",
+    "@storybook/web-components-vite": "^8.6.0",
+    "storybook": "^8.6.0"
+  }
+}

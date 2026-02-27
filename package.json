@@ -1,0 +1,34 @@
+{
+  "name": "roundrush-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "design-system/packages/*",
+    "design-system/apps/storybook",
+    "prototypes/app"
+  ],
+  "scripts": {
+    "start": "npm run dev:prototype",
+    "dev": "npm run dev:prototype",
+    "predev:prototype": "npm run build:tokens",
+    "dev:prototype": "npm run dev --workspace @roundrush/prototypes-app",
+    "predev:storybook": "npm run build:tokens",
+    "dev:storybook": "npm run dev --workspace @roundrush/storybook",
+    "storybook": "npm run dev:storybook",
+    "prebuild:prototype": "npm run build:tokens",
+    "build:prototype": "npm run build --workspace @roundrush/prototypes-app",
+    "build:storybook": "npm run build --workspace @roundrush/storybook",
+    "build": "npm run build -ws --if-present",
+    "test:prototype": "npm run test --workspace @roundrush/prototypes-app",
+    "test:components": "node design-system/packages/components/tests/components-contract.test.mjs",
+    "test": "npm run test -ws --if-present",
+    "validate:specs": "node tools/validators/validate-spec-links.mjs",
+    "build:tokens": "node design-system/scripts/build-tokens.mjs",
+    "scaffold:components": "node design-system/scripts/scaffold-components.mjs",
+    "sync:figma": "node design-system/scripts/sync-figma-tokens.mjs",
+    "setup": "npm install && npm run build:tokens && npm run scaffold:components"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
