@@ -183,7 +183,7 @@ function mapEffectNode(node) {
   }
 
   if (!isObject(node)) {
-    return node === undefined || node === null ? "" : String(node)
+    return node === undefined || node === null ? "none" : String(node)
   }
 
   const numericShadowKeys = Object.keys(node).filter((key) => /^\d+$/.test(key) && isTokenLeaf(node[key]))
@@ -213,7 +213,7 @@ function mapEffectNode(node) {
   }
 
   if (Object.keys(mapped).length === 0) {
-    return ""
+    return "none"
   }
 
   return mapped
@@ -303,6 +303,88 @@ function buildTypographyAliases(textTokens) {
   }
 }
 
+function toTextStyleBaseName(styleName) {
+  return String(styleName).replace(/(Regular|Medium|Med|Bold|Semi|Semibold)$/i, "")
+}
+
+function resolveTextTokenPath(textTokens, tokenGroup, styleGroup, styleName, expectedValue) {
+  const styleCandidates = [styleName, toTextStyleBaseName(styleName)]
+  for (const candidate of styleCandidates) {
+    if (!candidate) {
+      continue
+    }
+    const candidateValue = getPathValue(textTokens, [tokenGroup, styleGroup, candidate], undefined)
+    if (candidateValue === expectedValue) {
+      return [tokenGroup, styleGroup, candidate]
+    }
+  }
+
+  const groupTokens = getPathValue(textTokens, [tokenGroup, styleGroup], {})
+  for (const [candidate, candidateValue] of Object.entries(groupTokens)) {
+    if (candidateValue === expectedValue) {
+      return [tokenGroup, styleGroup, candidate]
+    }
+  }
+
+  return null
+}
+
+function buildTextStylesFromVariables(textStyles, textTokens, typographyAliases) {
+  const fontWeightPathByValue = new Map([
+    [typographyAliases.fontWeightRegular, "fontWeightRegular"],
+    [typographyAliases.fontWeightMedium, "fontWeightMedium"],
+    [typographyAliases.fontWeightSemibold, "fontWeightSemibold"],
+    [typographyAliases.fontWeightBold, "fontWeightBold"]
+  ])
+
+  const letterSpacingPathByValue = new Map([
+    [getPathValue(textTokens, ["general", "letterSpacingMin"], undefined), ["general", "letterSpacingMin"]],
+    [getPathValue(textTokens, ["general", "letterSpacingMax"], undefined), ["general", "letterSpacingMax"]]
+  ])
+
+  const mapped = {}
+  for (const [styleGroup, styles] of Object.entries(textStyles)) {
+    mapped[styleGroup] = {}
+    for (const [styleName, styleProps] of Object.entries(styles)) {
+      mapped[styleGroup][styleName] = {}
+      for (const [propertyName, propertyValue] of Object.entries(styleProps)) {
+        let nextValue = propertyValue
+
+        if (propertyName === "fontSize") {
+          const tokenPath = resolveTextTokenPath(textTokens, "fontSizes", styleGroup, styleName, propertyValue)
+          if (tokenPath) {
+            nextValue = `var(--rr-textTokens-${tokenPath.join("-")})`
+          }
+        } else if (propertyName === "lineHeight") {
+          const tokenPath = resolveTextTokenPath(textTokens, "lineHeight", styleGroup, styleName, propertyValue)
+          if (tokenPath) {
+            nextValue = `var(--rr-textTokens-${tokenPath.join("-")})`
+          }
+        } else if (propertyName === "fontFamily") {
+          const fontFamilyValue = getPathValue(textTokens, ["general", "fontFamily"], undefined)
+          if (propertyValue === fontFamilyValue) {
+            nextValue = "var(--rr-textTokens-general-fontFamily)"
+          }
+        } else if (propertyName === "fontWeight") {
+          const fontWeightPath = fontWeightPathByValue.get(String(propertyValue))
+          if (fontWeightPath) {
+            nextValue = `var(--rr-typography-${fontWeightPath})`
+          }
+        } else if (propertyName === "letterSpacing") {
+          const letterSpacingPath = letterSpacingPathByValue.get(propertyValue)
+          if (letterSpacingPath) {
+            nextValue = `var(--rr-textTokens-${letterSpacingPath.join("-")})`
+          }
+        }
+
+        mapped[styleGroup][styleName][propertyName] = nextValue
+      }
+    }
+  }
+
+  return mapped
+}
+
 function buildLegacyPrimitiveAliases(themes) {
   const light = themes.light ?? {}
   return {
@@ -332,7 +414,9 @@ function buildFromFigmaExport(figmaExport) {
   const spacingScale = mapTokenTree(figmaExport.variables.spacing, mapLeaf, referenceMap)
   const layout = mapTokenTree(figmaExport.variables.tokenSpacing, mapLeaf, referenceMap)
   const textTokens = mapTokenTree(figmaExport.variables.textTokens, mapLeaf, referenceMap)
-  const textStyles = mapTokenTree(figmaExport.typography.typography, mapLeaf, referenceMap)
+  const textStylesRaw = mapTokenTree(figmaExport.typography.typography, mapLeaf, referenceMap)
+  const typography = buildTypographyAliases(textTokens)
+  const textStyles = buildTextStylesFromVariables(textStylesRaw, textTokens, typography)
   const effectStyles = mapEffectNode(figmaExport.effect.effect)
 
   const themes = {}
@@ -343,13 +427,22 @@ function buildFromFigmaExport(figmaExport) {
   const legacyPrimitives = buildLegacyPrimitiveAliases(themes)
 
   const tokens = {
+    tokenColors: {
+      primitive: color,
+      semantic: themes
+    },
     color,
     spacingScale,
     spacing: buildSpacingAliases(spacingScale),
     layout,
     radius: getPathValue(layout, ["desktop", "cornerRadius"], {}),
-    typography: buildTypographyAliases(textTokens),
+    typography,
+    typographySystem: {
+      variables: textTokens,
+      styles: textStyles
+    },
     textTokens,
+    textStylesRaw,
     textStyles,
     effects: {
       ...effectStyles,
@@ -400,7 +493,9 @@ if (existsSync(figmaExportPath)) {
 mkdirSync(tokensDistDir, { recursive: true })
 mkdirSync(themesSrcDir, { recursive: true })
 mkdirSync(themesDistDir, { recursive: true })
-const flattenedTokens = flattenObject(tokens, [], { skipRootKeys: new Set(["semantic"]) })
+const flattenedTokens = flattenObject(tokens, [], {
+  skipRootKeys: new Set(["semantic", "tokenColors", "typographySystem", "textStylesRaw"])
+})
 const tokenCssVariables = flattenedTokens
   .map(([name, value]) => `  --rr-${name}: ${value};`)
   .join("\n")
