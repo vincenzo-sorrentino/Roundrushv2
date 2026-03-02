@@ -1,4 +1,5 @@
 import { tokens } from "@roundrush/tokens"
+import figmaDesignTokens from "../../../../../design-tokens.tokens.json"
 
 const SCALE_STEPS = ["0", "25", "50", "100", "150", "200", "300", "400", "500", "600", "700", "800", "850", "900", "950"]
 
@@ -48,9 +49,28 @@ const COLOR_GROUPS = [
 ]
 
 const DISPLAY_COLOR_KEYS = ["roundrushRedDark", "rounrushYellowDark", "rounrushGreenDark", "rounrushBlueDark"]
+const TEXT_STYLE_GROUPS = ["titles", "headings", "fields", "actions", "paragraph"]
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+}
+
+function toTitleCase(value) {
+  return String(value)
+    .replaceAll(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replaceAll(/[-_]/g, " ")
+    .replaceAll(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
 
 function hexToRgb(hex) {
-  const sanitized = hex.replace("#", "")
+  const sanitized = String(hex).replace("#", "")
   if (sanitized.length === 8) {
     const rgb = sanitized.slice(0, 6)
     const value = Number.parseInt(rgb, 16)
@@ -80,11 +100,7 @@ function hexToRgb(hex) {
       b: value & 255
     }
   }
-  return {
-    r: 0,
-    g: 0,
-    b: 0
-  }
+  return { r: 0, g: 0, b: 0 }
 }
 
 function channelToLinear(channel) {
@@ -109,7 +125,7 @@ function contrastRatio(a, b) {
 }
 
 function toDisplayHex(hex) {
-  return hex.toUpperCase()
+  return String(hex).toUpperCase()
 }
 
 function scoreForHex(hex) {
@@ -122,6 +138,85 @@ function scoreForHex(hex) {
     ratio,
     level: ratio >= 7 ? "AAA" : `AA ${ratio.toFixed(2)}`
   }
+}
+
+function flattenObject(object, prefix = []) {
+  return Object.entries(object ?? {}).flatMap(([key, value]) => {
+    const nextPrefix = [...prefix, key]
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return flattenObject(value, nextPrefix)
+    }
+    return [[nextPrefix.join("."), value]]
+  })
+}
+
+function parsePx(value, fallback = 0) {
+  const numeric = Number.parseFloat(String(value).replace("px", ""))
+  return Number.isNaN(numeric) ? fallback : numeric
+}
+
+function textCaseToTransform(textCase) {
+  const value = String(textCase || "none").toLowerCase()
+  if (value === "upper" || value === "uppercase") {
+    return "uppercase"
+  }
+  if (value === "lower" || value === "lowercase") {
+    return "lowercase"
+  }
+  if (value === "title" || value === "capitalize") {
+    return "capitalize"
+  }
+  return "none"
+}
+
+function styleDefinitionToInlineCss(definition) {
+  if (!definition || typeof definition !== "object") {
+    return ""
+  }
+
+  const map = {
+    fontFamily: "font-family",
+    fontSize: "font-size",
+    fontWeight: "font-weight",
+    fontStyle: "font-style",
+    lineHeight: "line-height",
+    letterSpacing: "letter-spacing",
+    textDecoration: "text-decoration"
+  }
+
+  const rules = Object.entries(map)
+    .map(([sourceKey, cssKey]) => {
+      const value = definition[sourceKey]
+      if (!value) {
+        return ""
+      }
+      return `${cssKey}:${value};`
+    })
+    .filter(Boolean)
+
+  rules.push(`text-transform:${textCaseToTransform(definition.textCase)};`)
+
+  return rules.join("")
+}
+
+function sampleTextForStyle(groupKey, styleKey) {
+  if (groupKey === "titles") {
+    return "Marketing Title"
+  }
+  if (groupKey === "headings") {
+    return "Section Heading"
+  }
+  if (groupKey === "fields") {
+    return styleKey === "input" ? "Input text sample" : "Field Label"
+  }
+  if (groupKey === "actions") {
+    return "Primary Action"
+  }
+  return "Body paragraph sample text."
+}
+
+function createJsonDownloadHref(payload) {
+  return `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(payload, null, 2))}`
 }
 
 function renderSwatch(scaleKey, step) {
@@ -157,7 +252,7 @@ function renderDisplaySwatch(key) {
         <span>Display</span>
       </div>
       <div class="rr-foundation-swatch-meta">
-        <strong>${key}</strong>
+        <strong>${escapeHtml(key)}</strong>
         <small>${toDisplayHex(hex)}</small>
       </div>
     </article>
@@ -178,38 +273,31 @@ function renderScaleRow(group) {
   `
 }
 
-function flattenObject(object, prefix = []) {
-  return Object.entries(object ?? {}).flatMap(([key, value]) => {
-    const nextPrefix = [...prefix, key]
-    if (value && typeof value === "object" && !Array.isArray(value)) {
-      return flattenObject(value, nextPrefix)
-    }
-    return [[nextPrefix.join("."), value]]
-  })
-}
+function renderSemanticComparisonTable() {
+  const lightMap = new Map(flattenObject(tokens.semantic?.light || {}))
+  const darkMap = new Map(flattenObject(tokens.semantic?.dark || {}))
+  const paths = [...new Set([...lightMap.keys(), ...darkMap.keys()])].sort((a, b) => a.localeCompare(b))
 
-function renderVariableRows(object, prefix = []) {
-  return Object.entries(object)
-    .flatMap(([key, value]) => {
-      const path = [...prefix, key]
-      if (value && typeof value === "object" && !Array.isArray(value)) {
-        return renderVariableRows(value, path)
-      }
-      return [
-        `<tr><td><code>${path.join(".")}</code></td><td><code>${value}</code></td></tr>`
-      ]
-    })
-    .join("")
-}
+  const rows = paths
+    .map((path) => {
+      const lightValue = lightMap.get(path) || ""
+      const darkValue = darkMap.get(path) || ""
 
-function renderSemanticThemeTable(themeName, themeObject) {
-  const rows = flattenObject(themeObject)
-    .map(([path, value]) => {
       return `
         <tr>
-          <td><code>${path}</code></td>
-          <td><code>${value}</code></td>
-          <td><span class="rr-foundation-sem-sample" style="background:${value};"></span></td>
+          <td><code>${escapeHtml(path)}</code></td>
+          <td><code>${escapeHtml(lightValue || "-")}</code></td>
+          <td>
+            ${lightValue
+    ? `<span class="rr-foundation-sem-sample" style="background:${escapeHtml(lightValue)};"></span>`
+    : `<span class="rr-foundation-sem-sample rr-foundation-sem-sample--empty">-</span>`}
+          </td>
+          <td><code>${escapeHtml(darkValue || "-")}</code></td>
+          <td>
+            ${darkValue
+    ? `<span class="rr-foundation-sem-sample" style="background:${escapeHtml(darkValue)};"></span>`
+    : `<span class="rr-foundation-sem-sample rr-foundation-sem-sample--empty">-</span>`}
+          </td>
         </tr>
       `
     })
@@ -217,60 +305,175 @@ function renderSemanticThemeTable(themeName, themeObject) {
 
   return `
     <section class="rr-foundation-block">
-      <h2>Semantic Tokens (${themeName})</h2>
-      <table class="rr-foundation-table">
-        <thead>
-          <tr><th>Semantic token</th><th>Reference</th><th>Preview</th></tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
+      <h2>Semantic Tokens (Light + Dark)</h2>
+      <div class="rr-foundation-table-wrap">
+        <table class="rr-foundation-table">
+          <thead>
+            <tr>
+              <th>Semantic token</th>
+              <th>Light reference</th>
+              <th>Light preview</th>
+              <th>Dark reference</th>
+              <th>Dark preview</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
     </section>
   `
 }
 
-function renderTextStyleCards() {
+function renderTextStyleGroups() {
+  return TEXT_STYLE_GROUPS.map((groupKey) => {
+    const styles = tokens.textStyles?.[groupKey] || {}
+    const cards = Object.entries(styles)
+      .map(([styleKey, styleDefinition]) => {
+        const styleInline = styleDefinitionToInlineCss(styleDefinition)
+        const sample = sampleTextForStyle(groupKey, styleKey)
+        return `
+          <article class="rr-foundation-text-style-card">
+            <div class="rr-foundation-text-style-preview">
+              <p class="rr-foundation-text-style-sample" style="${styleInline}">${escapeHtml(sample)}</p>
+            </div>
+            <div class="rr-foundation-text-style-meta">
+              <strong>${toTitleCase(styleKey)}</strong>
+              <code>${groupKey}.${styleKey}</code>
+              <div class="rr-foundation-text-style-props">
+                <span>${escapeHtml(styleDefinition.fontSize || "-")}</span>
+                <span>${escapeHtml(styleDefinition.fontWeight || "-")}</span>
+                <span>${escapeHtml(styleDefinition.lineHeight || "-")}</span>
+              </div>
+            </div>
+          </article>
+        `
+      })
+      .join("")
+
+    return `
+      <section class="rr-foundation-text-group">
+        <h3>${toTitleCase(groupKey)}</h3>
+        <div class="rr-foundation-text-style-grid">
+          ${cards}
+        </div>
+      </section>
+    `
+  }).join("")
+}
+
+function renderAllTextStylesTable() {
+  const rows = TEXT_STYLE_GROUPS.flatMap((groupKey) => {
+    const styles = tokens.textStyles?.[groupKey] || {}
+    return Object.entries(styles).map(([styleKey, definition]) => {
+      return `
+        <tr>
+          <td><code>${groupKey}.${styleKey}</code></td>
+          <td><code>${escapeHtml(definition.fontSize || "-")}</code></td>
+          <td><code>${escapeHtml(definition.fontWeight || "-")}</code></td>
+          <td><code>${escapeHtml(definition.lineHeight || "-")}</code></td>
+          <td><code>${escapeHtml(definition.letterSpacing || "-")}</code></td>
+        </tr>
+      `
+    })
+  }).join("")
+
   return `
-    <div class="rr-foundation-text-style-grid">
-      <article class="rr-foundation-text-style-card">
-        <h1 style="font-size: ${tokens.typography.fontSizeH1}; line-height: ${tokens.typography.lineHeightHeading}; font-weight: ${tokens.typography.fontWeightMedium}; margin: 0;">H1 Medium</h1>
-        <p><code>Headings/H1-medium</code></p>
-      </article>
-      <article class="rr-foundation-text-style-card">
-        <h2 style="font-size: ${tokens.typography.fontSizeH4}; line-height: ${tokens.typography.lineHeightHeading}; font-weight: ${tokens.typography.fontWeightMedium}; margin: 0;">H4 Medium</h2>
-        <p><code>Headings/H4-medium</code></p>
-      </article>
-      <article class="rr-foundation-text-style-card">
-        <h3 style="font-size: ${tokens.typography.fontSizeH6}; line-height: ${tokens.typography.lineHeightHeading}; font-weight: ${tokens.typography.fontWeightMedium}; margin: 0;">H6 Medium</h3>
-        <p><code>Headings/H6-medium</code></p>
-      </article>
-      <article class="rr-foundation-text-style-card">
-        <p style="font-size: ${tokens.typography.fontSizeMd}; line-height: ${tokens.typography.lineHeightParagraph}; margin: 0;">Paragraph medium sample</p>
-        <p><code>Paragraph/Medium</code></p>
-      </article>
-      <article class="rr-foundation-text-style-card">
-        <p style="font-size: ${tokens.typography.fontSizeBig}; line-height: ${tokens.typography.lineHeightParagraph}; margin: 0;">Paragraph big sample</p>
-        <p><code>Paragraph/Big</code></p>
-      </article>
+    <div class="rr-foundation-table-wrap">
+      <table class="rr-foundation-table">
+        <thead>
+          <tr>
+            <th>Text style</th>
+            <th>Font size</th>
+            <th>Weight</th>
+            <th>Line height</th>
+            <th>Letter spacing</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
     </div>
   `
 }
 
 function renderEffects() {
+  const effectRows = flattenObject(tokens.effects || {})
+
+  const cards = effectRows
+    .map(([path, value]) => {
+      const safePath = escapeHtml(path)
+      const safeValue = escapeHtml(value)
+      const sampleStyle = path.includes("shadow") || path.includes("focusRing") ? `box-shadow:${value};` : ""
+
+      return `
+        <article class="rr-foundation-effect-card">
+          <div class="rr-foundation-effect-sample" style="${sampleStyle}"></div>
+          <h4>${safePath}</h4>
+          <code>${safeValue}</code>
+        </article>
+      `
+    })
+    .join("")
+
   return `
     <div class="rr-foundation-effects-grid">
-      <article class="rr-foundation-effect-card" style="box-shadow: ${tokens.effects.shadowLg};">
-        <h4>Shadow/lg</h4>
-        <code>${tokens.effects.shadowLg}</code>
-      </article>
-      <article class="rr-foundation-effect-card" style="box-shadow: ${tokens.shadow.md};">
-        <h4>Shadow/md</h4>
-        <code>${tokens.shadow.md}</code>
-      </article>
-      <article class="rr-foundation-effect-card" style="box-shadow: ${tokens.shadow.sm};">
-        <h4>Shadow/sm</h4>
-        <code>${tokens.shadow.sm}</code>
-      </article>
+      ${cards}
     </div>
+  `
+}
+
+function renderSpacing() {
+  const spacingRows = Object.entries(tokens.spacing || {})
+    .map(([key, value]) => {
+      const px = parsePx(value)
+      const width = Math.max(4, Math.min(px, 320))
+      return `
+        <article class="rr-foundation-spacing-item">
+          <div class="rr-foundation-spacing-meta">
+            <strong>${escapeHtml(key)}</strong>
+            <code>${escapeHtml(value)}</code>
+          </div>
+          <div class="rr-foundation-spacing-track">
+            <span style="width:${width}px;"></span>
+          </div>
+        </article>
+      `
+    })
+    .join("")
+
+  return `<div class="rr-foundation-spacing-list">${spacingRows}</div>`
+}
+
+function renderRadius() {
+  const radiusRows = Object.entries(tokens.radius || {})
+    .map(([key, value]) => {
+      return `
+        <article class="rr-foundation-radius-card">
+          <div class="rr-foundation-radius-sample" style="border-radius:${escapeHtml(value)};"></div>
+          <strong>${escapeHtml(key)}</strong>
+          <code>${escapeHtml(value)}</code>
+        </article>
+      `
+    })
+    .join("")
+
+  return `<div class="rr-foundation-radius-grid">${radiusRows}</div>`
+}
+
+function renderJsonDownloads() {
+  return `
+    <section class="rr-foundation-block">
+      <h2>JSON Downloads</h2>
+      <p>Download the Figma source token file used for the design variables.</p>
+      <div class="rr-foundation-downloads">
+        <a
+          class="rr-foundation-download-link"
+          href="${createJsonDownloadHref(figmaDesignTokens)}"
+          download="design-tokens.tokens.json"
+        >
+          design-tokens.tokens.json
+        </a>
+      </div>
+    </section>
   `
 }
 
@@ -299,33 +502,35 @@ export async function renderFoundationsColorsFlow() {
           </div>
         </section>
 
-        ${Object.entries(tokens.semantic ?? {})
-          .map(([themeName, themeObject]) => renderSemanticThemeTable(themeName, themeObject))
-          .join("")}
-
-        <section class="rr-foundation-block">
-          <h2>All Variables</h2>
-          <table class="rr-foundation-table">
-            <thead>
-              <tr><th>Variable</th><th>Value</th></tr>
-            </thead>
-            <tbody>
-              ${renderVariableRows(tokens)}
-            </tbody>
-          </table>
-        </section>
+        ${renderSemanticComparisonTable()}
 
         <section class="rr-foundation-block">
           <h2>Text Styles</h2>
-          ${renderTextStyleCards()}
-          <pre class="rr-foundation-pre">${JSON.stringify(tokens.textStyles, null, 2)}</pre>
+          ${renderTextStyleGroups()}
+          <h3>All Text Styles</h3>
+          ${renderAllTextStylesTable()}
         </section>
 
         <section class="rr-foundation-block">
           <h2>Effects</h2>
           ${renderEffects()}
-          <pre class="rr-foundation-pre">${JSON.stringify(tokens.effects, null, 2)}</pre>
         </section>
+
+        <section class="rr-foundation-block">
+          <h2>Spacing and Radius</h2>
+          <div class="rr-foundation-layout-grid">
+            <div>
+              <h3>Spacing</h3>
+              ${renderSpacing()}
+            </div>
+            <div>
+              <h3>Radius</h3>
+              ${renderRadius()}
+            </div>
+          </div>
+        </section>
+
+        ${renderJsonDownloads()}
       </section>
     </main>
   `

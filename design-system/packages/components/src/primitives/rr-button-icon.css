@@ -1,0 +1,245 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+button {
+  min-width: 36px;
+  min-height: 36px;
+  width: auto;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rr-icon-btn-color, var(--rr-sem-text-actionForeground));
+  background: var(--rr-icon-btn-background, transparent);
+  border-color: var(--rr-icon-btn-border-color, transparent);
+  box-shadow: var(--rr-icon-btn-shadow, none);
+  cursor: pointer;
+  transition: all 120ms ease-in-out;
+}
+
+button .icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+button .icon svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+button[data-size="xxs"] {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+button[data-size="xs"] {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+button[data-size="sm"] {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+button[data-size="md"] {
+  min-width: 52px;
+  min-height: 52px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+button[data-size="lg"] {
+  min-width: 56px;
+  min-height: 56px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+button[data-size="xl"] {
+  min-width: 60px;
+  min-height: 60px;
+  padding: 14px;
+  border-radius: 8px;
+}
+
+button[data-size="xxl"] {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+button[data-type="primary"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnPrimary);
+  --rr-icon-btn-color: var(--rr-sem-text-actionForeground);
+  --rr-icon-btn-border-color: transparent;
+  --rr-icon-btn-shadow: var(--rr-effects-shadow-xs, var(--rr-shadow-xs, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)));
+}
+
+button[data-type="secondary"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnSecondary);
+  --rr-icon-btn-color: var(--rr-sem-text-actionForeground);
+  --rr-icon-btn-border-color: transparent;
+  --rr-icon-btn-shadow: var(--rr-effects-shadow-xs, var(--rr-shadow-xs, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)));
+}
+
+button[data-type="neutral"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnNeutral);
+  --rr-icon-btn-color: var(--rr-sem-iconPrimary);
+  --rr-icon-btn-border-color: transparent;
+  --rr-icon-btn-shadow: var(--rr-effects-shadow-xs, var(--rr-shadow-xs, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)));
+}
+
+button[data-type="border"] {
+  --rr-icon-btn-background: transparent;
+  --rr-icon-btn-color: var(--rr-sem-iconSecondary);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnNeutral);
+  --rr-icon-btn-shadow: none;
+}
+
+button[data-type="icon"] {
+  --rr-icon-btn-background: transparent;
+  --rr-icon-btn-color: var(--rr-sem-iconSecondary);
+  --rr-icon-btn-border-color: transparent;
+  --rr-icon-btn-shadow: none;
+}
+
+button[data-type="destructive"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnDanger);
+  --rr-icon-btn-color: var(--rr-sem-text-actionForeground);
+  --rr-icon-btn-border-color: transparent;
+  --rr-icon-btn-shadow: var(--rr-effects-shadow-xs, var(--rr-shadow-xs, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)));
+}
+
+button[data-type="primary"]:not(:disabled):hover,
+button[data-type="primary"][data-state="hover"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnPrimaryHover);
+}
+
+button[data-type="secondary"]:not(:disabled):hover,
+button[data-type="secondary"][data-state="hover"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnSecondaryHover);
+}
+
+button[data-type="neutral"]:not(:disabled):hover,
+button[data-type="neutral"][data-state="hover"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnNeutralHover);
+}
+
+button[data-type="border"]:not(:disabled):hover,
+button[data-type="border"][data-state="hover"] {
+  --rr-icon-btn-background: var(--rr-sem-background-card);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnNeutralHover);
+}
+
+button[data-type="icon"]:not(:disabled):hover,
+button[data-type="icon"][data-state="hover"] {
+  --rr-icon-btn-background: var(--rr-sem-background-card);
+}
+
+button[data-type="destructive"]:not(:disabled):hover,
+button[data-type="destructive"][data-state="hover"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnDangerHover);
+}
+
+button[data-type="primary"]:not(:disabled):focus-visible,
+button[data-type="primary"][data-state="focused"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnPrimaryHover);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnFocus);
+  --rr-icon-btn-shadow: var(--rr-effects-focusRing-4pxPrimary, 0 0 0 4px var(--rr-sem-stroke-focusRingPrimary));
+  outline: none;
+}
+
+button[data-type="secondary"]:not(:disabled):focus-visible,
+button[data-type="secondary"][data-state="focused"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnSecondaryHover);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnFocus);
+  --rr-icon-btn-shadow: var(--rr-effects-focusRing-4pxSecondary, 0 0 0 4px var(--rr-sem-stroke-focusRingSecondary));
+  outline: none;
+}
+
+button[data-type="neutral"]:not(:disabled):focus-visible,
+button[data-type="neutral"][data-state="focused"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnNeutralHover);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnFocus);
+  --rr-icon-btn-shadow: var(--rr-effects-focusRing-4pxNeutral, 0 0 0 4px var(--rr-sem-stroke-focusRingNeutral));
+  outline: none;
+}
+
+button[data-type="border"]:not(:disabled):focus-visible,
+button[data-type="border"][data-state="focused"],
+button[data-type="icon"]:not(:disabled):focus-visible,
+button[data-type="icon"][data-state="focused"] {
+  --rr-icon-btn-background: var(--rr-sem-background-card);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnFocus);
+  --rr-icon-btn-shadow: var(--rr-effects-focusRing-4pxNeutral, 0 0 0 4px var(--rr-sem-stroke-focusRingNeutral));
+  outline: none;
+}
+
+button[data-type="destructive"]:not(:disabled):focus-visible,
+button[data-type="destructive"][data-state="focused"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnDangerHover);
+  --rr-icon-btn-border-color: var(--rr-sem-stroke-btnFocus);
+  --rr-icon-btn-shadow: var(--rr-effects-focusRing-4pxError, 0 0 0 4px var(--rr-sem-stroke-focusRingError));
+  outline: none;
+}
+
+button[data-type="primary"]:disabled,
+button[data-type="primary"][data-state="disabled"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnPrimaryDisabled);
+  --rr-icon-btn-color: var(--rr-sem-text-actionForeground);
+}
+
+button[data-type="secondary"]:disabled,
+button[data-type="secondary"][data-state="disabled"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnSecondaryDisabled);
+  --rr-icon-btn-color: var(--rr-sem-text-actionForeground);
+}
+
+button[data-type="neutral"]:disabled,
+button[data-type="neutral"][data-state="disabled"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnNeutralDisabled);
+  --rr-icon-btn-color: var(--rr-sem-text-disabled);
+  --rr-icon-btn-shadow: none;
+}
+
+button[data-type="border"]:disabled,
+button[data-type="border"][data-state="disabled"],
+button[data-type="icon"]:disabled,
+button[data-type="icon"][data-state="disabled"] {
+  --rr-icon-btn-background: transparent;
+  --rr-icon-btn-color: var(--rr-sem-text-disabled);
+  --rr-icon-btn-border-color: transparent;
+  --rr-icon-btn-shadow: none;
+}
+
+button[data-type="destructive"]:disabled,
+button[data-type="destructive"][data-state="disabled"] {
+  --rr-icon-btn-background: var(--rr-sem-action-btnDangerDisabled);
+  --rr-icon-btn-color: var(--rr-sem-text-actionForeground);
+  --rr-icon-btn-shadow: none;
+}
+
+button:disabled,
+button[data-state="disabled"] {
+  cursor: not-allowed;
+}

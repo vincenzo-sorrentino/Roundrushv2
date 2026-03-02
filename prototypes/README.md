@@ -15,3 +15,5 @@ Each approved flow must have:
 ```bash
 npm run dev --workspace prototypes/app
 ```
+
+Open `http://localhost:5173/library/components` to view the components library gallery.

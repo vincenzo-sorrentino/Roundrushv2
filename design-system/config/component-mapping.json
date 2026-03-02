@@ -3,9 +3,29 @@
     "tag": "rr-button",
     "source": "design-system/packages/components/src/primitives/rr-button.js"
   },
+  "Button Icon": {
+    "tag": "rr-button-icon",
+    "source": "design-system/packages/components/src/primitives/rr-button-icon.js"
+  },
+  "Button Link": {
+    "tag": "rr-button-link",
+    "source": "design-system/packages/components/src/primitives/rr-button-link.js"
+  },
   "Input": {
     "tag": "rr-input",
     "source": "design-system/packages/components/src/primitives/rr-input.js"
+  },
+  "Mega Input": {
+    "tag": "rr-mega-input",
+    "source": "design-system/packages/components/src/primitives/rr-mega-input.js"
+  },
+  "Verification Code Input": {
+    "tag": "rr-verification-code-input",
+    "source": "design-system/packages/components/src/primitives/rr-verification-code-input.js"
+  },
+  "Text Area": {
+    "tag": "rr-text-area",
+    "source": "design-system/packages/components/src/primitives/rr-text-area.js"
   },
   "Password Input": {
     "tag": "rr-password-input",
@@ -18,6 +38,22 @@
   "Select": {
     "tag": "rr-select",
     "source": "design-system/packages/components/src/primitives/rr-select.js"
+  },
+  "Dropdown Item": {
+    "tag": "rr-dropdown-item",
+    "source": "design-system/packages/components/src/primitives/rr-dropdown-item.js"
+  },
+  "Dropdown Template": {
+    "tag": "rr-dropdown-template",
+    "source": "design-system/packages/components/src/primitives/rr-dropdown-template.js"
+  },
+  "Toggle": {
+    "tag": "rr-toggle",
+    "source": "design-system/packages/components/src/primitives/rr-toggle.js"
+  },
+  "Toggle Text": {
+    "tag": "rr-toggle-text",
+    "source": "design-system/packages/components/src/primitives/rr-toggle-text.js"
   },
   "Alert": {
     "tag": "rr-alert",
@@ -42,5 +78,9 @@
   "Table Header Cell": {
     "tag": "rr-table-header-cell",
     "source": "design-system/packages/components/src/composites/rr-table-header-cell.js"
+  },
+  "Table Cell": {
+    "tag": "rr-table-cell",
+    "source": "design-system/packages/components/src/composites/rr-table-cell.js"
   }
 }

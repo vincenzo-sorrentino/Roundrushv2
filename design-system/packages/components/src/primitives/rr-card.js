@@ -1,40 +1,33 @@
 import { rrBaseStyles } from "../internal/theme.js"
+import rrCardStyles from "./rr-card.css?inline"
+
+const STYLES = `${rrBaseStyles}\n${rrCardStyles}`
 
 class RrCard extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: "open" })
+    this.observer = new MutationObserver(() => this.render())
   }
 
   connectedCallback() {
+    this.observer.observe(this, { childList: true, subtree: true })
+    this.render()
+  }
+
+  disconnectedCallback() {
+    this.observer.disconnect()
+  }
+
+  render() {
+    const hasHeader = Boolean(this.querySelector('[slot="header"]'))
+    const hasActions = Boolean(this.querySelector('[slot="actions"]'))
+
     this.shadowRoot.innerHTML = `
-      <style>
-        ${rrBaseStyles}
-        article {
-          background: var(--rr-sem-surface);
-          border: 1px solid var(--rr-sem-borderDefault);
-          border-radius: var(--rr-radius-lg);
-          box-shadow: var(--rr-shadow-sm);
-          padding: var(--rr-spacing-xl);
-          display: grid;
-          gap: var(--rr-spacing-lg);
-        }
-
-        header {
-          font-size: var(--rr-typography-fontSizeLg);
-          font-weight: var(--rr-typography-fontWeightSemibold);
-          color: var(--rr-sem-textPrimary);
-        }
-
-        footer {
-          display: flex;
-          justify-content: flex-end;
-          gap: var(--rr-spacing-sm);
-        }
-      </style>
-      <article>
+      <style>${STYLES}</style>
+      <article data-has-header="${hasHeader}" data-has-actions="${hasActions}">
         <header><slot name="header"></slot></header>
-        <section><slot></slot></section>
+        <section class="content"><slot></slot></section>
         <footer><slot name="actions"></slot></footer>
       </article>
     `

@@ -1,4 +1,7 @@
-import { rrBaseStyles } from "../internal/theme.js"
+import { parseNumberAttribute, rrBaseStyles } from "../internal/theme.js"
+import rrSpinnerStyles from "./rr-spinner.css?inline"
+
+const STYLES = `${rrBaseStyles}\n${rrSpinnerStyles}`
 
 class RrSpinner extends HTMLElement {
   constructor() {
@@ -19,31 +22,11 @@ class RrSpinner extends HTMLElement {
   }
 
   render() {
-    const size = this.getAttribute("size") || "20"
+    const size = parseNumberAttribute(this, "size", 20, { min: 10, max: 96 })
 
     this.shadowRoot.innerHTML = `
-      <style>
-        ${rrBaseStyles}
-        .spinner {
-          width: ${size}px;
-          height: ${size}px;
-          border-radius: 999px;
-          border: 2px solid var(--rr-sem-borderDefault);
-          border-top-color: var(--rr-sem-actionPrimary);
-          animation: rr-spin 800ms linear infinite;
-        }
-
-        @keyframes rr-spin {
-          from {
-            transform: rotate(0deg);
-          }
-
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      </style>
-      <div class="spinner" role="status" aria-label="Loading"></div>
+      <style>${STYLES}</style>
+      <div class="spinner" style="--rr-spinner-size:${size}px;" role="status" aria-label="Loading"></div>
     `
   }
 }

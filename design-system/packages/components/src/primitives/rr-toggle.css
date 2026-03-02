@@ -1,0 +1,98 @@
+:host {
+  display: inline-block;
+}
+
+.toggle {
+  --rr-toggle-height: 24px;
+  --rr-toggle-width: 44px;
+  --rr-toggle-thumb-size: 20px;
+  --rr-toggle-track: var(--rr-sem-background-card);
+  --rr-toggle-focus: var(--rr-effects-focusRing-4pxPrimary, 0 0 0 4px var(--rr-sem-stroke-focusRingPrimary));
+  --rr-toggle-thumb: var(--rr-sem-background-pageLight, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: var(--rr-toggle-width);
+  min-width: var(--rr-toggle-width);
+  height: var(--rr-toggle-height);
+  padding: 2px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--rr-toggle-track);
+  cursor: pointer;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.toggle:focus-visible {
+  outline: none;
+}
+
+.thumb {
+  width: var(--rr-toggle-thumb-size);
+  height: var(--rr-toggle-thumb-size);
+  border-radius: 50%;
+  background: var(--rr-toggle-thumb);
+  box-shadow: var(--rr-shadow-sm, 0 1px 2px 0 rgba(16, 24, 40, 0.1), 0 1px 3px 0 rgba(16, 24, 40, 0.15));
+}
+
+.toggle[data-size="sm"] {
+  --rr-toggle-width: 36px;
+  --rr-toggle-height: 20px;
+  --rr-toggle-thumb-size: 16px;
+}
+
+.toggle[data-size="md"] {
+  --rr-toggle-width: 44px;
+  --rr-toggle-height: 24px;
+  --rr-toggle-thumb-size: 20px;
+}
+
+.toggle[data-size="lg"] {
+  --rr-toggle-width: 50px;
+  --rr-toggle-height: 28px;
+  --rr-toggle-thumb-size: 24px;
+}
+
+.toggle[data-pressed="true"] {
+  justify-content: flex-end;
+  --rr-toggle-track: var(--rr-sem-action-btnPrimary);
+}
+
+.toggle[data-state="hover"][data-pressed="false"] {
+  --rr-toggle-track: var(--rr-sem-background-cardHover);
+}
+
+.toggle[data-state="hover"][data-pressed="true"] {
+  --rr-toggle-track: var(--rr-sem-action-btnPrimaryHover);
+}
+
+.toggle[data-state="focused"] {
+  box-shadow: var(--rr-toggle-focus);
+}
+
+.toggle[data-state="focused"][data-pressed="true"] {
+  --rr-toggle-track: var(--rr-sem-action-btnPrimaryHover);
+}
+
+.toggle[data-state="focused"][data-pressed="false"] {
+  --rr-toggle-track: var(--rr-sem-background-card);
+}
+
+.toggle[data-state="disabled"],
+.toggle:disabled {
+  cursor: not-allowed;
+}
+
+.toggle[data-readonly="true"]:not(:disabled) {
+  cursor: default;
+}
+
+.toggle[data-state="disabled"][data-pressed="false"],
+.toggle:disabled[data-pressed="false"] {
+  --rr-toggle-track: var(--rr-sem-background-cardDisabled);
+}
+
+.toggle[data-state="disabled"][data-pressed="true"],
+.toggle:disabled[data-pressed="true"] {
+  --rr-toggle-track: var(--rr-sem-action-btnPrimaryDisabled);
+}

@@ -1,0 +1,58 @@
+:host {
+  display: inline-flex;
+}
+
+button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-spacing-xs);
+  color: var(--rr-sem-textSecondary);
+  font-size: var(--rr-typography-fontSizeTiny);
+  line-height: var(--rr-typography-lineHeightParagraph);
+  font-weight: var(--rr-typography-fontWeightRegular);
+}
+
+button[data-state="hover"] {
+  color: var(--rr-sem-textPrimary);
+}
+
+button:focus-visible,
+button[data-state="focused"] {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px var(--rr-sem-stroke-focusRingPrimary);
+}
+
+button[data-state="disabled"],
+button:disabled {
+  cursor: not-allowed;
+  color: var(--rr-sem-textMuted);
+}
+
+.arrow {
+  font-size: 14px;
+  line-height: 1;
+  color: var(--rr-sem-iconSecondary);
+  min-width: 10px;
+}
+
+button[data-state="disabled"] .arrow,
+button:disabled .arrow {
+  color: var(--rr-sem-textMuted);
+}
+
+.help {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid var(--rr-sem-borderField);
+  font-size: 10px;
+  color: var(--rr-sem-textSecondary);
+}

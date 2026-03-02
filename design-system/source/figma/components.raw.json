@@ -10,11 +10,81 @@
       "slots": ["default"]
     },
     {
+      "name": "Button Icon",
+      "tag": "rr-button-icon",
+      "category": "primitives",
+      "description": "Icon-only action button with type, size, and state variants",
+      "attributes": ["type", "size", "state", "disabled", "label"],
+      "events": ["rr-click"],
+      "slots": ["default"]
+    },
+    {
+      "name": "Button Link",
+      "tag": "rr-button-link",
+      "category": "primitives",
+      "description": "Link-style button with leading/trailing icon layout",
+      "attributes": ["color", "size", "state", "icon-display", "disabled", "label"],
+      "events": ["rr-click"],
+      "slots": ["default", "icon-leading", "icon-trailing"]
+    },
+    {
       "name": "Input",
       "tag": "rr-input",
       "category": "primitives",
-      "description": "Text input with label and helper slots",
-      "attributes": ["label", "placeholder", "value", "type", "disabled"],
+      "description": "Input field matrix with default, trailing icon, money, phone, link, and credit-card variants",
+      "attributes": [
+        "label",
+        "placeholder",
+        "value",
+        "variant",
+        "type",
+        "input-type",
+        "state",
+        "disabled",
+        "helper",
+        "right-icon",
+        "currency",
+        "country",
+        "protocol"
+      ],
+      "events": ["rr-change"],
+      "slots": ["label", "helper"]
+    },
+    {
+      "name": "Mega Input",
+      "tag": "rr-mega-input",
+      "category": "primitives",
+      "description": "Single-character verification input in small, medium, and large sizes with visual states",
+      "attributes": ["size", "state", "value", "disabled", "aria-label"],
+      "events": ["rr-change"],
+      "slots": []
+    },
+    {
+      "name": "Verification Code Input",
+      "tag": "rr-verification-code-input",
+      "category": "primitives",
+      "description": "One-time verification code input with 4 or 6 digits, optional label/hint text, and size variants",
+      "attributes": ["size", "digits", "value", "active-index", "label", "hint", "show-label", "show-hint", "separator", "disabled"],
+      "events": [],
+      "slots": []
+    },
+    {
+      "name": "Text Area",
+      "tag": "rr-text-area",
+      "category": "primitives",
+      "description": "Multi-line paragraph input with default/error states, helper text, and optional character count",
+      "attributes": [
+        "label",
+        "placeholder",
+        "value",
+        "type",
+        "state",
+        "disabled",
+        "helper",
+        "show-count",
+        "max-length",
+        "rows"
+      ],
       "events": ["rr-change"],
       "slots": ["label", "helper"]
     },
@@ -40,10 +110,79 @@
       "name": "Select",
       "tag": "rr-select",
       "category": "primitives",
-      "description": "Select control",
-      "attributes": ["label", "value", "disabled", "options"],
+      "description": "Dropdown selector field with default/icon/avatar leading variants and full state styling",
+      "attributes": [
+        "label",
+        "placeholder",
+        "value",
+        "type",
+        "state",
+        "disabled",
+        "options",
+        "open",
+        "dot"
+      ],
       "events": ["rr-change"],
       "slots": ["label", "helper"]
+    },
+    {
+      "name": "Dropdown Item",
+      "tag": "rr-dropdown-item",
+      "category": "primitives",
+      "description": "Reusable dropdown row item supporting default, destructive, and divider types with interactive states",
+      "attributes": [
+        "text",
+        "value",
+        "subline",
+        "type",
+        "state",
+        "disabled",
+        "checkbox",
+        "avatar",
+        "dot",
+        "icon-left",
+        "icon-right",
+        "selected"
+      ],
+      "events": ["rr-select"],
+      "slots": ["default", "subline"]
+    },
+    {
+      "name": "Dropdown Template",
+      "tag": "rr-dropdown-template",
+      "category": "primitives",
+      "description": "Dropdown menu container with JSON-driven items and optional selected-check behavior",
+      "attributes": ["options", "value", "show-selected-check"],
+      "events": ["rr-select"],
+      "slots": []
+    },
+    {
+      "name": "Toggle",
+      "tag": "rr-toggle",
+      "category": "primitives",
+      "description": "Switch toggle control with pressed states, sizes (sm/md/lg), and interaction states",
+      "attributes": ["checked", "pressed", "size", "state", "disabled", "readonly", "aria-label"],
+      "events": ["rr-change"],
+      "slots": []
+    },
+    {
+      "name": "Toggle Text",
+      "tag": "rr-toggle-text",
+      "category": "primitives",
+      "description": "Toggle row with label and optional supporting underline text",
+      "attributes": [
+        "checked",
+        "pressed",
+        "size",
+        "state",
+        "disabled",
+        "readonly",
+        "label",
+        "description",
+        "has-underline"
+      ],
+      "events": ["rr-change"],
+      "slots": []
     },
     {
       "name": "Alert",
@@ -97,6 +236,33 @@
       "description": "Configurable table header cell with text, checkbox, and background style",
       "attributes": ["label", "text", "checkbox", "color", "dot", "arrow", "state"],
       "events": ["rr-sort"],
+      "slots": []
+    },
+    {
+      "name": "Table Cell",
+      "tag": "rr-table-cell",
+      "category": "composites",
+      "description": "Reusable table atom component with variants for default, controls, badges, statuses, and metadata cells",
+      "attributes": [
+        "variant",
+        "state",
+        "title",
+        "subtitle",
+        "show-checkbox",
+        "show-icon",
+        "show-avatar",
+        "show-blocker",
+        "show-flag",
+        "percent",
+        "checked",
+        "rating",
+        "badge-type",
+        "users-count",
+        "overflow-count",
+        "avatars-count",
+        "show-text"
+      ],
+      "events": [],
       "slots": []
     }
   ]

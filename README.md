@@ -19,6 +19,19 @@ npm run scaffold:components
 npm start
 ```
 
+## View Component Library
+
+Use the prototype app as the designer-facing library explorer (no Storybook required):
+
+```bash
+npm run dev:prototype
+```
+
+Then open:
+
+- `http://localhost:5173/library/components` for the full component gallery (variants, states, sizes, composites).
+- `http://localhost:5173/library/foundations/colors` for the full token/theme foundations view.
+
 ## Key Workflows
 
 - Validate specs and links: `npm run validate:specs`

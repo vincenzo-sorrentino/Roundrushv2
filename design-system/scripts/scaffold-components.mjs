@@ -17,8 +17,23 @@ for (const component of components) {
   const outDir = path.join(outRoot, category)
   mkdirSync(outDir, { recursive: true })
 
-  const filePath = path.join(outDir, `${component.tag}.js`)
-  if (existsSync(filePath)) {
+  const jsPath = path.join(outDir, `${component.tag}.js`)
+  const cssPath = path.join(outDir, `${component.tag}.css`)
+
+  if (!existsSync(cssPath)) {
+    const cssContent = `:host {
+  display: block;
+}
+
+.wrapper {
+  color: var(--rr-sem-textPrimary);
+  font-size: var(--rr-typography-fontSizeSm);
+}
+`
+    writeFileSync(cssPath, cssContent)
+  }
+
+  if (existsSync(jsPath)) {
     continue
   }
 
@@ -27,22 +42,20 @@ for (const component of components) {
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join("")
 
-  const content = `export class ${className} extends HTMLElement {
+  const content = `import { rrBaseStyles } from "../internal/theme.js"
+import componentStyles from "./${component.tag}.css?inline"
+
+const STYLES = \`${"${rrBaseStyles}"}\\n${"${componentStyles}"}\`
+
+export class ${className} extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: "open" })
   }
 
   connectedCallback() {
-    this.shadowRoot.innerHTML = \
-\`<style>
-  :host {
-    display: block;
-    font-family: var(--rr-typography-fontFamilyBase);
-    color: var(--rr-sem-textPrimary);
-  }
-</style>
-<slot></slot>\`
+    this.shadowRoot.innerHTML = \`<style>${"${STYLES}"}</style>
+<div class="wrapper"><slot></slot></div>\`
   }
 }
 
@@ -51,7 +64,7 @@ if (!customElements.get("${component.tag}")) {
 }
 `
 
-  writeFileSync(filePath, content)
+  writeFileSync(jsPath, content)
 }
 
 const exportLines = components.map((component) => {

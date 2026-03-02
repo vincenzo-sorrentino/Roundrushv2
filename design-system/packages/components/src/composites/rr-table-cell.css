@@ -1,0 +1,383 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.cell {
+  --rr-cell-bg: var(--rr-sem-background-table, var(--rr-sem-surfaceTable));
+  --rr-cell-title: var(--rr-sem-textPrimary);
+  --rr-cell-subtitle: var(--rr-sem-textMuted);
+  --rr-cell-icon: var(--rr-sem-iconSecondary);
+  min-height: 44px;
+  height: 44px;
+  width: 100%;
+  border-bottom: 1px solid var(--rr-sem-borderDefault);
+  background: var(--rr-cell-bg);
+  padding: 4px 16px;
+  display: flex;
+  align-items: center;
+  gap: var(--rr-spacing-sm, 8px);
+}
+
+.cell[data-align="center"] {
+  justify-content: center;
+}
+
+.cell[data-state="hover"],
+.cell[data-state="hover-blue"] {
+  --rr-cell-bg: var(--rr-sem-background-tableHover, var(--rr-sem-surfaceSubtle));
+}
+
+.cell[data-state="disabled"] {
+  --rr-cell-bg: var(--rr-sem-background-tableDisabled, var(--rr-sem-surfaceSubtle));
+  --rr-cell-title: var(--rr-sem-text-disabled);
+  --rr-cell-subtitle: var(--rr-sem-text-disabled);
+  --rr-cell-icon: var(--rr-sem-text-disabled);
+}
+
+.text-stack {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: grid;
+  gap: 0;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.title {
+  color: var(--rr-cell-title);
+  font-size: var(--rr-typography-fontSizeSm);
+  line-height: var(--rr-typography-lineHeightParagraph);
+  font-weight: var(--rr-typography-fontWeightRegular, 400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title[data-link="true"] {
+  color: var(--rr-sem-text-actionLink);
+  text-decoration: underline;
+}
+
+.title--secondary {
+  color: var(--rr-sem-textSecondary);
+}
+
+.subtitle {
+  color: var(--rr-cell-subtitle);
+  font-size: var(--rr-typography-fontSizeSm);
+  line-height: var(--rr-typography-lineHeightParagraph);
+  font-weight: var(--rr-typography-fontWeightRegular, 400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--rr-cell-icon);
+  flex: 0 0 auto;
+}
+
+.icon--leading {
+  width: 20px;
+  height: 20px;
+}
+
+.icon--button {
+  width: 18px;
+  height: 18px;
+}
+
+.icon--priority {
+  color: var(--rr-sem-display-priority-high, var(--rr-sem-text-error));
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon svg circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.avatar {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #a2a8cd, #bea887);
+  border: 1.5px solid var(--rr-sem-borderDefault);
+  flex: 0 0 auto;
+}
+
+.avatar--md {
+  width: 32px;
+  height: 32px;
+}
+
+.avatar--sm {
+  width: 24px;
+  height: 24px;
+}
+
+.control-box,
+.control-radio {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.control-box {
+  border-radius: 4px;
+  border: 1px solid var(--rr-sem-stroke-field);
+  background: var(--rr-sem-background-field);
+}
+
+.control-box[data-checked="true"] {
+  background: var(--rr-sem-action-btnPrimary);
+  border-color: var(--rr-sem-action-btnPrimary);
+}
+
+.control-box[data-checked="true"]::after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 10px;
+  border: solid var(--rr-sem-text-actionForeground);
+  border-width: 0 2px 2px 0;
+  transform: translate(4px, 1px) rotate(45deg);
+}
+
+.control-radio {
+  border-radius: 999px;
+  border: 1px solid var(--rr-sem-stroke-btnNeutral);
+  background: var(--rr-sem-background-field);
+  display: grid;
+  place-items: center;
+}
+
+.control-radio[data-checked="true"]::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rr-sem-action-btnPrimary);
+}
+
+.toggle {
+  width: 36px;
+  height: 20px;
+  border-radius: 16px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  background: var(--rr-sem-action-btnNeutral);
+}
+
+.cell[data-state="hover"] .toggle {
+  background: var(--rr-sem-action-btnNeutralHover);
+}
+
+.toggle[data-checked="true"] {
+  justify-content: flex-end;
+  background: var(--rr-sem-action-btnPrimary);
+}
+
+.toggle-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--rr-sem-surface);
+  box-shadow: var(--rr-shadow-sm, 0 1px 2px 0 rgba(16, 24, 40, 0.05), 0 1px 3px 0 rgba(16, 24, 40, 0.1));
+}
+
+.rating {
+  display: inline-flex;
+  gap: 4px;
+  color: var(--rr-sem-action-btnPrimary);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.star[data-filled="false"] {
+  color: var(--rr-sem-textMuted);
+}
+
+.cell[data-state="disabled"] .star {
+  color: var(--rr-sem-action-btnPrimaryDisabled);
+}
+
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 240px);
+}
+
+.progress-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--rr-sem-action-neutralSelection);
+  overflow: hidden;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--rr-sem-action-btnPrimary);
+}
+
+.cell[data-state="disabled"] .progress-fill {
+  background: var(--rr-sem-action-btnPrimaryDisabled);
+}
+
+.progress-value {
+  font-size: var(--rr-typography-fontSizeSm);
+  color: var(--rr-cell-title);
+}
+
+.icon-button,
+.mini-button {
+  border: 1px solid var(--rr-sem-stroke-btnNeutral);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--rr-cell-title);
+  padding: 6px 8px;
+  margin: 0;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-button {
+  width: 36px;
+  justify-content: center;
+}
+
+.priority-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  min-height: 24px;
+  border-radius: 24px;
+  border: 1px solid transparent;
+  padding: 2px 8px;
+  display: inline-grid;
+  place-items: center;
+  font-size: var(--rr-typography-fontSizeSm);
+  line-height: var(--rr-typography-lineHeightFieldsLabel, 20px);
+  font-weight: var(--rr-typography-fontWeightMedium, 500);
+  white-space: nowrap;
+}
+
+.pill[data-shape="square"] {
+  border-radius: 4px;
+}
+
+.pill[data-tone="success"] {
+  color: var(--rr-sem-text-success);
+  border-color: var(--rr-sem-stroke-success);
+  background: var(--rr-sem-action-succesSelection);
+}
+
+.pill[data-tone="primary"] {
+  color: var(--rr-sem-text-actionLink);
+  border-color: var(--rr-sem-stroke-btnPrimary);
+  background: var(--rr-sem-action-primarySelection);
+}
+
+.pill[data-tone="secondary"] {
+  color: var(--rr-sem-text-actionSecondary);
+  border-color: var(--rr-sem-stroke-btnSecondary);
+  background: var(--rr-sem-action-secondarySelection);
+}
+
+.pill[data-tone="neutral"] {
+  color: var(--rr-sem-text-actionLink);
+  border-color: var(--rr-sem-stroke-btnPrimary);
+  background: var(--rr-sem-surface);
+}
+
+.pill[data-tone="warning"] {
+  color: var(--rr-sem-text-warning);
+  border-color: var(--rr-sem-stroke-warning);
+  background: var(--rr-sem-action-warningSelection);
+}
+
+.pill[data-outline="false"] {
+  border-color: transparent;
+}
+
+.avatars {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+.avatars .avatar--sm {
+  margin-left: -4px;
+}
+
+.avatars .avatar--sm[data-index="0"] {
+  margin-left: 0;
+}
+
+.avatars .avatar--sm[data-index="1"] {
+  background: linear-gradient(135deg, #bea887, #a2a8cd);
+}
+
+.avatars .avatar--sm[data-index="2"] {
+  background: linear-gradient(135deg, #c7b9da, #d4b5ad);
+}
+
+.avatars .avatar--sm[data-index="3"] {
+  background: linear-gradient(135deg, #aa9c75, #c7b9da);
+}
+
+.avatars .avatar--sm[data-index="4"] {
+  background: linear-gradient(135deg, #d4b5ad, #bea887);
+}
+
+.avatar-more {
+  margin-left: -4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1.5px solid var(--rr-sem-borderDefault);
+  background: var(--rr-sem-surface);
+  color: var(--rr-sem-text-actionLight);
+  font-size: var(--rr-typography-fontSizeTiny);
+  display: inline-grid;
+  place-items: center;
+}
+
+.cell[data-state="disabled"] .icon-button,
+.cell[data-state="disabled"] .mini-button {
+  color: var(--rr-sem-text-disabled);
+}

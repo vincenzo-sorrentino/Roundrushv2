@@ -1,4 +1,9 @@
-import { rrBaseStyles } from "../internal/theme.js"
+import { escapeHtml, normalizeOption, rrBaseStyles } from "../internal/theme.js"
+import rrTableHeaderStyles from "./rr-table-header.css?inline"
+
+const VALID_STATES = ["default", "hover", "focused", "disabled"]
+const VALID_ARROWS = ["none", "up", "down"]
+const STYLES = `${rrBaseStyles}\n${rrTableHeaderStyles}`
 
 class RrTableHeader extends HTMLElement {
   constructor() {
@@ -20,52 +25,15 @@ class RrTableHeader extends HTMLElement {
 
   render() {
     const label = this.getAttribute("label") || "Company"
-    const arrow = this.getAttribute("arrow") || "none"
-    const state = this.getAttribute("state") || "default"
+    const arrow = normalizeOption(this.getAttribute("arrow") || "none", VALID_ARROWS, "none")
+    const state = normalizeOption(this.getAttribute("state") || "default", VALID_STATES, "default")
     const helpIcon = this.getAttribute("help-icon") === "true"
-
     const isDisabled = state === "disabled"
-    const textColor = isDisabled ? "var(--rr-sem-textMuted)" : "var(--rr-sem-textSecondary)"
-    const iconColor = isDisabled ? "var(--rr-sem-textMuted)" : "var(--rr-sem-iconSecondary)"
 
     this.shadowRoot.innerHTML = `
-      <style>
-        ${rrBaseStyles}
-        button {
-          border: none;
-          background: transparent;
-          padding: 0;
-          margin: 0;
-          cursor: ${isDisabled ? "not-allowed" : "pointer"};
-          display: inline-flex;
-          align-items: center;
-          gap: var(--rr-spacing-xs);
-          color: ${textColor};
-          font-size: var(--rr-typography-fontSizeTiny);
-          line-height: var(--rr-typography-lineHeightParagraph);
-          font-weight: var(--rr-typography-fontWeightRegular);
-        }
-
-        .arrow {
-          font-size: 16px;
-          line-height: 1;
-          color: ${iconColor};
-          min-width: 10px;
-        }
-
-        .help {
-          display: inline-grid;
-          place-items: center;
-          width: 16px;
-          height: 16px;
-          border-radius: 999px;
-          border: 1px solid var(--rr-sem-borderField);
-          font-size: 10px;
-          color: var(--rr-sem-textSecondary);
-        }
-      </style>
-      <button type="button" aria-disabled="${isDisabled}">
-        <span>${label}</span>
+      <style>${STYLES}</style>
+      <button type="button" data-state="${state}" aria-disabled="${isDisabled}" ${isDisabled ? "disabled" : ""}>
+        <span>${escapeHtml(label)}</span>
         ${helpIcon ? `<span class="help">?</span>` : ""}
         ${arrow === "down" ? `<span class="arrow">&#8595;</span>` : arrow === "up" ? `<span class="arrow">&#8593;</span>` : ""}
       </button>

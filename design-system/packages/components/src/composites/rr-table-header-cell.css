@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.cell {
+  min-height: 40px;
+  height: 40px;
+  width: 100%;
+  border-bottom: 1px solid var(--rr-sem-borderDefault);
+  display: flex;
+  align-items: center;
+  gap: var(--rr-spacing-sm);
+  padding: 0 var(--rr-spacing-lg);
+}
+
+.cell[data-color="white"] {
+  background: var(--rr-sem-surfaceTable);
+}
+
+.cell[data-color="gray"] {
+  background: var(--rr-sem-surfaceSubtle);
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--rr-sem-borderField);
+  background: var(--rr-sem-surfaceField);
+  box-sizing: border-box;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--rr-sem-actionPrimary);
+  margin-left: 2px;
+  margin-right: 2px;
+}

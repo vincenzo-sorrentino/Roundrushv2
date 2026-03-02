@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  width: 300px;
+  max-width: 100%;
+}
+
+.template {
+  display: grid;
+  gap: var(--rr-spacing-none, 0px);
+  width: 100%;
+  padding: var(--rr-spacing-lg, 16px);
+  border: 1px solid var(--rr-sem-stroke-primary, var(--rr-sem-borderDefault));
+  border-radius: var(--rr-radius-md, 16px);
+  background: var(--rr-sem-background-elevated, var(--rr-sem-surface));
+  box-shadow: var(--rr-shadow-sm, 0 1px 2px 0 rgba(16, 24, 40, 0.06), 0 1px 3px 0 rgba(16, 24, 40, 0.1));
+}
+
+.template > rr-dropdown-item {
+  width: 100%;
+}

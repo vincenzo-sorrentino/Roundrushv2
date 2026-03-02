@@ -1,5 +1,9 @@
-import { rrBaseStyles } from "../internal/theme.js"
+import { escapeHtml, getBooleanAttribute, normalizeOption, rrBaseStyles } from "../internal/theme.js"
+import rrTableHeaderCellStyles from "./rr-table-header-cell.css?inline"
 import "./rr-table-header.js"
+
+const VALID_COLORS = ["white", "gray"]
+const STYLES = `${rrBaseStyles}\n${rrTableHeaderCellStyles}`
 
 class RrTableHeaderCell extends HTMLElement {
   constructor() {
@@ -22,53 +26,21 @@ class RrTableHeaderCell extends HTMLElement {
   render() {
     const label = this.getAttribute("label") || "Company"
     const showText = this.getAttribute("text") !== "false"
-    const showCheckbox = this.getAttribute("checkbox") === "true"
-    const color = this.getAttribute("color") || "white"
-    const showDot = this.getAttribute("dot") === "true"
+    const showCheckbox = getBooleanAttribute(this, "checkbox")
+    const color = normalizeOption(this.getAttribute("color") || "white", VALID_COLORS, "white")
+    const showDot = getBooleanAttribute(this, "dot")
     const arrow = this.getAttribute("arrow") || "none"
     const state = this.getAttribute("state") || "default"
-    const helpIcon = this.getAttribute("help-icon") || "false"
-
-    const background = color === "gray" ? "var(--rr-sem-surfaceSubtle)" : "var(--rr-sem-surfaceTable)"
+    const helpIcon = getBooleanAttribute(this, "help-icon")
 
     this.shadowRoot.innerHTML = `
-      <style>
-        ${rrBaseStyles}
-        .cell {
-          min-height: 40px;
-          height: 40px;
-          width: 100%;
-          border-bottom: 1px solid var(--rr-sem-borderDefault);
-          background: ${background};
-          display: flex;
-          align-items: center;
-          gap: var(--rr-spacing-sm);
-          padding: 0 var(--rr-spacing-lg);
-          box-sizing: border-box;
-        }
-
-        .checkbox {
-          width: 16px;
-          height: 16px;
-          border-radius: var(--rr-radius-sm);
-          border: 1px solid var(--rr-sem-borderField);
-          background: var(--rr-sem-surfaceField);
-          box-sizing: border-box;
-        }
-
-        .dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: var(--rr-sem-actionPrimary);
-          margin-left: 2px;
-          margin-right: 2px;
-        }
-      </style>
-      <div class="cell">
+      <style>${STYLES}</style>
+      <div class="cell" data-color="${color}">
         ${showCheckbox ? `<span class="checkbox" aria-hidden="true"></span>` : ""}
         ${showDot ? `<span class="dot" aria-hidden="true"></span>` : ""}
-        ${showText ? `<rr-table-header label="${label}" arrow="${arrow}" state="${state}" help-icon="${helpIcon}"></rr-table-header>` : ""}
+        ${showText
+    ? `<rr-table-header label="${escapeHtml(label)}" arrow="${escapeHtml(arrow)}" state="${escapeHtml(state)}" help-icon="${helpIcon}"></rr-table-header>`
+    : ""}
       </div>
     `
 

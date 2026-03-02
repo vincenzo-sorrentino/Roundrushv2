@@ -1,0 +1,66 @@
+:host {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--rr-spacing-lg, 16px);
+  cursor: pointer;
+}
+
+.row:focus-visible {
+  outline: none;
+}
+
+.row[data-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.row[data-underline="true"] {
+  align-items: flex-start;
+  width: 344px;
+  max-width: 100%;
+}
+
+.meta {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  flex: 1 1 auto;
+  letter-spacing: var(--rr-textTokens-general-letterSpacingMax, 0px);
+}
+
+.label,
+.description {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label {
+  font-size: var(--rr-textTokens-fontSizes-fields-label, 14px);
+  line-height: var(--rr-textTokens-lineHeight-fields-label, 20px);
+  font-weight: var(--rr-typography-fontWeightMedium, 500);
+  color: var(--rr-sem-textPrimary);
+  white-space: nowrap;
+}
+
+.description {
+  font-size: var(--rr-textTokens-fontSizes-fields-underline, 14px);
+  line-height: var(--rr-textTokens-lineHeight-fields-underline, 12px);
+  font-weight: var(--rr-typography-fontWeightRegular, 400);
+  color: var(--rr-sem-textSecondary);
+  white-space: normal;
+}
+
+.row[data-underline="false"] .description {
+  display: none;
+}
+
+.row[data-disabled="true"] .label,
+.row[data-disabled="true"] .description {
+  color: var(--rr-sem-text-disabled);
+}

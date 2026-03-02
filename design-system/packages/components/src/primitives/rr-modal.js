@@ -1,4 +1,7 @@
-import { rrBaseStyles } from "../internal/theme.js"
+import { escapeHtml, rrBaseStyles } from "../internal/theme.js"
+import rrModalStyles from "./rr-modal.css?inline"
+
+const STYLES = `${rrBaseStyles}\n${rrModalStyles}`
 
 class RrModal extends HTMLElement {
   constructor() {
@@ -18,59 +21,35 @@ class RrModal extends HTMLElement {
     this.render()
   }
 
+  close() {
+    this.removeAttribute("open")
+    this.dispatchEvent(new CustomEvent("rr-close", { bubbles: true, composed: true }))
+  }
+
   render() {
     const open = this.hasAttribute("open")
     const title = this.getAttribute("title") || "Modal"
 
     this.shadowRoot.innerHTML = `
-      <style>
-        ${rrBaseStyles}
-        .backdrop {
-          position: fixed;
-          inset: 0;
-          display: ${open ? "grid" : "none"};
-          place-items: center;
-          background: var(--rr-sem-overlay);
-        }
-
-        .dialog {
-          min-width: 320px;
-          max-width: 560px;
-          border-radius: var(--rr-radius-lg);
-          border: 1px solid var(--rr-sem-borderDefault);
-          background: var(--rr-sem-surface);
-          box-shadow: var(--rr-shadow-md);
-          padding: var(--rr-spacing-xl);
-          display: grid;
-          gap: var(--rr-spacing-lg);
-        }
-
-        .title {
-          font-size: var(--rr-typography-fontSizeLg);
-          font-weight: var(--rr-typography-fontWeightSemibold);
-        }
-
-        .actions {
-          display: flex;
-          justify-content: flex-end;
-          gap: var(--rr-spacing-sm);
-        }
-      </style>
-      <div class="backdrop" aria-hidden="${open ? "false" : "true"}">
-        <section class="dialog" role="dialog" aria-modal="true" aria-label="${title}">
-          <header class="title">${title}</header>
+      <style>${STYLES}</style>
+      <div class="backdrop" data-open="${open}" aria-hidden="${open ? "false" : "true"}">
+        <section class="dialog" role="dialog" aria-modal="true" aria-label="${escapeHtml(title)}">
+          <h2 class="title">${escapeHtml(title)}</h2>
           <slot></slot>
           <div class="actions">
             <slot name="actions"></slot>
-            <button type="button" data-close>Close</button>
+            <button type="button" class="close" data-close>Close</button>
           </div>
         </section>
       </div>
     `
 
-    this.shadowRoot.querySelector("[data-close]")?.addEventListener("click", () => {
-      this.removeAttribute("open")
-      this.dispatchEvent(new CustomEvent("rr-close", { bubbles: true, composed: true }))
+    this.shadowRoot.querySelector("[data-close]")?.addEventListener("click", () => this.close())
+
+    this.shadowRoot.querySelector(".backdrop")?.addEventListener("click", (event) => {
+      if (event.target.classList.contains("backdrop")) {
+        this.close()
+      }
     })
   }
 }
