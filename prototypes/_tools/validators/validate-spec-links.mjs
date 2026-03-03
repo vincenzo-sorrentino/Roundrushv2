@@ -91,8 +91,9 @@ function collectFlowConfigs() {
 }
 
 const errors = []
-const specPaths = walkFiles(path.resolve("requirements/_legacy/requirements-v1/domains"), (filePath) => filePath.endsWith("/spec.md"))
-const linkPaths = walkFiles(path.resolve("requirements/_legacy/requirements-v1/domains"), (filePath) => filePath.endsWith("/links.json"))
+const specsDir = path.resolve("requirements/epics")
+const specPaths = walkFiles(specsDir, (filePath) => filePath.endsWith("/spec.md"))
+const linkPaths = walkFiles(specsDir, (filePath) => filePath.endsWith("/links.json"))
 const routeConfigsByRoute = collectFlowConfigs()
 const specMetaByRelativePath = new Map()
 
