@@ -1,6 +1,7 @@
 import { renderAuthLoginFlow } from "../flows/auth-login/index.js"
 import { renderComponentsLibraryFlow } from "../flows/components-library/index.js"
 import { renderFoundationsColorsFlow } from "../flows/foundations-colors/index.js"
+import { mountRequirementsModuleFlow, renderRequirementsModuleFlow } from "../flows/requirements-module/index.js"
 
 const routes = [
   {
@@ -19,6 +20,13 @@ const routes = [
     id: "auth-login-default",
     path: "/auth/login/default",
     render: renderAuthLoginFlow,
+    status: "approved"
+  },
+  {
+    id: "requirements-module",
+    path: "/requirements/module",
+    render: renderRequirementsModuleFlow,
+    mount: mountRequirementsModuleFlow,
     status: "approved"
   }
 ]

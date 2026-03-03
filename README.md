@@ -31,6 +31,7 @@ Then open:
 
 - `http://localhost:5173/library/components` for the full component gallery (variants, states, sizes, composites).
 - `http://localhost:5173/library/foundations/colors` for the full token/theme foundations view.
+- `http://localhost:5173/requirements/module` for the read-only Requirements Module reflection prototype.
 
 ## Key Workflows
 

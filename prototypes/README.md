@@ -17,3 +17,4 @@ npm run dev --workspace prototypes/app
 ```
 
 Open `http://localhost:5173/library/components` to view the components library gallery.
+Open `http://localhost:5173/requirements/module` to view the Requirements Module read-only reflection prototype.
