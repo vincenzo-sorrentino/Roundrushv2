@@ -6,10 +6,10 @@ version: "0.1.0"
 last_updated: "2026-03-03"
 
 epics:
-  - id: EP001
+  - id: AUT
     slug: authentication
-    title: Authentication
-    path: epics/EP001-authentication/
+    title: Authentication and team access
+    path: epics/AUT-authentication/
 
   - id: EP002
     slug: requirements

@@ -1,0 +1,47 @@
+version: 1
+epic_id: AUT
+title: Authentication
+policies:
+  integration_branch: dev
+  release_branch: main
+  coverage_threshold_percent: 100
+  evidence_preference: ci_preferred   # ci_required | ci_preferred | allow_agent
+  required_manual_suites:
+    smoke: true
+    uat: false
+    non_functional: false
+laws:
+  - id: AL-01
+    name: Production code implemented
+    description: Required production code for all modules is implemented and merged into the integration branch.
+    evidence_required: [MergeStatus]
+
+  - id: AL-02
+    name: Unit and integration tests pass with required coverage
+    description: All unit and integration tests pass and coverage meets the project threshold.
+    evidence_required: [TestExecution(unit), TestExecution(integration), CoverageReport]
+
+  - id: AL-03
+    name: Documentation updated
+    description: Documentation is updated where applicable (requirements if necessary, code comments, component docs, and any required technical docs).
+    evidence_required: [DocumentationUpdate]
+
+  - id: AL-04
+    name: End-to-end tests implemented and passed
+    description: E2E tests exist for user-facing flows and pass in CI.
+    evidence_required: [TestExecution(e2e)]
+
+  - id: AL-05
+    name: Dependency map updated
+    description: Dependency map is updated (or explicitly confirmed unchanged) when changes affect module boundaries or coupling.
+    evidence_required: [DependencyGraphUpdate]
+
+  - id: AL-06
+    name: Dependency-based regression tests pass
+    description: Regression tests derived from impacted modules (via dependency map) pass with 100% success.
+    evidence_required: [TestExecution(regression)]
+
+  - id: AL-07
+    name: Required manual suites completed
+    description: Required manual validation sessions are completed and recorded.
+    evidence_required: [ManualTestSession]

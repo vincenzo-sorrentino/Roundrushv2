@@ -1,0 +1,9 @@
+module: AUT-M002
+prototypes:
+  - version: v1
+    path: /prototypes/AUT/signup/v1/
+    status: in_progress        # planned | in_progress | delivered | validated
+    customer_approval:
+      status: pending           # pending | approved | rejected
+      date: null
+      notes: ""

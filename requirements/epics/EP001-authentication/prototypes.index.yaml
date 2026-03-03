@@ -1,9 +1,0 @@
-# Prototype index for EP001 — Authentication
-# Lists all module-level prototypes in this epic.
-
-epic_id: EP001
-title: "Authentication"
-
-modules:
-  - module_id: EP001-M001-login
-    prototypes_ref: modules/EP001-M001-login/prototypes.yaml
