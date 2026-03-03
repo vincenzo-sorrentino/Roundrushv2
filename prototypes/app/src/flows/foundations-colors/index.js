@@ -1,5 +1,5 @@
 import { tokens } from "@roundrush/tokens"
-import figmaDesignTokens from "../../../../../design-tokens.tokens.json"
+import figmaDesignTokens from "../../../../design-tokens.tokens.json"
 
 const SCALE_STEPS = ["0", "25", "50", "100", "150", "200", "300", "400", "500", "600", "700", "800", "850", "900", "950"]
 

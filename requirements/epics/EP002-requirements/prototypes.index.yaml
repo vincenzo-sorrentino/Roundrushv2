@@ -1,0 +1,9 @@
+# Prototype index for EP002 — Requirements
+# Lists all module-level prototypes in this epic.
+
+epic_id: EP002
+title: "Requirements"
+
+modules:
+  - module_id: EP002-M001-requirements-management
+    prototypes_ref: modules/EP002-M001-requirements-management/prototypes.yaml

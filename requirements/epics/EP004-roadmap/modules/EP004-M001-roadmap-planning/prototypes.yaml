@@ -1,0 +1,20 @@
+# Prototypes for module EP004-M001-roadmap-planning
+module_id: EP004-M001-roadmap-planning
+epic_id: EP004
+
+design_system_ref:
+  path: "/prototypes/design-system"
+
+prototype_runtime_ref:
+  path: "/prototypes/_shared"
+
+prototypes: []
+# Example entry:
+# - id: proto-001
+#   version: "0.1.0"
+#   entrypoint: "/prototypes/EP004/EP004-M001-roadmap-planning/index.html"
+#   type: html
+#   customer_approval:
+#     status: pending
+#     approved_by: null
+#     approved_at: null

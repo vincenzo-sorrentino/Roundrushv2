@@ -1,0 +1,20 @@
+# Prototypes for module EP003-M001-dependency-tracking
+module_id: EP003-M001-dependency-tracking
+epic_id: EP003
+
+design_system_ref:
+  path: "/prototypes/design-system"
+
+prototype_runtime_ref:
+  path: "/prototypes/_shared"
+
+prototypes: []
+# Example entry:
+# - id: proto-001
+#   version: "0.1.0"
+#   entrypoint: "/prototypes/EP003/EP003-M001-dependency-tracking/index.html"
+#   type: html
+#   customer_approval:
+#     status: pending
+#     approved_by: null
+#     approved_at: null

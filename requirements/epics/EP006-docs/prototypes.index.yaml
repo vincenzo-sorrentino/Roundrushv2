@@ -1,0 +1,9 @@
+# Prototype index for EP006 — Docs
+# Lists all module-level prototypes in this epic.
+
+epic_id: EP006
+title: "Docs"
+
+modules:
+  - module_id: EP006-M001-documentation
+    prototypes_ref: modules/EP006-M001-documentation/prototypes.yaml

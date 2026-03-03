@@ -1,0 +1,29 @@
+# Prototypes for module EP002-M001-requirements-management
+module_id: EP002-M001-requirements-management
+epic_id: EP002
+
+design_system_ref:
+  path: "/prototypes/design-system"
+
+prototype_runtime_ref:
+  path: "/prototypes/_shared"
+
+prototypes:
+  - id: proto-req-module-001
+    version: "0.1.0"
+    entrypoint: "/prototypes/app/src/flows/requirements-module/index.js"
+    type: html
+    notes: "Existing Vite-based prototype (not moved to avoid breaking build)"
+    customer_approval:
+      status: pending
+      approved_by: null
+      approved_at: null
+  - id: proto-req-module-static-001
+    version: "0.1.0"
+    entrypoint: "/prototypes/app/public/prototypes/requirements-module/index.html"
+    type: html
+    notes: "Static HTML prototype"
+    customer_approval:
+      status: pending
+      approved_by: null
+      approved_at: null

@@ -1,0 +1,9 @@
+# Prototype index for EP005 — Kanban / Planning
+# Lists all module-level prototypes in this epic.
+
+epic_id: EP005
+title: "Kanban / Planning"
+
+modules:
+  - module_id: EP005-M001-kanban-board
+    prototypes_ref: modules/EP005-M001-kanban-board/prototypes.yaml

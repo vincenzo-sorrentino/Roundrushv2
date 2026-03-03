@@ -1,0 +1,9 @@
+# Prototype index for EP004 — Roadmap
+# Lists all module-level prototypes in this epic.
+
+epic_id: EP004
+title: "Roadmap"
+
+modules:
+  - module_id: EP004-M001-roadmap-planning
+    prototypes_ref: modules/EP004-M001-roadmap-planning/prototypes.yaml

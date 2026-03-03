@@ -4,11 +4,8 @@ This repository is a single monorepo for product specification, design system im
 
 ## Workspace Areas
 
-- `requirements/`: domain-first product requirements and flow definitions.
-- `design-system/`: Figma-sourced tokens/themes and strict `rr-*` Web Components.
-- `prototypes/`: route-driven Vite prototype app consuming the design system packages.
-- `process/`: governance docs, conventions, and architecture decisions.
-- `tools/`: validators and CI support scripts.
+- `requirements/` — EP-based product requirements, acceptance laws, governance, and legacy docs.
+- `prototypes/` — Vite prototype app, design system (tokens/themes/components), and CI/validation tools.
 
 ## Quick Start
 
@@ -40,3 +37,20 @@ Then open:
 - Regenerate component skeletons from Figma export: `npm run scaffold:components`
 - Run prototype app: `npm start` or `npm run dev:prototype`
 - Run component library explorer (Storybook): `npm run dev:storybook`
+- Generate acceptance-laws.md from YAML: `npm run generate:acceptance-laws`
+
+## Acceptance Laws
+
+Each epic under `requirements/epics/EP00x-*/` contains:
+
+- `acceptance-laws.yaml` — the machine-readable source of truth
+- `acceptance-laws.md` — human-readable view, auto-generated from the YAML
+
+To regenerate all `.md` files after editing any YAML:
+
+```bash
+npm run generate:acceptance-laws
+```
+
+The script computes a SHA-256 hash of the YAML contents and embeds it in the
+Markdown front matter (`yaml_hash`), making it easy to verify alignment.

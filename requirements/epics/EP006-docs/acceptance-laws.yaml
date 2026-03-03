@@ -1,0 +1,35 @@
+# Acceptance Laws for EP006 — Docs
+# This is the machine-readable source of truth.
+# Run: node requirements/_scripts/generate-acceptance-laws-md.js to regenerate acceptance-laws.md
+
+epic_id: EP006
+title: "Docs"
+
+laws:
+  - id: AL-01
+    title: Production code implemented
+    description: All production code for this epic is implemented, reviewed, and merged.
+
+  - id: AL-02
+    title: Unit + Integration tests pass + coverage requirement satisfied
+    description: All unit and integration tests pass, and code coverage meets the project threshold.
+
+  - id: AL-03
+    title: Documentation updated
+    description: Documentation is updated, including UML, architecture diagrams, and use-cases where applicable.
+
+  - id: AL-04
+    title: E2E tests implemented and passed
+    description: End-to-end tests are implemented and all pass successfully.
+
+  - id: AL-05
+    title: Dependency map updated
+    description: The dependency map is updated to reflect any new or changed dependencies.
+
+  - id: AL-06
+    title: Dependency-based regression tests pass
+    description: Regression tests triggered by dependency changes all pass.
+
+  - id: AL-07
+    title: Manual suites completed
+    description: Manual test suites (smoke, UAT, non-functional) are completed as applicable.
