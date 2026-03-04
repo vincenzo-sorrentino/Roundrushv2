@@ -2536,6 +2536,7 @@ rr-alert.rr-req-info-callout {
   border-right: 1px solid #e0e2e7;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   color: #424856;
   font-family: 'Rubik', var(--rr-typography-fontFamilyBase, sans-serif);
   transition: width 0.15s ease;
@@ -2546,13 +2547,13 @@ rr-alert.rr-req-info-callout {
   width: 88px;
   align-items: center;
   padding: 24px 18px;
-  gap: 8px;
+  gap: 0;
 }
 
 .rr-sidebar--open {
   width: 260px;
-  padding: 24px 18px;
-  gap: 4px;
+  padding: 24px 20px;
+  gap: 0;
 }
 
 .rr-sidebar-top {
@@ -2560,11 +2561,23 @@ rr-alert.rr-req-info-callout {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
+  padding-left: 8px;
 }
 
 .rr-sidebar--collapsed .rr-sidebar-top {
   justify-content: center;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+/* wrapper for logo header + nav — provides the 32px gap between them */
+.rr-sidebar-cont {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
 }
 
 .rr-sidebar-toggle {
@@ -2587,114 +2600,200 @@ rr-alert.rr-req-info-callout {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.rr-sidebar-logo-mark {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: #0067da;
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.rr-sidebar-logo-text {
-  font-weight: 600;
-  font-size: 16px;
-  color: #1a1c21;
+  /* logo is an SVG glyph — no background wrapper needed */
 }
 
 .rr-sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  flex: 1;
-}
-
-.rr-sidebar--collapsed .rr-sidebar-nav {
-  align-items: center;
-  gap: 8px;
-}
-
-.rr-sidebar-badge {
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 12px;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
+  gap: 4px;
 }
 
 .rr-sidebar-link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 8px;
+  padding: 12px 8px;
   border-radius: 8px;
   text-decoration: none;
-  color: #424856;
-  font-size: 14px;
+  color: #14161b;
+  font-size: 16px;
   font-weight: 400;
+  line-height: 18px;
 }
 
 .rr-sidebar-link:hover {
   background: #f0f1f3;
 }
 
-.rr-sidebar-link--active {
-  background: #ebf2ff;
-  color: #0067da;
-  font-weight: 500;
-}
-
 .rr-sidebar-link svg {
   flex-shrink: 0;
+  color: #424856;
 }
 
+/* Inbox badge — rectangular per Figma design (not a pill) */
 .rr-sidebar-inbox-badge {
   margin-left: auto;
-  min-width: 22px;
   height: 20px;
-  padding: 0 6px;
-  border-radius: 10px;
-  background: #e34850;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #d13245;
   color: #fff;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
 }
 
-.rr-sidebar-section-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #8b8fa7;
-  padding: 16px 12px 6px;
+/* Horizontal divider between nav groups */
+.rr-sidebar-divider {
+  height: 1px;
+  background: #e0e2e7;
+  margin: 4px 0;
+  flex-shrink: 0;
 }
 
-.rr-sidebar-link--team svg {
+/* Teams section header — icon + label row with hover-revealed add button */
+.rr-sidebar-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px 4px;
+  border-radius: 8px;
+  color: #14161b;
+}
+
+.rr-sidebar-section-header-icon {
+  display: flex;
+  flex-shrink: 0;
   color: #8b8fa7;
+}
+
+.rr-sidebar-section-header-text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #14161b;
+}
+
+.rr-sidebar-section-header-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #8b8fa7;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.rr-sidebar-section-header:hover .rr-sidebar-section-header-add {
+  opacity: 1;
+}
+
+.rr-sidebar-section-header-add:hover {
+  background: #f0f1f3;
+}
+
+/* Team list item — bullet dot + label + caret */
+.rr-sidebar-team-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #14161b;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18px;
+  user-select: none;
+}
+
+.rr-sidebar-team-item:hover {
+  background: #f0f1f3;
+}
+
+.rr-sidebar-team-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0d5dd;
+  flex-shrink: 0;
+}
+
+.rr-sidebar-team-label {
+  flex: 1;
+}
+
+.rr-sidebar-team-caret {
+  display: flex;
+  align-items: center;
+  color: #8b8fa7;
+}
+
+/* Expanded sub-projects list (connector branch visual) */
+.rr-sidebar-subnav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 0 8px 28px;
+  position: relative;
+}
+
+.rr-sidebar-subnav::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 0;
+  bottom: 8px;
+  width: 1px;
+  background: #e0e2e7;
+}
+
+.rr-sidebar-subitem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  color: #14161b;
+  line-height: 18px;
+}
+
+.rr-sidebar-subitem:hover {
+  background: #f0f1f3;
+}
+
+.rr-sidebar-project-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.rr-sidebar-subitem-label {
+  flex: 1;
 }
 
 .rr-sidebar-bottom {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid #e0e2e7;
+  /* no border-top per Figma Kat branch — profile floats at bottom */
+  flex-shrink: 0;
 }
 
 .rr-sidebar-avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   background: #d0d5dd;
   color: #424856;
@@ -2707,24 +2806,91 @@ rr-alert.rr-req-info-callout {
 .rr-sidebar-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 4px;
+  gap: 16px;
+  padding: 4px 0;
 }
 
 .rr-sidebar-profile-info {
   display: grid;
-  gap: 1px;
+  gap: 0;
 }
 
 .rr-sidebar-profile-info strong {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1a1c21;
+  font-size: 16px;
+  font-weight: 400;
+  color: #14161b;
+  line-height: 18px;
 }
 
 .rr-sidebar-profile-info span {
   font-size: 12px;
-  color: #8b8fa7;
+  color: #667085;
+  line-height: 18px;
+}
+
+/* =====================================================
+   COLLAPSED SIDEBAR — nav items (bell, project/team badges)
+   ===================================================== */
+
+.rr-sidebar-collapsed-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  padding: 16px 0 8px;
+}
+
+.rr-sidebar-collapsed-nav .rr-sidebar-divider {
+  width: 36px;
+  margin: 8px 0;
+}
+
+.rr-sidebar-collapsed-bell {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #424856;
+  border-radius: 8px;
+}
+
+.rr-sidebar-collapsed-bell:hover {
+  background: #f0f1f3;
+}
+
+.rr-sidebar-notification-dot {
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d13245;
+  border: 1.5px solid rgba(244, 59, 81, 0.3);
+}
+
+.rr-sidebar-collapsed-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.rr-sidebar-collapsed-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1;
 }
 
 /* =====================================================
