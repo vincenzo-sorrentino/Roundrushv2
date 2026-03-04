@@ -1,15 +1,9 @@
 ---
-generated_from: acceptance-laws.yaml
-yaml_hash: b8729fa5328bfaa124696ca833a3a451acfc54adada836edccc9f8c163043aa7
-generated_at: "2026-03-03T14:17:54.784Z"
 epic_id: EP007
 title: "Testing Suite"
 ---
 
 # Acceptance Laws — EP007 Testing Suite
-
-> **Auto-generated** from `acceptance-laws.yaml`.
-> Do not edit manually — run `node requirements/_scripts/generate-acceptance-laws-md.js` to regenerate.
 
 | ID | Law | Description |
 |---|---|---|

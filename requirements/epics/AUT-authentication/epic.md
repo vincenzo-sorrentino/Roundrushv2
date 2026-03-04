@@ -6,7 +6,6 @@ design_state: drafting   # discovery | drafting | review | approved | ready_for_
 modules:
   - AUT-M001
   - AUT-M002
-prototypes_index: prototypes.index.yaml
 ---
 
 ## Objective

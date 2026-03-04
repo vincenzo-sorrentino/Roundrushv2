@@ -1,9 +1,0 @@
-# Prototype index for EP003 — Dependencies
-# Lists all module-level prototypes in this epic.
-
-epic_id: EP003
-title: "Dependencies"
-
-modules:
-  - module_id: EP003-M001-dependency-tracking
-    prototypes_ref: modules/EP003-M001-dependency-tracking/prototypes.yaml

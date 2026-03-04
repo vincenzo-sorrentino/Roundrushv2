@@ -26,7 +26,6 @@
     "build:tokens": "node prototypes/design-system/scripts/build-tokens.mjs",
     "scaffold:components": "node prototypes/design-system/scripts/scaffold-components.mjs",
     "sync:figma": "node prototypes/design-system/scripts/sync-figma-tokens.mjs",
-    "generate:acceptance-laws": "node requirements/_scripts/generate-acceptance-laws-md.js",
     "setup": "npm install && npm run build:tokens && npm run scaffold:components"
   },
   "engines": {

@@ -1,6 +1,6 @@
 ---
-yaml_hash: b0f9eb5b6ae700ec3a8be73111aa89ca55aa6a472637c1b837baad2cb22610ca
-generated_by: requirements/_scripts/generate-acceptance-laws-md.js
+epic_id: AUT
+title: "Authentication"
 ---
 
 # AUT — Authentication · Acceptance Laws

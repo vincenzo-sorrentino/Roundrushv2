@@ -1,15 +1,9 @@
 ---
-generated_from: acceptance-laws.yaml
-yaml_hash: 569b4a61c622268de4ab12911fb34aa6bd639892a1223cbd27f242a8e8a3f731
-generated_at: "2026-03-03T14:17:54.782Z"
 epic_id: EP003
 title: "Dependencies"
 ---
 
 # Acceptance Laws — EP003 Dependencies
-
-> **Auto-generated** from `acceptance-laws.yaml`.
-> Do not edit manually — run `node requirements/_scripts/generate-acceptance-laws-md.js` to regenerate.
 
 | ID | Law | Description |
 |---|---|---|

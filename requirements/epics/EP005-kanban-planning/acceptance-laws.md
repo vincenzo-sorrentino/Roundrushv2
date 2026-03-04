@@ -1,15 +1,9 @@
 ---
-generated_from: acceptance-laws.yaml
-yaml_hash: 4ab894c3b5d91fd8f5c8d1e3455a677a20b4e4f3041e8b6a0e67984a3faa5564
-generated_at: "2026-03-03T14:17:54.784Z"
 epic_id: EP005
 title: "Kanban / Planning"
 ---
 
 # Acceptance Laws — EP005 Kanban / Planning
-
-> **Auto-generated** from `acceptance-laws.yaml`.
-> Do not edit manually — run `node requirements/_scripts/generate-acceptance-laws-md.js` to regenerate.
 
 | ID | Law | Description |
 |---|---|---|

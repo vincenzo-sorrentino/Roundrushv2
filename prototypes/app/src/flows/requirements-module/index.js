@@ -498,8 +498,7 @@ modules:
   - AUT-M002 (Signup)
   - AUT-M003 (Session management)
   - AUT-M004 (Password recovery)
-  - AUT-M005 (2-factor authentication)
-prototypes_index: prototypes.index.yaml</pre>
+  - AUT-M005 (2-factor authentication)</pre>
       <div class="rr-rm2-divider"></div>
       <h4>Objective</h4>
       <p>${escapeHtml(EPIC.objective)}</p>
