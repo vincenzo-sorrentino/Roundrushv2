@@ -27,7 +27,8 @@ const routes = [
     path: "/requirements/module",
     render: renderRequirementsModuleFlow,
     mount: mountRequirementsModuleFlow,
-    status: "approved"
+    status: "approved",
+    showGlobalNavigation: false
   }
 ]
 

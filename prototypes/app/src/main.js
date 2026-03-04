@@ -5,18 +5,39 @@ import "./styles/app.css"
 
 import { resolveRoute } from "./router/routes.js"
 import { canAccessRoute } from "./router/guards.js"
+import { renderSidebar, mountSidebar, isSidebarCollapsed } from "./shared/sidebar.js"
 
 const app = document.querySelector("#app")
 let currentUnmount = null
 
-function renderNavigation(currentPath) {
+const TAB_HEADER_ITEMS = [
+  { id: "dashboard", label: "Dashboard", path: "/library/foundations/colors" },
+  { id: "requirements", label: "Requirements", path: "/requirements/module" },
+  { id: "planning", label: "Planning", path: null },
+  { id: "dependencies", label: "Dependencies", path: null },
+  { id: "issues", label: "Issues", path: null },
+  { id: "docs", label: "Docs", path: null },
+  { id: "design", label: "Design", path: "/library/components" },
+]
+
+function renderTabHeader(currentPath) {
+  const tabs = TAB_HEADER_ITEMS.map(tab => {
+    const isActive = tab.path && currentPath.startsWith(tab.path)
+    const href = tab.path || "#"
+    const cls = `rr-tab-header-item${isActive ? " rr-tab-header-item--active" : ""}${!tab.path ? " rr-tab-header-item--disabled" : ""}`
+    return `<a href="${href}" class="${cls}">${tab.label}</a>`
+  }).join("")
+
   return `
-    <nav class="rr-nav">
-      <a href="/library/foundations/colors" ${currentPath === "/library/foundations/colors" ? 'data-active="true"' : ""}>Foundations</a>
-      <a href="/library/components" ${currentPath === "/library/components" ? 'data-active="true"' : ""}>Components Library</a>
-      <a href="/requirements/module" ${currentPath === "/requirements/module" ? 'data-active="true"' : ""}>Requirements</a>
-      <a href="/auth/login/default" ${currentPath === "/auth/login/default" ? 'data-active="true"' : ""}>Auth Login</a>
-    </nav>
+    <header class="rr-tab-header" id="rr-tab-header">
+      <div class="rr-tab-header-tabs">${tabs}</div>
+      <div class="rr-tab-header-actions">
+        <button type="button" class="rr-tab-filter">All modules</button>
+        <button type="button" class="rr-tab-filter">All priority</button>
+        <button type="button" class="rr-tab-filter">All statuses</button>
+        <span class="rr-tab-sync">Last sync: 03/03/26</span>
+      </div>
+    </header>
   `
 }
 
@@ -26,24 +47,55 @@ async function render() {
     currentUnmount = null
   }
 
-  const currentPath = window.location.pathname === "/" ? "/library/foundations/colors" : window.location.pathname
+  const currentPath = window.location.pathname === "/" ? "/requirements/module" : window.location.pathname
   if (window.location.pathname === "/") {
     window.history.replaceState({}, "", currentPath)
   }
   const route = resolveRoute(currentPath)
 
+  const sidebarHtml = renderSidebar(isSidebarCollapsed())
+  const tabHeaderHtml = renderTabHeader(currentPath)
+
   if (!route) {
-    app.innerHTML = `${renderNavigation(currentPath)}<section class="rr-empty"><h1>Route not found</h1></section>`
+    app.innerHTML = `
+      <div class="rr-app-layout">
+        ${sidebarHtml}
+        <div class="rr-app-content">
+          ${tabHeaderHtml}
+          <section class="rr-empty"><h1>Route not found</h1></section>
+        </div>
+      </div>
+    `
+    mountSidebar(() => render())
     return
   }
 
   if (!canAccessRoute(route)) {
-    app.innerHTML = `${renderNavigation(currentPath)}<section class="rr-empty"><h1>Access denied</h1></section>`
+    app.innerHTML = `
+      <div class="rr-app-layout">
+        ${sidebarHtml}
+        <div class="rr-app-content">
+          ${tabHeaderHtml}
+          <section class="rr-empty"><h1>Access denied</h1></section>
+        </div>
+      </div>
+    `
+    mountSidebar(() => render())
     return
   }
 
   const html = await route.render()
-  app.innerHTML = `${renderNavigation(currentPath)}${html}`
+  app.innerHTML = `
+    <div class="rr-app-layout">
+      ${sidebarHtml}
+      <div class="rr-app-content">
+        ${tabHeaderHtml}
+        ${html}
+      </div>
+    </div>
+  `
+
+  mountSidebar(() => render())
 
   if (typeof route.mount === "function") {
     const maybeCleanup = route.mount()
