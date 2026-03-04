@@ -4,3 +4,4 @@ dist/
 coverage/
 .storybook-static/
 storybook-static/
+.env.local
