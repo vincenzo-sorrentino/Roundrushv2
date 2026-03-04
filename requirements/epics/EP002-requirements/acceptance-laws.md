@@ -1,15 +1,9 @@
 ---
-generated_from: acceptance-laws.yaml
-yaml_hash: 29c11836548a1b52f552f56c8cae4edd1de97403a2bab8287b89f6f361a0acb9
-generated_at: "2026-03-03T14:17:54.781Z"
 epic_id: EP002
 title: "Requirements"
 ---
 
 # Acceptance Laws — EP002 Requirements
-
-> **Auto-generated** from `acceptance-laws.yaml`.
-> Do not edit manually — run `node requirements/_scripts/generate-acceptance-laws-md.js` to regenerate.
 
 | ID | Law | Description |
 |---|---|---|

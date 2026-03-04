@@ -1,9 +1,0 @@
-module: AUT-M001
-prototypes:
-  - version: v1
-    path: /prototypes/AUT/login/v1/
-    status: in_progress        # planned | in_progress | delivered | validated
-    customer_approval:
-      status: pending           # pending | approved | rejected
-      date: null
-      notes: ""

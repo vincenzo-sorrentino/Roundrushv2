@@ -1,15 +1,9 @@
 ---
-generated_from: acceptance-laws.yaml
-yaml_hash: 33b6b62d9a4fc222bef1eb49c848b9ca8f4a98f28ce144b5800797e29f2986af
-generated_at: "2026-03-03T14:17:54.782Z"
 epic_id: EP004
 title: "Roadmap"
 ---
 
 # Acceptance Laws — EP004 Roadmap
-
-> **Auto-generated** from `acceptance-laws.yaml`.
-> Do not edit manually — run `node requirements/_scripts/generate-acceptance-laws-md.js` to regenerate.
 
 | ID | Law | Description |
 |---|---|---|

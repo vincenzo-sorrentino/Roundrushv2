@@ -19,8 +19,8 @@ TODO: Describe the epic scope.
 
 ## Acceptance Laws
 
-See [acceptance-laws.md](acceptance-laws.md) (generated from [acceptance-laws.yaml](acceptance-laws.yaml)).
+See [acceptance-laws.md](acceptance-laws.md).
 
 ## Prototypes
 
-See [prototypes.index.yaml](prototypes.index.yaml) for a listing of all module-level prototypes.
+TODO: List prototypes here.

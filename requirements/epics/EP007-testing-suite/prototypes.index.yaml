@@ -1,9 +1,0 @@
-# Prototype index for EP007 — Testing Suite
-# Lists all module-level prototypes in this epic.
-
-epic_id: EP007
-title: "Testing Suite"
-
-modules:
-  - module_id: EP007-M001-test-management
-    prototypes_ref: modules/EP007-M001-test-management/prototypes.yaml

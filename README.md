@@ -37,20 +37,9 @@ Then open:
 - Regenerate component skeletons from Figma export: `npm run scaffold:components`
 - Run prototype app: `npm start` or `npm run dev:prototype`
 - Run component library explorer (Storybook): `npm run dev:storybook`
-- Generate acceptance-laws.md from YAML: `npm run generate:acceptance-laws`
 
 ## Acceptance Laws
 
 Each epic under `requirements/epics/EP00x-*/` contains:
 
-- `acceptance-laws.yaml` — the machine-readable source of truth
-- `acceptance-laws.md` — human-readable view, auto-generated from the YAML
-
-To regenerate all `.md` files after editing any YAML:
-
-```bash
-npm run generate:acceptance-laws
-```
-
-The script computes a SHA-256 hash of the YAML contents and embeds it in the
-Markdown front matter (`yaml_hash`), making it easy to verify alignment.
+- `acceptance-laws.md` — the list of acceptance criteria that must be met before an epic is considered done

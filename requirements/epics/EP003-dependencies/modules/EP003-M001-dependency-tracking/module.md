@@ -20,4 +20,4 @@ TODO: List functionality files.
 
 ## Prototypes
 
-See [prototypes.yaml](prototypes.yaml).
+TODO: List prototypes here.
