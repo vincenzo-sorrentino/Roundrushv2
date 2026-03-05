@@ -752,6 +752,88 @@ export async function renderComponentsLibraryFlow() {
 
       <section class="rr-library-section">
         <div class="rr-library-section-head">
+          <h2>Sprint &amp; Kanban Atoms</h2>
+          <p>Inline atoms used in the Sprint Planning module. These are prototype-scoped CSS components (rr-kb-* classes).</p>
+        </div>
+
+        <div class="rr-library-composite-grid">
+          <article class="rr-library-composite-card">
+            <h3>Priority Indicators</h3>
+            <div class="rr-library-inline-row" style="gap:24px">
+              <span class="rr-kb-priority"><svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,160 128,80 208,160" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg><span>High</span></span>
+              <span class="rr-kb-priority"><svg width="18" height="18" viewBox="0 0 256 256" fill="none"><line x1="40" y1="96" x2="216" y2="96" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="40" y1="160" x2="216" y2="160" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg><span>Medium</span></span>
+              <span class="rr-kb-priority"><svg width="18" height="18" viewBox="0 0 256 256" fill="none"><line x1="128" y1="56" x2="128" y2="200" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="72,144 128,200 184,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Low</span></span>
+            </div>
+          </article>
+
+          <article class="rr-library-composite-card">
+            <h3>Avatar Groups</h3>
+            <div class="rr-library-inline-row" style="gap:24px">
+              <span class="rr-kb-avatar-group">
+                <span class="rr-kb-avatar" style="background:#d4b5ad" title="Olivia Rhye">OR</span>
+                <span class="rr-kb-avatar" style="background:#a2a8cd" title="Candice Wu">CW</span>
+              </span>
+              <span class="rr-kb-avatar-group">
+                <span class="rr-kb-avatar" style="background:#cfc3a7" title="Orlando Diggs">OD</span>
+                <span class="rr-kb-avatar" style="background:#bea887" title="Demi Wilkinson">DW</span>
+                <span class="rr-kb-avatar" style="background:#d1dfc3" title="Drew Cano">DC</span>
+                <span class="rr-kb-avatar rr-kb-avatar--overflow">+2</span>
+              </span>
+            </div>
+          </article>
+
+          <article class="rr-library-composite-card rr-library-composite-card--wide" style="grid-column: 1/-1">
+            <h3>Progress Bars</h3>
+            <div class="rr-library-inline-row" style="gap:32px;flex-wrap:wrap">
+              <span class="rr-kb-progress"><span class="rr-kb-progress-track"><span class="rr-kb-progress-fill" style="width:0%;background:var(--rr-kanban-progress-partial,#667085)"></span></span><span class="rr-kb-progress-label">0%</span></span>
+              <span class="rr-kb-progress"><span class="rr-kb-progress-track"><span class="rr-kb-progress-fill" style="width:30%;background:var(--rr-kanban-progress-partial,#667085)"></span></span><span class="rr-kb-progress-label">30%</span></span>
+              <span class="rr-kb-progress"><span class="rr-kb-progress-track"><span class="rr-kb-progress-fill" style="width:60%;background:var(--rr-kanban-progress-partial,#667085)"></span></span><span class="rr-kb-progress-label">60%</span></span>
+              <span class="rr-kb-progress"><span class="rr-kb-progress-track"><span class="rr-kb-progress-fill" style="width:80%;background:var(--rr-kanban-progress-partial,#667085)"></span></span><span class="rr-kb-progress-label">80%</span></span>
+              <span class="rr-kb-progress"><span class="rr-kb-progress-track"><span class="rr-kb-progress-fill" style="width:100%;background:var(--rr-kanban-progress-full,#0e9255)"></span></span><span class="rr-kb-progress-label">100%</span></span>
+            </div>
+          </article>
+
+          <article class="rr-library-composite-card rr-library-composite-card--wide" style="grid-column: 1/-1">
+            <h3>Status Badges</h3>
+            <div class="rr-library-inline-row" style="gap:12px;flex-wrap:wrap">
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-todo-bg,#e0e2e7);color:var(--rr-kanban-status-todo-text,#3d4350)">To do</span>
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-progress-bg,#daebff);color:var(--rr-kanban-status-progress-text,#0067da)">In progress</span>
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-merged-bg,#fbc6cd);color:var(--rr-kanban-status-merged-text,#d13245)">Merged-QA</span>
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-done-bg,#d4f5e3);color:var(--rr-kanban-status-done-text,#0e9255)">Done</span>
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-review-bg,#fff3cd);color:var(--rr-kanban-status-review-text,#856404)">Review</span>
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-validating-bg,#f6edfd);color:var(--rr-kanban-status-validating-text,#9b5bce)">Validating</span>
+              <span class="rr-kb-status" style="background:var(--rr-kanban-status-blocked-bg,#fef2f1);color:var(--rr-kanban-status-blocked-text,#c0362d)">Blocked</span>
+            </div>
+          </article>
+
+          <article class="rr-library-composite-card">
+            <h3>Blocker Icon</h3>
+            <div class="rr-library-inline-row" style="gap:16px;align-items:center">
+              <span class="rr-kb-blocker" title="Blocker"><svg width="18" height="18" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><line x1="60" y1="196" x2="196" y2="60" stroke="currentColor" stroke-width="16"/></svg></span>
+              <span style="font-size:13px;color:var(--rr-sem-fg-secondary,#667085)">Shown next to blocked module rows</span>
+            </div>
+          </article>
+
+          <article class="rr-library-composite-card">
+            <h3>Sprint Selector Pill</h3>
+            <div class="rr-library-inline-row" style="gap:16px;align-items:center">
+              <button type="button" class="rr-kb-sprint-btn" style="pointer-events:none">
+                <span class="rr-kb-sprint-dot" style="background:#0e9255"></span>
+                <span>Sprint 13</span>
+                <svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button type="button" class="rr-kb-sprint-btn" style="pointer-events:none">
+                <span class="rr-kb-sprint-dot" style="background:#667085"></span>
+                <span>Sprint 12</span>
+                <svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="rr-library-section">
+        <div class="rr-library-section-head">
           <h2>Modal Preview</h2>
           <p>Open state rendered in preview mode.</p>
         </div>
