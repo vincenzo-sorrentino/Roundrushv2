@@ -57,6 +57,15 @@ const MODULES = [
     title: "User login",
     scope: "Allow registered users to authenticate with email + password and recover a forgotten password.",
     status: "released",
+    laws: {
+      "AL-01": { status: "pass" },
+      "AL-02": { status: "pass" },
+      "AL-03": { status: "pass" },
+      "AL-04": { status: "pass" },
+      "AL-05": { status: "pass" },
+      "AL-06": { status: "pass" },
+      "AL-07": { status: "pass" }
+    },
     prototypes: [
       {
         name: "Login flow - v1",
@@ -180,6 +189,15 @@ const MODULES = [
     scope:
       "Allow new users to join RoundRush through invitation email, account creation, and automatic team joining.",
     status: "released",
+    laws: {
+      "AL-01": { status: "pass" },
+      "AL-02": { status: "pass" },
+      "AL-03": { status: "pass" },
+      "AL-04": { status: "pass" },
+      "AL-05": { status: "pass" },
+      "AL-06": { status: "pass" },
+      "AL-07": { status: "pass" }
+    },
     prototypes: [
       {
         name: "Signup flow - v1",
@@ -297,6 +315,15 @@ const MODULES = [
     title: "User session management",
     scope: "Track, refresh, and revoke sessions safely across devices.",
     status: "planned",
+    laws: {
+      "AL-01": { status: "unknown" },
+      "AL-02": { status: "unknown" },
+      "AL-03": { status: "unknown" },
+      "AL-04": { status: "unknown" },
+      "AL-05": { status: "unknown" },
+      "AL-06": { status: "unknown" },
+      "AL-07": { status: "unknown" }
+    },
     prototypes: [],
     functionalities: []
   },
@@ -306,6 +333,15 @@ const MODULES = [
     title: "User password recovery",
     scope: "Centralize recovery policies and risk checks for reset journeys.",
     status: "planned",
+    laws: {
+      "AL-01": { status: "unknown" },
+      "AL-02": { status: "unknown" },
+      "AL-03": { status: "unknown" },
+      "AL-04": { status: "unknown" },
+      "AL-05": { status: "unknown" },
+      "AL-06": { status: "unknown" },
+      "AL-07": { status: "unknown" }
+    },
     prototypes: [],
     functionalities: []
   },
@@ -315,6 +351,15 @@ const MODULES = [
     title: "2-factor authentication",
     scope: "Add step-up authentication for sensitive access paths.",
     status: "planned",
+    laws: {
+      "AL-01": { status: "unknown" },
+      "AL-02": { status: "unknown" },
+      "AL-03": { status: "unknown" },
+      "AL-04": { status: "unknown" },
+      "AL-05": { status: "unknown" },
+      "AL-06": { status: "unknown" },
+      "AL-07": { status: "unknown" }
+    },
     prototypes: [],
     functionalities: []
   }
@@ -430,6 +475,11 @@ function getTabsForNode(node) {
     ]
   }
 
+  // No tabs for functionality pages
+  if (node.type === "functionality") {
+    return []
+  }
+
   return [
     { id: "description", label: "Description" },
     { id: "acceptance-laws", label: "Acceptance Laws" },
@@ -535,34 +585,61 @@ modules:
   `
 }
 
-function renderModulesTable() {
-  return `
-    <div class="rr-rm2-table-wrap">
-      <table class="rr-rm2-table">
-        <thead>
-          <tr>
-            <th>Module</th>
-            <th>Scope</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          ${MODULES.map(
-            (module) => `
-              <tr>
-                <td>${escapeHtml(module.code)} - ${escapeHtml(module.title)}</td>
-                <td>${escapeHtml(module.scope)}</td>
-                <td>${renderStatusBadge(module.status)}</td>
-                <td>
-                  <button type="button" class="rr-rm2-link-button" data-action="open-node" data-node-id="${escapeHtml(module.id)}">Open</button>
-                </td>
-              </tr>
-            `
-          ).join("")}
-        </tbody>
-      </table>
+function renderModulesTable(state) {
+  const expandedModuleIds = state?.expandedModuleIds ?? new Set()
+
+  const rootRow = `
+    <div class="rr-rm2-modules-row rr-rm2-modules-row--root">
+      <div class="rr-rm2-modules-name">
+        <span class="rr-rm2-modules-icon">${TREE_ICON.file}</span>
+        <span class="rr-rm2-modules-name-text">manifest.yaml</span>
+      </div>
+      <div class="rr-rm2-modules-status"></div>
     </div>
+  `
+
+  const moduleRows = MODULES.map((module) => {
+    const hasChildren = Array.isArray(module.functionalities) && module.functionalities.length > 0
+    const isExpanded = hasChildren && expandedModuleIds.has(module.id)
+
+    const toggleControl = hasChildren
+      ? `<button type="button" class="rr-rm2-modules-toggle" data-action="toggle-module-folder" data-module-id="${escapeHtml(module.id)}" aria-label="${isExpanded ? "Collapse" : "Expand"} ${escapeHtml(module.code)}" aria-expanded="${String(isExpanded)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
+      : `<span class="rr-rm2-modules-toggle rr-rm2-modules-toggle--placeholder" aria-hidden="true">${TREE_ICON.caretRight}</span>`
+
+    const childrenRows = isExpanded
+      ? module.functionalities
+          .map(
+            (item) => `
+              <div class="rr-rm2-modules-row rr-rm2-modules-row--file">
+                <div class="rr-rm2-modules-name">
+                  <span class="rr-rm2-modules-icon">${TREE_ICON.file}</span>
+                  <button type="button" class="rr-rm2-modules-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.filename)}</button>
+                </div>
+                <div class="rr-rm2-modules-status">${renderStatusBadge(item.status)}</div>
+              </div>
+            `
+          )
+          .join("")
+      : ""
+
+    return `
+      <div class="rr-rm2-modules-row rr-rm2-modules-row--module ${isExpanded ? 'is-expanded' : ''}">
+        <div class="rr-rm2-modules-name">
+          ${toggleControl}
+          <span class="rr-rm2-modules-icon">${TREE_ICON.folder}</span>
+          <button type="button" class="rr-rm2-modules-name-button" data-action="open-node" data-node-id="${escapeHtml(module.id)}">${escapeHtml(module.code)} - ${escapeHtml(module.title)}</button>
+        </div>
+        <div class="rr-rm2-modules-status"></div>
+      </div>
+      ${childrenRows}
+    `
+  }).join("")
+
+  return `
+    <section class="rr-rm2-modules-wrap" aria-label="Modules">
+      ${rootRow}
+      ${moduleRows}
+    </section>
   `
 }
 
@@ -572,20 +649,67 @@ function renderModuleFunctionalities(module) {
   }
 
   return `
-    <div class="rr-rm2-list">
+    <div class="rr-rm2-func-wrap">
       ${module.functionalities
         .map(
           (item) => `
-            <div class="rr-rm2-list-row">
-              <button type="button" class="rr-rm2-list-title" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
-              <a class="rr-rm2-icon-link" href="${escapeHtml(module.prototypes[0]?.path || "#")}" target="_blank" rel="noreferrer" aria-label="Open prototype">Open</a>
-              ${renderStatusBadge(item.status)}
+            <div class="rr-rm2-func-row">
+              <div class="rr-rm2-func-name">
+                <span class="rr-rm2-func-icon">${TREE_ICON.file}</span>
+                <button type="button" class="rr-rm2-func-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
+              </div>
+              <div class="rr-rm2-func-status">
+                ${renderStatusBadge(item.status)}
+              </div>
             </div>
           `
         )
         .join("")}
     </div>
   `
+}
+
+function getPrototypeGroups(node, items) {
+  if (node.type === "epic") {
+    return MODULES.map((module) => ({
+      id: module.id,
+      label: `${module.code} - ${module.title}`,
+      children: (module.prototypes || []).map((item, index) => ({
+        id: `${module.id}-prototype-${index}`,
+        label: item.flow || item.name,
+        status: item.status || "in-progress",
+        path: item.path || "#"
+      }))
+    }))
+  }
+
+  if (node.type === "module") {
+    return [
+      {
+        id: node.id,
+        label: `${node.code} - ${node.title}`,
+        children: (items || []).map((item, index) => ({
+          id: `${node.id}-prototype-${index}`,
+          label: item.flow || item.name,
+          status: item.status || "in-progress",
+          path: item.path || "#"
+        }))
+      }
+    ]
+  }
+
+  return [
+    {
+      id: node.moduleId,
+      label: `${node.moduleCode} - ${node.moduleTitle}`,
+      children: (items || []).map((item, index) => ({
+        id: `${node.moduleId}-prototype-${index}`,
+        label: item.flow || item.name,
+        status: item.status || "in-progress",
+        path: item.path || "#"
+      }))
+    }
+  ]
 }
 
 function renderSiblingFunctionalities(functionality) {
@@ -595,15 +719,19 @@ function renderSiblingFunctionalities(functionality) {
   }
 
   return `
-    <div class="rr-rm2-list">
+    <div class="rr-rm2-func-wrap">
       ${module.functionalities
         .map((item) => {
           const isCurrent = item.id === functionality.id
           return `
-            <div class="rr-rm2-list-row ${isCurrent ? "is-current" : ""}">
-              <button type="button" class="rr-rm2-list-title" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
-              <a class="rr-rm2-icon-link" href="${escapeHtml(module.prototypes[0]?.path || "#")}" target="_blank" rel="noreferrer" aria-label="Open prototype">Open</a>
-              ${renderStatusBadge(item.status)}
+            <div class="rr-rm2-func-row ${isCurrent ? "is-current" : ""}">
+              <div class="rr-rm2-func-name">
+                <span class="rr-rm2-func-icon">${TREE_ICON.file}</span>
+                <button type="button" class="rr-rm2-func-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
+              </div>
+              <div class="rr-rm2-func-status">
+                ${renderStatusBadge(item.status)}
+              </div>
             </div>
           `
         })
@@ -612,29 +740,95 @@ function renderSiblingFunctionalities(functionality) {
   `
 }
 
-function renderPrototypePanel(items) {
+function renderPrototypePanel(node, items, state) {
   if (!Array.isArray(items) || items.length === 0) {
     return `<p class="rr-rm2-empty">No prototype references.</p>`
   }
 
+  // For module pages, display prototypes directly without parent group
+  if (node.type === "module") {
+    const rows = items
+      .map((item, index) => {
+        const protoId = `${node.id}-prototype-${index}`
+        const label = item.flow || item.name
+        const status = item.status || "in-progress"
+        const path = item.path || "#"
+        
+        return `
+          <div class="rr-rm2-proto-flat-row">
+            <div class="rr-rm2-proto-flat-name">
+              <p class="rr-rm2-proto-flat-text">${escapeHtml(label)}</p>
+            </div>
+            <div class="rr-rm2-proto-flat-link">
+              <a class="rr-rm2-proto-flat-button" href="${escapeHtml(path)}" target="_blank" rel="noreferrer" aria-label="Open prototype">
+                <svg width="18" height="18" viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M144 80h32a40 40 0 010 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 010-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+              </a>
+            </div>
+            <div class="rr-rm2-proto-flat-status">${renderStatusBadge(status)}</div>
+          </div>
+        `
+      })
+      .join("")
+
+    return `
+      <section class="rr-rm2-proto-flat-wrap" aria-label="Prototype references">
+        ${rows}
+      </section>
+    `
+  }
+
+  // For epic and functionality pages, show grouped prototypes
+  const groups = getPrototypeGroups(node, items)
+  const expandedGroupIds = state?.expandedPrototypeGroupIds ?? new Set()
+
+  const rows = groups
+    .map((group) => {
+      const hasChildren = Array.isArray(group.children) && group.children.length > 0
+      const isExpanded = hasChildren && expandedGroupIds.has(group.id)
+      const toggleControl = hasChildren
+        ? `<button type="button" class="rr-rm2-proto-toggle" data-action="toggle-prototype-group" data-group-id="${escapeHtml(group.id)}" aria-label="${isExpanded ? "Collapse" : "Expand"} ${escapeHtml(group.label)}" aria-expanded="${String(isExpanded)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
+        : `<span class="rr-rm2-proto-toggle rr-rm2-proto-toggle--placeholder" aria-hidden="true">${TREE_ICON.caretRight}</span>`
+
+      const childRows = isExpanded
+        ? group.children
+            .map(
+              (child) => `
+                <div class="rr-rm2-proto-row rr-rm2-proto-row--file">
+                  <div class="rr-rm2-proto-name">
+                    <span class="rr-rm2-proto-icon">${TREE_ICON.file}</span>
+                    <span class="rr-rm2-proto-name-text">${escapeHtml(child.label)}</span>
+                  </div>
+                  <div class="rr-rm2-proto-link-cell">
+                    <a class="rr-rm2-proto-link" href="${escapeHtml(child.path)}" target="_blank" rel="noreferrer" aria-label="Open prototype reference">
+                      <svg width="18" height="18" viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M144 80h32a40 40 0 010 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 010-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+                    </a>
+                  </div>
+                  <div class="rr-rm2-proto-status">${renderStatusBadge(child.status)}</div>
+                </div>
+              `
+            )
+            .join("")
+        : ""
+
+      return `
+        <div class="rr-rm2-proto-row rr-rm2-proto-row--group ${isExpanded ? 'is-expanded' : ''}">
+          <div class="rr-rm2-proto-name">
+            ${toggleControl}
+            <span class="rr-rm2-proto-icon">${TREE_ICON.folder}</span>
+            <span class="rr-rm2-proto-name-text">${escapeHtml(group.label)}</span>
+          </div>
+          <div class="rr-rm2-proto-link-cell"></div>
+          <div class="rr-rm2-proto-status"></div>
+        </div>
+        ${childRows}
+      `
+    })
+    .join("")
+
   return `
-    <div class="rr-rm2-prototype-grid">
-      ${items
-        .map(
-          (item) => `
-            <article class="rr-rm2-prototype-card">
-              <div>
-                <strong>${escapeHtml(item.name)}</strong>
-                ${item.version ? `<span>${escapeHtml(item.version)}</span>` : ""}
-              </div>
-              ${renderStatusBadge(item.status || "in-progress")}
-              <p>${escapeHtml(item.flow || item.path)}</p>
-              <a href="${escapeHtml(item.path)}" target="_blank" rel="noreferrer">Open prototype</a>
-            </article>
-          `
-        )
-        .join("")}
-    </div>
+    <section class="rr-rm2-proto-wrap" aria-label="Prototype references">
+      ${rows}
+    </section>
   `
 }
 
@@ -690,7 +884,7 @@ epic: AUT</pre>
   `
 }
 
-function renderPanel(node, activeTab) {
+function renderPanel(node, activeTab, state) {
   if (activeTab === "acceptance-laws") {
     return renderAcceptanceLawsTable()
   }
@@ -700,10 +894,10 @@ function renderPanel(node, activeTab) {
       return renderEpicDescription()
     }
     if (activeTab === "modules") {
-      return renderModulesTable()
+      return renderModulesTable(state)
     }
     if (activeTab === "prototypes") {
-      return renderPrototypePanel(EPIC.prototypes)
+      return renderPrototypePanel(node, EPIC.prototypes, state)
     }
   }
 
@@ -715,7 +909,7 @@ function renderPanel(node, activeTab) {
       return renderModuleFunctionalities(node)
     }
     if (activeTab === "prototypes") {
-      return renderPrototypePanel(node.prototypes)
+      return renderPrototypePanel(node, node.prototypes, state)
     }
   }
 
@@ -728,10 +922,12 @@ function renderPanel(node, activeTab) {
     }
     if (activeTab === "prototypes") {
       return renderPrototypePanel(
+        node,
         (node.modulePrototypes || []).map((prototype) => ({
           ...prototype,
           flow: node.prototypeRef
-        }))
+        })),
+        state
       )
     }
   }
@@ -922,25 +1118,51 @@ function renderExplorer(state) {
 }
 
 function renderSummary(node) {
-  if (node.type !== "epic") {
-    return ""
+  if (node.type === "epic") {
+    const passedLaws = ACCEPTANCE_LAWS.filter((law) => law.status === "pass").length
+    const compliantModules = MODULES.filter((module) => module.status !== "planned").length
+
+    return `
+      <div class="rr-rm2-summary-grid">
+        <article>
+          <strong>Acceptance laws</strong>
+          <span>${passedLaws} / ${ACCEPTANCE_LAWS.length}</span>
+        </article>
+        <article>
+          <strong>Compliant modules</strong>
+          <span>${compliantModules} / ${MODULES.length}</span>
+        </article>
+      </div>
+    `
   }
 
-  const passedLaws = ACCEPTANCE_LAWS.filter((law) => law.status === "pass").length
-  const compliantModules = MODULES.filter((module) => module.status !== "planned").length
+  if (node.type === "module") {
+    // Count passed laws for this specific module
+    const moduleLaws = node.laws || {}
+    const passedLaws = Object.values(moduleLaws).filter((law) => law.status === "pass").length
+    const totalLaws = ACCEPTANCE_LAWS.length
 
-  return `
-    <div class="rr-rm2-summary-grid">
-      <article>
-        <strong>Acceptance laws</strong>
-        <span>${passedLaws} / ${ACCEPTANCE_LAWS.length}</span>
-      </article>
-      <article>
-        <strong>Compliant modules</strong>
-        <span>${compliantModules} / ${MODULES.length}</span>
-      </article>
-    </div>
-  `
+    // Count compliant functionalities (released or validated)
+    const functionalities = node.functionalities || []
+    const compliantFunctionalities = functionalities.filter(
+      (func) => func.status === "released" || func.status === "validated"
+    ).length
+
+    return `
+      <div class="rr-rm2-summary-grid">
+        <article>
+          <strong>Acceptance laws</strong>
+          <span>${passedLaws} / ${totalLaws}</span>
+        </article>
+        <article>
+          <strong>Compliant functionalities</strong>
+          <span>${compliantFunctionalities} / ${functionalities.length}</span>
+        </article>
+      </div>
+    `
+  }
+
+  return ""
 }
 
 export async function renderRequirementsModuleFlow() {
@@ -1003,9 +1225,11 @@ export function mountRequirementsModuleFlow() {
   const state = {
     selectedNodeId: "AUT",
     activeTab: "acceptance-laws",
-    isExplorerOpen: false,
+    isExplorerOpen: true,
     treeSearch: "",
-    expandedTreeIds: new Set(["AUT", "tree-AUT-M001"])
+    expandedTreeIds: new Set(["AUT", "tree-AUT-M001"]),
+    expandedModuleIds: new Set(),
+    expandedPrototypeGroupIds: new Set()
   }
 
   function ensureActiveTabForNode(node) {
@@ -1054,11 +1278,23 @@ export function mountRequirementsModuleFlow() {
 
     elements.summary.innerHTML = renderSummary(node)
     elements.tabs.innerHTML = renderTabs(node, state.activeTab)
-    elements.panel.innerHTML = renderPanel(node, state.activeTab)
+    elements.panel.innerHTML = renderPanel(node, state.activeTab, state)
 
     elements.explorer.innerHTML = renderExplorer(state)
-    elements.explorer.hidden = !state.isExplorerOpen
-    elements.openExplorer.hidden = state.isExplorerOpen
+    const isExplorerOpen = state.isExplorerOpen
+    elements.explorer.hidden = !isExplorerOpen
+    elements.explorer.style.display = isExplorerOpen ? "" : "none"
+
+    const collapseButton = elements.explorer.querySelector(".rr-rm2-explorer-collapse")
+    if (collapseButton) {
+      collapseButton.style.display = isExplorerOpen ? "" : "none"
+      collapseButton.setAttribute("aria-expanded", String(isExplorerOpen))
+    }
+
+    // Keep button out of layout when explorer is open, per UI requirement.
+    elements.openExplorer.hidden = isExplorerOpen
+    elements.openExplorer.style.display = isExplorerOpen ? "none" : ""
+    elements.openExplorer.setAttribute("aria-expanded", String(isExplorerOpen))
   }
 
   function handleRootClick(event) {
@@ -1088,9 +1324,49 @@ export function mountRequirementsModuleFlow() {
       if (!nodeId) {
         return
       }
+
+      const selectedModule = MODULE_BY_ID.get(nodeId)
+      const selectedFunctionality = FUNCTIONALITY_BY_ID.get(nodeId)
+      if (selectedModule) {
+        state.expandedModuleIds.add(selectedModule.id)
+        state.expandedPrototypeGroupIds.add(selectedModule.id)
+      }
+      if (selectedFunctionality) {
+        state.expandedModuleIds.add(selectedFunctionality.moduleId)
+        state.expandedPrototypeGroupIds.add(selectedFunctionality.moduleId)
+      }
+
       state.selectedNodeId = nodeId
       state.activeTab = getDefaultTabForNode(getNodeById(nodeId))
       expandAncestors(nodeId)
+      render()
+      return
+    }
+
+    if (action === "toggle-module-folder") {
+      const moduleId = actionElement.getAttribute("data-module-id") || ""
+      if (!MODULE_BY_ID.has(moduleId)) {
+        return
+      }
+      if (state.expandedModuleIds.has(moduleId)) {
+        state.expandedModuleIds.delete(moduleId)
+      } else {
+        state.expandedModuleIds.add(moduleId)
+      }
+      render()
+      return
+    }
+
+    if (action === "toggle-prototype-group") {
+      const groupId = actionElement.getAttribute("data-group-id") || ""
+      if (!groupId) {
+        return
+      }
+      if (state.expandedPrototypeGroupIds.has(groupId)) {
+        state.expandedPrototypeGroupIds.delete(groupId)
+      } else {
+        state.expandedPrototypeGroupIds.add(groupId)
+      }
       render()
       return
     }
