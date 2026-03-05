@@ -1104,15 +1104,33 @@ export function mountKanbanModuleFlow() {
     if (state.detail.open && state.detail.moduleId) {
       const mod = findModuleById(state.detail.moduleId)
       if (mod) {
-        els.detailOverlay.innerHTML = renderDetailPanel(mod, state.detail)
-        els.detailOverlay.classList.add("is-open")
-        // Trigger opening animation on next frame
-        requestAnimationFrame(() => {
-          const panel = els.detailOverlay.querySelector(".rr-detail-panel")
-          const backdrop = els.detailOverlay.querySelector(".rr-detail-backdrop")
-          if (panel) panel.classList.add("is-visible")
-          if (backdrop) backdrop.classList.add("is-visible")
-        })
+        const isAlreadyOpen = els.detailOverlay.classList.contains("is-open")
+
+        if (isAlreadyOpen) {
+          /* Panel is already visible — update content without re-animating */
+          const panelEl = els.detailOverlay.querySelector(".rr-detail-panel")
+          if (panelEl) {
+            const moduleData = getModuleTasks(mod.id)
+            const progress = computeDetailProgress(moduleData)
+            panelEl.innerHTML = `
+              ${renderDetailHeader(mod)}
+              ${renderDetailNav(state.detail.activeTab, progress)}
+              <div class="rr-detail-content">
+                ${renderDetailTabContent(state.detail.activeTab, mod, moduleData, state.detail.collapsedFeatures)}
+              </div>
+            `
+          }
+        } else {
+          /* First open — full render + animate in */
+          els.detailOverlay.innerHTML = renderDetailPanel(mod, state.detail)
+          els.detailOverlay.classList.add("is-open")
+          requestAnimationFrame(() => {
+            const panel = els.detailOverlay.querySelector(".rr-detail-panel")
+            const backdrop = els.detailOverlay.querySelector(".rr-detail-backdrop")
+            if (panel) panel.classList.add("is-visible")
+            if (backdrop) backdrop.classList.add("is-visible")
+          })
+        }
         document.body.style.overflow = "hidden"
         return
       }
@@ -1130,7 +1148,14 @@ export function mountKanbanModuleFlow() {
     return null
   }
 
+  let _closeTimer = null
+
   function openDetailPanel(moduleId) {
+    // Cancel any pending close animation to prevent race conditions
+    if (_closeTimer) {
+      clearTimeout(_closeTimer)
+      _closeTimer = null
+    }
     state.detail.open = true
     state.detail.moduleId = moduleId
     state.detail.activeTab = "tasks"
@@ -1150,7 +1175,8 @@ export function mountKanbanModuleFlow() {
     if (backdrop) backdrop.classList.remove("is-visible")
 
     // Wait for animation to finish before removing content
-    setTimeout(() => {
+    _closeTimer = setTimeout(() => {
+      _closeTimer = null
       els.detailOverlay.classList.remove("is-open")
       els.detailOverlay.innerHTML = ""
       document.body.style.overflow = ""
@@ -1168,11 +1194,16 @@ export function mountKanbanModuleFlow() {
     const target = event.target.closest("[data-action]")
 
     if (!target) {
+      // If clicking inside the detail overlay, don't close dropdowns or re-render
+      if (state.detail.open && event.target.closest(".rr-detail-overlay")) return
       if (closeAllDropdowns()) render()
       return
     }
 
     const action = target.dataset.action
+
+    // Ignore noop actions (e.g. non-functional sort indicator)
+    if (action === "noop") return
 
     if (action === "toggle-group") {
       event.preventDefault()
@@ -1274,7 +1305,7 @@ export function mountKanbanModuleFlow() {
       event.preventDefault()
       event.stopPropagation()
       const tab = target.dataset.tab
-      if (tab && tab !== state.detail.activeTab) {
+      if (tab) {
         state.detail.activeTab = tab
         renderDetail()
       }
