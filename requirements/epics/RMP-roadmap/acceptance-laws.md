@@ -1,9 +1,9 @@
 ---
-epic_id: REQ
-title: "Requirements"
+epic_id: RMP
+title: "Roadmap"
 ---
 
-# REQ — Requirements · Acceptance Laws
+# RMP — Roadmap · Acceptance Laws
 
 | ID | Name | Description |
 |----|------|-------------|

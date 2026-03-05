@@ -9,6 +9,7 @@ functionalities:
   - REQ-M001-F004
   - REQ-M001-F005
   - REQ-M001-F006
+  - REQ-M001-F007
 ---
 
 ## Scope

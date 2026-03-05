@@ -1,9 +1,9 @@
 ---
-epic_id: REQ
-title: "Requirements"
+epic_id: DEP
+title: "Dependencies"
 ---
 
-# REQ — Requirements · Acceptance Laws
+# DEP — Dependencies · Acceptance Laws
 
 | ID | Name | Description |
 |----|------|-------------|

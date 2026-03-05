@@ -1,9 +1,9 @@
 ---
-epic_id: REQ
-title: "Requirements"
+epic_id: KAN
+title: "Kanban / Planning"
 ---
 
-# REQ — Requirements · Acceptance Laws
+# KAN — Kanban / Planning · Acceptance Laws
 
 | ID | Name | Description |
 |----|------|-------------|

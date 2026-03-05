@@ -1,9 +1,9 @@
 ---
-epic_id: REQ
-title: "Requirements"
+epic_id: TST
+title: "Testing Suite"
 ---
 
-# REQ — Requirements · Acceptance Laws
+# TST — Testing Suite · Acceptance Laws
 
 | ID | Name | Description |
 |----|------|-------------|
