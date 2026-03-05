@@ -28,15 +28,22 @@ function renderTabHeader(currentPath) {
     return `<a href="${href}" class="${cls}">${tab.label}</a>`
   }).join("")
 
-  return `
-    <header class="rr-tab-header" id="rr-tab-header">
-      <div class="rr-tab-header-tabs">${tabs}</div>
-      <div class="rr-tab-header-actions">
+  /* For Planning routes, the sprint selector is injected by the kanban module.
+     For other routes, show the default filters / sync label. */
+  const isPlanning = currentPath.startsWith("/planning")
+  const actionsHtml = isPlanning
+    ? `<div class="rr-tab-header-actions" id="rr-tab-sprint-header"></div>`
+    : `<div class="rr-tab-header-actions">
         <button type="button" class="rr-tab-filter">All modules</button>
         <button type="button" class="rr-tab-filter">All priority</button>
         <button type="button" class="rr-tab-filter">All statuses</button>
         <span class="rr-tab-sync">Last sync: 03/03/26</span>
-      </div>
+      </div>`
+
+  return `
+    <header class="rr-tab-header" id="rr-tab-header">
+      <div class="rr-tab-header-tabs">${tabs}</div>
+      ${actionsHtml}
     </header>
   `
 }
