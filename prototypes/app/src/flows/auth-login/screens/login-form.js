@@ -7,7 +7,7 @@ export function renderLoginForm() {
         <div class="rr-stack">
           <rr-alert variant="info">Use your Roundrush account to continue.</rr-alert>
           <rr-input label="Email" placeholder="name@company.com"></rr-input>
-          <rr-password-input label="Password" placeholder="Enter password"></rr-password-input>
+          <rr-input type="password" label="Password" placeholder="Enter password"></rr-input>
           <rr-checkbox>Remember this device</rr-checkbox>
         </div>
 

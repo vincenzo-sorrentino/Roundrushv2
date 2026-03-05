@@ -9,6 +9,8 @@ import { renderSidebar, mountSidebar, isSidebarCollapsed } from "./shared/sideba
 
 const app = document.querySelector("#app")
 let currentUnmount = null
+const TAB_SYNC_ICON_URL = "http://localhost:3845/assets/42ec88ad5e301cefafc623f7aee872a71a63c91f.svg"
+const TAB_SYNC_TEXT = "Last sync: 28/02/26"
 
 const TAB_HEADER_ITEMS = [
   { id: "dashboard", label: "Dashboard", path: "/library/foundations/colors" },
@@ -23,19 +25,24 @@ const TAB_HEADER_ITEMS = [
 function renderTabHeader(currentPath) {
   const tabs = TAB_HEADER_ITEMS.map(tab => {
     const isActive = tab.path && currentPath.startsWith(tab.path)
-    const href = tab.path || "#"
-    const cls = `rr-tab-header-item${isActive ? " rr-tab-header-item--active" : ""}${!tab.path ? " rr-tab-header-item--disabled" : ""}`
-    return `<a href="${href}" class="${cls}">${tab.label}</a>`
+    const tabState = tab.path ? (isActive ? "selected" : "default") : "disabled"
+    const tabMarkup = `<rr-tabs type="horizontal" state="${tabState}" label="${tab.label}"></rr-tabs>`
+
+    if (tab.path) {
+      return `<a href="${tab.path}" class="rr-tab-header-tab-link" aria-label="${tab.label}">${tabMarkup}</a>`
+    }
+
+    return `<span class="rr-tab-header-tab-slot rr-tab-header-tab-slot--static" aria-label="${tab.label}">${tabMarkup}</span>`
   }).join("")
 
   return `
     <header class="rr-tab-header" id="rr-tab-header">
       <div class="rr-tab-header-tabs">${tabs}</div>
       <div class="rr-tab-header-actions">
-        <button type="button" class="rr-tab-filter">All modules</button>
-        <button type="button" class="rr-tab-filter">All priority</button>
-        <button type="button" class="rr-tab-filter">All statuses</button>
-        <span class="rr-tab-sync">Last sync: 03/03/26</span>
+        <span class="rr-tab-sync">${TAB_SYNC_TEXT}</span>
+        <button type="button" class="rr-tab-sync-action" aria-label="Sync history">
+          <img src="${TAB_SYNC_ICON_URL}" alt="" />
+        </button>
       </div>
     </header>
   `

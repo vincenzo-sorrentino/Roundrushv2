@@ -439,29 +439,50 @@ function getTabsForNode(node) {
 }
 
 function getDefaultTabForNode(node) {
-  if (node.type === "epic") {
-    return "acceptance-laws"
-  }
-  if (node.type === "module") {
-    return "functionalities"
-  }
   return "description"
 }
 
 function renderStatusBadge(status) {
-  return `<span class="rr-rm2-status is-${toStatusClass(status)}">${escapeHtml(toStatusLabel(status))}</span>`
+  const statusClass = toStatusClass(status)
+  const label = toStatusLabel(status)
+  
+  // Map status to badge color
+  let badgeColor = "gray"
+  if (["pass", "released", "validated"].includes(statusClass)) {
+    badgeColor = "green"
+  } else if (["in-sprint", "in-progress"].includes(statusClass)) {
+    badgeColor = "blue"
+  } else if (["ready-for-sprint", "planned"].includes(statusClass)) {
+    badgeColor = "red"
+  } else if (statusClass === "design") {
+    badgeColor = "purple"
+  }
+  
+  return `<div class="rr-badge-square rr-badge-square--${badgeColor} rr-badge-square--fill-light">
+    <p class="rr-badge-square-label">${escapeHtml(label)}</p>
+  </div>`
 }
 
 function renderAcceptanceLawsTable() {
   const rows = ACCEPTANCE_LAWS.map(
     (law) => `
       <tr>
-        <td>${escapeHtml(law.id)}</td>
         <td>
-          <strong>${escapeHtml(law.name)}</strong>
-          <p>${escapeHtml(law.description)}</p>
+          <div class="rr-rm2-table-cell-content">
+            <span class="rr-rm2-table-cell-text">${escapeHtml(law.id)}</span>
+          </div>
         </td>
-        <td>${escapeHtml(law.evidence)}</td>
+        <td>
+          <div class="rr-rm2-table-cell-content">
+            <span class="rr-rm2-table-cell-text">${escapeHtml(law.name)}</span>
+            <span class="rr-rm2-table-cell-supporting">${escapeHtml(law.description)}</span>
+          </div>
+        </td>
+        <td>
+          <div class="rr-rm2-table-cell-content">
+            <span class="rr-rm2-table-cell-text">${escapeHtml(law.evidence)}</span>
+          </div>
+        </td>
         <td>${renderStatusBadge(law.status)}</td>
       </tr>
     `
@@ -739,17 +760,37 @@ function getBreadcrumbSegments(node) {
   return base
 }
 
+function isTabDisabled(node, tabId) {
+  // Check if tab should be disabled based on content availability
+  if (tabId === "prototypes") {
+    if (node.type === "epic") {
+      return !EPIC.prototypes || EPIC.prototypes.length === 0
+    }
+    if (node.type === "module") {
+      return !node.prototypes || node.prototypes.length === 0
+    }
+    if (node.type === "functionality") {
+      return !node.modulePrototypes || node.modulePrototypes.length === 0
+    }
+  }
+  return false
+}
+
 function renderTabs(node, activeTab) {
   return getTabsForNode(node)
     .map(
-      (tab) => `
+      (tab) => {
+        const isDisabled = isTabDisabled(node, tab.id)
+        return `
         <button
           type="button"
           class="rr-rm2-tab ${tab.id === activeTab ? "is-active" : ""}"
           data-action="set-tab"
           data-tab-id="${tab.id}"
+          ${isDisabled ? "disabled" : ""}
         >${escapeHtml(tab.label)}</button>
       `
+      }
     )
     .join("")
 }
@@ -834,29 +875,26 @@ const TREE_ICON = {
   file: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><path d="M200 224H56a8 8 0 01-8-8V40a8 8 0 018-8h96l56 56v128a8 8 0 01-8 8z" fill="#fff" stroke="#94a3b8" stroke-width="8"/><polyline points="152,32 152,88 208,88" fill="none" stroke="#94a3b8" stroke-width="8"/></svg>`,
 }
 
-function renderExplorerItems(items, state, forceExpanded = false) {
+function renderExplorerItems(items, state, forceExpanded = false, depth = 0) {
   return items
     .map((item) => {
       const hasChildren = Array.isArray(item.children) && item.children.length > 0
       const isExpanded = hasChildren && (forceExpanded || state.expandedTreeIds.has(item.id))
       const isSelected = item.targetNodeId && item.targetNodeId === state.selectedNodeId
-      const statusColor = item.targetNodeId ? getStatusDotColor(item.targetNodeId) : null
-      const statusDot = statusColor ? `<span class="rr-rm2-tree-dot" style="background:${statusColor}"></span>` : ""
       const row = item.targetNodeId
         ? `<button type="button" class="rr-rm2-tree-select ${isSelected ? "is-selected" : ""}" data-action="select-node" data-node-id="${escapeHtml(item.targetNodeId)}">${escapeHtml(item.label)}</button>`
         : `<span class="rr-rm2-tree-label">${escapeHtml(item.label)}</span>`
 
       return `
         <li>
-          <div class="rr-rm2-tree-row">
+          <div class="rr-rm2-tree-row ${isSelected ? "is-selected" : ""} ${hasChildren ? "is-folder" : "is-file"}" data-depth="${depth}">
             ${hasChildren
               ? `<button type="button" class="rr-rm2-tree-toggle" data-action="toggle-tree" data-tree-id="${escapeHtml(item.id)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
-              : `<span class="rr-rm2-tree-pad"></span>`}
+              : ""}
             <span class="rr-rm2-tree-icon">${item.icon === "file" ? TREE_ICON.file : TREE_ICON.folder}</span>
             ${row}
-            ${statusDot}
           </div>
-          ${hasChildren && isExpanded ? `<ul>${renderExplorerItems(item.children, state, forceExpanded)}</ul>` : ""}
+          ${hasChildren && isExpanded ? `<ul>${renderExplorerItems(item.children, state, forceExpanded, depth + 1)}</ul>` : ""}
         </li>
       `
     })
@@ -870,10 +908,13 @@ function renderExplorer(state) {
   return `
     <div class="rr-rm2-explorer-header">
       <div class="rr-rm2-explorer-search-wrap">
+        <span class="rr-rm2-search-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="116" cy="116" r="84" stroke="currentColor" stroke-width="16"/><line x1="175.4" y1="175.4" x2="224" y2="224" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+        </span>
         <input type="search" id="rr-rm2-tree-search" class="rr-rm2-search" placeholder="Search" value="${escapeHtml(state.treeSearch)}" />
       </div>
       <button type="button" class="rr-rm2-explorer-collapse" data-action="toggle-explorer" aria-label="Close explorer">
-        <svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="200,48 120,128 200,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="120,48 40,128 120,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="none"><polyline points="200,48 120,128 200,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="120,48 40,128 120,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
     <ul class="rr-rm2-tree">${renderExplorerItems(data, state, forceExpanded)}</ul>
@@ -969,8 +1010,13 @@ export function mountRequirementsModuleFlow() {
 
   function ensureActiveTabForNode(node) {
     const tabs = getTabsForNode(node)
-    if (!tabs.some((tab) => tab.id === state.activeTab)) {
-      state.activeTab = getDefaultTabForNode(node)
+    const currentTabExists = tabs.some((tab) => tab.id === state.activeTab)
+    const currentTabIsDisabled = currentTabExists && isTabDisabled(node, state.activeTab)
+    
+    if (!currentTabExists || currentTabIsDisabled) {
+      // Find first non-disabled tab or fall back to default
+      const firstEnabledTab = tabs.find((tab) => !isTabDisabled(node, tab.id))
+      state.activeTab = firstEnabledTab ? firstEnabledTab.id : getDefaultTabForNode(node)
     }
   }
 
@@ -1024,6 +1070,10 @@ export function mountRequirementsModuleFlow() {
     const action = actionElement.getAttribute("data-action")
 
     if (action === "set-tab") {
+      // Don't process clicks on disabled tabs
+      if (actionElement.disabled) {
+        return
+      }
       const tabId = actionElement.getAttribute("data-tab-id") || ""
       const node = getNodeById(state.selectedNodeId)
       if (getTabsForNode(node).some((tab) => tab.id === tabId)) {
