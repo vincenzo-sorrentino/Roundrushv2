@@ -4247,25 +4247,26 @@ rr-alert.rr-req-info-callout {
   opacity: 1;
 }
 
-/* ── Panel (slides up from bottom) ────────────────────────── */
+/* ── Panel (slides up from bottom — bottom-sheet style) ──── */
 .rr-detail-panel {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  top: 0;
+  top: 72px;                     /* leave space at the top so backdrop is tappable */
   display: flex;
   flex-direction: column;
   background: var(--rr-sem-surface, #fff);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   border-top: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
-  transform: translateY(30px);
-  opacity: 0;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.25s ease;
+  box-shadow: 0 -4px 24px rgba(16, 24, 40, 0.12);
+  transform: translateY(100%);   /* start fully off-screen at bottom */
+  opacity: 1;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .rr-detail-panel.is-visible {
   transform: translateY(0);
-  opacity: 1;
 }
 
 /* ── Modal header ─────────────────────────────────────────── */
