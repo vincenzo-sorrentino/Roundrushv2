@@ -1,26 +1,27 @@
 ---
-epic_id: EP005
-title: "Kanban / Planning"
-status: draft
-created: "2026-03-03"
+id: EP005
+title_short: Kanban / Planning
+title: Sprint planning board and module detail
+design_state: drafting   # discovery | drafting | review | approved | ready_for_delivery
+modules:
+  - EP005-M001
+  - EP005-M002
 ---
 
-# EP005 — Kanban / Planning
+## Objective
+Provide a sprint-centric planning view where teams can browse, sort, filter, and inspect modules grouped by feature area, and drill into individual module details to review tasks, dependencies, test cases, and documentation.
 
-> Placeholder – requirements will be authored here.
+## In scope
+- Sprint board table with grouped modules, priority, assignees, dates, and statuses
+- Column sorting, multi-criteria filtering, and free-text search
+- Sprint selector with history navigation
+- Module detail overlay with tabbed navigation (Overview, Dependencies, Tasks, Test Cases, UAT Issues, Docs)
+- Task breakdown per module grouped by feature, with priority, assignee, due date, and status
+- Progress tracking at module level
 
-## Overview
-
-TODO: Describe the epic scope.
-
-## Modules
-
-- [EP005-M001-kanban-board](modules/EP005-M001-kanban-board/module.md)
-
-## Acceptance Laws
-
-See [acceptance-laws.md](acceptance-laws.md).
-
-## Prototypes
-
-TODO: List prototypes here.
+## Out of scope (for this EP)
+- Drag-and-drop reordering of modules or tasks
+- Inline editing of module or task fields
+- Real-time multi-user collaboration / live updates
+- Sprint creation, deletion, or configuration
+- Capacity planning and workload balancing

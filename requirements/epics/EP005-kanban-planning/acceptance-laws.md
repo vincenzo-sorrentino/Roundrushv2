@@ -3,45 +3,15 @@ epic_id: EP005
 title: "Kanban / Planning"
 ---
 
-# Acceptance Laws — EP005 Kanban / Planning
+# EP005 — Kanban / Planning · Acceptance Laws
 
-| ID | Law | Description |
-|---|---|---|
-| AL-01 | Production code implemented | All production code for this epic is implemented, reviewed, and merged. |
-| AL-02 | Unit + Integration tests pass + coverage requirement satisfied | All unit and integration tests pass, and code coverage meets the project threshold. |
-| AL-03 | Documentation updated | Documentation is updated, including UML, architecture diagrams, and use-cases where applicable. |
-| AL-04 | E2E tests implemented and passed | End-to-end tests are implemented and all pass successfully. |
-| AL-05 | Dependency map updated | The dependency map is updated to reflect any new or changed dependencies. |
-| AL-06 | Dependency-based regression tests pass | Regression tests triggered by dependency changes all pass. |
-| AL-07 | Manual suites completed | Manual test suites (smoke, UAT, non-functional) are completed as applicable. |
-
----
-
-### AL-01 — Production code implemented
-
-All production code for this epic is implemented, reviewed, and merged.
-
-### AL-02 — Unit + Integration tests pass + coverage requirement satisfied
-
-All unit and integration tests pass, and code coverage meets the project threshold.
-
-### AL-03 — Documentation updated
-
-Documentation is updated, including UML, architecture diagrams, and use-cases where applicable.
-
-### AL-04 — E2E tests implemented and passed
-
-End-to-end tests are implemented and all pass successfully.
-
-### AL-05 — Dependency map updated
-
-The dependency map is updated to reflect any new or changed dependencies.
-
-### AL-06 — Dependency-based regression tests pass
-
-Regression tests triggered by dependency changes all pass.
-
-### AL-07 — Manual suites completed
-
-Manual test suites (smoke, UAT, non-functional) are completed as applicable.
+| ID | Name | Description |
+|----|------|-------------|
+| AL-01 | Production code implemented | Required production code for all modules is implemented and merged into the integration branch. |
+| AL-02 | Unit and integration tests pass with required coverage | All unit and integration tests pass and coverage meets the project threshold. |
+| AL-03 | Documentation updated | Documentation is updated where applicable (requirements if necessary, code comments, component docs, and any required technical docs). |
+| AL-04 | End-to-end tests implemented and passed | E2E tests exist for user-facing flows and pass in CI. |
+| AL-05 | Dependency map updated | Dependency map is updated (or explicitly confirmed unchanged) when changes affect module boundaries or coupling. |
+| AL-06 | Dependency-based regression tests pass | Regression tests derived from impacted modules (via dependency map) pass with 100% success. |
+| AL-07 | Required manual suites completed | Required manual validation sessions are completed and recorded. |
 
