@@ -29,8 +29,8 @@ button {
 }
 
 .icon {
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -38,15 +38,21 @@ button {
 }
 
 .icon svg {
-  width: 24px;
-  height: 24px;
+  width: 100%;
+  height: 100%;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
 }
 
-button[data-size="sm"] {
+button[data-size="sm"][data-icon-display="leading"] {
+  --rr-btn-link-font-size: var(--rr-typography-fontSizeSm);
+  --rr-btn-link-line-height: var(--rr-typography-lineHeightParagraph);
+  --rr-btn-link-font-weight: var(--rr-typography-fontWeightRegular);
+}
+
+button[data-size="sm"][data-icon-display="trailing"] {
   --rr-btn-link-font-size: var(--rr-textTokens-fontSizes-actions-small, var(--rr-typography-fontSizeSm));
   --rr-btn-link-line-height: var(--rr-textTokens-lineHeight-actions-small, var(--rr-typography-lineHeightParagraph));
   --rr-btn-link-font-weight: var(--rr-typography-fontWeightMedium);

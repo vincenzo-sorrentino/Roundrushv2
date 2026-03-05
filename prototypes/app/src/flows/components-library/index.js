@@ -8,6 +8,7 @@ const ICON_BUTTON_SIZES = ["xxs", "xs", "sm", "md", "lg", "xl", "xxl"]
 const LINK_BUTTON_COLORS = ["primary", "black"]
 const LINK_BUTTON_SIZES = ["sm", "md"]
 const LINK_BUTTON_ICON_DISPLAYS = ["leading", "trailing"]
+const TAB_STATES = ["default", "hover", "focus", "disabled", "selected", "selected-hover"]
 const INPUT_VARIANTS = [
   { label: "Trailing Icon", value: "trailing-icon" },
   { label: "Money", value: "money" },
@@ -17,34 +18,6 @@ const INPUT_VARIANTS = [
   { label: "Default", value: "default" }
 ]
 const INPUT_STATES = ["placeholder", "hover", "filled", "focused", "disabled", "error", "error-focused"]
-const DROPDOWN_TYPES = [
-  { label: "Default", value: "default" },
-  { label: "Icon Leading", value: "icon-leading" },
-  { label: "Avatar Leading", value: "avatar-leading" }
-]
-const DROPDOWN_FIELD_ROWS = [
-  { label: "default-no value", state: "default", hasValue: false },
-  { label: "default-value", state: "default", hasValue: true },
-  { label: "hover", state: "hover", hasValue: true },
-  { label: "focused", state: "focused", hasValue: true },
-  { label: "disabled", state: "disabled", hasValue: false }
-]
-const DROPDOWN_ITEM_STATES = ["default", "hover", "focused", "disabled"]
-const DROPDOWN_ITEM_TYPES = [
-  { label: "Default", value: "default" },
-  { label: "Destructive", value: "destructive" }
-]
-const DROPDOWN_SELECTOR_OPTIONS = JSON.stringify([
-  { label: "Owner", value: "owner" },
-  { label: "Admin", value: "admin" },
-  { label: "Member", value: "member" }
-])
-const DROPDOWN_TEMPLATE_OPTIONS = JSON.stringify([
-  { text: "Edit", value: "edit" },
-  { text: "Update", value: "update" },
-  { type: "divider" },
-  { text: "Delete", value: "delete", type: "destructive", iconLeft: "trash" }
-])
 const TOGGLE_SIZES = ["sm", "md", "lg"]
 const TOGGLE_STATES = ["default", "hover", "focused", "disabled"]
 const MEGA_INPUT_SIZES = ["sm", "md", "lg"]
@@ -170,13 +143,21 @@ const ALERT_VARIANTS = ["info", "success", "warning", "danger"]
 const FIGMA_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6353-98804&m=dev"
 const FIGMA_ICON_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=821-6261&m=dev"
 const FIGMA_LINK_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=821-7099&m=dev"
+const FIGMA_TABS_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6381-104724&m=dev"
 const FIGMA_INPUT_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6373-31764&m=dev"
 const FIGMA_MEGA_INPUT_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=1106-66560&m=dev"
 const FIGMA_VERIFICATION_CODE_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=1106-66757&m=dev"
 const FIGMA_TEXT_AREA_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6373-33560&m=dev"
-const FIGMA_DROPDOWN_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=18-0&m=dev"
+const FIGMA_FILE_MENU_ITEM_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=2331-3079&m=dev"
 const FIGMA_TOGGLE_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=1102-4631&m=dev"
 const FIGMA_TABLE_ATOMS_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=214-0&m=dev"
+const FIGMA_BADGE_SQUARE_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=2104-2903&m=dev"
+const FIGMA_BUTTON_GROUP_ATOM_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=1046-9312&m=dev"
+const FIGMA_BUTTON_GROUP_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=1046-10171&m=dev"
+const BUTTON_GROUP_ICON_CIRCLE_URL = "http://localhost:3845/assets/2d4ee0c3366d87df6914c8e0f1f4c31a17c2fdb4.svg"
+const BUTTON_GROUP_ICON_ARROW_LEFT_URL = "http://localhost:3845/assets/8e227ea65c07969aac5fbcaf2a6b2b19ea38bfca.svg"
+const BUTTON_GROUP_ICON_PLUS_URL = "http://localhost:3845/assets/c19040cb060ee29f77385766efc799fe95f2eb8e.svg"
+const BUTTON_GROUP_ICON_ARROW_RIGHT_URL = "http://localhost:3845/assets/020a147f09abc3aeb0681be416980eb431cc12a3.svg"
 
 const SEMANTIC_SWATCHES = [
   { label: "Page", token: "--rr-sem-background-page" },
@@ -250,6 +231,127 @@ function renderLinkButtonSizes() {
   return LINK_BUTTON_SIZES.map((size) => `<rr-button-link color="primary" size="${size}" icon-display="leading">Button CTA</rr-button-link>`).join("")
 }
 
+function renderTabsMatrix(withBadge = false) {
+  return `
+    <div class="rr-library-tabs-matrix">
+      <div class="rr-library-tabs-row rr-library-tabs-row--header">
+        <div class="rr-library-tabs-axis">State</div>
+        <div class="rr-library-tabs-col-title">Horizontal</div>
+        <div class="rr-library-tabs-col-title">Vertical</div>
+      </div>
+      ${TAB_STATES.map(
+        (state) => `
+          <div class="rr-library-tabs-row">
+            <div class="rr-library-tabs-axis">${state.replace("-", " ")}</div>
+            <div class="rr-library-tabs-cell">
+              <rr-tabs type="horizontal" state="${state}" ${withBadge ? 'badge badge-value="3"' : ""}>LOREM IPSUM</rr-tabs>
+            </div>
+            <div class="rr-library-tabs-cell">
+              <rr-tabs type="vertical" state="${state}" ${withBadge ? 'badge badge-value="3"' : ""}>LOREM IPSUM</rr-tabs>
+            </div>
+          </div>
+        `
+      ).join("")}
+    </div>
+  `
+}
+
+function renderTabsPreview() {
+  return `
+    <div class="rr-library-tabs-grid">
+      <article class="rr-library-tabs-card">
+        <h3>Text</h3>
+        ${renderTabsMatrix(false)}
+      </article>
+      <article class="rr-library-tabs-card">
+        <h3>With Badge</h3>
+        ${renderTabsMatrix(true)}
+      </article>
+    </div>
+  `
+}
+
+function renderButtonGroupPreview() {
+  return `
+    <div class="rr-library-button-group-stack">
+      <div class="rr-button-group rr-button-group--text" role="group" aria-label="Button group text only">
+        <button class="rr-button-group-item" type="button">Text</button>
+        <button class="rr-button-group-item" type="button">Text</button>
+        <button class="rr-button-group-item" type="button">Text</button>
+      </div>
+
+      <div class="rr-button-group rr-button-group--leading" role="group" aria-label="Button group with leading icons">
+        <button class="rr-button-group-item" type="button">
+          <span class="rr-button-group-icon" aria-hidden="true">
+            <img src="${BUTTON_GROUP_ICON_CIRCLE_URL}" alt="" />
+          </span>
+          <span class="rr-button-group-label">Text</span>
+        </button>
+        <button class="rr-button-group-item" type="button">
+          <span class="rr-button-group-icon" aria-hidden="true">
+            <img src="${BUTTON_GROUP_ICON_CIRCLE_URL}" alt="" />
+          </span>
+          <span class="rr-button-group-label">Text</span>
+        </button>
+        <button class="rr-button-group-item" type="button">
+          <span class="rr-button-group-icon" aria-hidden="true">
+            <img src="${BUTTON_GROUP_ICON_CIRCLE_URL}" alt="" />
+          </span>
+          <span class="rr-button-group-label">Text</span>
+        </button>
+      </div>
+
+      <div class="rr-button-group rr-button-group--icon" role="group" aria-label="Icon-only button group">
+        <button class="rr-button-group-item" type="button" aria-label="Previous">
+          <span class="rr-button-group-icon" aria-hidden="true">
+            <img src="${BUTTON_GROUP_ICON_ARROW_LEFT_URL}" alt="" />
+          </span>
+        </button>
+        <button class="rr-button-group-item" type="button" aria-label="Add">
+          <span class="rr-button-group-icon" aria-hidden="true">
+            <img src="${BUTTON_GROUP_ICON_PLUS_URL}" alt="" />
+          </span>
+        </button>
+        <button class="rr-button-group-item" type="button" aria-label="Next">
+          <span class="rr-button-group-icon" aria-hidden="true">
+            <img src="${BUTTON_GROUP_ICON_ARROW_RIGHT_URL}" alt="" />
+          </span>
+        </button>
+      </div>
+    </div>
+  `
+}
+
+function renderBadgeSquarePreview() {
+  const colors = ["green", "blue", "red", "orange", "purple", "gray", "white", "red-error"]
+  const types = ["outline", "fill-light", "fill-dark"]
+  
+  return `
+    <div class="rr-library-badge-grid">
+      ${colors.map(color => `
+        <div class="rr-library-badge-column">
+          <h4>${color.replace("-", " ")}</h4>
+          <div class="rr-library-badge-variants">
+            ${types.filter(type => !(color === "white" && type === "fill-dark")).map(type => `
+              <div class="rr-badge-square rr-badge-square--${color} rr-badge-square--${type}">
+                <p class="rr-badge-square-label">Label</p>
+              </div>
+            `).join("")}
+            ${color !== "white" ? `
+              <div class="rr-badge-square rr-badge-square--${color} rr-badge-square--${types[0]} rr-badge-square--with-dropdown">
+                <p class="rr-badge-square-label">Label</p>
+                <svg class="rr-badge-square-caret" width="16" height="16" viewBox="0 0 256 256" fill="none">
+                  <polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `
+}
+
 function renderInputCell(state, variant) {
   const attrs = [
     `variant="${variant.value}"`,
@@ -305,91 +407,6 @@ function renderMegaInputMatrix() {
           ${MEGA_INPUT_SIZES.map((size) => renderMegaInputCell(state, size)).join("")}
         </div>
       `).join("")}
-    </div>
-  `
-}
-
-function renderDropdownFieldCell(row, type) {
-  const attrs = [
-    `type="${type.value}"`,
-    `state="${row.state}"`,
-    'label="Label"',
-    'placeholder="Select"',
-    `options='${DROPDOWN_SELECTOR_OPTIONS}'`
-  ]
-  if (row.hasValue) {
-    attrs.push('value="admin"')
-  }
-  return `
-    <div class="rr-library-dropdown-cell">
-      <rr-select ${attrs.join(" ")}></rr-select>
-    </div>
-  `
-}
-
-function renderDropdownFieldMatrix() {
-  return `
-    <div class="rr-library-dropdown-matrix-wrap">
-      <div class="rr-library-dropdown-matrix">
-        <div class="rr-library-dropdown-row rr-library-dropdown-row--header">
-          <div class="rr-library-dropdown-axis">State</div>
-          ${DROPDOWN_TYPES.map((type) => `<div class="rr-library-dropdown-col-title">${type.label}</div>`).join("")}
-        </div>
-        ${DROPDOWN_FIELD_ROWS.map((row) => `
-          <div class="rr-library-dropdown-row">
-            <div class="rr-library-dropdown-axis">${row.label}</div>
-            ${DROPDOWN_TYPES.map((type) => renderDropdownFieldCell(row, type)).join("")}
-          </div>
-        `).join("")}
-      </div>
-    </div>
-  `
-}
-
-function renderDropdownItemCell(state, type) {
-  const text = type.value === "destructive" ? "Delete" : "Option"
-  const iconLeft = type.value === "destructive" ? ' icon-left="trash"' : ""
-  return `
-    <div class="rr-library-dropdown-item-cell">
-      <rr-dropdown-item
-        type="${type.value}"
-        state="${state}"
-        text="${text}"${iconLeft}>
-      </rr-dropdown-item>
-    </div>
-  `
-}
-
-function renderDropdownItemMatrix() {
-  return `
-    <div class="rr-library-dropdown-item-matrix-wrap">
-      <div class="rr-library-dropdown-item-matrix">
-        <div class="rr-library-dropdown-item-row rr-library-dropdown-item-row--header">
-          <div class="rr-library-dropdown-item-axis">State</div>
-          ${DROPDOWN_ITEM_TYPES.map((type) => `<div class="rr-library-dropdown-item-col-title">${type.label}</div>`).join("")}
-        </div>
-        ${DROPDOWN_ITEM_STATES.map((state) => `
-          <div class="rr-library-dropdown-item-row">
-            <div class="rr-library-dropdown-item-axis">${state}</div>
-            ${DROPDOWN_ITEM_TYPES.map((type) => renderDropdownItemCell(state, type)).join("")}
-          </div>
-        `).join("")}
-        <div class="rr-library-dropdown-item-row rr-library-dropdown-item-row--divider">
-          <div class="rr-library-dropdown-item-axis">divider</div>
-          <div class="rr-library-dropdown-item-divider-cell">
-            <rr-dropdown-item type="divider"></rr-dropdown-item>
-          </div>
-        </div>
-      </div>
-    </div>
-  `
-}
-
-function renderDropdownTemplatePreview() {
-  return `
-    <div class="rr-library-dropdown-template-row">
-      <rr-dropdown-template options='${DROPDOWN_TEMPLATE_OPTIONS}'></rr-dropdown-template>
-      <rr-dropdown-template options='${DROPDOWN_TEMPLATE_OPTIONS}' value="update" show-selected-check></rr-dropdown-template>
     </div>
   `
 }
@@ -507,6 +524,52 @@ function renderAlertStates() {
   return ALERT_VARIANTS.map((variant) => `<rr-alert variant="${variant}">${variant.toUpperCase()} alert message</rr-alert>`).join("")
 }
 
+function renderFileMenuItemPreview() {
+  return `
+    <div class="rr-library-file-menu-grid">
+      <div class="rr-library-file-menu-stack">
+        <h4>Default</h4>
+        <div class="rr-library-file-menu-items">
+          <rr-file-menu-item file-name="Tech requirements.pdf" show-status></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" show-status show-icon></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" show-status show-dropdown></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" show-status hide-icon></rr-file-menu-item>
+        </div>
+      </div>
+
+      <div class="rr-library-file-menu-stack">
+        <h4>Hover</h4>
+        <div class="rr-library-file-menu-items">
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="hover" show-status show-blocker></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="hover" show-status show-icon show-blocker></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="hover" show-status show-feature-flag></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="hover" show-status show-icon show-feature-flag></rr-file-menu-item>
+        </div>
+      </div>
+
+      <div class="rr-library-file-menu-stack">
+        <h4>Selected</h4>
+        <div class="rr-library-file-menu-items">
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="selected" show-status show-blocker></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="selected" show-status show-icon show-feature-flag></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="selected" show-status show-checkbox></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="selected" show-status show-dropdown show-feature-flag></rr-file-menu-item>
+        </div>
+      </div>
+
+      <div class="rr-library-file-menu-stack">
+        <h4>Disabled</h4>
+        <div class="rr-library-file-menu-items">
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="disabled" show-status></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="disabled" show-status show-icon></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="disabled" show-status show-checkbox></rr-file-menu-item>
+          <rr-file-menu-item file-name="Tech requirements.pdf" state="disabled" show-status show-blocker></rr-file-menu-item>
+        </div>
+      </div>
+    </div>
+  `
+}
+
 function renderTypographyPreview() {
   const heading = tokens.typography?.fontSizeH4 || "24px"
   const body = tokens.typography?.fontSizeMd || "16px"
@@ -596,6 +659,38 @@ export async function renderComponentsLibraryFlow() {
 
       <section class="rr-library-section">
         <div class="rr-library-section-head">
+          <h2>Tabs</h2>
+          <p>Horizontal and vertical tabs across all design states.</p>
+          <a href="${FIGMA_TABS_URL}" target="_blank" rel="noreferrer">Open in Figma</a>
+        </div>
+        ${renderTabsPreview()}
+      </section>
+
+      <section class="rr-library-section">
+        <div class="rr-library-section-head">
+          <div class="rr-library-section-title">
+            <h2>Button Group</h2>
+            <p>Segmented actions with text, leading icons, and icon-only variants.</p>
+          </div>
+          <div class="rr-library-section-links">
+            <a href="${FIGMA_BUTTON_GROUP_ATOM_URL}" target="_blank" rel="noreferrer">Atom</a>
+            <a href="${FIGMA_BUTTON_GROUP_URL}" target="_blank" rel="noreferrer">Component</a>
+          </div>
+        </div>
+        ${renderButtonGroupPreview()}
+      </section>
+
+      <section class="rr-library-section">
+        <div class="rr-library-section-head">
+          <h2>Badge Square</h2>
+          <p>Square badges with 8 color options and 3 types (outline, fill light, fill dark). Optional dropdown indicator.</p>
+          <a href="${FIGMA_BADGE_SQUARE_URL}" target="_blank" rel="noreferrer">Open in Figma</a>
+        </div>
+        ${renderBadgeSquarePreview()}
+      </section>
+
+      <section class="rr-library-section">
+        <div class="rr-library-section-head">
           <h2>Inputs and Selection</h2>
           <p>Input field matrix with all variants and states from the design system.</p>
           <a href="${FIGMA_INPUT_URL}" target="_blank" rel="noreferrer">Open in Figma</a>
@@ -638,36 +733,6 @@ export async function renderComponentsLibraryFlow() {
             </div>
           </article>
 
-          <article class="rr-library-control-card">
-            <h3>Password Input</h3>
-            <rr-password-input label="Default" placeholder="Enter password"></rr-password-input>
-            <rr-password-input state="focused" label="Focused" value="secret123"></rr-password-input>
-            <rr-password-input state="error" label="Error" value="weak"></rr-password-input>
-            <rr-password-input state="disabled" label="Disabled" value="disabled"></rr-password-input>
-          </article>
-
-          <article class="rr-library-control-card rr-library-control-card--wide">
-            <div class="rr-library-control-head">
-              <h3>Dropdown Selectors</h3>
-              <a href="${FIGMA_DROPDOWN_URL}" target="_blank" rel="noreferrer">Open in Figma</a>
-            </div>
-            <p class="rr-library-control-note">Selector field, dropdown item, and dropdown template mapped from the Dropdowns page.</p>
-            <div class="rr-library-dropdown-group">
-              <div class="rr-library-dropdown-block">
-                <h4>Dropdown Field</h4>
-                ${renderDropdownFieldMatrix()}
-              </div>
-              <div class="rr-library-dropdown-block">
-                <h4>Dropdown Item</h4>
-                ${renderDropdownItemMatrix()}
-              </div>
-              <div class="rr-library-dropdown-block">
-                <h4>Dropdown Template</h4>
-                ${renderDropdownTemplatePreview()}
-              </div>
-            </div>
-          </article>
-
           <article class="rr-library-control-card rr-library-control-card--wide">
             <div class="rr-library-control-head">
               <h3>Toggles</h3>
@@ -694,6 +759,15 @@ export async function renderComponentsLibraryFlow() {
             <rr-checkbox state="disabled" checked>Disabled</rr-checkbox>
           </article>
         </div>
+      </section>
+
+      <section class="rr-library-section">
+        <div class="rr-library-section-head">
+          <h2>File Menu Item</h2>
+          <a href="${FIGMA_FILE_MENU_ITEM_URL}" target="_blank" rel="noreferrer">Open in Figma</a>
+        </div>
+        <p class="rr-library-control-note">File menu item component with multiple states (default, hover, selected, disabled) and optional decorators (icon, dropdown, checkbox, blocker, feature flag, status badge).</p>
+        ${renderFileMenuItemPreview()}
       </section>
 
       <section class="rr-library-section">
