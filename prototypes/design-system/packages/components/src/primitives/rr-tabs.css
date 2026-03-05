@@ -1,0 +1,150 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+  color: var(--rr-sem-text-primary, #14161b);
+}
+
+button {
+  margin: 0;
+  border: none;
+  background: transparent;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  isolation: isolate;
+  color: inherit;
+  font-family: var(--rr-typography-fontFamilyBase);
+  font-size: var(--rr-textTokens-fontSizes-paragraph-small, var(--rr-typography-fontSizeSm));
+  line-height: var(--rr-textTokens-lineHeight-actions-small, var(--rr-typography-lineHeightParagraph));
+  font-weight: var(--rr-typography-fontWeightRegular);
+  letter-spacing: var(--rr-typography-letterSpacingMax);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+button[data-type="vertical"] {
+  padding: 8px 24px 8px 12px;
+}
+
+button:focus-visible {
+  outline: none;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 22px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+/* Hover styles - both for state attribute and actual hover */
+button[data-state="hover"]::before,
+button[data-state="selected-hover"]::before,
+button:hover:not(:disabled):not([data-state="selected"])::before {
+  opacity: 1;
+}
+
+button[data-state="hover"]::before,
+button:hover:not(:disabled):not([data-state="selected"])::before {
+  background: var(--rr-sem-background-navHover, #f0f1f3);
+}
+
+button[data-state="selected-hover"]::before,
+button[data-state="selected"]:hover:not(:disabled)::before {
+  background: var(--rr-sem-background-primarySubtle, #f2f8ff);
+}
+
+button[data-type="horizontal"]::before {
+  left: 8px;
+  right: 8px;
+}
+
+button[data-type="vertical"]::before {
+  left: 8px;
+  right: 20px;
+}
+
+button[data-state="focus"] {
+  background: var(--rr-sem-background-pageLight, #ffffff);
+  box-shadow: 0 0 0 4px var(--rr-sem-stroke-focusRingPrimary, rgba(0, 121, 255, 0.3));
+}
+
+button[data-state="selected"],
+button[data-state="selected-hover"] {
+  color: var(--rr-sem-text-actionLink, #0067da);
+}
+
+button[data-state="selected"][data-type="horizontal"],
+button[data-state="selected-hover"][data-type="horizontal"] {
+  border-bottom: 1px solid var(--rr-sem-stroke-btnPrimary, #0067da);
+}
+
+button[data-state="selected"][data-type="vertical"],
+button[data-state="selected-hover"][data-type="vertical"] {
+  border-right: 2px solid var(--rr-sem-stroke-btnPrimary, #0067da);
+}
+
+button[data-state="disabled"],
+button:disabled {
+  color: var(--rr-sem-text-disabled, #a3a9b6);
+  cursor: not-allowed;
+}
+
+.label,
+.badge,
+.icon {
+  position: relative;
+  z-index: 1;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  height: 18px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 4px;
+  border: 1px solid var(--rr-sem-stroke-secondary, #c2c6ce);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--rr-textTokens-fontSizes-paragraph-tiny, var(--rr-typography-fontSizeTiny));
+  line-height: var(--rr-textTokens-lineHeight-actions-small, var(--rr-typography-lineHeightParagraph));
+  color: inherit;
+}
+
+button[data-state="disabled"] .badge,
+button:disabled .badge {
+  border-color: var(--rr-sem-stroke-disabled, #d1d4da);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

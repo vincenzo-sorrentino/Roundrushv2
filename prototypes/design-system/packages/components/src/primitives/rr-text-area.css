@@ -12,19 +12,20 @@
 
 .label {
   margin: 0;
+  font-family: var(--rr-typography-fontFamilyBase);
   font-size: var(--rr-textTokens-fontSizes-fields-label, 14px);
   line-height: var(--rr-textTokens-lineHeight-fields-label, 20px);
   font-weight: var(--rr-typography-fontWeightMedium, 500);
   letter-spacing: var(--rr-textTokens-general-letterSpacingMax, 0px);
-  color: var(--rr-sem-textPrimary);
+  color: var(--rr-sem-text-primary);
 }
 
 .field {
   --rr-textarea-bg: var(--rr-sem-background-field, var(--rr-sem-surfaceField));
   --rr-textarea-border: var(--rr-sem-stroke-field, var(--rr-sem-borderField));
-  --rr-textarea-color: var(--rr-sem-textMuted);
-  --rr-textarea-placeholder: var(--rr-sem-textMuted);
-  --rr-textarea-shadow: var(--rr-effects-shadow-xs, 0 1px 2px 0 rgba(16, 24, 40, 0.05));
+  --rr-textarea-color: var(--rr-sem-text-tertiary);
+  --rr-textarea-placeholder: var(--rr-sem-text-tertiary);
+  --rr-textarea-shadow: none;
   border: 1px solid var(--rr-textarea-border);
   border-radius: var(--rr-radius-sm, 8px);
   background: var(--rr-textarea-bg);
@@ -43,6 +44,7 @@
   outline: none;
   resize: none;
   background: transparent;
+  font-family: var(--rr-typography-fontFamilyBase);
   font-size: var(--rr-textTokens-fontSizes-fields-input, 16px);
   line-height: var(--rr-textTokens-lineHeight-fields-input, 20px);
   font-weight: var(--rr-typography-fontWeightRegular, 400);
@@ -56,7 +58,7 @@
 }
 
 .textarea:not(:placeholder-shown) {
-  color: var(--rr-textarea-filled-color, var(--rr-sem-textPrimary));
+  color: var(--rr-textarea-filled-color, var(--rr-sem-text-primary));
 }
 
 .footer {
@@ -64,11 +66,12 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--rr-spacing-sm, 8px);
+  font-family: var(--rr-typography-fontFamilyBase);
   font-size: var(--rr-textTokens-fontSizes-fields-underline, 14px);
   line-height: var(--rr-textTokens-lineHeight-fields-underline, 12px);
   font-weight: var(--rr-typography-fontWeightRegular, 400);
   letter-spacing: var(--rr-textTokens-general-letterSpacingMax, 0px);
-  color: var(--rr-textarea-helper, var(--rr-sem-textMuted));
+  color: var(--rr-textarea-helper, var(--rr-sem-text-tertiary));
 }
 
 .helper-text {
@@ -83,7 +86,7 @@
 
 .wrapper[data-state="filled"] .field,
 .wrapper[data-state="focused"] .field {
-  --rr-textarea-color: var(--rr-sem-textPrimary);
+  --rr-textarea-color: var(--rr-sem-text-primary);
 }
 
 .wrapper[data-state="focused"] .field {

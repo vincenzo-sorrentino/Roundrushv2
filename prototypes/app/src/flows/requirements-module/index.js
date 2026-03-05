@@ -53,10 +53,19 @@ const ACCEPTANCE_LAWS = [
 const MODULES = [
   {
     id: "AUT-M001",
-    code: "LOG-001",
+    code: "AUT-M001",
     title: "User login",
     scope: "Allow registered users to authenticate with email + password and recover a forgotten password.",
     status: "released",
+    laws: {
+      "AL-01": { status: "pass" },
+      "AL-02": { status: "pass" },
+      "AL-03": { status: "pass" },
+      "AL-04": { status: "pass" },
+      "AL-05": { status: "pass" },
+      "AL-06": { status: "pass" },
+      "AL-07": { status: "pass" }
+    },
     prototypes: [
       {
         name: "Login flow - v1",
@@ -69,9 +78,9 @@ const MODULES = [
     functionalities: [
       {
         id: "AUT-M001-F001",
-        shortCode: "LOG-001-F01",
+        shortCode: "AUT-M001-F001",
         title: "Login form",
-        filename: "LOG-001-F01-login-form.md",
+        filename: "AUT-M001-F001-login-form.md",
         status: "validated",
         userStory:
           "As a registered user, I want to log in with my email and password so that I can access my team's workspace.",
@@ -103,9 +112,9 @@ const MODULES = [
       },
       {
         id: "AUT-M001-F002",
-        shortCode: "LOG-001-F02",
+        shortCode: "AUT-M001-F002",
         title: "Password reset",
-        filename: "LOG-001-F02-password-reset.md",
+        filename: "AUT-M001-F002-password-reset.md",
         status: "validated",
         userStory:
           "As a registered user who forgot their password, I want to reset it via email so that I can regain access.",
@@ -137,9 +146,9 @@ const MODULES = [
       },
       {
         id: "AUT-M001-F003",
-        shortCode: "LOG-001-F03",
+        shortCode: "AUT-M001-F003",
         title: "OTP code",
-        filename: "LOG-001-F03-otp-code.md",
+        filename: "AUT-M001-F003-otp-code.md",
         status: "released",
         userStory:
           "As a user in high-risk sessions, I want to validate with a temporary OTP code so that sign-in remains secure.",
@@ -155,9 +164,9 @@ const MODULES = [
       },
       {
         id: "AUT-M001-F004",
-        shortCode: "LOG-001-F04",
+        shortCode: "AUT-M001-F004",
         title: "Account selection",
-        filename: "LOG-001-F04-account-selection.md",
+        filename: "AUT-M001-F004-account-selection.md",
         status: "released",
         userStory:
           "As a user with access to multiple contexts, I want to choose an account before entering the workspace.",
@@ -175,11 +184,20 @@ const MODULES = [
   },
   {
     id: "AUT-M002",
-    code: "LOG-002",
+    code: "AUT-M002",
     title: "User authentication process",
     scope:
       "Allow new users to join RoundRush through invitation email, account creation, and automatic team joining.",
     status: "released",
+    laws: {
+      "AL-01": { status: "pass" },
+      "AL-02": { status: "pass" },
+      "AL-03": { status: "pass" },
+      "AL-04": { status: "pass" },
+      "AL-05": { status: "pass" },
+      "AL-06": { status: "pass" },
+      "AL-07": { status: "pass" }
+    },
     prototypes: [
       {
         name: "Signup flow - v1",
@@ -192,9 +210,9 @@ const MODULES = [
     functionalities: [
       {
         id: "AUT-M002-F001",
-        shortCode: "LOG-002-F01",
+        shortCode: "AUT-M002-F001",
         title: "Get invitation email",
-        filename: "LOG-002-F01-invitation-email.md",
+        filename: "AUT-M002-F001-invitation-email.md",
         status: "released",
         userStory:
           "As a prospective user, I want to receive an invitation email from a team admin so that I can begin the signup process.",
@@ -225,9 +243,9 @@ const MODULES = [
       },
       {
         id: "AUT-M002-F002",
-        shortCode: "LOG-002-F02",
+        shortCode: "AUT-M002-F002",
         title: "Make an account",
-        filename: "LOG-002-F02-make-an-account.md",
+        filename: "AUT-M002-F002-make-an-account.md",
         status: "validated",
         userStory:
           "As an invited user, I want to create my account by setting my name and password so that I have credentials to log in.",
@@ -258,9 +276,9 @@ const MODULES = [
       },
       {
         id: "AUT-M002-F003",
-        shortCode: "LOG-002-F03",
+        shortCode: "AUT-M002-F003",
         title: "Join team",
-        filename: "LOG-002-F03-join-team.md",
+        filename: "AUT-M002-F003-join-team.md",
         status: "validated",
         userStory:
           "As a newly registered user, I want to be automatically added to the team that invited me so that I can start collaborating immediately.",
@@ -293,28 +311,55 @@ const MODULES = [
   },
   {
     id: "AUT-M003",
-    code: "LOG-003",
+    code: "AUT-M003",
     title: "User session management",
     scope: "Track, refresh, and revoke sessions safely across devices.",
     status: "planned",
+    laws: {
+      "AL-01": { status: "unknown" },
+      "AL-02": { status: "unknown" },
+      "AL-03": { status: "unknown" },
+      "AL-04": { status: "unknown" },
+      "AL-05": { status: "unknown" },
+      "AL-06": { status: "unknown" },
+      "AL-07": { status: "unknown" }
+    },
     prototypes: [],
     functionalities: []
   },
   {
     id: "AUT-M004",
-    code: "LOG-004",
+    code: "AUT-M004",
     title: "User password recovery",
     scope: "Centralize recovery policies and risk checks for reset journeys.",
     status: "planned",
+    laws: {
+      "AL-01": { status: "unknown" },
+      "AL-02": { status: "unknown" },
+      "AL-03": { status: "unknown" },
+      "AL-04": { status: "unknown" },
+      "AL-05": { status: "unknown" },
+      "AL-06": { status: "unknown" },
+      "AL-07": { status: "unknown" }
+    },
     prototypes: [],
     functionalities: []
   },
   {
     id: "AUT-M005",
-    code: "LOG-005",
+    code: "AUT-M005",
     title: "2-factor authentication",
     scope: "Add step-up authentication for sensitive access paths.",
     status: "planned",
+    laws: {
+      "AL-01": { status: "unknown" },
+      "AL-02": { status: "unknown" },
+      "AL-03": { status: "unknown" },
+      "AL-04": { status: "unknown" },
+      "AL-05": { status: "unknown" },
+      "AL-06": { status: "unknown" },
+      "AL-07": { status: "unknown" }
+    },
     prototypes: [],
     functionalities: []
   }
@@ -430,6 +475,11 @@ function getTabsForNode(node) {
     ]
   }
 
+  // No tabs for functionality pages
+  if (node.type === "functionality") {
+    return []
+  }
+
   return [
     { id: "description", label: "Description" },
     { id: "acceptance-laws", label: "Acceptance Laws" },
@@ -439,29 +489,50 @@ function getTabsForNode(node) {
 }
 
 function getDefaultTabForNode(node) {
-  if (node.type === "epic") {
-    return "acceptance-laws"
-  }
-  if (node.type === "module") {
-    return "functionalities"
-  }
   return "description"
 }
 
 function renderStatusBadge(status) {
-  return `<span class="rr-rm2-status is-${toStatusClass(status)}">${escapeHtml(toStatusLabel(status))}</span>`
+  const statusClass = toStatusClass(status)
+  const label = toStatusLabel(status)
+  
+  // Map status to badge color
+  let badgeColor = "gray"
+  if (["pass", "released", "validated"].includes(statusClass)) {
+    badgeColor = "green"
+  } else if (["in-sprint", "in-progress"].includes(statusClass)) {
+    badgeColor = "blue"
+  } else if (["ready-for-sprint", "planned"].includes(statusClass)) {
+    badgeColor = "red"
+  } else if (statusClass === "design") {
+    badgeColor = "purple"
+  }
+  
+  return `<div class="rr-badge-square rr-badge-square--${badgeColor} rr-badge-square--fill-light">
+    <p class="rr-badge-square-label">${escapeHtml(label)}</p>
+  </div>`
 }
 
 function renderAcceptanceLawsTable() {
   const rows = ACCEPTANCE_LAWS.map(
     (law) => `
       <tr>
-        <td>${escapeHtml(law.id)}</td>
         <td>
-          <strong>${escapeHtml(law.name)}</strong>
-          <p>${escapeHtml(law.description)}</p>
+          <div class="rr-rm2-table-cell-content">
+            <span class="rr-rm2-table-cell-text">${escapeHtml(law.id)}</span>
+          </div>
         </td>
-        <td>${escapeHtml(law.evidence)}</td>
+        <td>
+          <div class="rr-rm2-table-cell-content">
+            <span class="rr-rm2-table-cell-text">${escapeHtml(law.name)}</span>
+            <span class="rr-rm2-table-cell-supporting">${escapeHtml(law.description)}</span>
+          </div>
+        </td>
+        <td>
+          <div class="rr-rm2-table-cell-content">
+            <span class="rr-rm2-table-cell-text">${escapeHtml(law.evidence)}</span>
+          </div>
+        </td>
         <td>${renderStatusBadge(law.status)}</td>
       </tr>
     `
@@ -514,34 +585,61 @@ modules:
   `
 }
 
-function renderModulesTable() {
-  return `
-    <div class="rr-rm2-table-wrap">
-      <table class="rr-rm2-table">
-        <thead>
-          <tr>
-            <th>Module</th>
-            <th>Scope</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          ${MODULES.map(
-            (module) => `
-              <tr>
-                <td>${escapeHtml(module.code)} - ${escapeHtml(module.title)}</td>
-                <td>${escapeHtml(module.scope)}</td>
-                <td>${renderStatusBadge(module.status)}</td>
-                <td>
-                  <button type="button" class="rr-rm2-link-button" data-action="open-node" data-node-id="${escapeHtml(module.id)}">Open</button>
-                </td>
-              </tr>
-            `
-          ).join("")}
-        </tbody>
-      </table>
+function renderModulesTable(state) {
+  const expandedModuleIds = state?.expandedModuleIds ?? new Set()
+
+  const rootRow = `
+    <div class="rr-rm2-modules-row rr-rm2-modules-row--root">
+      <div class="rr-rm2-modules-name">
+        <span class="rr-rm2-modules-icon">${TREE_ICON.file}</span>
+        <span class="rr-rm2-modules-name-text">manifest.yaml</span>
+      </div>
+      <div class="rr-rm2-modules-status"></div>
     </div>
+  `
+
+  const moduleRows = MODULES.map((module) => {
+    const hasChildren = Array.isArray(module.functionalities) && module.functionalities.length > 0
+    const isExpanded = hasChildren && expandedModuleIds.has(module.id)
+
+    const toggleControl = hasChildren
+      ? `<button type="button" class="rr-rm2-modules-toggle" data-action="toggle-module-folder" data-module-id="${escapeHtml(module.id)}" aria-label="${isExpanded ? "Collapse" : "Expand"} ${escapeHtml(module.code)}" aria-expanded="${String(isExpanded)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
+      : `<span class="rr-rm2-modules-toggle rr-rm2-modules-toggle--placeholder" aria-hidden="true">${TREE_ICON.caretRight}</span>`
+
+    const childrenRows = isExpanded
+      ? module.functionalities
+          .map(
+            (item) => `
+              <div class="rr-rm2-modules-row rr-rm2-modules-row--file">
+                <div class="rr-rm2-modules-name">
+                  <span class="rr-rm2-modules-icon">${TREE_ICON.file}</span>
+                  <button type="button" class="rr-rm2-modules-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.filename)}</button>
+                </div>
+                <div class="rr-rm2-modules-status">${renderStatusBadge(item.status)}</div>
+              </div>
+            `
+          )
+          .join("")
+      : ""
+
+    return `
+      <div class="rr-rm2-modules-row rr-rm2-modules-row--module ${isExpanded ? 'is-expanded' : ''}">
+        <div class="rr-rm2-modules-name">
+          ${toggleControl}
+          <span class="rr-rm2-modules-icon">${TREE_ICON.folder}</span>
+          <button type="button" class="rr-rm2-modules-name-button" data-action="open-node" data-node-id="${escapeHtml(module.id)}">${escapeHtml(module.code)} - ${escapeHtml(module.title)}</button>
+        </div>
+        <div class="rr-rm2-modules-status"></div>
+      </div>
+      ${childrenRows}
+    `
+  }).join("")
+
+  return `
+    <section class="rr-rm2-modules-wrap" aria-label="Modules">
+      ${rootRow}
+      ${moduleRows}
+    </section>
   `
 }
 
@@ -551,20 +649,67 @@ function renderModuleFunctionalities(module) {
   }
 
   return `
-    <div class="rr-rm2-list">
+    <div class="rr-rm2-func-wrap">
       ${module.functionalities
         .map(
           (item) => `
-            <div class="rr-rm2-list-row">
-              <button type="button" class="rr-rm2-list-title" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
-              <a class="rr-rm2-icon-link" href="${escapeHtml(module.prototypes[0]?.path || "#")}" target="_blank" rel="noreferrer" aria-label="Open prototype">Open</a>
-              ${renderStatusBadge(item.status)}
+            <div class="rr-rm2-func-row">
+              <div class="rr-rm2-func-name">
+                <span class="rr-rm2-func-icon">${TREE_ICON.file}</span>
+                <button type="button" class="rr-rm2-func-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
+              </div>
+              <div class="rr-rm2-func-status">
+                ${renderStatusBadge(item.status)}
+              </div>
             </div>
           `
         )
         .join("")}
     </div>
   `
+}
+
+function getPrototypeGroups(node, items) {
+  if (node.type === "epic") {
+    return MODULES.map((module) => ({
+      id: module.id,
+      label: `${module.code} - ${module.title}`,
+      children: (module.prototypes || []).map((item, index) => ({
+        id: `${module.id}-prototype-${index}`,
+        label: item.flow || item.name,
+        status: item.status || "in-progress",
+        path: item.path || "#"
+      }))
+    }))
+  }
+
+  if (node.type === "module") {
+    return [
+      {
+        id: node.id,
+        label: `${node.code} - ${node.title}`,
+        children: (items || []).map((item, index) => ({
+          id: `${node.id}-prototype-${index}`,
+          label: item.flow || item.name,
+          status: item.status || "in-progress",
+          path: item.path || "#"
+        }))
+      }
+    ]
+  }
+
+  return [
+    {
+      id: node.moduleId,
+      label: `${node.moduleCode} - ${node.moduleTitle}`,
+      children: (items || []).map((item, index) => ({
+        id: `${node.moduleId}-prototype-${index}`,
+        label: item.flow || item.name,
+        status: item.status || "in-progress",
+        path: item.path || "#"
+      }))
+    }
+  ]
 }
 
 function renderSiblingFunctionalities(functionality) {
@@ -574,15 +719,19 @@ function renderSiblingFunctionalities(functionality) {
   }
 
   return `
-    <div class="rr-rm2-list">
+    <div class="rr-rm2-func-wrap">
       ${module.functionalities
         .map((item) => {
           const isCurrent = item.id === functionality.id
           return `
-            <div class="rr-rm2-list-row ${isCurrent ? "is-current" : ""}">
-              <button type="button" class="rr-rm2-list-title" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
-              <a class="rr-rm2-icon-link" href="${escapeHtml(module.prototypes[0]?.path || "#")}" target="_blank" rel="noreferrer" aria-label="Open prototype">Open</a>
-              ${renderStatusBadge(item.status)}
+            <div class="rr-rm2-func-row ${isCurrent ? "is-current" : ""}">
+              <div class="rr-rm2-func-name">
+                <span class="rr-rm2-func-icon">${TREE_ICON.file}</span>
+                <button type="button" class="rr-rm2-func-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.title)}</button>
+              </div>
+              <div class="rr-rm2-func-status">
+                ${renderStatusBadge(item.status)}
+              </div>
             </div>
           `
         })
@@ -591,29 +740,95 @@ function renderSiblingFunctionalities(functionality) {
   `
 }
 
-function renderPrototypePanel(items) {
+function renderPrototypePanel(node, items, state) {
   if (!Array.isArray(items) || items.length === 0) {
     return `<p class="rr-rm2-empty">No prototype references.</p>`
   }
 
+  // For module pages, display prototypes directly without parent group
+  if (node.type === "module") {
+    const rows = items
+      .map((item, index) => {
+        const protoId = `${node.id}-prototype-${index}`
+        const label = item.flow || item.name
+        const status = item.status || "in-progress"
+        const path = item.path || "#"
+        
+        return `
+          <div class="rr-rm2-proto-flat-row">
+            <div class="rr-rm2-proto-flat-name">
+              <p class="rr-rm2-proto-flat-text">${escapeHtml(label)}</p>
+            </div>
+            <div class="rr-rm2-proto-flat-link">
+              <a class="rr-rm2-proto-flat-button" href="${escapeHtml(path)}" target="_blank" rel="noreferrer" aria-label="Open prototype">
+                <svg width="18" height="18" viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M144 80h32a40 40 0 010 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 010-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+              </a>
+            </div>
+            <div class="rr-rm2-proto-flat-status">${renderStatusBadge(status)}</div>
+          </div>
+        `
+      })
+      .join("")
+
+    return `
+      <section class="rr-rm2-proto-flat-wrap" aria-label="Prototype references">
+        ${rows}
+      </section>
+    `
+  }
+
+  // For epic and functionality pages, show grouped prototypes
+  const groups = getPrototypeGroups(node, items)
+  const expandedGroupIds = state?.expandedPrototypeGroupIds ?? new Set()
+
+  const rows = groups
+    .map((group) => {
+      const hasChildren = Array.isArray(group.children) && group.children.length > 0
+      const isExpanded = hasChildren && expandedGroupIds.has(group.id)
+      const toggleControl = hasChildren
+        ? `<button type="button" class="rr-rm2-proto-toggle" data-action="toggle-prototype-group" data-group-id="${escapeHtml(group.id)}" aria-label="${isExpanded ? "Collapse" : "Expand"} ${escapeHtml(group.label)}" aria-expanded="${String(isExpanded)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
+        : `<span class="rr-rm2-proto-toggle rr-rm2-proto-toggle--placeholder" aria-hidden="true">${TREE_ICON.caretRight}</span>`
+
+      const childRows = isExpanded
+        ? group.children
+            .map(
+              (child) => `
+                <div class="rr-rm2-proto-row rr-rm2-proto-row--file">
+                  <div class="rr-rm2-proto-name">
+                    <span class="rr-rm2-proto-icon">${TREE_ICON.file}</span>
+                    <span class="rr-rm2-proto-name-text">${escapeHtml(child.label)}</span>
+                  </div>
+                  <div class="rr-rm2-proto-link-cell">
+                    <a class="rr-rm2-proto-link" href="${escapeHtml(child.path)}" target="_blank" rel="noreferrer" aria-label="Open prototype reference">
+                      <svg width="18" height="18" viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M144 80h32a40 40 0 010 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 010-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+                    </a>
+                  </div>
+                  <div class="rr-rm2-proto-status">${renderStatusBadge(child.status)}</div>
+                </div>
+              `
+            )
+            .join("")
+        : ""
+
+      return `
+        <div class="rr-rm2-proto-row rr-rm2-proto-row--group ${isExpanded ? 'is-expanded' : ''}">
+          <div class="rr-rm2-proto-name">
+            ${toggleControl}
+            <span class="rr-rm2-proto-icon">${TREE_ICON.folder}</span>
+            <span class="rr-rm2-proto-name-text">${escapeHtml(group.label)}</span>
+          </div>
+          <div class="rr-rm2-proto-link-cell"></div>
+          <div class="rr-rm2-proto-status"></div>
+        </div>
+        ${childRows}
+      `
+    })
+    .join("")
+
   return `
-    <div class="rr-rm2-prototype-grid">
-      ${items
-        .map(
-          (item) => `
-            <article class="rr-rm2-prototype-card">
-              <div>
-                <strong>${escapeHtml(item.name)}</strong>
-                ${item.version ? `<span>${escapeHtml(item.version)}</span>` : ""}
-              </div>
-              ${renderStatusBadge(item.status || "in-progress")}
-              <p>${escapeHtml(item.flow || item.path)}</p>
-              <a href="${escapeHtml(item.path)}" target="_blank" rel="noreferrer">Open prototype</a>
-            </article>
-          `
-        )
-        .join("")}
-    </div>
+    <section class="rr-rm2-proto-wrap" aria-label="Prototype references">
+      ${rows}
+    </section>
   `
 }
 
@@ -669,7 +884,7 @@ epic: AUT</pre>
   `
 }
 
-function renderPanel(node, activeTab) {
+function renderPanel(node, activeTab, state) {
   if (activeTab === "acceptance-laws") {
     return renderAcceptanceLawsTable()
   }
@@ -679,10 +894,10 @@ function renderPanel(node, activeTab) {
       return renderEpicDescription()
     }
     if (activeTab === "modules") {
-      return renderModulesTable()
+      return renderModulesTable(state)
     }
     if (activeTab === "prototypes") {
-      return renderPrototypePanel(EPIC.prototypes)
+      return renderPrototypePanel(node, EPIC.prototypes, state)
     }
   }
 
@@ -694,7 +909,7 @@ function renderPanel(node, activeTab) {
       return renderModuleFunctionalities(node)
     }
     if (activeTab === "prototypes") {
-      return renderPrototypePanel(node.prototypes)
+      return renderPrototypePanel(node, node.prototypes, state)
     }
   }
 
@@ -707,10 +922,12 @@ function renderPanel(node, activeTab) {
     }
     if (activeTab === "prototypes") {
       return renderPrototypePanel(
+        node,
         (node.modulePrototypes || []).map((prototype) => ({
           ...prototype,
           flow: node.prototypeRef
-        }))
+        })),
+        state
       )
     }
   }
@@ -739,17 +956,37 @@ function getBreadcrumbSegments(node) {
   return base
 }
 
+function isTabDisabled(node, tabId) {
+  // Check if tab should be disabled based on content availability
+  if (tabId === "prototypes") {
+    if (node.type === "epic") {
+      return !EPIC.prototypes || EPIC.prototypes.length === 0
+    }
+    if (node.type === "module") {
+      return !node.prototypes || node.prototypes.length === 0
+    }
+    if (node.type === "functionality") {
+      return !node.modulePrototypes || node.modulePrototypes.length === 0
+    }
+  }
+  return false
+}
+
 function renderTabs(node, activeTab) {
   return getTabsForNode(node)
     .map(
-      (tab) => `
+      (tab) => {
+        const isDisabled = isTabDisabled(node, tab.id)
+        return `
         <button
           type="button"
           class="rr-rm2-tab ${tab.id === activeTab ? "is-active" : ""}"
           data-action="set-tab"
           data-tab-id="${tab.id}"
+          ${isDisabled ? "disabled" : ""}
         >${escapeHtml(tab.label)}</button>
       `
+      }
     )
     .join("")
 }
@@ -834,29 +1071,26 @@ const TREE_ICON = {
   file: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><path d="M200 224H56a8 8 0 01-8-8V40a8 8 0 018-8h96l56 56v128a8 8 0 01-8 8z" fill="#fff" stroke="#94a3b8" stroke-width="8"/><polyline points="152,32 152,88 208,88" fill="none" stroke="#94a3b8" stroke-width="8"/></svg>`,
 }
 
-function renderExplorerItems(items, state, forceExpanded = false) {
+function renderExplorerItems(items, state, forceExpanded = false, depth = 0) {
   return items
     .map((item) => {
       const hasChildren = Array.isArray(item.children) && item.children.length > 0
       const isExpanded = hasChildren && (forceExpanded || state.expandedTreeIds.has(item.id))
       const isSelected = item.targetNodeId && item.targetNodeId === state.selectedNodeId
-      const statusColor = item.targetNodeId ? getStatusDotColor(item.targetNodeId) : null
-      const statusDot = statusColor ? `<span class="rr-rm2-tree-dot" style="background:${statusColor}"></span>` : ""
       const row = item.targetNodeId
         ? `<button type="button" class="rr-rm2-tree-select ${isSelected ? "is-selected" : ""}" data-action="select-node" data-node-id="${escapeHtml(item.targetNodeId)}">${escapeHtml(item.label)}</button>`
         : `<span class="rr-rm2-tree-label">${escapeHtml(item.label)}</span>`
 
       return `
         <li>
-          <div class="rr-rm2-tree-row">
+          <div class="rr-rm2-tree-row ${isSelected ? "is-selected" : ""} ${hasChildren ? "is-folder" : "is-file"}" data-depth="${depth}">
             ${hasChildren
               ? `<button type="button" class="rr-rm2-tree-toggle" data-action="toggle-tree" data-tree-id="${escapeHtml(item.id)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
-              : `<span class="rr-rm2-tree-pad"></span>`}
+              : ""}
             <span class="rr-rm2-tree-icon">${item.icon === "file" ? TREE_ICON.file : TREE_ICON.folder}</span>
             ${row}
-            ${statusDot}
           </div>
-          ${hasChildren && isExpanded ? `<ul>${renderExplorerItems(item.children, state, forceExpanded)}</ul>` : ""}
+          ${hasChildren && isExpanded ? `<ul>${renderExplorerItems(item.children, state, forceExpanded, depth + 1)}</ul>` : ""}
         </li>
       `
     })
@@ -870,10 +1104,13 @@ function renderExplorer(state) {
   return `
     <div class="rr-rm2-explorer-header">
       <div class="rr-rm2-explorer-search-wrap">
+        <span class="rr-rm2-search-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="116" cy="116" r="84" stroke="currentColor" stroke-width="16"/><line x1="175.4" y1="175.4" x2="224" y2="224" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
+        </span>
         <input type="search" id="rr-rm2-tree-search" class="rr-rm2-search" placeholder="Search" value="${escapeHtml(state.treeSearch)}" />
       </div>
       <button type="button" class="rr-rm2-explorer-collapse" data-action="toggle-explorer" aria-label="Close explorer">
-        <svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="200,48 120,128 200,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="120,48 40,128 120,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="none"><polyline points="200,48 120,128 200,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="120,48 40,128 120,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
     <ul class="rr-rm2-tree">${renderExplorerItems(data, state, forceExpanded)}</ul>
@@ -881,24 +1118,115 @@ function renderExplorer(state) {
 }
 
 function renderSummary(node) {
-  if (node.type !== "epic") {
-    return ""
+  if (node.type === "epic") {
+    const passedLaws = ACCEPTANCE_LAWS.filter((law) => law.status === "pass").length
+    const compliantModules = MODULES.filter((module) => module.status !== "planned").length
+
+    return `
+      <div class="rr-rm2-summary-grid">
+        <article>
+          <strong>Acceptance laws</strong>
+          <span>${passedLaws} / ${ACCEPTANCE_LAWS.length}</span>
+        </article>
+        <article>
+          <strong>Compliant modules</strong>
+          <span>${compliantModules} / ${MODULES.length}</span>
+        </article>
+      </div>
+    `
   }
 
-  const passedLaws = ACCEPTANCE_LAWS.filter((law) => law.status === "pass").length
-  const compliantModules = MODULES.filter((module) => module.status !== "planned").length
+  if (node.type === "module") {
+    // Count passed laws for this specific module
+    const moduleLaws = node.laws || {}
+    const passedLaws = Object.values(moduleLaws).filter((law) => law.status === "pass").length
+    const totalLaws = ACCEPTANCE_LAWS.length
+
+    // Count compliant functionalities (released or validated)
+    const functionalities = node.functionalities || []
+    const compliantFunctionalities = functionalities.filter(
+      (func) => func.status === "released" || func.status === "validated"
+    ).length
+
+    return `
+      <div class="rr-rm2-summary-grid">
+        <article>
+          <strong>Acceptance laws</strong>
+          <span>${passedLaws} / ${totalLaws}</span>
+        </article>
+        <article>
+          <strong>Compliant functionalities</strong>
+          <span>${compliantFunctionalities} / ${functionalities.length}</span>
+        </article>
+      </div>
+    `
+  }
+
+  return ""
+}
+
+const FILTER_ICON_URL = "http://localhost:3845/assets/c1ac277a995da9385c6a39a55cf12092dcafa1ab.svg"
+const CLOSE_ICON_URL = "http://localhost:3845/assets/690ab9866a6c446fa7d1bfd3f29f885705443183.svg"
+const AVATAR_1_URL = "http://localhost:3845/assets/2e2cf1b6f441c6f28c3b0e1e0eb4863eb80b7401.png"
+const AVATAR_2_URL = "http://localhost:3845/assets/05be041b58b5e1fe37be4a6bb5a74f76d7c0f06d.png"
+const AVATAR_3_URL = "http://localhost:3845/assets/30d4a462ea7b6e1428ffcb7ed5d646ca522e5a23.png"
+const AVATAR_DEFAULT_URL = "http://localhost:3845/assets/67da9fddd372b1b5b44ffef41eed6ceb810ddf8a.png"
+
+function renderHistoryDrawer() {
+  const historyEntries = [
+    {
+      date: "19/02/26",
+      description: "Example history entry of the sync and applied changes",
+      users: [
+        { name: "Orlando Diggs", avatar: AVATAR_1_URL },
+        { name: "Drew Cano", avatar: AVATAR_2_URL }
+      ]
+    },
+    {
+      date: "17/02/26",
+      description: "Example history entry of the sync and applied changes",
+      users: [
+        { name: "Lana Steiner", avatar: AVATAR_3_URL }
+      ]
+    },
+    {
+      date: "14/02/26",
+      description: "Example history entry",
+      users: [
+        { name: "Brooklyn Simmons", avatar: AVATAR_DEFAULT_URL }
+      ]
+    }
+  ]
+
+  const entriesHtml = historyEntries.map((entry, index) => `
+    <div class="rr-history-card">
+      <div class="rr-history-card-date">${entry.date}</div>
+      <p class="rr-history-card-description">${entry.description}</p>
+      ${entry.users.map(user => `
+        <div class="rr-history-card-user">
+          <img src="${user.avatar}" alt="" class="rr-history-card-avatar" />
+          <span class="rr-history-card-username">${user.name}</span>
+        </div>
+      `).join("")}
+    </div>
+  `).join("")
 
   return `
-    <div class="rr-rm2-summary-grid">
-      <article>
-        <strong>Acceptance laws</strong>
-        <span>${passedLaws} / ${ACCEPTANCE_LAWS.length}</span>
-      </article>
-      <article>
-        <strong>Compliant modules</strong>
-        <span>${compliantModules} / ${MODULES.length}</span>
-      </article>
-    </div>
+    <aside class="rr-history-drawer" id="rr-history-drawer">
+      <div class="rr-history-drawer-header">
+        <h2 class="rr-history-drawer-title">History</h2>
+        <button type="button" class="rr-history-drawer-icon-btn" aria-label="Filter history">
+          <img src="${FILTER_ICON_URL}" alt="" />
+        </button>
+        <button type="button" class="rr-history-drawer-icon-btn" data-action="close-history-drawer" aria-label="Close history">
+          <img src="${CLOSE_ICON_URL}" alt="" />
+        </button>
+      </div>
+      <div class="rr-history-timeline">
+        <div class="rr-history-timeline-line"></div>
+        ${entriesHtml}
+      </div>
+    </aside>
   `
 }
 
@@ -914,6 +1242,13 @@ export async function renderRequirementsModuleFlow() {
               <svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="56,48 136,128 56,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="136,48 216,128 136,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="rr-rm2-breadcrumbs" id="rr-rm2-breadcrumbs"></div>
+            <div class="rr-rm2-search-container">
+              <svg class="rr-rm2-search-icon" width="16" height="16" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="116" cy="116" r="84" stroke="currentColor" stroke-width="16"/>
+                <line x1="175.4" y1="175.4" x2="224" y2="224" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+              </svg>
+              <input type="text" class="rr-rm2-search" placeholder="Search" aria-label="Search" />
+            </div>
           </div>
 
           <div class="rr-rm2-title-row">
@@ -925,9 +1260,37 @@ export async function renderRequirementsModuleFlow() {
           <div class="rr-rm2-tabs" id="rr-rm2-tabs"></div>
           <section id="rr-rm2-panel"></section>
         </main>
+        
+        ${renderHistoryDrawer()}
       </div>
     </section>
   `
+}
+
+let isHistoryDrawerOpen = false
+
+function mountHistoryDrawer() {
+  const syncButton = document.querySelector(".rr-tab-sync-action")
+  const closeButton = document.querySelector('[data-action="close-history-drawer"]')
+  const rm2Body = document.querySelector(".rr-rm2-body")
+  
+  if (syncButton) {
+    syncButton.addEventListener("click", () => {
+      isHistoryDrawerOpen = !isHistoryDrawerOpen
+      if (rm2Body) {
+        rm2Body.classList.toggle("rr-rm2-body--drawer-open", isHistoryDrawerOpen)
+      }
+    })
+  }
+  
+  if (closeButton) {
+    closeButton.addEventListener("click", () => {
+      isHistoryDrawerOpen = false
+      if (rm2Body) {
+        rm2Body.classList.remove("rr-rm2-body--drawer-open")
+      }
+    })
+  }
 }
 
 export function mountRequirementsModuleFlow() {
@@ -935,6 +1298,8 @@ export function mountRequirementsModuleFlow() {
   if (!root) {
     return undefined
   }
+  
+  mountHistoryDrawer()
 
   const elements = {
     title: root.querySelector("#rr-rm2-title"),
@@ -962,15 +1327,22 @@ export function mountRequirementsModuleFlow() {
   const state = {
     selectedNodeId: "AUT",
     activeTab: "acceptance-laws",
-    isExplorerOpen: false,
+    isExplorerOpen: true,
     treeSearch: "",
-    expandedTreeIds: new Set(["AUT", "tree-AUT-M001"])
+    expandedTreeIds: new Set(["AUT", "tree-AUT-M001"]),
+    expandedModuleIds: new Set(),
+    expandedPrototypeGroupIds: new Set()
   }
 
   function ensureActiveTabForNode(node) {
     const tabs = getTabsForNode(node)
-    if (!tabs.some((tab) => tab.id === state.activeTab)) {
-      state.activeTab = getDefaultTabForNode(node)
+    const currentTabExists = tabs.some((tab) => tab.id === state.activeTab)
+    const currentTabIsDisabled = currentTabExists && isTabDisabled(node, state.activeTab)
+    
+    if (!currentTabExists || currentTabIsDisabled) {
+      // Find first non-disabled tab or fall back to default
+      const firstEnabledTab = tabs.find((tab) => !isTabDisabled(node, tab.id))
+      state.activeTab = firstEnabledTab ? firstEnabledTab.id : getDefaultTabForNode(node)
     }
   }
 
@@ -1008,11 +1380,23 @@ export function mountRequirementsModuleFlow() {
 
     elements.summary.innerHTML = renderSummary(node)
     elements.tabs.innerHTML = renderTabs(node, state.activeTab)
-    elements.panel.innerHTML = renderPanel(node, state.activeTab)
+    elements.panel.innerHTML = renderPanel(node, state.activeTab, state)
 
     elements.explorer.innerHTML = renderExplorer(state)
-    elements.explorer.hidden = !state.isExplorerOpen
-    elements.openExplorer.hidden = state.isExplorerOpen
+    const isExplorerOpen = state.isExplorerOpen
+    elements.explorer.hidden = !isExplorerOpen
+    elements.explorer.style.display = isExplorerOpen ? "" : "none"
+
+    const collapseButton = elements.explorer.querySelector(".rr-rm2-explorer-collapse")
+    if (collapseButton) {
+      collapseButton.style.display = isExplorerOpen ? "" : "none"
+      collapseButton.setAttribute("aria-expanded", String(isExplorerOpen))
+    }
+
+    // Keep button out of layout when explorer is open, per UI requirement.
+    elements.openExplorer.hidden = isExplorerOpen
+    elements.openExplorer.style.display = isExplorerOpen ? "none" : ""
+    elements.openExplorer.setAttribute("aria-expanded", String(isExplorerOpen))
   }
 
   function handleRootClick(event) {
@@ -1024,6 +1408,10 @@ export function mountRequirementsModuleFlow() {
     const action = actionElement.getAttribute("data-action")
 
     if (action === "set-tab") {
+      // Don't process clicks on disabled tabs
+      if (actionElement.disabled) {
+        return
+      }
       const tabId = actionElement.getAttribute("data-tab-id") || ""
       const node = getNodeById(state.selectedNodeId)
       if (getTabsForNode(node).some((tab) => tab.id === tabId)) {
@@ -1038,9 +1426,49 @@ export function mountRequirementsModuleFlow() {
       if (!nodeId) {
         return
       }
+
+      const selectedModule = MODULE_BY_ID.get(nodeId)
+      const selectedFunctionality = FUNCTIONALITY_BY_ID.get(nodeId)
+      if (selectedModule) {
+        state.expandedModuleIds.add(selectedModule.id)
+        state.expandedPrototypeGroupIds.add(selectedModule.id)
+      }
+      if (selectedFunctionality) {
+        state.expandedModuleIds.add(selectedFunctionality.moduleId)
+        state.expandedPrototypeGroupIds.add(selectedFunctionality.moduleId)
+      }
+
       state.selectedNodeId = nodeId
       state.activeTab = getDefaultTabForNode(getNodeById(nodeId))
       expandAncestors(nodeId)
+      render()
+      return
+    }
+
+    if (action === "toggle-module-folder") {
+      const moduleId = actionElement.getAttribute("data-module-id") || ""
+      if (!MODULE_BY_ID.has(moduleId)) {
+        return
+      }
+      if (state.expandedModuleIds.has(moduleId)) {
+        state.expandedModuleIds.delete(moduleId)
+      } else {
+        state.expandedModuleIds.add(moduleId)
+      }
+      render()
+      return
+    }
+
+    if (action === "toggle-prototype-group") {
+      const groupId = actionElement.getAttribute("data-group-id") || ""
+      if (!groupId) {
+        return
+      }
+      if (state.expandedPrototypeGroupIds.has(groupId)) {
+        state.expandedPrototypeGroupIds.delete(groupId)
+      } else {
+        state.expandedPrototypeGroupIds.add(groupId)
+      }
       render()
       return
     }
