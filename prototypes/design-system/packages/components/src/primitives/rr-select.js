@@ -1,6 +1,5 @@
 import { escapeHtml, getBooleanAttribute, normalizeOption, rrBaseStyles } from "../internal/theme.js"
 import rrSelectStyles from "./rr-select.css?inline"
-import "./rr-dropdown-template.js"
 
 const FIGMA_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=18-0&m=dev"
 const VALID_STATES = ["default", "hover", "focused", "disabled"]
