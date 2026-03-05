@@ -53,7 +53,7 @@ const ACCEPTANCE_LAWS = [
 const MODULES = [
   {
     id: "AUT-M001",
-    code: "LOG-001",
+    code: "AUT-M001",
     title: "User login",
     scope: "Allow registered users to authenticate with email + password and recover a forgotten password.",
     status: "released",
@@ -78,9 +78,9 @@ const MODULES = [
     functionalities: [
       {
         id: "AUT-M001-F001",
-        shortCode: "LOG-001-F01",
+        shortCode: "AUT-M001-F001",
         title: "Login form",
-        filename: "LOG-001-F01-login-form.md",
+        filename: "AUT-M001-F001-login-form.md",
         status: "validated",
         userStory:
           "As a registered user, I want to log in with my email and password so that I can access my team's workspace.",
@@ -112,9 +112,9 @@ const MODULES = [
       },
       {
         id: "AUT-M001-F002",
-        shortCode: "LOG-001-F02",
+        shortCode: "AUT-M001-F002",
         title: "Password reset",
-        filename: "LOG-001-F02-password-reset.md",
+        filename: "AUT-M001-F002-password-reset.md",
         status: "validated",
         userStory:
           "As a registered user who forgot their password, I want to reset it via email so that I can regain access.",
@@ -146,9 +146,9 @@ const MODULES = [
       },
       {
         id: "AUT-M001-F003",
-        shortCode: "LOG-001-F03",
+        shortCode: "AUT-M001-F003",
         title: "OTP code",
-        filename: "LOG-001-F03-otp-code.md",
+        filename: "AUT-M001-F003-otp-code.md",
         status: "released",
         userStory:
           "As a user in high-risk sessions, I want to validate with a temporary OTP code so that sign-in remains secure.",
@@ -164,9 +164,9 @@ const MODULES = [
       },
       {
         id: "AUT-M001-F004",
-        shortCode: "LOG-001-F04",
+        shortCode: "AUT-M001-F004",
         title: "Account selection",
-        filename: "LOG-001-F04-account-selection.md",
+        filename: "AUT-M001-F004-account-selection.md",
         status: "released",
         userStory:
           "As a user with access to multiple contexts, I want to choose an account before entering the workspace.",
@@ -184,7 +184,7 @@ const MODULES = [
   },
   {
     id: "AUT-M002",
-    code: "LOG-002",
+    code: "AUT-M002",
     title: "User authentication process",
     scope:
       "Allow new users to join RoundRush through invitation email, account creation, and automatic team joining.",
@@ -210,9 +210,9 @@ const MODULES = [
     functionalities: [
       {
         id: "AUT-M002-F001",
-        shortCode: "LOG-002-F01",
+        shortCode: "AUT-M002-F001",
         title: "Get invitation email",
-        filename: "LOG-002-F01-invitation-email.md",
+        filename: "AUT-M002-F001-invitation-email.md",
         status: "released",
         userStory:
           "As a prospective user, I want to receive an invitation email from a team admin so that I can begin the signup process.",
@@ -243,9 +243,9 @@ const MODULES = [
       },
       {
         id: "AUT-M002-F002",
-        shortCode: "LOG-002-F02",
+        shortCode: "AUT-M002-F002",
         title: "Make an account",
-        filename: "LOG-002-F02-make-an-account.md",
+        filename: "AUT-M002-F002-make-an-account.md",
         status: "validated",
         userStory:
           "As an invited user, I want to create my account by setting my name and password so that I have credentials to log in.",
@@ -276,9 +276,9 @@ const MODULES = [
       },
       {
         id: "AUT-M002-F003",
-        shortCode: "LOG-002-F03",
+        shortCode: "AUT-M002-F003",
         title: "Join team",
-        filename: "LOG-002-F03-join-team.md",
+        filename: "AUT-M002-F003-join-team.md",
         status: "validated",
         userStory:
           "As a newly registered user, I want to be automatically added to the team that invited me so that I can start collaborating immediately.",
@@ -311,7 +311,7 @@ const MODULES = [
   },
   {
     id: "AUT-M003",
-    code: "LOG-003",
+    code: "AUT-M003",
     title: "User session management",
     scope: "Track, refresh, and revoke sessions safely across devices.",
     status: "planned",
@@ -329,7 +329,7 @@ const MODULES = [
   },
   {
     id: "AUT-M004",
-    code: "LOG-004",
+    code: "AUT-M004",
     title: "User password recovery",
     scope: "Centralize recovery policies and risk checks for reset journeys.",
     status: "planned",
@@ -347,7 +347,7 @@ const MODULES = [
   },
   {
     id: "AUT-M005",
-    code: "LOG-005",
+    code: "AUT-M005",
     title: "2-factor authentication",
     scope: "Add step-up authentication for sensitive access paths.",
     status: "planned",
@@ -1165,6 +1165,71 @@ function renderSummary(node) {
   return ""
 }
 
+const FILTER_ICON_URL = "http://localhost:3845/assets/c1ac277a995da9385c6a39a55cf12092dcafa1ab.svg"
+const CLOSE_ICON_URL = "http://localhost:3845/assets/690ab9866a6c446fa7d1bfd3f29f885705443183.svg"
+const AVATAR_1_URL = "http://localhost:3845/assets/2e2cf1b6f441c6f28c3b0e1e0eb4863eb80b7401.png"
+const AVATAR_2_URL = "http://localhost:3845/assets/05be041b58b5e1fe37be4a6bb5a74f76d7c0f06d.png"
+const AVATAR_3_URL = "http://localhost:3845/assets/30d4a462ea7b6e1428ffcb7ed5d646ca522e5a23.png"
+const AVATAR_DEFAULT_URL = "http://localhost:3845/assets/67da9fddd372b1b5b44ffef41eed6ceb810ddf8a.png"
+
+function renderHistoryDrawer() {
+  const historyEntries = [
+    {
+      date: "19/02/26",
+      description: "Example history entry of the sync and applied changes",
+      users: [
+        { name: "Orlando Diggs", avatar: AVATAR_1_URL },
+        { name: "Drew Cano", avatar: AVATAR_2_URL }
+      ]
+    },
+    {
+      date: "17/02/26",
+      description: "Example history entry of the sync and applied changes",
+      users: [
+        { name: "Lana Steiner", avatar: AVATAR_3_URL }
+      ]
+    },
+    {
+      date: "14/02/26",
+      description: "Example history entry",
+      users: [
+        { name: "Brooklyn Simmons", avatar: AVATAR_DEFAULT_URL }
+      ]
+    }
+  ]
+
+  const entriesHtml = historyEntries.map((entry, index) => `
+    <div class="rr-history-card">
+      <div class="rr-history-card-date">${entry.date}</div>
+      <p class="rr-history-card-description">${entry.description}</p>
+      ${entry.users.map(user => `
+        <div class="rr-history-card-user">
+          <img src="${user.avatar}" alt="" class="rr-history-card-avatar" />
+          <span class="rr-history-card-username">${user.name}</span>
+        </div>
+      `).join("")}
+    </div>
+  `).join("")
+
+  return `
+    <aside class="rr-history-drawer" id="rr-history-drawer">
+      <div class="rr-history-drawer-header">
+        <h2 class="rr-history-drawer-title">History</h2>
+        <button type="button" class="rr-history-drawer-icon-btn" aria-label="Filter history">
+          <img src="${FILTER_ICON_URL}" alt="" />
+        </button>
+        <button type="button" class="rr-history-drawer-icon-btn" data-action="close-history-drawer" aria-label="Close history">
+          <img src="${CLOSE_ICON_URL}" alt="" />
+        </button>
+      </div>
+      <div class="rr-history-timeline">
+        <div class="rr-history-timeline-line"></div>
+        ${entriesHtml}
+      </div>
+    </aside>
+  `
+}
+
 export async function renderRequirementsModuleFlow() {
   return `
     <section class="rr-rm2" data-flow="requirements-module-v2">
@@ -1177,6 +1242,13 @@ export async function renderRequirementsModuleFlow() {
               <svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="56,48 136,128 56,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="136,48 216,128 136,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="rr-rm2-breadcrumbs" id="rr-rm2-breadcrumbs"></div>
+            <div class="rr-rm2-search-container">
+              <svg class="rr-rm2-search-icon" width="16" height="16" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="116" cy="116" r="84" stroke="currentColor" stroke-width="16"/>
+                <line x1="175.4" y1="175.4" x2="224" y2="224" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+              </svg>
+              <input type="text" class="rr-rm2-search" placeholder="Search" aria-label="Search" />
+            </div>
           </div>
 
           <div class="rr-rm2-title-row">
@@ -1188,9 +1260,37 @@ export async function renderRequirementsModuleFlow() {
           <div class="rr-rm2-tabs" id="rr-rm2-tabs"></div>
           <section id="rr-rm2-panel"></section>
         </main>
+        
+        ${renderHistoryDrawer()}
       </div>
     </section>
   `
+}
+
+let isHistoryDrawerOpen = false
+
+function mountHistoryDrawer() {
+  const syncButton = document.querySelector(".rr-tab-sync-action")
+  const closeButton = document.querySelector('[data-action="close-history-drawer"]')
+  const rm2Body = document.querySelector(".rr-rm2-body")
+  
+  if (syncButton) {
+    syncButton.addEventListener("click", () => {
+      isHistoryDrawerOpen = !isHistoryDrawerOpen
+      if (rm2Body) {
+        rm2Body.classList.toggle("rr-rm2-body--drawer-open", isHistoryDrawerOpen)
+      }
+    })
+  }
+  
+  if (closeButton) {
+    closeButton.addEventListener("click", () => {
+      isHistoryDrawerOpen = false
+      if (rm2Body) {
+        rm2Body.classList.remove("rr-rm2-body--drawer-open")
+      }
+    })
+  }
 }
 
 export function mountRequirementsModuleFlow() {
@@ -1198,6 +1298,8 @@ export function mountRequirementsModuleFlow() {
   if (!root) {
     return undefined
   }
+  
+  mountHistoryDrawer()
 
   const elements = {
     title: root.querySelector("#rr-rm2-title"),
