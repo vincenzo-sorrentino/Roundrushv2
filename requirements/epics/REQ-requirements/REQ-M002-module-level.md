@@ -31,84 +31,24 @@ Show the module-level detail view so that stakeholders can inspect a module's sc
 
 ## Functionalities
 
-### REQ-M002-F001 — Description tab (module)
+### REQ-M002-F001 — Description tab
 
-**User story**
-
-As a product owner, I want to view the module's metadata, scope, and linked functionalities so that I understand what the module covers and which features it contains.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on a module node | They select the "Description" tab | A content card shows the module frontmatter (id, title, epic) in a preformatted block |
-| 2 | The description tab is active | The content renders | A "Scope" section appears below the frontmatter with the module's scope text |
-| 3 | The module has functionalities | The description tab is active | A "Functionalities" section lists each one as "FUNCTIONALITY-ID - Functionality title" |
-| 4 | The module has no functionalities | The description tab is active | The "Functionalities" section shows an empty list |
-
-**Edge cases / negative paths**
-
-- The description tab is not the default tab for modules; the default tab is "Functionalities".
-- If the scope field is empty, the "Scope" heading still appears with no body text.
+When a module is selected and the Description tab is active, the user sees the module's core metadata (ID, title, parent epic), its scope text, and a list of all the functionalities it contains. This tab gives product owners and developers a concise reference for what the module covers and how it breaks down — without having to open individual functionality records.
 
 ---
 
-### REQ-M002-F002 — Acceptance Laws tab (module)
+### REQ-M002-F002 — Acceptance Laws tab
 
-**User story**
-
-As a quality engineer, I want to review the acceptance laws while viewing a module so that I can verify the module contributes to epic-level compliance.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on a module node | They select the "Acceptance Laws" tab | The shared acceptance laws table is displayed with columns: No., Law, Evidence, Status |
-| 2 | The table is displayed | Laws are listed | Each row shows its ID, name, description, evidence type, and a coloured status badge |
-
-**Edge cases / negative paths**
-
-- The acceptance laws are shared at the epic level. The table is identical regardless of which module is selected.
+The Acceptance Laws tab at module level displays the same set of seven shared laws that appear at the epic level, so compliance can be reviewed regardless of where in the hierarchy the user is working. Every row shows the law ID, name, evidence type, and a colour-coded status badge. The table is identical across all levels — it reflects epic-wide compliance, not module-specific status.
 
 ---
 
-### REQ-M002-F003 — Functionalities tab (module)
+### REQ-M002-F003 — Functionalities tab
 
-**User story**
-
-As a product owner, I want to see all functionalities belonging to this module in a list so that I can review their status and navigate to individual functionality details.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on a module node | They select the "Functionalities" tab (default) | A list is displayed where each row shows the functionality title (clickable), an "Open" link to the prototype, and a coloured status badge |
-| 2 | The functionalities list is displayed | The user clicks a functionality title | The view navigates to that functionality's detail, updating breadcrumbs, title, tabs, and explorer selection |
-| 3 | The functionalities list is displayed | The user clicks the "Open" link on a row | The prototype linked to the parent module opens in a new tab |
-| 4 | The module has no functionalities | The tab is selected | A message reads "No functionalities linked yet." |
-
-**Edge cases / negative paths**
-
-- The "Open" link points to the first prototype of the parent module. If the module has no prototypes, the link falls back to "#".
-- Status badge colour mapping: released = green "Released", validated = green "Validated", in-progress = blue "In sprint", planned = red "Ready for sprint", draft = grey "To do", design = purple "Design".
+The default view when opening a module is the Functionalities tab: a list where each row shows the functionality title, a link to open the related prototype, and a colour-coded status badge. Clicking a functionality title navigates straight into that functionality's detail view, updating the breadcrumb and sidebar selection in place. If no functionalities have been added to the module yet, a clear placeholder message is shown instead of an empty list.
 
 ---
 
-### REQ-M002-F004 — Prototypes tab (module)
+### REQ-M002-F004 — Prototypes tab
 
-**User story**
-
-As a designer, I want to see the prototypes linked to this module so that I can access the relevant design artefacts for module-level flows.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on a module node | They select the "Prototypes" tab | A grid of prototype cards is displayed, each showing: name, version, status badge, flow description, and an "Open prototype" link |
-| 2 | A prototype card has a valid path | The user clicks "Open prototype" | The prototype opens in a new browser tab |
-| 3 | The module has no prototypes | The tab is selected | A message reads "No prototype references." |
-
-**Edge cases / negative paths**
-
-- Module prototypes may differ from epic-level prototypes; each module carries its own references.
-- Cards without a version field omit the version span rather than showing an empty tag.
+The Prototypes tab shows the design artefacts linked specifically to this module — which may differ from the prototypes listed at epic level. Each card shows the prototype name, version, status, a brief description, and an "Open prototype" link that opens in a new browser tab. If no prototypes are linked to the module, the tab shows a simple empty-state message.

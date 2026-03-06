@@ -61,6 +61,24 @@ const PROTOTYPE_GROUPS = [
         status: "approved",
         epic: "KAN",
         module: "KAN-M001 · KAN-M002"
+      },
+      {
+        id: "dependencies-uml",
+        title: "Dependencies Graph",
+        subtitle: "UML dependency diagram — Bézier graph view with pan & node selection.",
+        route: "/dependencies/uml",
+        status: "approved",
+        epic: "DEP",
+        module: "DEP-M001"
+      },
+      {
+        id: "docs-hub",
+        title: "Docs Hub",
+        subtitle: "Project documentation hub with search and section cards.",
+        route: "/docs/hub",
+        status: "approved",
+        epic: "DOC",
+        module: "DOC-M001"
       }
     ]
   }
@@ -133,9 +151,9 @@ export async function renderPrototypeIndexFlow() {
       .rr-proto-index {
         width: min(960px, 100%);
         margin: 0 auto;
-        padding: var(--rr-spacing-2xl) var(--rr-spacing-lg);
+        padding: var(--rr-spacing-xl) var(--rr-spacing-xl);
         display: grid;
-        gap: var(--rr-spacing-3xl);
+        gap: var(--rr-spacing-2xl);
       }
 
       .rr-proto-index-header h1 {

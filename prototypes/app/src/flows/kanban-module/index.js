@@ -92,7 +92,7 @@ const SPRINTS = [
             tasksComplete: 2,
             tasksTotal: 7,
             testPercent: 15,
-            status: "to-do",
+            status: "in-progress",
             blocker: false,
           },
           {
@@ -124,7 +124,7 @@ const SPRINTS = [
             tasksComplete: 3,
             tasksTotal: 3,
             testPercent: 100,
-            status: "in-progress",
+            status: "review",
             blocker: false,
           },
           {
@@ -137,7 +137,7 @@ const SPRINTS = [
             tasksComplete: 6,
             tasksTotal: 9,
             testPercent: 45,
-            status: "validating",
+            status: "in-progress",
             blocker: false,
           },
           {
@@ -214,7 +214,7 @@ const SPRINTS = [
             tasksComplete: 4,
             tasksTotal: 6,
             testPercent: 50,
-            status: "review",
+            status: "validating",
             blocker: false,
           },
           {
@@ -685,13 +685,85 @@ const DETAIL_STATUS_CONFIG = {
 
 /* ── Detail panel tab definitions ──────────────────────────── */
 const DETAIL_TABS = [
-  { id: "overview",      label: "Overview" },
-  { id: "dependencies",  label: "Dependencies" },
-  { id: "tasks",         label: "Tasks" },
-  { id: "test-cases",    label: "Test Cases" },
-  { id: "uat-issues",    label: "UAT Issues" },
-  { id: "docs",          label: "Docs" },
+  { id: "overview",          label: "Overview" },
+  { id: "acceptance-laws",   label: "Acceptance Laws" },
+  { id: "dependencies",      label: "Dependencies" },
+  { id: "tasks",             label: "Tasks" },
+  { id: "test-cases",        label: "Test Cases" },
+  { id: "uat-issues",        label: "UAT Issues" },
 ]
+
+/* ── Acceptance laws definitions (global, constant across all modules) ── */
+const ACCEPTANCE_LAWS = [
+  {
+    id: "AL-01",
+    title: "Production code implemented",
+    description: "Required production code for all modules is implemented and merged into the integration branch",
+    evidence: "Merge status",
+  },
+  {
+    id: "AL-02",
+    title: "Unit and integration tests pass with required coverage",
+    description: "All unit and integration tests pass and coverage meets the project threshold",
+    evidence: "TestExecution (unit), TestExecution (integration), CoverageReport",
+  },
+  {
+    id: "AL-03",
+    title: "Documentation updated",
+    description: "Documentation is updated where applicable (requirements if necessary, code comments, component docs, and any required technical docs)",
+    evidence: "Documentation update",
+  },
+  {
+    id: "AL-04",
+    title: "End-to-end tests implemented and passed",
+    description: "E2E tests exist for user-facing flows and pass in CI",
+    evidence: "Test execution (e2e)",
+  },
+  {
+    id: "AL-05",
+    title: "Dependency map updated",
+    description: "Dependency map is updated (or explicitly confirmed unchanged) when changes affect module boundaries or coupling",
+    evidence: "Dependency graph update",
+  },
+  {
+    id: "AL-06",
+    title: "Dependency-based regression tests pass",
+    description: "Regression tests derived from impacted modules (via dependency map) pass with 100% success",
+    evidence: "Test execution (regression)",
+  },
+  {
+    id: "AL-07",
+    title: "Required manual suites completed",
+    description: "Required manual validation sessions are completed and recorded",
+    evidence: "Manual test session",
+  },
+]
+
+/* ── Deterministic per-module AL status generator ───────────── */
+function hashModuleId(str) {
+  let h = 0
+  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+
+function getAcceptanceLawStatuses(moduleId, moduleStatus) {
+  // Pass probability per law index, weighted by module status
+  const passProbability = {
+    "done":        [0.97, 0.95, 0.96, 0.97, 0.92, 0.90, 0.94],
+    "merged-qa":   [0.92, 0.88, 0.90, 0.85, 0.82, 0.78, 0.82],
+    "validating":  [0.85, 0.80, 0.78, 0.72, 0.75, 0.70, 0.75],
+    "review":      [0.80, 0.74, 0.72, 0.65, 0.62, 0.58, 0.68],
+    "in-progress": [0.68, 0.62, 0.55, 0.45, 0.42, 0.38, 0.50],
+    "to-do":       [0.30, 0.22, 0.18, 0.14, 0.12, 0.10, 0.16],
+    "blocked":     [0.58, 0.52, 0.48, 0.38, 0.22, 0.18, 0.28],
+  }
+  const weights = passProbability[moduleStatus] ?? passProbability["in-progress"]
+  const seed = hashModuleId(moduleId)
+  return weights.map((p, i) => {
+    const rng = ((seed ^ (seed >>> (i + 2))) * (i * 0x3a4b5c + 0xf1e2d3)) >>> 0
+    return (rng / 0xFFFFFFFF) < p ? "pass" : "fail"
+  })
+}
 
 /* ── Mock task data per module ─────────────────────────────── */
 function getModuleTasks(moduleId) {
@@ -804,7 +876,7 @@ function renderDetailHeader(mod) {
 }
 
 /* ── Detail panel: render tab navigation ───────────────────── */
-function renderDetailNav(activeTab, progressPercent) {
+function renderDetailNav(activeTab, progressPercent, progressLabel = null) {
   const tabs = DETAIL_TABS.map(tab => {
     const isActive = tab.id === activeTab
     return `
@@ -824,7 +896,7 @@ function renderDetailNav(activeTab, progressPercent) {
         <span class="rr-detail-progress-track">
           <span class="rr-detail-progress-fill" style="width:${progressPercent}%;background:${barColor}"></span>
         </span>
-        <span class="rr-detail-progress-label">${progressPercent}%</span>
+        <span class="rr-detail-progress-label">${escapeHtml(progressLabel ?? progressPercent + "%")}</span>
       </div>
     </div>
   `
@@ -846,6 +918,38 @@ function renderDetailPriority(priority) {
 function renderDetailStatus(status) {
   const cfg = DETAIL_STATUS_CONFIG[status] || DETAIL_STATUS_CONFIG["to-do"]
   return `<span class="rr-kb-status" style="background:${cfg.bg};color:${cfg.text}">${escapeHtml(cfg.label)}</span>`
+}
+
+/* ── Detail panel: Acceptance Laws tab content ─────────────── */
+function renderAcceptanceLawsTab(mod) {
+  const statuses = getAcceptanceLawStatuses(mod.id, mod.status)
+  const header = `
+    <div class="rr-al-thead">
+      <span class="rr-al-th rr-al-th--no">No.</span>
+      <span class="rr-al-th rr-al-th--law">Law</span>
+      <span class="rr-al-th rr-al-th--evidence">Evidence</span>
+      <span class="rr-al-th rr-al-th--status">Status</span>
+    </div>
+  `
+  const rows = ACCEPTANCE_LAWS.map((law, i) => {
+    const status = statuses[i] ?? "fail"
+    const badgeClass = status === "pass" ? "rr-al-badge--pass" : "rr-al-badge--fail"
+    const badgeLabel = status === "pass" ? "Pass" : "Fail"
+    return `
+      <div class="rr-al-row">
+        <span class="rr-al-cell rr-al-cell--no">${escapeHtml(law.id)}</span>
+        <span class="rr-al-cell rr-al-cell--law">
+          <span class="rr-al-law-title">${escapeHtml(law.title)}</span>
+          <span class="rr-al-law-desc">${escapeHtml(law.description)}</span>
+        </span>
+        <span class="rr-al-cell rr-al-cell--evidence">${escapeHtml(law.evidence)}</span>
+        <span class="rr-al-cell rr-al-cell--status">
+          <span class="rr-al-badge ${badgeClass}">${badgeLabel}</span>
+        </span>
+      </div>
+    `
+  }).join("")
+  return `<div class="rr-al-table">${header}<div class="rr-al-tbody">${rows}</div></div>`
 }
 
 /* ── Detail panel: Tasks tab content ───────────────────────── */
@@ -904,9 +1008,550 @@ function renderDetailTasksTab(moduleData, collapsedFeatures) {
   `
 }
 
+/* ── Dependencies data ─────────────────────────────────────── */
+const DEPENDENCY_RISK_CONFIG = {
+  high:   { label: "High",   bg: "#fcdad7", text: "#c0362d" },
+  medium: { label: "Medium", bg: "#fef4e6", text: "#f79009" },
+  low:    { label: "Low",    bg: "#d4f5e3", text: "#0e9255" },
+}
+
+const DEPENDENCY_MAP = {
+  /* ── LOG / AUT: Authentication & Login ── */
+  "LOG-001": [
+    { from: "UI-Login",        to: "SVC-AUTH",         relation: "calls_api",      iface: "POST /auth/login",            risk: "high",   conf: 0.97, why: "Core credential validation entry point" },
+    { from: "UI-Login",        to: "SVC-SESSION",      relation: "calls_api",      iface: "POST /sessions/init",         risk: "high",   conf: 0.94, why: "JWT issued on successful auth" },
+    { from: "SVC-AUTH",        to: "DB-USERS",         relation: "reads",          iface: "SELECT hash, salt WHERE id",  risk: "high",   conf: 0.99, why: "Bcrypt comparison requires stored hash" },
+    { from: "SVC-AUTH",        to: "SVC-MFA",          relation: "calls_api",      iface: "POST /mfa/verify",            risk: "medium", conf: 0.85, why: "Optional 2FA step before session grant" },
+    { from: "SVC-AUTH",        to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/auth-attempt",   risk: "low",    conf: 0.91, why: "Compliance log for all login events" },
+    { from: "UI-Login",        to: "SVC-RATE-LIMIT",   relation: "reads_policy",   iface: "policy.auth.maxAttempts",     risk: "medium", conf: 0.88, why: "Lockout after N failed attempts" },
+  ],
+  "LOG-002": [
+    { from: "SVC-AUTH",        to: "DB-USERS",         relation: "reads",          iface: "SELECT id, hash, provider",   risk: "high",   conf: 0.98, why: "Multi-strategy lookup by provider type" },
+    { from: "SVC-AUTH",        to: "SVC-OAUTH",        relation: "delegates_to",   iface: "GET /oauth/callback",         risk: "medium", conf: 0.86, why: "Social login redirect handled externally" },
+    { from: "SVC-AUTH",        to: "SVC-TOKEN",        relation: "calls_api",      iface: "POST /tokens/refresh",        risk: "high",   conf: 0.93, why: "Short-lived access tokens must rotate" },
+    { from: "SVC-AUTH",        to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/auth-attempt",   risk: "low",    conf: 0.90, why: "All auth attempts logged for SIEM" },
+    { from: "UI-Login",        to: "SVC-CAPTCHA",      relation: "calls_api",      iface: "POST /captcha/verify",        risk: "medium", conf: 0.79, why: "Bot prevention on repeated failures" },
+  ],
+  "LOG-003": [
+    { from: "UI-Recovery",     to: "SVC-AUTH",         relation: "calls_api",      iface: "POST /auth/reset-request",    risk: "high",   conf: 0.95, why: "Triggers reset token generation" },
+    { from: "SVC-AUTH",        to: "SVC-NOTIFY",       relation: "triggers",       iface: "POST /notify/reset-email",    risk: "high",   conf: 0.97, why: "Recovery link delivered via email" },
+    { from: "SVC-AUTH",        to: "DB-TOKENS",        relation: "reads_writes",   iface: "INSERT/DELETE reset_tokens",  risk: "high",   conf: 0.99, why: "One-time tokens stored with TTL" },
+    { from: "UI-Recovery",     to: "SVC-RATE-LIMIT",   relation: "reads_policy",   iface: "policy.reset.maxPerHour",     risk: "medium", conf: 0.88, why: "Prevents email flooding attacks" },
+    { from: "SVC-AUTH",        to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/password-reset", risk: "low",    conf: 0.87, why: "Security audit trail for resets" },
+  ],
+  "LOG-004": [
+    { from: "SVC-SESSION",     to: "DB-SESSIONS",      relation: "reads_writes",   iface: "SELECT/UPDATE sessions",      risk: "high",   conf: 0.98, why: "Sliding expiry updated on each request" },
+    { from: "SVC-SESSION",     to: "SVC-TOKEN",        relation: "calls_api",      iface: "POST /tokens/renew",          risk: "high",   conf: 0.96, why: "Access token regenerated before expiry" },
+    { from: "SVC-SESSION",     to: "SVC-GOV",          relation: "reads_policy",   iface: "policy.session.ttl",          risk: "medium", conf: 0.91, why: "Configurable session lifetime policy" },
+    { from: "SVC-SESSION",     to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/session-renew",  risk: "low",    conf: 0.83, why: "Renewal events tracked for anomaly detection" },
+  ],
+  /* ── TEM: Team management ── */
+  "TEM-001": [
+    { from: "UI-TEAMS",        to: "API-USERS",        relation: "calls_api",      iface: "GET /users/directory",        risk: "low",    conf: 0.92, why: "Populates assignable member list" },
+    { from: "UI-TEAMS",        to: "SVC-ROLES",        relation: "calls_api",      iface: "GET /roles/available",        risk: "medium", conf: 0.87, why: "Role picker needs current permission set" },
+    { from: "SVC-TEAMS",       to: "DB-TEAMS",         relation: "reads_writes",   iface: "INSERT INTO teams",           risk: "low",    conf: 0.96, why: "Persists new team record with owner" },
+    { from: "SVC-TEAMS",       to: "SVC-NOTIFY",       relation: "triggers",       iface: "POST /notify/team-created",   risk: "low",    conf: 0.83, why: "Invited members receive join notification" },
+    { from: "UI-TEAMS",        to: "SVC-PERMISSIONS",  relation: "reads_policy",   iface: "policy.rbac.team-create",     risk: "high",   conf: 0.91, why: "Only workspace admins may create teams" },
+  ],
+  "TEM-002": [
+    { from: "UI-TEAM-ROLES",   to: "SVC-ROLES",        relation: "calls_api",      iface: "GET /roles/by-team",          risk: "medium", conf: 0.89, why: "Displays per-team role assignments" },
+    { from: "UI-TEAM-ROLES",   to: "SVC-PERMISSIONS",  relation: "reads_policy",   iface: "policy.rbac.assign",          risk: "high",   conf: 0.94, why: "Role change requires admin privilege" },
+    { from: "SVC-ROLES",       to: "DB-ROLES",         relation: "reads_writes",   iface: "UPDATE member_roles",         risk: "medium", conf: 0.97, why: "Role table updated atomically" },
+    { from: "SVC-ROLES",       to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/role-change",    risk: "low",    conf: 0.85, why: "RBAC changes always audited" },
+    { from: "SVC-ROLES",       to: "SVC-NOTIFY",       relation: "triggers",       iface: "POST /notify/role-update",    risk: "low",    conf: 0.81, why: "Affected user notified of privilege change" },
+  ],
+  "TEM-003": [
+    { from: "UI-TEAM-SETTINGS", to: "SVC-TEAMS",       relation: "calls_api",      iface: "PATCH /teams/:id/settings",   risk: "medium", conf: 0.88, why: "Team name, avatar, visibility updated" },
+    { from: "UI-TEAM-SETTINGS", to: "SVC-INTEGRATIONS",relation: "calls_api",      iface: "GET /integrations/linked",    risk: "low",    conf: 0.84, why: "Shows connected repos and tools" },
+    { from: "SVC-TEAMS",       to: "DB-TEAMS",         relation: "reads_writes",   iface: "UPDATE teams WHERE id",       risk: "low",    conf: 0.96, why: "Settings persisted in teams table" },
+    { from: "SVC-TEAMS",       to: "SVC-MEDIA",        relation: "calls_api",      iface: "POST /media/upload",          risk: "low",    conf: 0.78, why: "Avatar upload to object storage" },
+  ],
+  /* ── REQ: Requirements ── */
+  "REQ-001": [
+    { from: "UI-BACKLOG",      to: "API-READ",         relation: "calls_api",      iface: "GET /requirements/tree",      risk: "high",   conf: 0.92, why: "Renders Epic→Module→Feature hierarchy" },
+    { from: "UI-BACKLOG",      to: "SVC-DEPS",         relation: "calls_api",      iface: "GET /dependencies/impact",    risk: "medium", conf: 0.88, why: "Impact count badge on each module card" },
+    { from: "SVC-REQ",         to: "DB-REQ",           relation: "reads_writes",   iface: "CRUD requirements WHERE epic",risk: "low",    conf: 0.97, why: "Full CRUD on requirements table" },
+    { from: "SVC-REQ",         to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/req-modified",   risk: "low",    conf: 0.82, why: "Spec changes create audit entries" },
+    { from: "SVC-SPRINT",      to: "SVC-REQ",          relation: "aggregates",     iface: "module status rollup",        risk: "medium", conf: 0.85, why: "Sprint progress from module completion %" },
+  ],
+  "REQ-002": [
+    { from: "UI-REQ-EDITOR",   to: "SVC-REQ",          relation: "calls_api",      iface: "GET /acceptance-laws/:id",    risk: "medium", conf: 0.90, why: "Laws retrieved per module on tab open" },
+    { from: "SVC-REQ",         to: "SVC-GOV",          relation: "reads_policy",   iface: "policy.al.required-fields",   risk: "high",   conf: 0.93, why: "Gov policy defines mandatory AL fields" },
+    { from: "SVC-REQ",         to: "DB-REQ",           relation: "reads_writes",   iface: "UPSERT acceptance_laws",      risk: "medium", conf: 0.96, why: "AL upserted on every save" },
+    { from: "SVC-REQ",         to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/al-changed",     risk: "low",    conf: 0.84, why: "Law edits logged with diff" },
+  ],
+  "REQ-003": [
+    { from: "UI-DEP-VIEW",     to: "SVC-DEPS",         relation: "calls_api",      iface: "GET /deps/graph?moduleId",    risk: "medium", conf: 0.90, why: "Full DAG data for canvas render" },
+    { from: "SVC-DEPS",        to: "DB-DEPS",          relation: "reads",          iface: "SELECT edges WHERE module",   risk: "low",    conf: 0.95, why: "Persistent store of dep edges" },
+    { from: "SVC-DEPS",        to: "SVC-MODULES",      relation: "aggregates",     iface: "module boundary analysis",    risk: "high",   conf: 0.78, why: "Detects cross-module coupling issues" },
+    { from: "UI-DEP-VIEW",     to: "SVC-RELEASE",      relation: "reads",          iface: "GET /releases/diff",          risk: "medium", conf: 0.82, why: "Diff view shows dep changes per version" },
+  ],
+  /* ── DEP: Dependency engine ── */
+  "DEP-001": [
+    { from: "UI-DEP-GRAPH",    to: "SVC-DEPS",         relation: "calls_api",      iface: "GET /deps/graph?moduleId",    risk: "medium", conf: 0.90, why: "Directed acyclic graph data for canvas" },
+    { from: "SVC-DEPS",        to: "DB-DEPS",          relation: "reads",          iface: "SELECT * FROM dep_edges",     risk: "low",    conf: 0.96, why: "Edge store is source of truth for graph" },
+    { from: "SVC-DEPS",        to: "SVC-MODULES",      relation: "aggregates",     iface: "boundary analysis payload",   risk: "high",   conf: 0.79, why: "Finds modules sharing internal contracts" },
+    { from: "SVC-DEPS",        to: "SVC-GOV",          relation: "reads_policy",   iface: "policy.deps.maxDepth",        risk: "low",    conf: 0.86, why: "Max allowed transitive depth enforced" },
+    { from: "UI-DEP-GRAPH",    to: "SVC-RELEASE",      relation: "reads",          iface: "GET /releases/diff",          risk: "medium", conf: 0.81, why: "Version diff highlights new dep edges" },
+  ],
+  "DEP-002": [
+    { from: "SVC-DEPS",        to: "DB-DEPS",          relation: "reads",          iface: "WITH RECURSIVE cycle_check",  risk: "high",   conf: 0.94, why: "Recursive CTE detects back-edges in DAG" },
+    { from: "SVC-DEPS",        to: "SVC-NOTIFY",       relation: "triggers",       iface: "POST /notify/cycle-detected", risk: "high",   conf: 0.88, why: "Cycle alert surfaced in real time to team" },
+    { from: "SVC-DEPS",        to: "SVC-GOV",          relation: "reads_policy",   iface: "policy.deps.allowCycles",     risk: "high",   conf: 0.91, why: "Policy switch: warn vs hard-block" },
+    { from: "SVC-DEPS",        to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/cycle-resolved", risk: "low",    conf: 0.80, why: "Resolution logged for compliance review" },
+  ],
+  /* ── Sprint 12 modules ── */
+  "AUT-M001": [
+    { from: "UI-Login-Form",   to: "SVC-AUTH",         relation: "calls_api",      iface: "POST /auth/login",            risk: "high",   conf: 0.97, why: "Form submit binds directly to auth API" },
+    { from: "UI-Login-Form",   to: "SVC-VALIDATION",   relation: "calls_api",      iface: "POST /validate/credentials",  risk: "medium", conf: 0.88, why: "Client-side validation before network call" },
+    { from: "SVC-AUTH",        to: "DB-USERS",         relation: "reads",          iface: "SELECT * WHERE email",        risk: "high",   conf: 0.99, why: "User lookup by email for hash compare" },
+    { from: "UI-Login-Form",   to: "SVC-RATE-LIMIT",   relation: "reads_policy",   iface: "policy.auth.lockout",         risk: "medium", conf: 0.87, why: "Lockout banner shown after 5 failures" },
+  ],
+  "AUT-M002": [
+    { from: "UI-OAuth",        to: "SVC-OAUTH",        relation: "delegates_to",   iface: "GET /oauth/:provider/start",  risk: "medium", conf: 0.89, why: "PKCE flow initiated via redirect" },
+    { from: "SVC-OAUTH",       to: "SVC-AUTH",         relation: "calls_api",      iface: "POST /auth/oauth/exchange",   risk: "high",   conf: 0.93, why: "Token exchange after provider callback" },
+    { from: "SVC-OAUTH",       to: "DB-USERS",         relation: "reads_writes",   iface: "UPSERT users ON oauth_id",    risk: "medium", conf: 0.90, why: "Auto-provision new users on first login" },
+    { from: "SVC-AUTH",        to: "SVC-SESSION",      relation: "calls_api",      iface: "POST /sessions/init",         risk: "high",   conf: 0.96, why: "Session created same path as password auth" },
+    { from: "SVC-OAUTH",       to: "SVC-AUDIT",        relation: "triggers",       iface: "POST /events/oauth-login",    risk: "low",    conf: 0.84, why: "Provider + scopes recorded per login" },
+  ],
+  "SET-001": [
+    { from: "UI-PROFILE",      to: "API-USERS",        relation: "calls_api",      iface: "GET /users/me",               risk: "low",    conf: 0.97, why: "Fetches current user data on page load" },
+    { from: "UI-PROFILE",      to: "SVC-MEDIA",        relation: "calls_api",      iface: "POST /media/avatar",          risk: "low",    conf: 0.82, why: "Avatar upload to object storage bucket" },
+    { from: "SVC-USERS",       to: "DB-USERS",         relation: "reads_writes",   iface: "UPDATE users SET profile",    risk: "low",    conf: 0.96, why: "Profile fields patched atomically" },
+    { from: "SVC-USERS",       to: "SVC-NOTIFY",       relation: "triggers",       iface: "POST /notify/profile-update", risk: "low",    conf: 0.75, why: "Optional notification on email change" },
+  ],
+}
+
+/* Fallback used when a module id has no specific map entry */
+const DEFAULT_DEPENDENCIES = [
+  { from: "UI-SPRINT",        to: "SVC-SPRINT",       relation: "calls_api",      iface: "GET /sprints/active",         risk: "medium", conf: 0.93, why: "Loads current sprint scope and dates" },
+  { from: "UI-SPRINT",        to: "SVC-MODULES",      relation: "calls_api",      iface: "GET /modules/by-sprint",      risk: "high",   conf: 0.96, why: "Sprint board rows sourced from module list" },
+  { from: "UI-SPRINT",        to: "SVC-PROGRESS",     relation: "calls_api",      iface: "GET /progress/aggregate",     risk: "low",    conf: 0.88, why: "Task & test completion % per module" },
+  { from: "SVC-SPRINT",       to: "DB-TASKS",         relation: "reads",          iface: "SELECT tasks WHERE sprint",   risk: "low",    conf: 0.97, why: "Task counts feed progress bar display" },
+  { from: "SVC-SPRINT",       to: "SVC-NOTIFY",       relation: "triggers",       iface: "POST /notify/sprint-open",    risk: "low",    conf: 0.85, why: "Team notified on sprint start / close" },
+  { from: "SVC-RELEASE",      to: "SVC-TEST",         relation: "aggregates",     iface: "evidence: tests+coverage",    risk: "low",    conf: 0.90, why: "Release notes bundle test proof" },
+  { from: "SVC-RELEASE",      to: "SVC-DEPS",         relation: "aggregates",     iface: "dep diff: vA\u2192vB",        risk: "medium", conf: 0.82, why: "Dependency changes included in changelog" },
+]
+
+function getModuleDependencies(moduleId) {
+  return DEPENDENCY_MAP[moduleId] ?? DEFAULT_DEPENDENCIES
+}
+
+/* ── Detail panel: Dependencies tab renderer ───────────────── */
+function renderDependenciesTab(mod) {
+  const deps = getModuleDependencies(mod.id)
+
+  const header = `
+    <div class="rr-dep-thead">
+      <span class="rr-dep-th rr-dep-th--from">
+        <button type="button" class="rr-kb-sort-btn is-active" data-action="noop">
+          From ${ICON.arrowDown}
+        </button>
+      </span>
+      <span class="rr-dep-th rr-dep-th--to">To</span>
+      <span class="rr-dep-th rr-dep-th--relation">Relation</span>
+      <span class="rr-dep-th rr-dep-th--iface">Interface / Contract</span>
+      <span class="rr-dep-th rr-dep-th--risk">Risk</span>
+      <span class="rr-dep-th rr-dep-th--conf" style="justify-content:flex-end">Conf %</span>
+      <span class="rr-dep-th rr-dep-th--why">Rationale</span>
+    </div>
+  `
+
+  const rows = deps.map(dep => {
+    const risk = DEPENDENCY_RISK_CONFIG[dep.risk] || DEPENDENCY_RISK_CONFIG.low
+    const riskBadge = `<span class="rr-dep-risk-badge" style="background:${risk.bg};color:${risk.text}">${escapeHtml(risk.label)}</span>`
+    const confPct = Math.round(dep.conf * 100)
+    return `
+      <div class="rr-dep-row">
+        <span class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</span>
+        <span class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</span>
+        <span class="rr-dep-cell rr-dep-cell--relation"><code class="rr-dep-relation-chip">${escapeHtml(dep.relation)}</code></span>
+        <span class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</span>
+        <span class="rr-dep-cell rr-dep-cell--risk">${riskBadge}</span>
+        <span class="rr-dep-cell rr-dep-cell--conf">${confPct}%</span>
+        <span class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</span>
+      </div>
+    `
+  }).join("")
+
+  return `<div class="rr-dep-table"><div class="rr-dep-thead-wrap">${header}</div><div class="rr-dep-tbody">${rows}</div></div>`
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TEST CASES TAB
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Test result badge config ───────────────────────────────── */
+const TC_RESULT_CONFIG = {
+  pass:      { label: "Pass",    bg: "#ddf7eb", text: "#0e9255" },
+  fail:      { label: "Fail",    bg: "#fcdad7", text: "#c0362d" },
+  blocked:   { label: "Blocked", bg: "#e0e2e7", text: "#3d4350" },
+  "not-run": { label: "Not run", bg: "#f0f1f3", text: "#667085" },
+}
+
+/* ── Test case template library (by category) ───────────────── */
+const TC_TEMPLATE_POOL = {
+  auth: [
+    {
+      description: "Verify that valid credentials authenticate the user and redirect to the dashboard",
+      preconditions: "User account exists with known valid credentials; application is accessible",
+      steps: "1. Navigate to the login page\n2. Enter a valid registered email address\n3. Enter the correct password\n4. Click 'Sign in'",
+      expectedResults: "- Authentication succeeds within 2 seconds\n- User is redirected to the dashboard\n- Session token is stored in a secure HttpOnly cookie\n- Last login timestamp updates",
+    },
+    {
+      description: "Verify that invalid credentials show an error without revealing which field is wrong",
+      preconditions: "Application is loaded; user is unauthenticated",
+      steps: "1. Navigate to the login page\n2. Enter a valid email address\n3. Enter an incorrect password\n4. Click 'Sign in'",
+      expectedResults: "- Authentication fails\n- Error 'Invalid email or password' is displayed\n- No hint about which field is incorrect\n- User remains on the login page",
+    },
+    {
+      description: "Verify that the login form validates email format before submission",
+      preconditions: "Application is loaded; user is on the login page",
+      steps: "1. Click the email field\n2. Enter 'notanemail' (no @ symbol)\n3. Click the password field\n4. Observe validation feedback",
+      expectedResults: "- Inline error: 'Please enter a valid email address'\n- Form submission is prevented\n- Error clears when corrected",
+    },
+    {
+      description: "Verify that the password field masks entered characters by default",
+      preconditions: "User is on the login page",
+      steps: "1. Click the password input\n2. Type any text",
+      expectedResults: "- Characters appear as masked dots (•••)\n- Input type attribute is 'password'\n- A 'Show password' toggle is visible and functional",
+    },
+    {
+      description: "Verify that 'Remember me' persists the session across browser restarts",
+      preconditions: "User account exists; user is on the login page",
+      steps: "1. Enter valid credentials\n2. Check 'Remember me'\n3. Click 'Sign in'\n4. Close and reopen the browser",
+      expectedResults: "- User is automatically logged in after browser restart\n- Token persists in a long-lived cookie (30 days)\n- Sessions without 'Remember me' expire on browser close",
+    },
+    {
+      description: "Verify that 5 consecutive failed login attempts temporarily lock the account",
+      preconditions: "Account exists; rate limiting is active",
+      steps: "1. Enter correct email, wrong password\n2. Repeat 5 times consecutively",
+      expectedResults: "- Account is locked after the 5th failure\n- Message: 'Too many failed attempts. Try again in 15 minutes'\n- Lockout is logged in the security audit trail",
+    },
+    {
+      description: "Verify that the login page meets WCAG 2.1 AA keyboard navigation requirements",
+      preconditions: "Application is loaded",
+      steps: "1. Open the login page\n2. Navigate all elements using only Tab\n3. Submit the form using Enter",
+      expectedResults: "- All inputs are reachable via Tab in logical order\n- ARIA labels are present on all inputs\n- Focus ring is visible (contrast ratio ≥ 3:1)\n- Form submits successfully via keyboard",
+    },
+    {
+      description: "Verify that 'Forgot password?' link navigates to the password reset screen",
+      preconditions: "Application is loaded; user is on the login page",
+      steps: "1. Click the 'Forgot password?' link",
+      expectedResults: "- User navigates to the password reset page\n- Email input receives focus automatically\n- Page title updates to 'Reset your password'",
+    },
+  ],
+  session: [
+    {
+      description: "Verify that a JWT access token is issued on successful login",
+      preconditions: "Valid user credentials are available",
+      steps: "1. Send POST /auth/login with valid credentials\n2. Inspect the response body",
+      expectedResults: "- HTTP 200 is returned\n- Body contains accessToken (JWT, 15 min expiry) and refreshToken\n- Payload includes userId, roles, and iat",
+    },
+    {
+      description: "Verify that an access token can be refreshed using a valid refresh token",
+      preconditions: "User holds a valid unexpired refresh token",
+      steps: "1. Send POST /auth/refresh with the refresh token\n2. Inspect the response",
+      expectedResults: "- New access token is returned\n- Refresh token is rotated (old one invalidated)\n- HTTP 200 is returned",
+    },
+    {
+      description: "Verify that expired access tokens are rejected with HTTP 401",
+      preconditions: "An expired access token is available",
+      steps: "1. Send an authenticated request with an expired token",
+      expectedResults: "- HTTP 401 Unauthorized is returned\n- Error code 'TOKEN_EXPIRED' in response body\n- No data is returned",
+    },
+    {
+      description: "Verify that sessions expire after the configured inactivity period",
+      preconditions: "User is authenticated; inactivity timeout is 30 minutes",
+      steps: "1. Log in successfully\n2. Leave the browser idle for 31 minutes",
+      expectedResults: "- Session is automatically invalidated\n- User is redirected to login with 'Session expired' message\n- Refresh token is revoked server-side",
+    },
+    {
+      description: "Verify that logging out revokes all active sessions for the user",
+      preconditions: "User is logged in from two devices simultaneously",
+      steps: "1. Log out from device A\n2. Attempt an authenticated request from device B",
+      expectedResults: "- Device A session is invalidated immediately\n- Device B receives HTTP 401 on next request\n- All refresh tokens for the user are revoked",
+    },
+    {
+      description: "Verify that concurrent sessions from multiple devices are tracked correctly",
+      preconditions: "User has active sessions on three devices",
+      steps: "1. Navigate to Account Security settings\n2. View 'Active sessions' section",
+      expectedResults: "- All three sessions are listed with device, location, and last active time\n- User can individually revoke any session",
+    },
+  ],
+  team: [
+    {
+      description: "Verify that an admin can create a new team with a unique name",
+      preconditions: "User has admin role; application is accessible",
+      steps: "1. Navigate to Teams Management\n2. Click 'Create New Team'\n3. Enter a unique team name\n4. Click 'Create'",
+      expectedResults: "- Team is created successfully\n- Creator is assigned as team owner\n- Confirmation toast is displayed\n- Team appears in the list immediately",
+    },
+    {
+      description: "Verify that duplicate team names within the same organisation are rejected",
+      preconditions: "A team named 'Engineering' already exists",
+      steps: "1. Attempt to create a second team named 'Engineering'",
+      expectedResults: "- Error: 'A team with this name already exists'\n- Team is not created\n- Form stays open for correction",
+    },
+    {
+      description: "Verify that members can be assigned Owner, Admin, or Member roles",
+      preconditions: "Team exists; current user has Owner role",
+      steps: "1. Open team settings\n2. Select a member\n3. Change role to Admin\n4. Save",
+      expectedResults: "- Role saved as 'Admin'\n- Badge updates in member list\n- Change is recorded in the audit trail",
+    },
+    {
+      description: "Verify that removing a member immediately revokes their access to team resources",
+      preconditions: "Team has at least 2 members; current user has Owner role",
+      steps: "1. Open team settings\n2. Click 'Remove from team' for a member\n3. Confirm the action",
+      expectedResults: "- Member no longer appears in the list\n- Team resource access is revoked immediately\n- Audit log records the removal with timestamp and actor",
+    },
+    {
+      description: "Verify that a non-admin user cannot access team creation",
+      preconditions: "User has 'member' role only",
+      steps: "1. Navigate to Teams Management\n2. Observe available actions",
+      expectedResults: "- 'Create New Team' button is hidden or disabled\n- Accessing the URL directly returns HTTP 403",
+    },
+    {
+      description: "Verify that team settings changes are saved and reflected immediately",
+      preconditions: "User is the team owner; team has a name and description",
+      steps: "1. Open team settings\n2. Update the team name and description\n3. Click 'Save'",
+      expectedResults: "- Changes saved with confirmation toast\n- Updated values appear in the team list without reload\n- Audit trail records the change",
+    },
+  ],
+  requirements: [
+    {
+      description: "Verify that a new module can be created under an existing epic",
+      preconditions: "At least one epic exists; user has write access",
+      steps: "1. Open an epic in Requirements view\n2. Click 'Add Module'\n3. Enter a title and save",
+      expectedResults: "- Module appears under the epic immediately\n- Auto-generated ID follows [EPIC]-[NNN] format\n- Module is editable on creation",
+    },
+    {
+      description: "Verify that a module cannot be saved with an empty title",
+      preconditions: "User is on the 'Add Module' form within an epic",
+      steps: "1. Leave the title field empty\n2. Click 'Save'",
+      expectedResults: "- Validation error 'Title is required' is shown\n- Module is not created\n- Form remains open for correction",
+    },
+    {
+      description: "Verify that editing a module title updates all linked sprint references",
+      preconditions: "Module exists and is assigned to an active sprint",
+      steps: "1. Open the module in Requirements view\n2. Edit the title\n3. Save changes",
+      expectedResults: "- Title updates in Requirements view\n- Sprint board reflects the updated title\n- Audit log records the change",
+    },
+    {
+      description: "Verify that deleting a module requires confirmation and cascades correctly",
+      preconditions: "Module exists with tasks but no active sprint assignment",
+      steps: "1. Open the module\n2. Click 'Delete module'\n3. Confirm in the dialog",
+      expectedResults: "- Confirmation dialog lists tasks to be deleted\n- Module and tasks removed on confirmation\n- Sprint references are unlinked\n- Action is audit-logged",
+    },
+    {
+      description: "Verify that acceptance law statuses can be toggled from the module detail view",
+      preconditions: "Module has at least one acceptance law; user has write access",
+      steps: "1. Open module detail\n2. Navigate to 'Acceptance Laws' tab\n3. Toggle a law status to 'Pass'",
+      expectedResults: "- Law status updates to the green 'Pass' badge\n- Change is attributed to the current user with timestamp",
+    },
+  ],
+  dependencies: [
+    {
+      description: "Verify that adding a dependency between modules updates the dependency graph",
+      preconditions: "Two modules exist with no existing dependency between them",
+      steps: "1. Open module A → Dependencies tab\n2. Add module B as an upstream dependency\n3. Save",
+      expectedResults: "- Edge B → A appears in the graph\n- Module B's dependents list includes A",
+    },
+    {
+      description: "Verify that the system prevents circular dependency relationships",
+      preconditions: "Module A depends on B; user attempts to make B depend on A",
+      steps: "1. Open module B\n2. Attempt to add module A as a dependency",
+      expectedResults: "- Error 'Circular dependency detected' is displayed\n- The dependency is not saved",
+    },
+    {
+      description: "Verify that dependency risk levels are displayed with correct colour coding",
+      preconditions: "Dependencies exist at each risk level (High, Medium, Low)",
+      steps: "1. Open a module with mixed-risk dependencies\n2. Observe the Risk column",
+      expectedResults: "- High: red badge\n- Medium: amber badge\n- Low: green badge\n- Risk basis is shown in the 'Why' column",
+    },
+    {
+      description: "Verify that removing a dependency updates the graph in real time",
+      preconditions: "An established dependency between two modules exists",
+      steps: "1. Open the module detail → Dependencies tab\n2. Remove a dependency\n3. Confirm",
+      expectedResults: "- Dependency removed from the table immediately\n- Graph reflects the removal without a page reload",
+    },
+    {
+      description: "Verify that confidence scores are displayed accurately for each dependency",
+      preconditions: "Dependencies are defined with confidence scores",
+      steps: "1. Open a module with dependencies\n2. Observe the Conf column",
+      expectedResults: "- Values displayed as two-decimal decimals (e.g. 0.92)\n- All values fall within the 0.00–1.00 range",
+    },
+  ],
+  generic: [
+    {
+      description: "Verify that the module renders correctly at 1440px desktop viewport",
+      preconditions: "Module is implemented; viewport is 1440px wide",
+      steps: "1. Load the module at 1440px viewport\n2. Inspect layout for overflow or misalignment",
+      expectedResults: "- No horizontal overflow\n- All interactive elements are fully visible\n- No content is hidden unintentionally",
+    },
+    {
+      description: "Verify that the module loads within acceptable performance thresholds",
+      preconditions: "Module has ≥50 records; standard broadband connection",
+      steps: "1. Navigate to the module\n2. Measure Time to Interactive (TTI) using browser dev tools",
+      expectedResults: "- Initial load completes in under 1.5 seconds\n- TTI is under 3 seconds\n- Cumulative Layout Shift (CLS) < 0.1",
+    },
+    {
+      description: "Verify that an empty state is displayed when no records exist",
+      preconditions: "Module has zero records",
+      steps: "1. Navigate to the module with no data\n2. Observe the content area",
+      expectedResults: "- Empty state illustration or message is displayed\n- 'Add new' action is available and functional\n- No error messages appear",
+    },
+    {
+      description: "Verify that API errors surface with actionable messaging",
+      preconditions: "Backend returns HTTP 500 for the module's primary API call",
+      steps: "1. Simulate a server error via proxy rule or feature flag\n2. Navigate to the module",
+      expectedResults: "- Error state is displayed instead of empty or broken UI\n- A 'Retry' option is available\n- Error details are sent to the monitoring system",
+    },
+    {
+      description: "Verify that all interactive form elements have visible focus indicators",
+      preconditions: "Module contains at least one form; user navigates via keyboard",
+      steps: "1. Tab through all form elements\n2. Observe the focus ring on each element",
+      expectedResults: "- Focus ring is visually distinct (contrast ratio ≥ 3:1)\n- Tab order follows a logical page flow\n- All controls are reachable",
+    },
+    {
+      description: "Verify that module data exports match the on-screen records exactly",
+      preconditions: "Module has ≥10 records; export feature is available",
+      steps: "1. Note the total record count on screen\n2. Click 'Export'\n3. Open the exported file",
+      expectedResults: "- Exported row count matches on-screen total\n- All visible columns are present in the export\n- Data values are identical to on-screen values",
+    },
+    {
+      description: "Verify that real-time updates appear without a manual page reload",
+      preconditions: "WebSocket or poll-based live update is configured",
+      steps: "1. Open the module in two separate browser windows\n2. Modify a record in window A",
+      expectedResults: "- Window B reflects the change within 3 seconds\n- No page refresh is required",
+    },
+    {
+      description: "Verify that pagination handles large datasets without performance degradation",
+      preconditions: "Module has 500+ records",
+      steps: "1. Navigate to the module\n2. Scroll to the bottom of the list\n3. Measure scroll FPS",
+      expectedResults: "- Scroll remains fluid (≥30 FPS)\n- Only visible records render in the DOM\n- Total count displays accurately",
+    },
+  ],
+}
+
+/* ── Deterministic test result per case ─────────────────────── */
+function getTestCaseResult(moduleStatus, index, seed) {
+  // [pass prob, fail prob, blocked prob] — remainder = "not-run"
+  const weights = {
+    "done":        [0.90, 0.04, 0.02],
+    "merged-qa":   [0.80, 0.08, 0.05],
+    "validating":  [0.72, 0.10, 0.08],
+    "review":      [0.65, 0.08, 0.06],
+    "in-progress": [0.45, 0.12, 0.10],
+    "to-do":       [0.05, 0.02, 0.03],
+    "blocked":     [0.35, 0.18, 0.28],
+  }
+  const w = weights[moduleStatus] ?? weights["in-progress"]
+  const rng = ((seed ^ (seed >>> (index + 3))) * (index * 0x9e3779b9 + 0xd1b54a35)) >>> 0
+  const r = rng / 0xFFFFFFFF
+  if (r < w[0]) return "pass"
+  if (r < w[0] + w[1]) return "fail"
+  if (r < w[0] + w[1] + w[2]) return "blocked"
+  return "not-run"
+}
+
+/* ── Retrieve test cases for a module ───────────────────────── */
+function getModuleTestCases(moduleId, moduleStatus) {
+  const prefix = moduleId.split("-")[0].toUpperCase()
+  const categoryMap = {
+    LOG: [...TC_TEMPLATE_POOL.auth,  ...TC_TEMPLATE_POOL.session],
+    AUT: [...TC_TEMPLATE_POOL.auth,  ...TC_TEMPLATE_POOL.session],
+    TEM: [...TC_TEMPLATE_POOL.team,  ...TC_TEMPLATE_POOL.generic],
+    REQ: [...TC_TEMPLATE_POOL.requirements, ...TC_TEMPLATE_POOL.generic],
+    DEP: [...TC_TEMPLATE_POOL.dependencies, ...TC_TEMPLATE_POOL.generic],
+    SET: TC_TEMPLATE_POOL.generic,
+    KAN: TC_TEMPLATE_POOL.generic,
+  }
+  const pool = categoryMap[prefix] ?? TC_TEMPLATE_POOL.generic
+  const seed = hashModuleId(moduleId)
+  const count = 5 + (seed % 8)  // 5–12 test cases per module
+
+  // Deterministic Fisher-Yates shuffle
+  const indices = Array.from({ length: pool.length }, (_, i) => i)
+  for (let i = indices.length - 1; i > 0; i--) {
+    const rng = (seed * (i + 0x5bd1e995)) >>> 0
+    const j = rng % (i + 1)
+    const tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp
+  }
+
+  return indices.slice(0, Math.min(count, pool.length)).map((poolIdx, i) => ({
+    ...pool[poolIdx],
+    result: getTestCaseResult(moduleStatus, i, seed),
+  }))
+}
+
+/* ── Compute pass/total for the nav progress bar ────────────── */
+function computeTestProgress(testCases) {
+  let pass = 0
+  for (const tc of testCases) {
+    if (tc.result === "pass") pass++
+  }
+  return { pass, total: testCases.length }
+}
+
+/* ── Progress info for nav bar (adapts per active tab) ──────── */
+function getProgressInfo(activeTab, mod, moduleData) {
+  if (activeTab === "test-cases") {
+    const tcs = getModuleTestCases(mod.id, mod.status)
+    const { pass, total } = computeTestProgress(tcs)
+    return {
+      percent: total === 0 ? 0 : Math.round((pass / total) * 100),
+      label: `${pass}/${total}`,
+    }
+  }
+  return { percent: computeDetailProgress(moduleData), label: null }
+}
+
+/* ── Render test cases tab ──────────────────────────────────── */
+function renderTestCasesTab(mod) {
+  const testCases = getModuleTestCases(mod.id, mod.status)
+
+  const header = `
+    <div class="rr-tc-thead">
+      <span class="rr-tc-th rr-tc-th--no">No. ${ICON.arrowDown}</span>
+      <span class="rr-tc-th rr-tc-th--desc">Description</span>
+      <span class="rr-tc-th rr-tc-th--pre">Pre-conditions</span>
+      <span class="rr-tc-th rr-tc-th--steps">Steps</span>
+      <span class="rr-tc-th rr-tc-th--expected">Expected results</span>
+      <span class="rr-tc-th rr-tc-th--result">Result</span>
+    </div>
+  `
+
+  const rows = testCases.map((tc, i) => {
+    const cfg = TC_RESULT_CONFIG[tc.result] ?? TC_RESULT_CONFIG["not-run"]
+    const badge = `<span class="rr-tc-badge" style="background:${cfg.bg};color:${cfg.text}">${escapeHtml(cfg.label)}</span>`
+    const stepsHtml    = escapeHtml(tc.steps).replace(/\n/g, "<br>")
+    const expectedHtml = escapeHtml(tc.expectedResults).replace(/\n/g, "<br>")
+    return `
+      <div class="rr-tc-row">
+        <span class="rr-tc-cell rr-tc-cell--no">${i + 1}</span>
+        <span class="rr-tc-cell rr-tc-cell--desc">${escapeHtml(tc.description)}</span>
+        <span class="rr-tc-cell rr-tc-cell--pre">${escapeHtml(tc.preconditions)}</span>
+        <span class="rr-tc-cell rr-tc-cell--steps">${stepsHtml}</span>
+        <span class="rr-tc-cell rr-tc-cell--expected">${expectedHtml}</span>
+        <span class="rr-tc-cell rr-tc-cell--result">${badge}</span>
+      </div>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-tc-table">
+      <div class="rr-tc-thead-wrap">${header}</div>
+      <div class="rr-tc-tbody">${rows}</div>
+    </div>
+  `
+}
+
 /* ── Detail panel: placeholder tab content ─────────────────── */
 function renderDetailTabContent(tabId, mod, moduleData, collapsedFeatures) {
+  if (tabId === "acceptance-laws") return renderAcceptanceLawsTab(mod)
   if (tabId === "tasks") return renderDetailTasksTab(moduleData, collapsedFeatures)
+  if (tabId === "dependencies") return renderDependenciesTab(mod)
+  if (tabId === "test-cases") return renderTestCasesTab(mod)
 
   const placeholders = {
     overview: {
@@ -920,15 +1565,6 @@ function renderDetailTabContent(tabId, mod, moduleData, collapsedFeatures) {
         { label: "Tasks Progress", value: `${mod.tasksComplete}/${mod.tasksTotal}` },
         { label: "Test Coverage", value: `${mod.testPercent}%` },
         { label: "Last Update", value: mod.lastUpdate },
-      ],
-    },
-    dependencies: {
-      title: "Dependencies",
-      description: "Upstream and downstream module dependencies.",
-      items: [
-        { label: "Upstream", value: "No upstream dependencies defined" },
-        { label: "Downstream", value: "No downstream dependencies defined" },
-        { label: "External", value: "None" },
       ],
     },
     "test-cases": {
@@ -984,13 +1620,13 @@ function renderDetailTabContent(tabId, mod, moduleData, collapsedFeatures) {
 function renderDetailPanel(mod, detailState) {
   if (!mod) return ""
   const moduleData = getModuleTasks(mod.id)
-  const progress = computeDetailProgress(moduleData)
+  const progressInfo = getProgressInfo(detailState.activeTab, mod, moduleData)
 
   return `
     <div class="rr-detail-backdrop" data-action="close-detail"></div>
     <div class="rr-detail-panel">
       ${renderDetailHeader(mod)}
-      ${renderDetailNav(detailState.activeTab, progress)}
+      ${renderDetailNav(detailState.activeTab, progressInfo.percent, progressInfo.label)}
       <div class="rr-detail-content">
         ${renderDetailTabContent(detailState.activeTab, mod, moduleData, detailState.collapsedFeatures)}
       </div>
@@ -1111,10 +1747,10 @@ export function mountKanbanModuleFlow() {
           const panelEl = els.detailOverlay.querySelector(".rr-detail-panel")
           if (panelEl) {
             const moduleData = getModuleTasks(mod.id)
-            const progress = computeDetailProgress(moduleData)
+            const progressInfo = getProgressInfo(state.detail.activeTab, mod, moduleData)
             panelEl.innerHTML = `
               ${renderDetailHeader(mod)}
-              ${renderDetailNav(state.detail.activeTab, progress)}
+              ${renderDetailNav(state.detail.activeTab, progressInfo.percent, progressInfo.label)}
               <div class="rr-detail-content">
                 ${renderDetailTabContent(state.detail.activeTab, mod, moduleData, state.detail.collapsedFeatures)}
               </div>
@@ -1158,7 +1794,7 @@ export function mountKanbanModuleFlow() {
     }
     state.detail.open = true
     state.detail.moduleId = moduleId
-    state.detail.activeTab = "tasks"
+    state.detail.activeTab = "acceptance-laws"
     state.detail.collapsedFeatures = new Set()
     renderDetail()
   }

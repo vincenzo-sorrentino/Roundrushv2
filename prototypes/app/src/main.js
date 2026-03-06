@@ -1,5 +1,6 @@
 import "@roundrush/tokens/tokens.css"
 import "@roundrush/themes/light.css"
+import "@roundrush/themes/dark.css"
 import "@roundrush/components"
 import "./styles/app.css"
 
@@ -13,13 +14,13 @@ const TAB_SYNC_ICON_URL = "http://localhost:3845/assets/42ec88ad5e301cefafc623f7
 const TAB_SYNC_TEXT = "Last sync: 28/02/26"
 
 const TAB_HEADER_ITEMS = [
-  { id: "dashboard", label: "Dashboard", path: "/library/foundations/colors" },
+  { id: "dashboard", label: "Dashboard", path: null },
   { id: "requirements", label: "Requirements", path: "/requirements/module" },
   { id: "planning", label: "Planning", path: "/planning/kanban" },
-  { id: "dependencies", label: "Dependencies", path: null },
+  { id: "dependencies", label: "Dependencies", path: "/dependencies/uml" },
   { id: "issues", label: "Issues", path: null },
-  { id: "docs", label: "Docs", path: null },
-  { id: "design", label: "Design", path: "/library/components" },
+  { id: "docs", label: "Docs", path: "/docs/hub" },
+  { id: "design", label: "Design", path: null },
 ]
 
 function renderTabHeader(currentPath) {
@@ -92,11 +93,12 @@ async function render() {
   }
 
   const html = await route.render()
+  const showNav = route.showGlobalNavigation !== false
   app.innerHTML = `
     <div class="rr-app-layout">
       ${sidebarHtml}
-      <div class="rr-app-content">
-        ${tabHeaderHtml}
+      <div class="rr-app-content${showNav ? "" : " rr-app-content--no-nav"}">
+        ${showNav ? tabHeaderHtml : ""}
         ${html}
       </div>
     </div>

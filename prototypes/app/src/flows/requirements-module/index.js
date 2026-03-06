@@ -16,37 +16,37 @@ const ACCEPTANCE_LAWS = [
   {
     id: "AL-03",
     name: "Documentation updated",
-    description: "Documentation is updated where applicable (requirements, code comments, component docs, technical docs).",
-    evidence: "Documentation update",
-    status: "pass"
+    description: "Documentation is updated where applicable (requirements if necessary, code comments, component docs, and any required technical docs).",
+    evidence: "Confluence update, inline code comments",
+    status: "in-progress"
   },
   {
     id: "AL-04",
     name: "End-to-end tests implemented and passed",
-    description: "E2E tests exist for user-facing flows and pass in CI.",
-    evidence: "Test execution (e2e)",
-    status: "pass"
+    description: "E2E tests exist for all user-facing flows and pass in CI with no critical failures.",
+    evidence: "E2E test report (CI)",
+    status: "fail"
   },
   {
     id: "AL-05",
     name: "Dependency map updated",
     description: "Dependency map is updated (or explicitly confirmed unchanged) when changes affect module boundaries or coupling.",
-    evidence: "Dependency graph update",
+    evidence: "Dependency map snapshot",
     status: "pass"
   },
   {
     id: "AL-06",
     name: "Dependency-based regression tests pass",
     description: "Regression tests derived from impacted modules (via dependency map) pass with 100% success.",
-    evidence: "Test execution (regression)",
-    status: "pass"
+    evidence: "Regression test report",
+    status: "pending"
   },
   {
     id: "AL-07",
     name: "Required manual suites completed",
-    description: "Required manual validation sessions are completed and recorded.",
-    evidence: "Manual test session",
-    status: "pass"
+    description: "Required manual validation sessions are completed and recorded by the QA team.",
+    evidence: "QA sign-off log",
+    status: "pending"
   }
 ]
 
@@ -371,22 +371,99 @@ const EPIC = {
   fullTitle: "Authentication and team access",
   owner: "GivePayments",
   objective:
-    "Provide secure authentication and invitation-based onboarding so users can access RoundRush within the correct team.",
+    "Provide secure, invitation-based authentication so that only authorised team members can access the workspace. Users can log in with email and password, recover a forgotten password, and join a team through a time-limited invitation link.",
   designState: "drafting",
   inScope: [
-    "Login and password recovery",
-    "Invitation-based signup and team joining"
+    "Email and password login with rate-limiting on failed attempts",
+    "Password recovery via a time-limited reset link",
+    "Invitation-based signup (admin sends invite → user creates account → user joins team)",
+    "Automatic team membership upon completing the invitation flow"
   ],
   outOfScope: [
-    "Advanced org management (multiple orgs per user)",
-    "SSO (SAML/OAuth enterprise), MFA (can be later EP)",
-    'Role/permission system beyond minimum "member/admin" needed for invites'
+    "Advanced organisation management",
+    "Single Sign-On (SSO) and Multi-Factor Authentication (MFA)",
+    "Role and permission management beyond member/admin distinction"
   ],
   prototypes: [
     { name: "Login flow - v1", path: "/prototypes/AUT/login/v1/", status: "validated" },
     { name: "Signup flow - v1", path: "/prototypes/AUT/signup/v1/", status: "in-progress" }
   ]
 }
+
+const EPIC_DEPENDENCIES = [
+  {
+    from: "UI-AUT (Login)",
+    to: "SVC-AUTH",
+    relation: "calls_api",
+    iface: "POST/auth/login",
+    risk: "high",
+    conf: 0.96,
+    why: "Login form submits credentials to auth service for token issuance"
+  },
+  {
+    from: "UI-AUT (Login)",
+    to: "SVC-SESSION",
+    relation: "reads_state",
+    iface: "GET/sessions/me",
+    risk: "low",
+    conf: 0.91,
+    why: "Checks active session on entry to skip redundant login redirect"
+  },
+  {
+    from: "UI-AUT (Signup)",
+    to: "SVC-AUTH",
+    relation: "calls_api",
+    iface: "POST/auth/register",
+    risk: "low",
+    conf: 0.93,
+    why: "Signup form creates account via auth service registration endpoint"
+  },
+  {
+    from: "UI-AUT (Signup)",
+    to: "SVC-NOTIFY",
+    relation: "triggers_workflow",
+    iface: "POST/notifications/welcome",
+    risk: "medium",
+    conf: 0.84,
+    why: "Account creation triggers welcome email dispatch workflow"
+  },
+  {
+    from: "UI-AUT (Recovery)",
+    to: "SVC-NOTIFY",
+    relation: "triggers_workflow",
+    iface: "POST/email/reset-link",
+    risk: "medium",
+    conf: 0.87,
+    why: "Password reset flow sends time-limited reset link via email"
+  },
+  {
+    from: "SVC-AUTH",
+    to: "KAN-M001 (Sprint Board)",
+    relation: "provides_token",
+    iface: "Authorization: Bearer",
+    risk: "high",
+    conf: 0.90,
+    why: "Sprint board validates bearer tokens issued by AUT service"
+  },
+  {
+    from: "SVC-AUTH",
+    to: "REQ-M001 (Backlog)",
+    relation: "provides_token",
+    iface: "Authorization: Bearer",
+    risk: "high",
+    conf: 0.92,
+    why: "Requirements backlog enforces token validation through AUT"
+  },
+  {
+    from: "SVC-SESSION",
+    to: "SVC-AUDIT",
+    relation: "writes_event",
+    iface: "POST/audit/session-log",
+    risk: "low",
+    conf: 0.85,
+    why: "Login and logout events are written to the centralised audit log"
+  }
+]
 
 const SIDE_PROJECTS = [
   "DAS - Dashboard",
@@ -430,9 +507,11 @@ function toStatusClass(status) {
 function toStatusLabel(status) {
   const labels = {
     pass: "Pass",
+    fail: "Fail",
+    pending: "Pending",
     released: "Released",
     validated: "Validated",
-    "in-progress": "In sprint",
+    "in-progress": "In progress",
     planned: "Ready for sprint",
     draft: "To do",
     design: "Design"
@@ -461,8 +540,8 @@ function getTabsForNode(node) {
     return [
       { id: "description", label: "Description" },
       { id: "acceptance-laws", label: "Acceptance Laws" },
-      { id: "modules", label: "Modules" },
-      { id: "prototypes", label: "Prototypes" }
+      { id: "dependencies", label: "Dependencies" },
+      { id: "modules", label: "Modules" }
     ]
   }
 
@@ -504,6 +583,8 @@ function renderStatusBadge(status) {
     badgeColor = "blue"
   } else if (["ready-for-sprint", "planned"].includes(statusClass)) {
     badgeColor = "red"
+  } else if (statusClass === "fail") {
+    badgeColor = "orange"
   } else if (statusClass === "design") {
     badgeColor = "purple"
   }
@@ -556,6 +637,10 @@ function renderAcceptanceLawsTable() {
 }
 
 function renderEpicDescription() {
+  const moduleLines = MODULES.map(
+    (m) => `  - ${escapeHtml(m.code)} - ${escapeHtml(m.title)}`
+  ).join("\n")
+
   return `
     <section class="rr-rm2-content-card">
       <h3>Description</h3>
@@ -563,13 +648,9 @@ function renderEpicDescription() {
       <pre class="rr-rm2-pre">id: AUT
 title_short: Authentication
 title: Authentication and team access
-design_state: drafting
+design_state: drafting  # discovery | drafting | review | approved | ready_for_delivery
 modules:
-  - AUT-M001 (User login)
-  - AUT-M002 (Signup)
-  - AUT-M003 (Session management)
-  - AUT-M004 (Password recovery)
-  - AUT-M005 (2-factor authentication)</pre>
+${moduleLines}</pre>
       <div class="rr-rm2-divider"></div>
       <h4>Objective</h4>
       <p>${escapeHtml(EPIC.objective)}</p>
@@ -585,61 +666,53 @@ modules:
   `
 }
 
-function renderModulesTable(state) {
-  const expandedModuleIds = state?.expandedModuleIds ?? new Set()
+function renderModulesTable() {
+  const ARROW_DOWN_ICON = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none" aria-hidden="true"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const LINK_ICON = `<svg width="18" height="18" viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M144 80h32a40 40 0 010 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 010-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`
 
-  const rootRow = `
-    <div class="rr-rm2-modules-row rr-rm2-modules-row--root">
-      <div class="rr-rm2-modules-name">
-        <span class="rr-rm2-modules-icon">${TREE_ICON.file}</span>
-        <span class="rr-rm2-modules-name-text">manifest.yaml</span>
-      </div>
-      <div class="rr-rm2-modules-status"></div>
-    </div>
-  `
+  const rows = MODULES.map((module) => {
+    const firstProto = Array.isArray(module.prototypes) && module.prototypes.length > 0 ? module.prototypes[0] : null
+    const protoStatus = firstProto ? firstProto.status : "draft"
+    const protoPath = firstProto ? firstProto.path : null
 
-  const moduleRows = MODULES.map((module) => {
-    const hasChildren = Array.isArray(module.functionalities) && module.functionalities.length > 0
-    const isExpanded = hasChildren && expandedModuleIds.has(module.id)
-
-    const toggleControl = hasChildren
-      ? `<button type="button" class="rr-rm2-modules-toggle" data-action="toggle-module-folder" data-module-id="${escapeHtml(module.id)}" aria-label="${isExpanded ? "Collapse" : "Expand"} ${escapeHtml(module.code)}" aria-expanded="${String(isExpanded)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
-      : `<span class="rr-rm2-modules-toggle rr-rm2-modules-toggle--placeholder" aria-hidden="true">${TREE_ICON.caretRight}</span>`
-
-    const childrenRows = isExpanded
-      ? module.functionalities
-          .map(
-            (item) => `
-              <div class="rr-rm2-modules-row rr-rm2-modules-row--file">
-                <div class="rr-rm2-modules-name">
-                  <span class="rr-rm2-modules-icon">${TREE_ICON.file}</span>
-                  <button type="button" class="rr-rm2-modules-name-button" data-action="open-node" data-node-id="${escapeHtml(item.id)}">${escapeHtml(item.filename)}</button>
-                </div>
-                <div class="rr-rm2-modules-status">${renderStatusBadge(item.status)}</div>
-              </div>
-            `
-          )
-          .join("")
-      : ""
+    const protoLinkCell = protoPath
+      ? `<a class="rr-rm2-mod-link-btn" href="${escapeHtml(protoPath)}" target="_blank" rel="noreferrer" aria-label="Open prototype">${LINK_ICON}</a>`
+      : `<span class="rr-rm2-mod-link-btn rr-rm2-mod-link-btn--disabled" aria-hidden="true">${LINK_ICON}</span>`
 
     return `
-      <div class="rr-rm2-modules-row rr-rm2-modules-row--module ${isExpanded ? 'is-expanded' : ''}">
-        <div class="rr-rm2-modules-name">
-          ${toggleControl}
-          <span class="rr-rm2-modules-icon">${TREE_ICON.folder}</span>
-          <button type="button" class="rr-rm2-modules-name-button" data-action="open-node" data-node-id="${escapeHtml(module.id)}">${escapeHtml(module.code)} - ${escapeHtml(module.title)}</button>
-        </div>
-        <div class="rr-rm2-modules-status"></div>
-      </div>
-      ${childrenRows}
+      <tr>
+        <td>
+          <div class="rr-rm2-mod-name-cell">
+            <span class="rr-rm2-mod-file-icon">${TREE_ICON.file}</span>
+            <button type="button" class="rr-rm2-mod-name-btn" data-action="open-node" data-node-id="${escapeHtml(module.id)}">${escapeHtml(module.code)} - ${escapeHtml(module.title)}</button>
+          </div>
+        </td>
+        <td class="rr-rm2-mod-col-prototype">${protoLinkCell}</td>
+        <td class="rr-rm2-mod-col-proto-status">${renderStatusBadge(protoStatus)}</td>
+        <td class="rr-rm2-mod-col-mod-status">${renderStatusBadge(module.status)}</td>
+      </tr>
     `
   }).join("")
 
   return `
-    <section class="rr-rm2-modules-wrap" aria-label="Modules">
-      ${rootRow}
-      ${moduleRows}
-    </section>
+    <div class="rr-rm2-mod-table-wrap">
+      <table class="rr-rm2-mod-table">
+        <thead>
+          <tr>
+            <th>
+              <div class="rr-rm2-mod-th-content">
+                <span>Module</span>
+                ${ARROW_DOWN_ICON}
+              </div>
+            </th>
+            <th class="rr-rm2-mod-col-prototype">Prototype</th>
+            <th class="rr-rm2-mod-col-proto-status">Prototype status</th>
+            <th class="rr-rm2-mod-col-mod-status">Module status</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
   `
 }
 
@@ -884,6 +957,49 @@ epic: AUT</pre>
   `
 }
 
+function renderDependenciesTable() {
+  const rows = EPIC_DEPENDENCIES.map((dep) => {
+    const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
+    return `
+      <div class="rr-dep-row">
+        <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
+        <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
+        <div class="rr-dep-cell rr-dep-cell--relation">
+          <span class="rr-dep-relation-chip">${escapeHtml(dep.relation)}</span>
+        </div>
+        <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
+        <div class="rr-dep-cell rr-dep-cell--risk">
+          <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
+        </div>
+        <div class="rr-dep-cell rr-dep-cell--conf">${escapeHtml(String(dep.conf))}</div>
+        <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</div>
+      </div>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-dep-table">
+      <div class="rr-dep-thead-wrap">
+        <div class="rr-dep-thead">
+          <div class="rr-dep-th rr-dep-th--from">
+            From
+            <svg class="rr-dep-sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="rr-dep-th rr-dep-th--to">To</div>
+          <div class="rr-dep-th rr-dep-th--relation">Relation</div>
+          <div class="rr-dep-th rr-dep-th--iface">Interface</div>
+          <div class="rr-dep-th rr-dep-th--risk">Risk</div>
+          <div class="rr-dep-th rr-dep-th--conf">Conf.</div>
+          <div class="rr-dep-th rr-dep-th--why">Why</div>
+        </div>
+      </div>
+      <div class="rr-dep-tbody">${rows}</div>
+    </div>
+  `
+}
+
 function renderPanel(node, activeTab, state) {
   if (activeTab === "acceptance-laws") {
     return renderAcceptanceLawsTable()
@@ -893,11 +1009,11 @@ function renderPanel(node, activeTab, state) {
     if (activeTab === "description") {
       return renderEpicDescription()
     }
-    if (activeTab === "modules") {
-      return renderModulesTable(state)
+    if (activeTab === "dependencies") {
+      return renderDependenciesTable()
     }
-    if (activeTab === "prototypes") {
-      return renderPrototypePanel(node, EPIC.prototypes, state)
+    if (activeTab === "modules") {
+      return renderModulesTable()
     }
   }
 
@@ -1006,7 +1122,8 @@ function buildExplorerData() {
       children: MODULES.map((module) => ({
         id: `tree-${module.id}`,
         label: `${module.code} - ${module.title}`,
-        icon: "folder",
+        icon: "dot",
+        dotColor: ["released", "validated"].includes(module.status) ? "green" : "gray",
         targetNodeId: module.id,
         children: module.functionalities.map((item) => ({
           id: `tree-${item.id}`,
@@ -1081,13 +1198,17 @@ function renderExplorerItems(items, state, forceExpanded = false, depth = 0) {
         ? `<button type="button" class="rr-rm2-tree-select ${isSelected ? "is-selected" : ""}" data-action="select-node" data-node-id="${escapeHtml(item.targetNodeId)}">${escapeHtml(item.label)}</button>`
         : `<span class="rr-rm2-tree-label">${escapeHtml(item.label)}</span>`
 
+      const dotIcon = item.icon === "dot"
+        ? `<span class="rr-rm2-tree-dot" style="background:${item.dotColor === "green" ? "#16a34a" : "#94a3b8"}"></span>`
+        : null
+
       return `
         <li>
           <div class="rr-rm2-tree-row ${isSelected ? "is-selected" : ""} ${hasChildren ? "is-folder" : "is-file"}" data-depth="${depth}">
             ${hasChildren
               ? `<button type="button" class="rr-rm2-tree-toggle" data-action="toggle-tree" data-tree-id="${escapeHtml(item.id)}">${isExpanded ? TREE_ICON.caretDown : TREE_ICON.caretRight}</button>`
-              : ""}
-            <span class="rr-rm2-tree-icon">${item.icon === "file" ? TREE_ICON.file : TREE_ICON.folder}</span>
+              : item.icon === "dot" ? `<span class="rr-rm2-tree-toggle rr-rm2-tree-toggle--placeholder" aria-hidden="true"></span>` : ""}
+            <span class="rr-rm2-tree-icon">${dotIcon ?? (item.icon === "file" ? TREE_ICON.file : TREE_ICON.folder)}</span>
             ${row}
           </div>
           ${hasChildren && isExpanded ? `<ul>${renderExplorerItems(item.children, state, forceExpanded, depth + 1)}</ul>` : ""}

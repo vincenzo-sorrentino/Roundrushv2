@@ -31,32 +31,10 @@ Allow registered users to authenticate securely using their email and password. 
 
 ### AUT-M001-F001 — Basic login
 
-**User story**
-
-As a registered user, I want to log in with my email and password so that I can access my team workspace.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | A valid email and password are entered | The user clicks "Log in" | The user is redirected to the dashboard |
-| 2 | An incorrect password is entered | The user clicks "Log in" | An inline error is shown without revealing which field is wrong |
-| 3 | 5 or more failed login attempts happen within 15 minutes | The user tries to log in again | The account is temporarily locked and the user receives an explanation |
-| 4 | The entered email has no associated account | The user views the login form | A visible link to request an invitation is shown |
+The user enters their email address and password and clicks "Log in". If the credentials are correct they land straight in their workspace. If something is wrong, a neutral inline error appears — it doesn't reveal whether the email or the password failed, so no information is leaked. After several consecutive failed attempts within a short window the account is temporarily locked to guard against brute-force access; the user receives a plain-language explanation of what happened and what to do next. If the email doesn't match any known account, a visible link to request an invitation is surfaced so the user isn't left without a path forward.
 
 ---
 
 ### AUT-M001-F002 — Recover password
 
-**User story**
-
-As a registered user who has forgotten their password, I want to receive a reset link by email so that I can set a new password and regain access to my account.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on the login screen | They click "Forgot password" | A form appears asking for their email address |
-| 2 | A valid registered email is submitted | The user requests a reset | A time-limited password reset link is sent to that email |
-| 3 | The user opens a valid reset link and submits a new password | The form is completed | The password is updated and the user is prompted to log in |
-| 4 | The user opens an expired or invalid reset link | The page loads | A clear error message explains the link is invalid and how to request a new one |
+From the login screen, a user who can't remember their password clicks "Forgot password" and is asked for their email address. A time-limited reset link is sent to that address. Clicking the link opens a form where the user sets a new password; on success they are taken directly to the login screen to sign in with the new credentials. If the link has expired or is invalid, the page explains clearly why it didn't work and tells the user exactly how to get a fresh one.
