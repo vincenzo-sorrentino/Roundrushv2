@@ -2,6 +2,7 @@ import { renderAuthLoginFlow } from "../flows/auth-login/index.js"
 import { renderComponentsLibraryFlow } from "../flows/components-library/index.js"
 import { renderFoundationsColorsFlow } from "../flows/foundations-colors/index.js"
 import { mountRequirementsModuleFlow, renderRequirementsModuleFlow } from "../flows/requirements-module/index.js"
+import { renderKanbanModuleFlow, mountKanbanModuleFlow } from "../flows/kanban-module/index.js"
 
 const routes = [
   {
@@ -29,6 +30,13 @@ const routes = [
     mount: mountRequirementsModuleFlow,
     status: "approved",
     showGlobalNavigation: false
+  },
+  {
+    id: "kanban-module",
+    path: "/planning/kanban",
+    render: renderKanbanModuleFlow,
+    mount: mountKanbanModuleFlow,
+    status: "approved"
   }
 ]
 

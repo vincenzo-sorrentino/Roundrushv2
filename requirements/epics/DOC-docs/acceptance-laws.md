@@ -1,9 +1,9 @@
 ---
-epic_id: REQ
-title: "Requirements"
+epic_id: DOC
+title: "Documentation"
 ---
 
-# REQ — Requirements · Acceptance Laws
+# DOC — Documentation · Acceptance Laws
 
 | ID | Name | Description |
 |----|------|-------------|

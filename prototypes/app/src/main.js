@@ -15,7 +15,7 @@ const TAB_SYNC_TEXT = "Last sync: 28/02/26"
 const TAB_HEADER_ITEMS = [
   { id: "dashboard", label: "Dashboard", path: "/library/foundations/colors" },
   { id: "requirements", label: "Requirements", path: "/requirements/module" },
-  { id: "planning", label: "Planning", path: null },
+  { id: "planning", label: "Planning", path: "/planning/kanban" },
   { id: "dependencies", label: "Dependencies", path: null },
   { id: "issues", label: "Issues", path: null },
   { id: "docs", label: "Docs", path: null },
