@@ -1,192 +1,159 @@
 import { readFileSync, readdirSync, statSync } from "node:fs"
 import path from "node:path"
 
-const REQUIRED_FRONTMATTER_FIELDS = [
-  "id",
-  "domain",
-  "feature",
-  "status",
-  "owner",
-  "prototype_route",
-  "figma_url",
-  "updated_at"
-]
-
-const REQUIRED_SECTIONS = [
-  "# Problem",
-  "# Scope",
-  "# User Stories",
-  "# Functional Requirements",
-  "# Non-Functional Requirements",
-  "# Edge Cases",
-  "# Dependencies",
-  "# Acceptance Criteria"
-]
-
-const VALID_STATUSES = ["draft", "in_review", "approved", "implemented", "archived"]
-
-function walkFiles(dir, predicate) {
-  const entries = readdirSync(dir)
-  const found = []
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry)
-    const stats = statSync(fullPath)
-    if (stats.isDirectory()) {
-      found.push(...walkFiles(fullPath, predicate))
-      continue
-    }
-
-    if (predicate(fullPath)) {
-      found.push(fullPath)
-    }
-  }
-
-  return found
-}
+// ─── helpers ─────────────────────────────────────────────────────────────────
 
 function parseFrontmatter(markdown) {
-  const match = markdown.match(/^---\n([\s\S]*?)\n---\n/)
-  if (!match) {
-    return null
-  }
-
-  const body = match[1]
+  const match = markdown.match(/^---\n([\s\S]*?)\n---/)
+  if (!match) return null
   const fields = {}
-
-  for (const line of body.split("\n")) {
-    if (!line.trim()) {
+  const lines = match[1].split("\n")
+  let currentKey = null
+  for (const line of lines) {
+    if (!line.trim()) continue
+    // YAML block sequence item under current key
+    if (currentKey && /^\s+-\s/.test(line)) {
+      fields[currentKey] = fields[currentKey]
+        ? fields[currentKey] + "," + line.replace(/^\s+-\s*/, "").trim()
+        : line.replace(/^\s+-\s*/, "").trim()
       continue
     }
-
-    const separatorIndex = line.indexOf(":")
-    if (separatorIndex === -1) {
-      continue
-    }
-
-    const key = line.slice(0, separatorIndex).trim()
-    const value = line.slice(separatorIndex + 1).trim()
-    fields[key] = value
+    const sep = line.indexOf(":")
+    if (sep === -1) continue
+    currentKey = line.slice(0, sep).trim()
+    const value = line.slice(sep + 1).trim()
+    fields[currentKey] = value
   }
-
   return fields
 }
 
-function collectFlowConfigs() {
-  const flowDir = path.resolve("prototypes/app/src/flows")
-  const flowConfigPaths = walkFiles(flowDir, (filePath) => filePath.endsWith("flow.config.json"))
-  const byRoute = new Map()
-
-  for (const configPath of flowConfigPaths) {
-    const data = JSON.parse(readFileSync(configPath, "utf8"))
-    if (data.route) {
-      byRoute.set(data.route, {
-        path: path.relative(process.cwd(), configPath),
-        config: data
-      })
-    }
-  }
-
-  return byRoute
+/** Read prototype routes registered in the app router. */
+function collectRegisteredRoutes() {
+  const routesPath = path.resolve("prototypes/app/src/router/routes.js")
+  const src = readFileSync(routesPath, "utf8")
+  const matches = [...src.matchAll(/path:\s*["']([^"']+)["']/g)]
+  return new Set(matches.map((m) => m[1]))
 }
 
+// ─── constants ────────────────────────────────────────────────────────────────
+
+const VALID_DESIGN_STATES = ["discovery", "drafting", "review", "approved", "ready_for_delivery"]
+const VALID_MODULE_STATUSES = ["draft", "ready", "in_dev", "done", "archived"]
+const ACTIVE_STATUSES = ["done"]
+
+const EPIC_REQUIRED_FIELDS = ["id", "title_short", "title", "design_state", "modules"]
+const MODULE_REQUIRED_FIELDS = ["id", "title", "epic", "status", "prototype_route", "functionalities"]
+const MODULE_REQUIRED_SECTIONS = ["## Overview", "## Acceptance Laws", "## Functionalities"]
+
+
+// ─── main ─────────────────────────────────────────────────────────────────────
+
 const errors = []
-const specsDir = path.resolve("requirements/epics")
-const specPaths = walkFiles(specsDir, (filePath) => filePath.endsWith("/spec.md"))
-const linkPaths = walkFiles(specsDir, (filePath) => filePath.endsWith("/links.json"))
-const routeConfigsByRoute = collectFlowConfigs()
-const specMetaByRelativePath = new Map()
+const registeredRoutes = collectRegisteredRoutes()
+const epicsDir = path.resolve("requirements/epics")
 
-for (const specPath of specPaths) {
-  const relativeSpecPath = path.relative(process.cwd(), specPath)
-  const markdown = readFileSync(specPath, "utf8")
-  const frontmatter = parseFrontmatter(markdown)
+const epicFolders = readdirSync(epicsDir).filter((name) => {
+  return statSync(path.join(epicsDir, name)).isDirectory()
+})
 
-  if (!frontmatter) {
-    errors.push(`${relativeSpecPath}: missing frontmatter`) 
+let epicFileCount = 0
+let moduleFileCount = 0
+
+for (const epicFolder of epicFolders) {
+  const epicDir = path.join(epicsDir, epicFolder)
+  const files = readdirSync(epicDir).filter((f) => f.endsWith(".md"))
+
+  const epicFileName = `${epicFolder}.md`
+  const moduleFiles = files.filter((f) => f !== epicFileName)
+
+  // ── validate epic file ─────────────────────────────────────────────────────
+  const epicFilePath = path.join(epicDir, epicFileName)
+  const epicRelPath = path.relative(process.cwd(), epicFilePath)
+
+  let epicData
+  try {
+    epicData = readFileSync(epicFilePath, "utf8")
+  } catch {
+    errors.push(`${epicRelPath}: epic file missing — expected ${epicFileName}`)
     continue
   }
 
-  for (const field of REQUIRED_FRONTMATTER_FIELDS) {
-    if (!frontmatter[field]) {
-      errors.push(`${relativeSpecPath}: missing frontmatter field '${field}'`)
-    }
-  }
+  epicFileCount++
+  const epicFm = parseFrontmatter(epicData)
 
-  if (frontmatter.status && !VALID_STATUSES.includes(frontmatter.status)) {
-    errors.push(`${relativeSpecPath}: invalid status '${frontmatter.status}'`)
-  }
-
-  if (frontmatter.status === "approved" && !frontmatter.prototype_route) {
-    errors.push(`${relativeSpecPath}: approved spec requires prototype_route`)
-  }
-
-  if (frontmatter.updated_at && Number.isNaN(Date.parse(frontmatter.updated_at))) {
-    errors.push(`${relativeSpecPath}: invalid updated_at '${frontmatter.updated_at}'`)
-  }
-
-  for (const section of REQUIRED_SECTIONS) {
-    if (!markdown.includes(section)) {
-      errors.push(`${relativeSpecPath}: missing required section '${section}'`)
-    }
-  }
-
-  specMetaByRelativePath.set(relativeSpecPath, frontmatter)
-
-  const requiresPrototypeLink = frontmatter.status === "approved" || frontmatter.status === "implemented"
-  if (requiresPrototypeLink && frontmatter.prototype_route && !routeConfigsByRoute.has(frontmatter.prototype_route)) {
-    errors.push(`${relativeSpecPath}: prototype_route '${frontmatter.prototype_route}' has no matching flow.config.json`)
-  }
-}
-
-for (const linkPath of linkPaths) {
-  const relativeLinkPath = path.relative(process.cwd(), linkPath)
-  const data = JSON.parse(readFileSync(linkPath, "utf8"))
-  const linkedSpecMeta = data.spec_file ? specMetaByRelativePath.get(data.spec_file) : null
-  const requiresPrototypeLink = linkedSpecMeta
-    ? linkedSpecMeta.status === "approved" || linkedSpecMeta.status === "implemented"
-    : true
-
-  if (!data.spec_file || !data.flow_file || !data.acceptance_file || !data.prototype_route) {
-    errors.push(`${relativeLinkPath}: missing required keys (spec_file/flow_file/acceptance_file/prototype_route)`)
-  }
-
-  if (data.spec_file) {
-    const specAbsolute = path.resolve(data.spec_file)
-    try {
-      statSync(specAbsolute)
-    } catch {
-      errors.push(`${relativeLinkPath}: referenced spec_file does not exist: ${data.spec_file}`)
-    }
-  }
-
-  if (requiresPrototypeLink && data.prototype_route && !routeConfigsByRoute.has(data.prototype_route)) {
-    errors.push(`${relativeLinkPath}: prototype_route '${data.prototype_route}' has no matching flow.config.json`)
-  }
-
-  if (requiresPrototypeLink && !data.prototype_flow_config) {
-    errors.push(`${relativeLinkPath}: approved or implemented flow requires prototype_flow_config`)
-  }
-
-  if (requiresPrototypeLink && data.prototype_flow_config) {
-    const absoluteFlowConfig = path.resolve(data.prototype_flow_config)
-    try {
-      const flowConfigStats = statSync(absoluteFlowConfig)
-      if (!flowConfigStats.isFile()) {
-        errors.push(`${relativeLinkPath}: prototype_flow_config is not a file: ${data.prototype_flow_config}`)
+  if (!epicFm) {
+    errors.push(`${epicRelPath}: missing frontmatter`)
+  } else {
+    for (const field of EPIC_REQUIRED_FIELDS) {
+      if (!epicFm[field]) {
+        errors.push(`${epicRelPath}: missing frontmatter field '${field}'`)
       }
-    } catch {
-      errors.push(`${relativeLinkPath}: prototype_flow_config missing: ${data.prototype_flow_config}`)
+    }
+    if (epicFm.design_state && !VALID_DESIGN_STATES.includes(epicFm.design_state)) {
+      errors.push(`${epicRelPath}: invalid design_state '${epicFm.design_state}'`)
+    }
+  }
+
+  if (!epicData.includes("## Acceptance Laws")) {
+    errors.push(`${epicRelPath}: missing '## Acceptance Laws' section`)
+  }
+
+  // ── validate module files ──────────────────────────────────────────────────
+  for (const moduleFileName of moduleFiles) {
+    const modulePath = path.join(epicDir, moduleFileName)
+    const moduleRelPath = path.relative(process.cwd(), modulePath)
+    moduleFileCount++
+
+    const moduleData = readFileSync(modulePath, "utf8")
+    const moduleFm = parseFrontmatter(moduleData)
+
+    if (!moduleFm) {
+      errors.push(`${moduleRelPath}: missing frontmatter`)
+      continue
+    }
+
+    for (const field of MODULE_REQUIRED_FIELDS) {
+      if (field === "prototype_route" && moduleFm[field] === "~") continue
+      if (moduleFm[field] === undefined || moduleFm[field] === "") {
+        errors.push(`${moduleRelPath}: missing frontmatter field '${field}'`)
+      }
+    }
+
+    if (moduleFm.status && !VALID_MODULE_STATUSES.includes(moduleFm.status)) {
+      errors.push(`${moduleRelPath}: invalid status '${moduleFm.status}'`)
+    }
+
+    const route = moduleFm.prototype_route
+    if (ACTIVE_STATUSES.includes(moduleFm.status)) {
+      if (!route || route === "~") {
+        errors.push(`${moduleRelPath}: status '${moduleFm.status}' requires a non-null prototype_route`)
+      }
+    }
+
+    if (route && route !== "~") {
+      if (!registeredRoutes.has(route)) {
+        errors.push(
+          `${moduleRelPath}: prototype_route '${route}' is not registered in prototypes/app/src/router/routes.js`
+        )
+      }
+    }
+
+    for (const section of MODULE_REQUIRED_SECTIONS) {
+      if (!moduleData.includes(section)) {
+        errors.push(`${moduleRelPath}: missing required section '${section}'`)
+      }
     }
   }
 }
+
+// ─── result ───────────────────────────────────────────────────────────────────
 
 if (errors.length > 0) {
   console.error("Spec validation failed:\n")
   for (const error of errors) {
-    console.error(`- ${error}`)
+    console.error(`  - ${error}`)
   }
   process.exit(1)
 }
 
-console.log(`Spec validation passed (${specPaths.length} specs, ${linkPaths.length} link maps).`)
+console.log(`Spec validation passed (${epicFileCount} epics, ${moduleFileCount} modules).`)

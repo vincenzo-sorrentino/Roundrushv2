@@ -1,29 +1,38 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Roundrush Spec Frontmatter",
+  "title": "Roundrush Module Frontmatter",
+  "description": "Validates the YAML frontmatter of a module .md file in requirements/epics/.",
   "type": "object",
-  "required": [
-    "id",
-    "domain",
-    "feature",
-    "status",
-    "owner",
-    "prototype_route",
-    "figma_url",
-    "updated_at"
-  ],
+  "required": ["id", "title", "epic", "status", "prototype_route", "functionalities"],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)+$" },
-    "domain": { "type": "string" },
-    "feature": { "type": "string" },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,4}-M[0-9]{3}$",
+      "description": "Module ID, e.g. AUT-M001"
+    },
+    "title": { "type": "string" },
+    "epic": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,4}$",
+      "description": "Parent epic code, e.g. AUT"
+    },
     "status": {
       "type": "string",
-      "enum": ["draft", "in_review", "approved", "implemented", "archived"]
+      "enum": ["draft", "ready", "in_dev", "done", "archived"],
+      "description": "Current development status of the module"
     },
-    "owner": { "type": "string" },
-    "prototype_route": { "type": "string", "pattern": "^/" },
-    "figma_url": { "type": "string", "pattern": "^https://" },
-    "updated_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+    "prototype_route": {
+      "type": "string",
+      "description": "Route path (e.g. /auth/login/default) or ~ if no prototype exists yet"
+    },
+    "functionalities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{2,4}-M[0-9]{3}-F[0-9]{3}$"
+      },
+      "description": "List of functionality IDs defined as ### sections within this file"
+    }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

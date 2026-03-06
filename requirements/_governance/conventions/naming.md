@@ -25,43 +25,61 @@ epic's domain name. The code is assigned once and never changes.
 | Module        | `<CODE>-M00N`                 | `AUT-M001`                       |
 | Functionality | `<CODE>-M00N-F00N`            | `AUT-M001-F001`                  |
 
-### Folder / file naming
+### File naming
 
-| Level         | Folder name                        | Example                                    |
-|---------------|------------------------------------|--------------------------------------------|
-| Epic          | `<CODE>-<kebab-domain>/`           | `AUT-authentication/`                      |
-| Module        | `<CODE>-M00N-<kebab-slug>/`        | `AUT-M001-login/`                          |
-| Functionality | `<CODE>-M00N-F00N-<kebab-slug>.md` | `AUT-M001-F001-basic-login.md`             |
+The `requirements/epics/` folder is **flat**: each epic folder contains only its epic `.md` and one `.md` per module. There are no `modules/` or `functionalities/` subdirectories.
+
+| Level         | File name pattern                       | Example                                    |
+|---------------|-----------------------------------------|--------------------------------------------|
+| Epic          | `<CODE>-<kebab-domain>.md`              | `AUT-authentication.md`                    |
+| Module        | `<CODE>-M00N-<kebab-slug>.md`           | `AUT-M001-login.md`                        |
+| Functionality | section inside the module `.md` file    | `### AUT-M001-F001 — Basic login`          |
 
 > **Rules**
 >
 > 1. Never use `EP` + number as a prefix — always use the 3-letter domain code.
-> 2. Module slugs are short (1–3 words). Do NOT repeat the module name inside
->    functionality filenames (e.g. `KAN-M001-F001-view-sprint-modules.md`, NOT
->    `KAN-M001-sprint-board-F001-view-sprint-modules.md`).
-> 3. Frontmatter keys follow the **AUT convention**:
->    - `epic.md` → `id`, `title_short`, `title`, `design_state`, `modules`
->    - `module.md` → `id`, `title`, `epic`, `functionalities`
->    - `functionality.md` → `id`, `title`, `module`, `status`
-> 4. Acceptance-laws heading format: `# <CODE> — <Title> · Acceptance Laws`
-> 5. Acceptance-laws table columns: `| ID | Name | Description |` (no Evidence column).
+> 2. Module slugs are short (1–3 words).
+> 3. Functionalities are **`###` sections** inside their parent module `.md` — they are not separate files.
+> 4. Frontmatter keys:
+>    - Epic `.md` → `id`, `title_short`, `title`, `design_state`, `modules`
+>    - Module `.md` → `id`, `title`, `epic`, `status`, `prototype_route`, `functionalities`
+> 5. The epic `.md` contains an aggregated Acceptance Laws table. The module `.md` contains its own Acceptance Laws table. The epic is compliant when all its modules are compliant.
 
-### Functionality file structure
+### Module file structure
 
-Every functionality `.md` file must contain:
+Every module `.md` must follow this structure:
 
-```
+```markdown
 ---
-id: <CODE>-M00N-F00N
-title: <Short title>
-module: <CODE>-M00N
+id: <CODE>-M00N
+title: <Title>
+epic: <CODE>
 status: draft          # draft | ready | in_dev | done
+prototype_route: /path/to/prototype   # ~ if not yet available
+functionalities:
+  - <CODE>-M00N-F00N
 ---
 
-## User story
+## Overview
+<Human-friendly one-paragraph description of what this module does and why.>
+
+## Acceptance Laws
+
+| ID    | Name                                                          | Status  |
+|-------|---------------------------------------------------------------|---------|
+| AL-01 | Production code implemented                                   | pending |
+...
+
+---
+
+## Functionalities
+
+### <CODE>-M00N-F00N — <Short title>
+
+**User story**
 As a <role>, I want to <goal> so that <benefit>.
 
-## Acceptance criteria
+**Acceptance criteria**
 
 | # | Given | When | Then |
 |---|-------|------|------|
