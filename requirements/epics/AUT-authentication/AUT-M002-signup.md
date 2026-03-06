@@ -32,49 +32,16 @@ Allow new users to join Roundrush exclusively through an admin-issued invitation
 
 ### AUT-M002-F001 — Get invitation email
 
-**User story**
-
-As a prospective user, I want to receive an invitation email from an admin so that I can begin the signup process for my team.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | An admin submits a valid email address | They send the invite | An invitation email is dispatched to that address |
-| 2 | The prospective user opens the email | The email has been delivered | A unique, time-limited signup link and the team name are clearly visible |
-| 3 | The admin tries to invite an email that already has an account | They submit the form | The system informs them that user already exists |
-| 4 | The user opens an expired invitation link | The page loads | A message explains the link has expired and describes how to request a new one |
+Joining Roundrush always starts with an invitation from an admin. Once an admin enters a valid email address and sends the invite, the prospective user receives an email that clearly shows the team name and a unique, time-limited signup link. If that link is opened after it has expired, the user sees a friendly message explaining what happened and how to ask for a new one. Admins are also protected from accidental duplicate invites — if the target email already belongs to an existing account the system alerts them before anything is dispatched.
 
 ---
 
 ### AUT-M002-F002 — Make an account
 
-**User story**
-
-As an invited user, I want to create my account with a name and password so that I have personal credentials to access the workspace.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user opens a valid invitation link | The page loads | Their email address is pre-filled and marked as read-only |
-| 2 | A name and a valid password are submitted | The user completes the form | The account is created and the flow continues to team joining |
-| 3 | The entered password does not meet the policy | The user submits | Inline validation explains what the password is missing |
-| 4 | The form is submitted | Registration completes | The password is stored using a secure hashing algorithm (bcrypt or argon2) |
+When the user opens a valid invitation link, the registration form loads with their email address already filled in and locked — they only need to choose a display name and a password. Password validation runs as they type, giving instant feedback rather than waiting for a submit attempt. Once both fields pass and the form is submitted, the account is created and the flow moves automatically into the team-joining step.
 
 ---
 
 ### AUT-M002-F003 — Join team
 
-**User story**
-
-As a newly registered user, I want to be automatically added to the inviting team so that I can start collaborating without any extra steps.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user completes account creation using an invitation | Registration finishes | They are automatically added to the inviting team as a member |
-| 2 | A user has been added to the team | The dashboard loads | It shows the team name and the shared resources for that team |
-| 3 | The user tries to join a team they already belong to | The system detects the duplicate | A friendly message informs them they are already a member |
-| 4 | The invitation references a team that has been deleted | The user tries to join | An error is shown and they are advised to contact support |
+The moment account registration is complete, the user is automatically added to the team that issued the invitation — no extra confirmation is required. When they land on the workspace for the first time, the team name and its shared resources are already visible. If something unexpected happens — for example the team was deleted between the invite being sent and the user registering — a clear error message is shown and the user is given a way to get help rather than being left with a broken screen.

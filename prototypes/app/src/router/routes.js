@@ -4,25 +4,30 @@ import { renderFoundationsColorsFlow } from "../flows/foundations-colors/index.j
 import { mountRequirementsModuleFlow, renderRequirementsModuleFlow } from "../flows/requirements-module/index.js"
 import { renderKanbanModuleFlow, mountKanbanModuleFlow } from "../flows/kanban-module/index.js"
 import { renderPrototypeIndexFlow } from "../flows/prototype-index/index.js"
+import { renderDependenciesUmlFlow, mountDependenciesUmlFlow } from "../flows/dependencies-uml/index.js"
+import { renderDocsHubFlow, mountDocsHubFlow } from "../flows/docs-hub/index.js"
 
 const routes = [
   {
     id: "prototype-index",
     path: "/prototypes",
     render: renderPrototypeIndexFlow,
-    status: "approved"
+    status: "approved",
+    showGlobalNavigation: false
   },
   {
     id: "foundations-colors",
     path: "/library/foundations/colors",
     render: renderFoundationsColorsFlow,
-    status: "approved"
+    status: "approved",
+    showGlobalNavigation: false
   },
   {
     id: "components-library",
     path: "/library/components",
     render: renderComponentsLibraryFlow,
-    status: "approved"
+    status: "approved",
+    showGlobalNavigation: false
   },
   {
     id: "auth-login-default",
@@ -35,14 +40,27 @@ const routes = [
     path: "/requirements/module",
     render: renderRequirementsModuleFlow,
     mount: mountRequirementsModuleFlow,
-    status: "approved",
-    showGlobalNavigation: false
+    status: "approved"
   },
   {
     id: "kanban-module",
     path: "/planning/kanban",
     render: renderKanbanModuleFlow,
     mount: mountKanbanModuleFlow,
+    status: "approved"
+  },
+  {
+    id: "dependencies-uml",
+    path: "/dependencies/uml",
+    render: renderDependenciesUmlFlow,
+    mount: mountDependenciesUmlFlow,
+    status: "approved"
+  },
+  {
+    id: "docs-hub",
+    path: "/docs/hub",
+    render: renderDocsHubFlow,
+    mount: mountDocsHubFlow,
     status: "approved"
   }
 ]

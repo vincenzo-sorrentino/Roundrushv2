@@ -36,144 +36,40 @@ Show the epic-level detail view so that stakeholders can understand the overall 
 
 ### REQ-M001-F001 — Explorer navigation
 
-**User story**
-
-As a product owner, I want to browse the entire requirement hierarchy in a tree sidebar so that I can navigate between epics, modules, and functionalities without losing context.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is viewing any node in the Requirements Module | They click the open-explorer button (double chevron) | The sidebar opens and shows a hierarchical tree of the epic, its modules (as folders), and functionalities (as files) |
-| 2 | The explorer sidebar is open | The user clicks a folder toggle caret | The folder expands or collapses to show or hide its children |
-| 3 | The explorer sidebar is open | The user clicks a tree node label | The main panel updates to show that node's detail and the node is visually highlighted |
-| 4 | The explorer sidebar is open | The user types in the search input | The tree filters to show only matching nodes plus their ancestor folders, all auto-expanded |
-| 5 | The explorer sidebar is open | The user clears the search input | The tree reverts to its previous expansion state |
-| 6 | The explorer sidebar is open | The user clicks the collapse button (double left chevron) | The sidebar closes and the open-explorer button becomes visible again |
-
-**Edge cases / negative paths**
-
-- If the search yields no results, the tree area should remain empty without errors.
-- Each tree node shows a coloured status dot: released = green, in-progress = blue, planned = red, draft = grey, design = purple.
+A collapsible tree sidebar lets users browse the entire requirements hierarchy — epics at the top, then modules, then functionalities — without losing their place in the main panel. Clicking a tree node loads that item's detail and highlights the node so the user always knows what they're looking at. Folder nodes (epics and modules) can be expanded and collapsed individually. A search box inside the explorer filters the tree in real time, automatically expanding ancestor folders to surface matching nodes, and clears back to the previous state when the search input is removed. Each node carries a small colour-coded status dot so the user can assess the state of items at a glance while browsing.
 
 ---
 
 ### REQ-M001-F002 — Breadcrumb navigation
 
-**User story**
-
-As a user navigating deep into the hierarchy, I want to see breadcrumb segments showing my exact path (Epic / Module / Functionality) so that I always know where I am.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user selects an epic node | The view renders | The breadcrumb shows a single segment: the epic title |
-| 2 | The user selects a module node | The view renders | The breadcrumb shows two segments separated by "/": Epic title / Module title |
-| 3 | The user selects a functionality node | The view renders | The breadcrumb shows three segments: Epic title / Module title / Functionality title |
-
-**Edge cases / negative paths**
-
-- Breadcrumb segments are display-only (not clickable) in the current design.
+A breadcrumb trail at the top of the detail panel always reflects the user's exact position in the hierarchy. At epic level it shows the epic title alone. At module level it shows the epic title and the module title separated by a slash. At functionality level it shows all three segments in sequence. This gives users a constant sense of location as they navigate deeper into the structure.
 
 ---
 
 ### REQ-M001-F003 — Epic summary metrics
 
-**User story**
-
-As a product owner, I want to see a quick summary grid showing acceptance law compliance and module readiness so that I can gauge epic health at a glance.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is viewing an epic node | The view renders | A summary grid shows "Acceptance laws: X / Y" where X = laws with status "pass" and Y = total laws |
-| 2 | The user is viewing an epic node | The view renders | The summary grid also shows "Compliant modules: X / Y" where X = non-"planned" modules and Y = total modules |
-| 3 | The user navigates to a module or functionality node | The view renders | The summary grid is not displayed (epic-only feature) |
-
-**Edge cases / negative paths**
-
-- If no laws or no modules exist, counts display "0 / 0".
+When viewing an epic, a compact metrics grid below the breadcrumb gives an instant health snapshot: how many acceptance laws are currently passing out of the total, and how many modules are compliant out of the total. This lets product owners check the overall state of an epic without reading through all the detail. The grid only appears at the epic level — it is not shown when navigating inside a module or functionality.
 
 ---
 
-### REQ-M001-F004 — Description tab (epic)
+### REQ-M001-F004 — Description tab
 
-**User story**
-
-As a product owner, I want to view the epic's metadata and scope breakdown so that I understand its purpose and boundaries.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on an epic node | They select the "Description" tab | A content card shows the epic frontmatter (id, title_short, title, design_state, module list) in a preformatted block |
-| 2 | The description tab is active | The content renders | Sections for "Objective", "In scope" (bullet list), and "Out of scope" (bullet list) are shown below the frontmatter |
-| 3 | The module list is in the frontmatter | Modules exist | Each module is shown as "MODULE-ID (Module title)" |
-
-**Edge cases / negative paths**
-
-- If any section (objective, in-scope, out-of-scope) is missing from the source data, the heading still appears with an empty body.
+The Description tab presents a complete picture of the epic: its core metadata (ID, short title, full title, design state, and module list), its objective written in plain language, a bullet list of everything that is in scope, and a bullet list of what is explicitly out of scope. This is the primary reference for anyone trying to understand what the epic is about and what it intentionally does not cover.
 
 ---
 
-### REQ-M001-F005 — Acceptance Laws tab (epic)
+### REQ-M001-F005 — Acceptance Laws tab
 
-**User story**
-
-As a quality engineer, I want to see all acceptance laws for the epic in a structured table so that I can track compliance at a glance.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on an epic node | They select the "Acceptance Laws" tab | A table is shown with columns: No. (ID), Law (name + description), Evidence, Status |
-| 2 | A law has status "pass" | The table renders | A coloured status badge reading "Pass" is shown in the Status column |
-| 3 | Acceptance laws exist | The table renders | All 7 laws are listed in order from AL-01 to AL-07 |
-
-**Edge cases / negative paths**
-
-- The Acceptance Laws tab is the default tab when an epic node is first selected.
-- If no acceptance laws are defined, the table displays an empty state row.
+The Acceptance Laws tab shows a structured table of all seven shared laws that define when work in this epic can be considered complete. Each law has an ID, a name, an evidence field describing what proof is required, and a colour-coded status badge. This tab is the default view when an epic node is first selected, so the compliance picture is always front and centre before diving into modules or prototypes.
 
 ---
 
-### REQ-M001-F006 — Modules tab (epic)
+### REQ-M001-F006 — Modules tab
 
-**User story**
-
-As a product owner, I want to see all modules belonging to the epic in a table so that I can review scope and navigate into each module.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on an epic node | They select the "Modules" tab | A table is shown with columns: Module (code + title), Scope, Status, and an action column |
-| 2 | A module row is shown | The table renders | The Module column shows the code followed by " - " and the title; the Scope column shows the module's scope; the Status column shows a coloured badge |
-| 3 | The user clicks the "Open" button on a module row | They click it | The view navigates to that module's detail, updating breadcrumbs, title, tabs, and explorer selection |
-
-**Edge cases / negative paths**
-
-- Modules with status "planned" still appear with a "Ready for sprint" badge.
-- If the epic has no modules, show an empty state message.
+The Modules tab lists every module that belongs to the epic in a table with its code, title, scope summary, and a colour-coded status badge. An "Open" button on each row navigates directly to that module's detail view, updating the breadcrumb, the sidebar selection, and the full content panel in a single click. If the epic has no modules yet, a clear empty-state message is shown instead of an empty table.
 
 ---
 
-### REQ-M001-F007 — Prototypes tab (epic)
+### REQ-M001-F007 — Prototypes tab
 
-**User story**
-
-As a designer or product owner, I want to see prototype references linked to the epic so that I can quickly access relevant design artefacts.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on an epic node | They select the "Prototypes" tab | A grid of prototype cards is displayed, each showing: name, version, status badge, flow description, and an "Open prototype" link |
-| 2 | A prototype card has a valid path | The user clicks "Open prototype" | The prototype opens in a new browser tab |
-| 3 | No prototypes are linked to the epic | The tab is selected | A message reads "No prototype references." |
-
-**Edge cases / negative paths**
-
-- Prototype links with missing paths fail gracefully and fall back to "#".
+The Prototypes tab surfaces all design artefacts linked to the epic as a grid of cards. Each card shows the prototype name, version, a status badge, a brief flow description, and a direct link to open it. Prototype links open in a new browser tab so the user never loses their place in the requirements view. If no prototypes have been linked yet, the tab displays a simple "No prototype references" message.

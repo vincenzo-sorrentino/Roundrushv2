@@ -18,6 +18,8 @@ const ICON = {
   caretDown: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   caretRight: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   plus: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="128" x2="216" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  sun: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm8,24a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64ZM232,120H208a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Zm-104,88a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128ZM69.11,59.22a8,8,0,0,0-11.32,11.31l16.95,17A8,8,0,0,0,86.06,76.18ZM59.22,186.89a8,8,0,0,0-11.32,11.32l17,16.95a8,8,0,0,0,11.32-11.31ZM186.89,59.22l-17,16.95A8,8,0,0,0,181.25,87.56l16.95-17a8,8,0,1,0-11.31-11.31ZM186.89,196.78a8,8,0,0,0-11.31,0L169.26,203a8,8,0,1,0,11.32,11.32l16.95-17A8.05,8.05,0,0,0,186.89,196.78Z"></path></svg>`,
+  moon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23Z"></path></svg>`,
 }
 
 // Two-tone circular glyph logo — matches Figma RrLogoGlyph component
@@ -56,6 +58,8 @@ const COLLAPSED_TEAM_BADGES = [
 
 export function renderSidebar(collapsed = true) {
   if (collapsed) {
+    const themeIcon = darkMode ? ICON.sun : ICON.moon
+    const themeLabel = darkMode ? "Switch to light mode" : "Switch to dark mode"
     return `
       <aside class="rr-sidebar rr-sidebar--collapsed" id="rr-sidebar" aria-label="App navigation">
         <div class="rr-sidebar-top">
@@ -90,6 +94,9 @@ export function renderSidebar(collapsed = true) {
           <div class="rr-sidebar-divider"></div>
         </div>
         <div class="rr-sidebar-bottom">
+          <button class="rr-sidebar-theme-btn" data-action="toggle-theme" aria-label="${themeLabel}" type="button">
+            ${themeIcon}
+          </button>
           <div class="rr-sidebar-avatar" title="Brooklyn Simmons">
             <span>BS</span>
           </div>
@@ -143,6 +150,10 @@ export function renderSidebar(collapsed = true) {
         </nav>
       </div>
       <div class="rr-sidebar-bottom">
+        <button class="rr-sidebar-theme-btn rr-sidebar-theme-btn--open" data-action="toggle-theme"
+                aria-label="${darkMode ? "Switch to light mode" : "Switch to dark mode"}" type="button">
+          ${darkMode ? ICON.sun : ICON.moon}
+        </button>
         <div class="rr-sidebar-profile">
           <div class="rr-sidebar-avatar">
             <span>BS</span>
@@ -158,6 +169,15 @@ export function renderSidebar(collapsed = true) {
 }
 
 let sidebarCollapsed = true
+let darkMode = (typeof localStorage !== "undefined" && localStorage.getItem("rr-theme") === "dark")
+
+function applyTheme(dark) {
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light")
+  if (typeof localStorage !== "undefined") localStorage.setItem("rr-theme", dark ? "dark" : "light")
+}
+
+// Apply saved theme on module load
+applyTheme(darkMode)
 
 export function mountSidebar(onToggle) {
   const sidebar = document.querySelector("#rr-sidebar")
@@ -165,10 +185,18 @@ export function mountSidebar(onToggle) {
 
   sidebar.addEventListener("click", (event) => {
     const toggle = event.target.closest('[data-action="toggle-sidebar"]')
-    if (!toggle) return
-    sidebarCollapsed = !sidebarCollapsed
-    if (typeof onToggle === "function") {
-      onToggle(sidebarCollapsed)
+    if (toggle) {
+      sidebarCollapsed = !sidebarCollapsed
+      if (typeof onToggle === "function") {
+        onToggle(sidebarCollapsed)
+      }
+      return
+    }
+    const themeBtn = event.target.closest('[data-action="toggle-theme"]')
+    if (themeBtn) {
+      darkMode = !darkMode
+      applyTheme(darkMode)
+      if (typeof onToggle === "function") onToggle(sidebarCollapsed)
     }
   })
 }

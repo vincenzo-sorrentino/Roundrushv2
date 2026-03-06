@@ -32,54 +32,16 @@ Show all modules assigned to the current sprint in a table grouped by feature ar
 
 ### KAN-M001-F001 — View sprint modules
 
-**User story**
-
-As a project manager, I want to see all the modules in the current sprint grouped by their feature area so that I can get a clear picture of what is planned and who is working on what.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | A sprint has modules assigned to it | The sprint board loads | All modules are displayed in a table, grouped under collapsible feature-area headers |
-| 2 | A module row is visible | The user views the board | The row shows the module ID, title, priority, assignee, start date, due date, and status |
-| 3 | A feature group is expanded | The user clicks the chevron | The group collapses and its module rows are hidden |
-| 4 | A feature group is collapsed | The user clicks the chevron | The group expands and its module rows become visible |
-| 5 | A sprint has no modules assigned | The user opens that sprint | An empty-state message is shown instead of the table |
+When the sprint board loads, the user sees every module assigned to the current sprint arranged in a table, grouped under their feature area. Each row shows the module ID, title, priority, assigned person, start date, due date, and current status at a glance. Feature area groups can be expanded and collapsed individually, which makes it easy to focus on one area while hiding the rest. If a sprint has no modules assigned to it yet, a clear placeholder message is shown instead of an empty table.
 
 ---
 
 ### KAN-M001-F002 — Sort and filter modules
 
-**User story**
-
-As a project manager, I want to sort the module table by any column, apply filters for status, priority, and assignee, and search by keyword — so that I can quickly find the modules I care about.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | A sortable column header is visible | The user clicks it | The table sorts ascending by that column |
-| 2 | A column is already sorted ascending | The user clicks its header again | The table sorts descending by that column |
-| 3 | A different column header is clicked | The user changes sort | The table re-sorts ascending by the newly selected column |
-| 4 | One or more filter options are selected (Status, Priority, Assignee) | Filters are applied | Only modules matching all selected criteria are shown |
-| 5 | An active filter is cleared | The user removes it | The table updates to show all modules that still match remaining criteria |
-| 6 | The user types in the search field | Characters are entered | Only modules whose ID or title contain the search text (case-insensitive) are shown |
-| 7 | Both filters and a search query are active | The user reads the board | Both criteria are applied together using AND logic |
+The board gives users full control over what they see. Clicking any column header sorts the entire table by that column; clicking it again reverses the order. Filter controls for status, priority, and assignee let users narrow down to exactly the work they care about, and a keyword search field lets them find a module by name or ID. All of these work together simultaneously — adding a filter while a search is active applies both criteria at the same time. Removing any filter or clearing the search immediately refreshes the table.
 
 ---
 
 ### KAN-M001-F003 — Sprint selection
 
-**User story**
-
-As a project manager, I want to switch between sprints using a dropdown so that I can review what was planned in any past sprint or look ahead to a future one.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The sprint board is displayed | The view loads | The current sprint name is shown with a dropdown trigger next to it |
-| 2 | The user clicks the sprint name or dropdown trigger | The trigger is clicked | A dropdown opens listing all sprints with their date ranges |
-| 3 | The user selects a different sprint from the dropdown | A sprint is chosen | The dropdown closes and the table updates to show that sprint's modules |
-| 4 | The user clicks outside the open dropdown | Focus moves away | The dropdown closes without changing the selected sprint |
-| 5 | The user clicks the sprint history action | The action is triggered | The view navigates to the sprint history page |
+At the top of the board the current sprint name is always visible alongside a dropdown trigger. Clicking it opens a list of all sprints with their date ranges, letting the user jump to any past or upcoming sprint instantly. Clicking outside the open dropdown closes it without changing the currently selected sprint. From this area the user can also navigate to a dedicated sprint history view if they need a longer perspective on what has been delivered.
