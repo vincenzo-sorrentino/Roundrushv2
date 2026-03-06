@@ -3,8 +3,15 @@ import { renderComponentsLibraryFlow } from "../flows/components-library/index.j
 import { renderFoundationsColorsFlow } from "../flows/foundations-colors/index.js"
 import { mountRequirementsModuleFlow, renderRequirementsModuleFlow } from "../flows/requirements-module/index.js"
 import { renderKanbanModuleFlow, mountKanbanModuleFlow } from "../flows/kanban-module/index.js"
+import { renderPrototypeIndexFlow } from "../flows/prototype-index/index.js"
 
 const routes = [
+  {
+    id: "prototype-index",
+    path: "/prototypes",
+    render: renderPrototypeIndexFlow,
+    status: "approved"
+  },
   {
     id: "foundations-colors",
     path: "/library/foundations/colors",

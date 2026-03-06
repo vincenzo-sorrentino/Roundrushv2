@@ -48,19 +48,14 @@ function createRepoPaths({
 }) {
   const req = toLower(requirementId)
   const mod = toLower(moduleId)
-  const func = toLower(functionalityId)
-  const criterion = toLower(criterionId)
   const base = mod || req
 
-  let requirementsPath = `/requirements/${req}/spec.md`
+  // Flat structure: requirements/epics/<EPIC>-<domain>/<MODULE>-<slug>.md
+  // For mock data with generic IDs (e.g. EP001, EP001-001) the paths are
+  // illustrative — they follow the same flat convention used in the real repo.
+  let requirementsPath = `requirements/epics/${req}/${req}.md`
   if (moduleId) {
-    requirementsPath = `/requirements/${req}/${mod}.md`
-  }
-  if (functionalityId) {
-    requirementsPath = `/requirements/${req}/${mod}/${func}.md`
-  }
-  if (criterionId) {
-    requirementsPath = `/requirements/${req}/${mod}/${func}/${criterion}.md`
+    requirementsPath = `requirements/epics/${req}/${mod}.md`
   }
 
   return {
@@ -72,7 +67,7 @@ function createRepoPaths({
     docsUmlPath: `/docs/uml/${req}/${base}/`,
     projectGovernancePath: `/project-governance/reviews/${base}/`,
     dependencyMapPath,
-    prototypesPath: "/prototypes/requirements-module/index.html"
+    prototypesPath: "/prototypes"
   }
 }
 

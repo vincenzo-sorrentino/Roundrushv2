@@ -2956,6 +2956,24 @@ rr-alert.rr-req-info-callout {
   /* logo is an SVG glyph — no background wrapper needed */
 }
 
+.rr-sidebar-logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  outline-offset: 4px;
+  border-radius: 8px;
+  opacity: 0.9;
+  transition: opacity 0.15s;
+}
+
+.rr-sidebar-logo-link:hover {
+  opacity: 1;
+}
+
+.rr-sidebar-logo-link--collapsed {
+  padding: 4px;
+}
+
 .rr-sidebar-nav {
   display: flex;
   flex-direction: column;

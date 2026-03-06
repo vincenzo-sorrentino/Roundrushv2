@@ -20,4 +20,10 @@ if (!flowConfig.spec_id || !flowConfig.entry_screen) {
   process.exit(1)
 }
 
+// Verify the prototype index route is registered
+if (!routesFile.includes('"/prototypes"') && !routesFile.includes("'/prototypes'")) {
+  console.error("Missing /prototypes route in router")
+  process.exit(1)
+}
+
 console.log("Prototype route checks passed.")

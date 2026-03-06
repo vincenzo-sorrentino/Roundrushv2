@@ -59,6 +59,9 @@ export function renderSidebar(collapsed = true) {
     return `
       <aside class="rr-sidebar rr-sidebar--collapsed" id="rr-sidebar" aria-label="App navigation">
         <div class="rr-sidebar-top">
+          <a href="/prototypes" class="rr-sidebar-logo-link rr-sidebar-logo-link--collapsed" aria-label="Prototype directory">
+            ${RR_LOGO_SVG}
+          </a>
           <button class="rr-sidebar-toggle" data-action="toggle-sidebar" aria-label="Expand sidebar" type="button">
             ${ICON.menu}
           </button>
@@ -100,7 +103,9 @@ export function renderSidebar(collapsed = true) {
       <div class="rr-sidebar-cont">
         <div class="rr-sidebar-top">
           <div class="rr-sidebar-logo">
-            ${RR_LOGO_SVG}
+            <a href="/prototypes" class="rr-sidebar-logo-link" aria-label="Prototype directory">
+              ${RR_LOGO_SVG}
+            </a>
           </div>
           <button class="rr-sidebar-toggle" data-action="toggle-sidebar" aria-label="Collapse sidebar" type="button">
             ${ICON.menu}
