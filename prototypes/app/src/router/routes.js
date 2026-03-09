@@ -6,6 +6,7 @@ import { renderKanbanModuleFlow, mountKanbanModuleFlow } from "../flows/kanban-m
 import { renderPrototypeIndexFlow } from "../flows/prototype-index/index.js"
 import { renderDependenciesUmlFlow, mountDependenciesUmlFlow } from "../flows/dependencies-uml/index.js"
 import { renderDocsHubFlow, mountDocsHubFlow } from "../flows/docs-hub/index.js"
+import { renderDesignTabFlow, mountDesignTabFlow } from "../flows/design-tab/index.js"
 
 const routes = [
   {
@@ -61,6 +62,13 @@ const routes = [
     path: "/docs/hub",
     render: renderDocsHubFlow,
     mount: mountDocsHubFlow,
+    status: "approved"
+  },
+  {
+    id: "design-tab",
+    path: "/design/tab",
+    render: renderDesignTabFlow,
+    mount: mountDesignTabFlow,
     status: "approved"
   }
 ]

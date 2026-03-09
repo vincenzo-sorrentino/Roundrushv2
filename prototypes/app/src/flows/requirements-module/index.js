@@ -55,6 +55,9 @@ const MODULES = [
     id: "AUT-M001",
     code: "AUT-M001",
     title: "User login",
+    epic: "AUT",
+    prototypeRoute: "/auth/login/default",
+    overview: "Allow registered users to authenticate securely using their email and password. If a user forgets their password, they can request a reset link by email and set a new password through a time-limited secure flow.",
     scope: "Allow registered users to authenticate with email + password and recover a forgotten password.",
     status: "released",
     laws: {
@@ -75,6 +78,80 @@ const MODULES = [
         flow: "Login form -> submit -> success and failed states"
       }
     ],
+    dependencies: [
+      {
+        from: "UI-REQ (Backlog)",
+        to: "API-READ",
+        relation: "calls_api",
+        iface: "GET/requirements/tree",
+        risk: "high",
+        conf: 0.92,
+        why: "Backlog renders EP – Module – F hierarchy"
+      },
+      {
+        from: "UI-REQ (Backlog)",
+        to: "SVC-DEPS",
+        relation: "calls_api",
+        iface: "GET/dependencies/impact",
+        risk: "medium",
+        conf: 0.88,
+        why: "Shows \"impact count\" + deep-links"
+      },
+      {
+        from: "UI-PLAN (Planning)",
+        to: "SVC-SPRINT",
+        relation: "calls_api",
+        iface: "POST/sprint-cycles",
+        risk: "low",
+        conf: 0.90,
+        why: "Create/activate sprint-cycles"
+      },
+      {
+        from: "UI-PLAN (Planning)",
+        to: "SVC-INTEGRATION",
+        relation: "triggers_workflow",
+        iface: "POST/automation/create-pr",
+        risk: "medium",
+        conf: 0.80,
+        why: "\"Start sprint\" opens PR design --> dev"
+      },
+      {
+        from: "UI-TEST (Testing)",
+        to: "SVC-TEST",
+        relation: "calls_api",
+        iface: "GET/testing/runs",
+        risk: "low",
+        conf: 0.95,
+        why: "Testing dashboard/runs/coverage"
+      },
+      {
+        from: "SVC-TEST",
+        to: "SVC-GOV",
+        relation: "reads_policy",
+        iface: "policy.coverage.threshold",
+        risk: "low",
+        conf: 0.85,
+        why: "Coverage & manual suite requirements"
+      },
+      {
+        from: "SVC-RELEASE",
+        to: "SVC-TEST",
+        relation: "aggregates",
+        iface: "evidence: tests/coverage/regression",
+        risk: "low",
+        conf: 0.90,
+        why: "Release notes include test proof"
+      },
+      {
+        from: "SVC-RELEASE",
+        to: "SVC-DEPS",
+        relation: "aggregates",
+        iface: "dep diff: versionA\u2192B",
+        risk: "medium",
+        conf: 0.82,
+        why: "Release notes include dependency changes"
+      }
+    ],
     functionalities: [
       {
         id: "AUT-M001-F001",
@@ -82,6 +159,7 @@ const MODULES = [
         title: "Login form",
         filename: "AUT-M001-F001-login-form.md",
         status: "validated",
+        description: "The user enters their email address and password and clicks \"Log in\". If the credentials are correct they land straight in their workspace. If something is wrong, a neutral inline error appears — it doesn't reveal whether the email or the password failed, so no information is leaked. After several consecutive failed attempts within a short window the account is temporarily locked to guard against brute-force access; the user receives a plain-language explanation of what happened and what to do next. If the email doesn't match any known account, a visible link to request an invitation is surfaced so the user isn't left without a path forward.",
         userStory:
           "As a registered user, I want to log in with my email and password so that I can access my team's workspace.",
         acceptanceCriteria: [
@@ -116,6 +194,7 @@ const MODULES = [
         title: "Password reset",
         filename: "AUT-M001-F002-password-reset.md",
         status: "validated",
+        description: "From the login screen, a user who can't remember their password clicks \"Forgot password\" and is asked for their email address. A time-limited reset link is sent to that address. Clicking the link opens a form where the user sets a new password; on success they are taken directly to the login screen to sign in with the new credentials. If the link has expired or is invalid, the page explains clearly why it didn't work and tells the user exactly how to get a fresh one.",
         userStory:
           "As a registered user who forgot their password, I want to reset it via email so that I can regain access.",
         acceptanceCriteria: [
@@ -186,6 +265,9 @@ const MODULES = [
     id: "AUT-M002",
     code: "AUT-M002",
     title: "User authentication process",
+    epic: "AUT",
+    prototypeRoute: "/auth/signup/default",
+    overview: "Allow new users to join RoundRush through invitation email, account creation, and automatic team joining.",
     scope:
       "Allow new users to join RoundRush through invitation email, account creation, and automatic team joining.",
     status: "released",
@@ -203,7 +285,7 @@ const MODULES = [
         name: "Signup flow - v1",
         version: "v1",
         path: "/prototypes/AUT/signup/v1/",
-        status: "in-progress",
+        status: "validated",
         flow: "Invitation email -> account creation -> join team"
       }
     ],
@@ -313,8 +395,11 @@ const MODULES = [
     id: "AUT-M003",
     code: "AUT-M003",
     title: "User session management",
+    epic: "AUT",
+    prototypeRoute: "/auth/sessions",
+    overview: "Track, refresh, and revoke user sessions safely across multiple devices.",
     scope: "Track, refresh, and revoke sessions safely across devices.",
-    status: "planned",
+    status: "released",
     laws: {
       "AL-01": { status: "unknown" },
       "AL-02": { status: "unknown" },
@@ -324,15 +409,26 @@ const MODULES = [
       "AL-06": { status: "unknown" },
       "AL-07": { status: "unknown" }
     },
-    prototypes: [],
+    prototypes: [
+      {
+        name: "Session management - v1",
+        version: "v1",
+        path: "/prototypes/AUT/sessions/v1/",
+        status: "in-progress",
+        flow: "Active sessions list -> revoke session"
+      }
+    ],
     functionalities: []
   },
   {
     id: "AUT-M004",
     code: "AUT-M004",
     title: "User password recovery",
+    epic: "AUT",
+    prototypeRoute: "/auth/recovery",
+    overview: "Centralise recovery policies and risk checks for all password reset journeys.",
     scope: "Centralize recovery policies and risk checks for reset journeys.",
-    status: "planned",
+    status: "released",
     laws: {
       "AL-01": { status: "unknown" },
       "AL-02": { status: "unknown" },
@@ -349,8 +445,11 @@ const MODULES = [
     id: "AUT-M005",
     code: "AUT-M005",
     title: "2-factor authentication",
+    epic: "AUT",
+    prototypeRoute: "/auth/2fa",
+    overview: "Add step-up authentication for sensitive access paths to strengthen account security.",
     scope: "Add step-up authentication for sensitive access paths.",
-    status: "planned",
+    status: "released",
     laws: {
       "AL-01": { status: "unknown" },
       "AL-02": { status: "unknown" },
@@ -392,81 +491,80 @@ const EPIC = {
 
 const EPIC_DEPENDENCIES = [
   {
-    from: "UI-AUT (Login)",
-    to: "SVC-AUTH",
+    from: "UI-REQ (Backlog)",
+    to: "API-READ",
     relation: "calls_api",
-    iface: "POST/auth/login",
-    risk: "high",
-    conf: 0.96,
-    why: "Login form submits credentials to auth service for token issuance"
-  },
-  {
-    from: "UI-AUT (Login)",
-    to: "SVC-SESSION",
-    relation: "reads_state",
-    iface: "GET/sessions/me",
-    risk: "low",
-    conf: 0.91,
-    why: "Checks active session on entry to skip redundant login redirect"
-  },
-  {
-    from: "UI-AUT (Signup)",
-    to: "SVC-AUTH",
-    relation: "calls_api",
-    iface: "POST/auth/register",
-    risk: "low",
-    conf: 0.93,
-    why: "Signup form creates account via auth service registration endpoint"
-  },
-  {
-    from: "UI-AUT (Signup)",
-    to: "SVC-NOTIFY",
-    relation: "triggers_workflow",
-    iface: "POST/notifications/welcome",
-    risk: "medium",
-    conf: 0.84,
-    why: "Account creation triggers welcome email dispatch workflow"
-  },
-  {
-    from: "UI-AUT (Recovery)",
-    to: "SVC-NOTIFY",
-    relation: "triggers_workflow",
-    iface: "POST/email/reset-link",
-    risk: "medium",
-    conf: 0.87,
-    why: "Password reset flow sends time-limited reset link via email"
-  },
-  {
-    from: "SVC-AUTH",
-    to: "KAN-M001 (Sprint Board)",
-    relation: "provides_token",
-    iface: "Authorization: Bearer",
-    risk: "high",
-    conf: 0.90,
-    why: "Sprint board validates bearer tokens issued by AUT service"
-  },
-  {
-    from: "SVC-AUTH",
-    to: "REQ-M001 (Backlog)",
-    relation: "provides_token",
-    iface: "Authorization: Bearer",
+    iface: "GET/requirements/tree",
     risk: "high",
     conf: 0.92,
-    why: "Requirements backlog enforces token validation through AUT"
+    why: "Backlog renders EP – Module – F hierarchy"
   },
   {
-    from: "SVC-SESSION",
-    to: "SVC-AUDIT",
-    relation: "writes_event",
-    iface: "POST/audit/session-log",
+    from: "UI-REQ (Backlog)",
+    to: "SVC-DEPS",
+    relation: "calls_api",
+    iface: "GET/dependencies/impact",
+    risk: "medium",
+    conf: 0.88,
+    why: "Shows \"impact count\" + deep-links"
+  },
+  {
+    from: "UI-PLAN (Planning)",
+    to: "SVC-SPRINT",
+    relation: "calls_api",
+    iface: "POST/sprint-cycles",
+    risk: "low",
+    conf: 0.90,
+    why: "Create/activate sprint-cycles"
+  },
+  {
+    from: "UI-PLAN (Planning)",
+    to: "SVC-INTEGRATION",
+    relation: "triggers_workflow",
+    iface: "POST/automation/create-pr",
+    risk: "medium",
+    conf: 0.80,
+    why: "\"Start sprint\" opens PR design → dev"
+  },
+  {
+    from: "UI-TEST (Testing)",
+    to: "SVC-TEST",
+    relation: "calls_api",
+    iface: "GET/testing/runs",
+    risk: "low",
+    conf: 0.95,
+    why: "Testing dashboard/runs/coverage"
+  },
+  {
+    from: "SVC-TEST",
+    to: "SVC-GOV",
+    relation: "reads_policy",
+    iface: "policy.coverage.threshold",
     risk: "low",
     conf: 0.85,
-    why: "Login and logout events are written to the centralised audit log"
+    why: "Coverage & manual suite requirements"
+  },
+  {
+    from: "SVC-RELEASE",
+    to: "SVC-TEST",
+    relation: "aggregates",
+    iface: "evidence: tests/coverage/regression",
+    risk: "low",
+    conf: 0.90,
+    why: "Release notes include test proof"
+  },
+  {
+    from: "SVC-RELEASE",
+    to: "SVC-DEPS",
+    relation: "aggregates",
+    iface: "dep diff: versionA→B",
+    risk: "medium",
+    conf: 0.82,
+    why: "Release notes include dependency changes"
   }
 ]
 
 const SIDE_PROJECTS = [
-  "DAS - Dashboard",
   "ONB - Onboarding",
   "TEM - Team management",
   "TRA - Transactions"
@@ -549,6 +647,7 @@ function getTabsForNode(node) {
     return [
       { id: "description", label: "Description" },
       { id: "acceptance-laws", label: "Acceptance Laws" },
+      { id: "dependencies", label: "Dependencies" },
       { id: "functionalities", label: "Functionalities" },
       { id: "prototypes", label: "Prototypes" }
     ]
@@ -939,34 +1038,69 @@ title_short: ${escapeHtml(functionality.title)}</pre>
 }
 
 function renderModuleDescription(module) {
+  const protoRouteCell = module.prototypeRoute
+    ? `<span class="rr-rm2-desc-meta-value">${escapeHtml(module.prototypeRoute)}</span>`
+    : `<span class="rr-rm2-desc-meta-value rr-rm2-desc-meta-value--empty">—</span>`
+
+  const functionalitiesHtml = Array.isArray(module.functionalities) && module.functionalities.length > 0
+    ? module.functionalities.map((item) => {
+        const shortNum = item.shortCode ? item.shortCode.replace(/^[A-Z]+-M\d+-F(\d+)$/, (_, n) => String(Number(n)).padStart(2, "0")) : ""
+        const codeLabel = shortNum ? `${module.code}-F${shortNum}` : item.id
+        return `
+          <div class="rr-rm2-desc-func">
+            <h4 class="rr-rm2-desc-func-title">${escapeHtml(codeLabel)} — ${escapeHtml(item.title)}</h4>
+            <p class="rr-rm2-desc-func-body">${escapeHtml(item.description || item.userStory || item.scope || "")}</p>
+          </div>
+        `
+      }).join("")
+    : `<p class="rr-rm2-empty">No functionalities defined yet.</p>`
+
   return `
     <section class="rr-rm2-content-card">
-      <h3>Description</h3>
+      <h3 class="rr-rm2-desc-section-label">Description</h3>
       <div class="rr-rm2-divider"></div>
-      <pre class="rr-rm2-pre">id: ${escapeHtml(module.id)}
-title: ${escapeHtml(module.title)}
-epic: AUT</pre>
+      <div class="rr-rm2-desc-meta">
+        <div class="rr-rm2-desc-meta-cell">
+          <span class="rr-rm2-desc-meta-label">ID</span>
+          <span class="rr-rm2-desc-meta-value">${escapeHtml(module.code)}</span>
+        </div>
+        <div class="rr-rm2-desc-meta-cell">
+          <span class="rr-rm2-desc-meta-label">Title</span>
+          <span class="rr-rm2-desc-meta-value">${escapeHtml(module.title)}</span>
+        </div>
+        <div class="rr-rm2-desc-meta-cell">
+          <span class="rr-rm2-desc-meta-label">Epic</span>
+          <span class="rr-rm2-desc-meta-value">${escapeHtml(module.epic || "AUT")}</span>
+        </div>
+        <div class="rr-rm2-desc-meta-cell">
+          <span class="rr-rm2-desc-meta-label">Status</span>
+          <span class="rr-rm2-desc-meta-value">${escapeHtml(toStatusLabel(module.status))}</span>
+        </div>
+        <div class="rr-rm2-desc-meta-cell">
+          <span class="rr-rm2-desc-meta-label">Prototype route</span>
+          ${protoRouteCell}
+        </div>
+      </div>
       <div class="rr-rm2-divider"></div>
-      <h4>Scope</h4>
-      <p>${escapeHtml(module.scope)}</p>
-      <h4>Functionalities</h4>
-      <ul>
-        ${module.functionalities.map((item) => `<li>${escapeHtml(item.id)} - ${escapeHtml(item.title)}</li>`).join("")}
-      </ul>
+      <h2 class="rr-rm2-desc-heading">Overview</h2>
+      <p class="rr-rm2-desc-body">${escapeHtml(module.overview || module.scope || "")}</p>
+      <div class="rr-rm2-divider"></div>
+      <h2 class="rr-rm2-desc-heading">Functionalities</h2>
+      ${functionalitiesHtml}
     </section>
   `
 }
 
 function renderDependenciesTable() {
+  const ARROW_DOWN_ICON = `<svg class="rr-dep-sort-icon" width="16" height="16" viewBox="0 0 256 256" fill="none" aria-hidden="true"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+
   const rows = EPIC_DEPENDENCIES.map((dep) => {
     const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
     return `
       <div class="rr-dep-row">
         <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
         <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
-        <div class="rr-dep-cell rr-dep-cell--relation">
-          <span class="rr-dep-relation-chip">${escapeHtml(dep.relation)}</span>
-        </div>
+        <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
         <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
         <div class="rr-dep-cell rr-dep-cell--risk">
           <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
@@ -981,12 +1115,50 @@ function renderDependenciesTable() {
     <div class="rr-dep-table">
       <div class="rr-dep-thead-wrap">
         <div class="rr-dep-thead">
-          <div class="rr-dep-th rr-dep-th--from">
-            From
-            <svg class="rr-dep-sort-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+          <div class="rr-dep-th rr-dep-th--from">From ${ARROW_DOWN_ICON}</div>
+          <div class="rr-dep-th rr-dep-th--to">To</div>
+          <div class="rr-dep-th rr-dep-th--relation">Relation</div>
+          <div class="rr-dep-th rr-dep-th--iface">Interface</div>
+          <div class="rr-dep-th rr-dep-th--risk">Risk</div>
+          <div class="rr-dep-th rr-dep-th--conf">Conf.</div>
+          <div class="rr-dep-th rr-dep-th--why">Why</div>
+        </div>
+      </div>
+      <div class="rr-dep-tbody">${rows}</div>
+    </div>
+  `
+}
+
+function renderModuleDependenciesTable(module) {
+  const deps = module.dependencies || []
+  const ARROW_DOWN_ICON = `<svg class="rr-dep-sort-icon" width="16" height="16" viewBox="0 0 256 256" fill="none" aria-hidden="true"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+
+  if (deps.length === 0) {
+    return `<div class="rr-dep-table"><p class="rr-rm2-empty">No dependencies defined for this module.</p></div>`
+  }
+
+  const rows = deps.map((dep) => {
+    const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
+    return `
+      <div class="rr-dep-row">
+        <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
+        <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
+        <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
+        <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
+        <div class="rr-dep-cell rr-dep-cell--risk">
+          <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
+        </div>
+        <div class="rr-dep-cell rr-dep-cell--conf">${escapeHtml(String(dep.conf))}</div>
+        <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</div>
+      </div>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-dep-table">
+      <div class="rr-dep-thead-wrap">
+        <div class="rr-dep-thead">
+          <div class="rr-dep-th rr-dep-th--from">From ${ARROW_DOWN_ICON}</div>
           <div class="rr-dep-th rr-dep-th--to">To</div>
           <div class="rr-dep-th rr-dep-th--relation">Relation</div>
           <div class="rr-dep-th rr-dep-th--iface">Interface</div>
@@ -1020,6 +1192,9 @@ function renderPanel(node, activeTab, state) {
   if (node.type === "module") {
     if (activeTab === "description") {
       return renderModuleDescription(node)
+    }
+    if (activeTab === "dependencies") {
+      return renderModuleDependenciesTable(node)
     }
     if (activeTab === "functionalities") {
       return renderModuleFunctionalities(node)
@@ -1116,21 +1291,15 @@ function buildExplorerData() {
     },
     {
       id: "AUT",
-      label: "AUT - Authentication",
+      label: "AUT - Login",
       icon: "folder",
       targetNodeId: "AUT",
       children: MODULES.map((module) => ({
         id: `tree-${module.id}`,
-        label: `${module.code} - ${module.title}`,
+        label: `${module.code.replace(/-M(\d)/, "-$1")} - ${module.title}`,
         icon: "dot",
         dotColor: ["released", "validated"].includes(module.status) ? "green" : "gray",
-        targetNodeId: module.id,
-        children: module.functionalities.map((item) => ({
-          id: `tree-${item.id}`,
-          label: item.filename,
-          icon: "file",
-          targetNodeId: item.id
-        }))
+        targetNodeId: module.id
       }))
     },
     ...SIDE_PROJECTS.map((project) => ({

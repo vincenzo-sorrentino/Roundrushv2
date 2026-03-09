@@ -22,12 +22,16 @@ const ICON = {
   moon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23Z"></path></svg>`,
 }
 
-// Two-tone circular glyph logo — matches Figma RrLogoGlyph component
+// RoundRush glyph logo — two-tone circular arrows (matches Figma RrLogoGlyph)
 const RR_LOGO_SVG = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <path d="M28 16C28 9.373 22.627 4 16 4C12.686 4 9.686 5.343 7.515 7.515" stroke="#0067da" stroke-width="3" stroke-linecap="round"/>
-  <path d="M4 16C4 22.627 9.373 28 16 28C19.314 28 22.314 26.657 24.485 24.485" stroke="#d03045" stroke-width="3" stroke-linecap="round"/>
-  <polyline points="23.5,7.5 28,16 19.5,16" stroke="#0067da" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <polyline points="8.5,24.5 4,16 12.5,16" stroke="#d03045" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Blue arc: right half, sweeping counter-clockwise from ~4 o'clock to ~10 o'clock -->
+  <path d="M27 20.5 A12 12 0 1 0 9 7" stroke="#0067da" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Blue arrowhead at the end of the blue arc (~10 o'clock) -->
+  <polyline points="13,3 9,7 13,11" stroke="#0067da" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Red arc: left half, sweeping counter-clockwise from ~10 o'clock to ~4 o'clock -->
+  <path d="M5 11.5 A12 12 0 1 0 23 25" stroke="#d03045" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Red arrowhead at the end of the red arc (~4 o'clock) -->
+  <polyline points="19,29 23,25 19,21" stroke="#d03045" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 </svg>`
 
 const TEAM_ITEMS = [
