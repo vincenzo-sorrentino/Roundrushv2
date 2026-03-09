@@ -19,6 +19,7 @@ const ICON = {
   check: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><polyline points="40,128 96,184 216,64" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   caretDoubleUp: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,160 128,80 208,160" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="48,208 128,128 208,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   close: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><line x1="64" y1="64" x2="192" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="192" y1="64" x2="64" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  warning: `<svg width="24" height="24" viewBox="0 0 256 256" fill="none"><path d="M230 194L142 34c-6-11-22-11-28 0L26 194c-6 11 1 26 14 26h176c13 0 20-15 14-26z" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="128" y1="104" x2="128" y2="144" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><circle cx="128" cy="176" r="10" fill="currentColor"/></svg>`,
   link: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M144 80h32a40 40 0 0 1 0 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 0 1 0-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   github: `<svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24,40,40,0,0,0-40-40,8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68Z"/></svg>`,
 }
@@ -479,6 +480,11 @@ function renderSprintSelector(activeSprint) {
     <button type="button" class="rr-kb-sprint-history-btn" data-action="sprint-history" title="Sprint history">
       ${ICON.clockHistory}
     </button>
+    ${activeSprint.status === "active" ? `
+    <button type="button" class="rr-kb-sprint-history-btn rr-kb-close-sprint-icon-btn" data-action="close-sprint" title="Close Sprint">
+      ${ICON.flagCheckered}
+    </button>
+    ` : ""}
   `
 }
 
@@ -1936,6 +1942,7 @@ export async function renderKanbanModuleFlow() {
         <div class="rr-kb-actions" id="rr-kb-actions"></div>
       </div>
       <div class="rr-detail-overlay" id="rr-detail-overlay"></div>
+      <div class="rr-modal-overlay" id="rr-kb-modal-overlay"></div>
     </section>
   `
 }
@@ -1953,6 +1960,7 @@ export function mountKanbanModuleFlow() {
     table:          root.querySelector("#rr-kb-table"),
     actions:        root.querySelector("#rr-kb-actions"),
     detailOverlay:  root.querySelector("#rr-detail-overlay"),
+    modalOverlay:   root.querySelector("#rr-kb-modal-overlay"),
   }
 
   const state = {
@@ -1962,6 +1970,7 @@ export function mountKanbanModuleFlow() {
     searchQuery: "",
     collapsedGroups: new Set(),
     sprintDropdownOpen: false,
+    modal: null,
     openFilter: null,
     filters: {
       modules:   [],
@@ -1982,6 +1991,54 @@ export function mountKanbanModuleFlow() {
     return SPRINTS.find(s => s.id === state.activeSprintId) || SPRINTS[0]
   }
 
+  /* ── Modal overlay ───────────────────────────────────────── */
+  function renderModals() {
+    if (!state.modal) {
+      els.modalOverlay.innerHTML = ""
+      els.modalOverlay.classList.remove("is-open")
+      return
+    }
+
+    const DONE = new Set(["validated", "merged-qa", "closed"])
+
+    let iconHtml, iconBg, title, bodyHtml, buttonsHtml
+
+    if (state.modal.type === "confirm") {
+      iconBg = "#fcdad7"
+      iconHtml = ICON.flagCheckered
+      title = "Close Sprint"
+      bodyHtml = `Total requirements included: ${escapeHtml(String(state.modal.total))}`
+      buttonsHtml = `
+        <button type="button" class="rr-modal-btn rr-modal-btn--neutral" data-action="close-sprint-cancel">Cancel</button>
+        <button type="button" class="rr-modal-btn rr-modal-btn--primary" data-action="close-sprint-confirm">Confirm</button>
+      `
+    } else {
+      iconBg = "#fef4e6"
+      iconHtml = ICON.warning
+      title = "Requirements are not completed"
+      const lines = state.modal.items.map(m => escapeHtml(`${m.id} \u2013 ${m.title}`)).join("<br>")
+      bodyHtml = `Items missing tests cases passing:<br>${lines}`
+      buttonsHtml = `
+        <button type="button" class="rr-modal-btn rr-modal-btn--neutral" data-action="close-sprint-cancel">Cancel</button>
+      `
+    }
+
+    els.modalOverlay.innerHTML = `
+      <div class="rr-modal-backdrop" data-action="close-sprint-cancel"></div>
+      <div class="rr-modal-popup">
+        <div class="rr-modal-content">
+          <div class="rr-modal-icon" style="background:${iconBg}">${iconHtml}</div>
+          <div class="rr-modal-text">
+            <p class="rr-modal-title">${escapeHtml(title)}</p>
+            <p class="rr-modal-body">${bodyHtml}</p>
+          </div>
+        </div>
+        <div class="rr-modal-buttons">${buttonsHtml}</div>
+      </div>
+    `
+    els.modalOverlay.classList.add("is-open")
+  }
+
   /* Re-render everything except the search input (to preserve cursor) */
   function render() {
     const sprint = getActiveSprint()
@@ -1995,7 +2052,6 @@ export function mountKanbanModuleFlow() {
 
     els.filterRow.innerHTML = renderFilterBar(state, sprint)
     els.table.innerHTML = renderSprintTable(sprint, state)
-    els.actions.innerHTML = renderCloseSprintButton(sprint)
 
     // Restore search value without re-creating the input
     const searchInput = root.querySelector("#rr-kb-search")
@@ -2005,6 +2061,7 @@ export function mountKanbanModuleFlow() {
 
     /* Detail panel */
     renderDetail()
+    renderModals()
   }
 
   function renderDetail() {
@@ -2185,8 +2242,30 @@ export function mountKanbanModuleFlow() {
 
     if (action === "close-sprint") {
       const sprint = getActiveSprint()
+      if (!sprint) return
+      const DONE = new Set(["validated", "merged-qa", "closed"])
+      const allModules = sprint.groups.flatMap(g => g.modules)
+      const incomplete = allModules.filter(m => !DONE.has(m.status))
+      if (incomplete.length > 0) {
+        state.modal = { type: "warning", items: incomplete }
+      } else {
+        state.modal = { type: "confirm", total: allModules.length }
+      }
+      renderModals()
+      return
+    }
+
+    if (action === "close-sprint-confirm") {
+      const sprint = getActiveSprint()
       if (sprint) sprint.status = "closed"
+      state.modal = null
       render()
+      return
+    }
+
+    if (action === "close-sprint-cancel") {
+      state.modal = null
+      renderModals()
       return
     }
 

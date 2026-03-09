@@ -45,6 +45,24 @@ const PROTOTYPE_GROUPS = [
         module: "AUT-M001"
       },
       {
+        id: "auth-signup-team",
+        title: "Signup — Team Member",
+        subtitle: "Invitation-based account creation for product team members.",
+        route: "/auth/signup/team",
+        status: "approved",
+        epic: "AUT",
+        module: "AUT-M002"
+      },
+      {
+        id: "auth-signup-guest",
+        title: "Signup — Guest (Stakeholder)",
+        subtitle: "Invitation-based guest access for external customers and reviewers.",
+        route: "/auth/signup/guest",
+        status: "approved",
+        epic: "AUT",
+        module: "AUT-M002"
+      },
+      {
         id: "requirements-module",
         title: "Requirements Module",
         subtitle: "Hierarchical explorer for epics, modules, and functionalities.",
@@ -79,6 +97,24 @@ const PROTOTYPE_GROUPS = [
         status: "approved",
         epic: "DOC",
         module: "DOC-M001"
+      },
+      {
+        id: "old-sprint",
+        title: "Old Sprint · Release Notes",
+        subtitle: "Closed sprint as a tabbed release document — Overview, Issues logs, Finalized Design, and Test Coverage.",
+        route: "/planning/old-sprint",
+        status: "approved",
+        epic: "KAN",
+        module: "KAN-M003"
+      },
+      {
+        id: "release-notes",
+        title: "Release Notes (Stakeholder Approval)",
+        subtitle: "Stakeholder-facing release notes with sign & approve workflow.",
+        route: "/planning/release-notes",
+        status: "approved",
+        epic: "KAN",
+        module: "KAN-M004"
       }
     ]
   }
