@@ -1,4 +1,6 @@
-import { renderAuthLoginFlow } from "../flows/auth-login/index.js"
+import { renderAuthLoginFlow, mountAuthLoginFlow } from "../flows/auth-login/index.js"
+import { renderAuthSignupTeamFlow, mountAuthSignupTeamFlow } from "../flows/auth-signup-team/index.js"
+import { renderAuthSignupGuestFlow, mountAuthSignupGuestFlow } from "../flows/auth-signup-guest/index.js"
 import { renderComponentsLibraryFlow } from "../flows/components-library/index.js"
 import { renderFoundationsColorsFlow } from "../flows/foundations-colors/index.js"
 import { mountRequirementsModuleFlow, renderRequirementsModuleFlow } from "../flows/requirements-module/index.js"
@@ -7,6 +9,8 @@ import { renderPrototypeIndexFlow } from "../flows/prototype-index/index.js"
 import { renderDependenciesUmlFlow, mountDependenciesUmlFlow } from "../flows/dependencies-uml/index.js"
 import { renderDocsHubFlow, mountDocsHubFlow } from "../flows/docs-hub/index.js"
 import { renderDesignTabFlow, mountDesignTabFlow } from "../flows/design-tab/index.js"
+import { renderOldSprintFlow, mountOldSprintFlow } from "../flows/old-sprint/index.js"
+import { renderReleaseNotesFlow, mountReleaseNotesFlow } from "../flows/release-notes/index.js"
 
 const routes = [
   {
@@ -34,7 +38,25 @@ const routes = [
     id: "auth-login-default",
     path: "/auth/login/default",
     render: renderAuthLoginFlow,
-    status: "approved"
+    mount: mountAuthLoginFlow,
+    status: "approved",
+    showGlobalNavigation: false
+  },
+  {
+    id: "auth-signup-team",
+    path: "/auth/signup/team",
+    render: renderAuthSignupTeamFlow,
+    mount: mountAuthSignupTeamFlow,
+    status: "approved",
+    showGlobalNavigation: false
+  },
+  {
+    id: "auth-signup-guest",
+    path: "/auth/signup/guest",
+    render: renderAuthSignupGuestFlow,
+    mount: mountAuthSignupGuestFlow,
+    status: "approved",
+    showGlobalNavigation: false
   },
   {
     id: "requirements-module",
@@ -69,6 +91,20 @@ const routes = [
     path: "/design/tab",
     render: renderDesignTabFlow,
     mount: mountDesignTabFlow,
+    status: "approved"
+  },
+  {
+    id: "old-sprint",
+    path: "/planning/old-sprint",
+    render: renderOldSprintFlow,
+    mount: mountOldSprintFlow,
+    status: "approved"
+  },
+  {
+    id: "release-notes",
+    path: "/planning/release-notes",
+    render: renderReleaseNotesFlow,
+    mount: mountReleaseNotesFlow,
     status: "approved"
   }
 ]

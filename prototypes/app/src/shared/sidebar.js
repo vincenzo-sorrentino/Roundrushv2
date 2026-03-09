@@ -22,16 +22,10 @@ const ICON = {
   moon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23Z"></path></svg>`,
 }
 
-// RoundRush glyph logo — two-tone circular arrows (matches Figma RrLogoGlyph)
-const RR_LOGO_SVG = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <!-- Blue arc: right half, sweeping counter-clockwise from ~4 o'clock to ~10 o'clock -->
-  <path d="M27 20.5 A12 12 0 1 0 9 7" stroke="#0067da" stroke-width="3" stroke-linecap="round" fill="none"/>
-  <!-- Blue arrowhead at the end of the blue arc (~10 o'clock) -->
-  <polyline points="13,3 9,7 13,11" stroke="#0067da" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <!-- Red arc: left half, sweeping counter-clockwise from ~10 o'clock to ~4 o'clock -->
-  <path d="M5 11.5 A12 12 0 1 0 23 25" stroke="#d03045" stroke-width="3" stroke-linecap="round" fill="none"/>
-  <!-- Red arrowhead at the end of the red arc (~4 o'clock) -->
-  <polyline points="19,29 23,25 19,21" stroke="#d03045" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+// Official Roundrush icon logo (RR_icon_logo.svg)
+const RR_LOGO_SVG = `<svg width="28" height="27" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0.607109 9.62553C2.08351 8.1695 4.57183 8.72574 5.26856 10.6398C5.69987 11.8505 6.41319 12.9957 7.40851 13.9609C7.64076 14.1899 7.873 14.4026 8.12183 14.5989C9.88024 16.0059 12.0368 16.6603 14.1767 16.5785C14.8403 16.5458 15.1887 17.3474 14.7242 17.8055C14.4588 18.0672 14.127 18.2636 13.762 18.3617C9.9466 19.4415 5.6501 18.4926 2.64753 15.5315C1.55267 14.4517 0.723232 13.2084 0.175802 11.8668C-0.172563 11.1143 0.00991217 10.2308 0.607109 9.62553Z" fill="#0079FF"/>
+  <path d="M19.021 9.16753C17.5446 10.6236 15.0563 10.0673 14.3596 8.15322C13.9283 6.94258 13.2149 5.79739 12.2196 4.83216C11.9874 4.60312 11.7551 4.39044 11.5063 4.19412C9.76447 2.78717 7.60792 2.13277 5.46797 2.21457C4.80442 2.24729 4.45605 1.44565 4.92054 0.987577C5.18596 0.725818 5.51774 0.529499 5.88269 0.43134C9.69811 -0.648414 13.9946 0.300461 16.9972 3.2616C18.092 4.34136 18.9215 5.58471 19.4689 6.92623C19.8007 7.69514 19.6182 8.57858 19.021 9.16753Z" fill="#F43B51"/>
 </svg>`
 
 const TEAM_ITEMS = [
