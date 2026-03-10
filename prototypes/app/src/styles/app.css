@@ -9758,6 +9758,16 @@ rr-alert.rr-req-info-callout {
   border-bottom: none;
 }
 
+.rr-reg-row:not(.rr-reg-row--header):hover {
+  background: #f5f6f8;
+}
+
+.rr-reg-row:not(.rr-reg-row--header):hover .rr-reg-issue-title {
+  color: #0067da;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* ── Header row ── */
 .rr-reg-row--header {
   background: #ffffff;
