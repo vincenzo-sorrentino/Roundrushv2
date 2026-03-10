@@ -11,6 +11,21 @@ const ICON = {
   folderSimple: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><path d="M216,72H130.67a8,8,0,0,1-4.8-1.6L99.2,50.4A8,8,0,0,0,94.4,48.8L68.53,48H40a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V80A8,8,0,0,0,216,72Z" fill="currentColor"/></svg>`,
   prohibit: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><line x1="60" y1="196" x2="196" y2="60" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   flag: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M40 216V48" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><path d="M40,96c32-16,64,16,96,0s64-16,96,0V48c-32,16-64-16-96,0s-64,16-96,0Z" fill="currentColor" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  close: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><line x1="200" y1="56" x2="56" y2="200" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="200" y1="200" x2="56" y2="56" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  copy: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><rect x="40" y="88" width="120" height="144" rx="8" stroke="currentColor" stroke-width="16"/><path d="M216,88V48a8,8,0,0,0-8-8H96" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  chatCircle: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><path d="M180,152c0,20-27.4,36-60,36c-8.2,0-16.2-1-24-2.8l-26.9,14.3c-1.5.8-3-1.4-2-3.1l10.3-24.8c-9-9-14.4-21-14.4-35.6c0-20,27.4-36,60-36s60,16,60,36Z" fill="currentColor"/></svg>`,
+  chatCircleSimple: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><path d="M80 176l16-30a56 56 0 1 1 24 20Z" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  link: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><path d="M136.41,200.86a59.79,59.79,0,0,1-84.72-84.72l24-24a59.79,59.79,0,0,1,84.72,0" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M119.59,55.14a59.79,59.79,0,0,1,84.72,84.72l-24,24a59.79,59.79,0,0,1-84.72,0" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  linkSimple: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M136 80h32a48 48 0 0 1 0 96h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M120 176H88a48 48 0 1 1 0-96h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  history: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><polyline points="168 40 168 96 112 96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M152,56a88,88,0,1,0,88,88" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="128 128 128 80 152 104" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  clockCounterClockwise: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="16 128 64 128 64 80" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M64 128a88 88 0 1 0 26-62" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="128 72 128 128 168 152" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  dotsThree: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><circle cx="60" cy="128" r="16" fill="currentColor"/><circle cx="128" cy="128" r="16" fill="currentColor"/><circle cx="196" cy="128" r="16" fill="currentColor"/></svg>`,
+  smiley: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><circle cx="100" cy="116" r="12" fill="currentColor"/><circle cx="156" cy="116" r="12" fill="currentColor"/><path d="M104,156c0,13.3,11.2,24,24,24s24-10.7,24-24" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  at: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="104" cy="112" r="48" stroke="currentColor" stroke-width="16"/><path d="M152,112a48,48,0,1,1-48-48" stroke="currentColor" stroke-width="16"/><path d="M128,156v40a40,40,0,0,1-40,40" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  image: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><rect x="32" y="48" width="192" height="160" rx="16" stroke="currentColor" stroke-width="16"/><circle cx="92" cy="108" r="16" fill="currentColor"/><path d="M32 172l52-52 44 44 28-28 68 68" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  paperclip: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><path d="M216,120v72a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V88a40,40,0,0,1,40-40h72" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="152 32 216 32 216 96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  send: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><polyline points="232 32 104 160 232 32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M232,32,104,160,40,192a16,16,0,0,1-20-20l32-64" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  arrowUp: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="128" y1="216" x2="128" y2="56" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,128 128,56 200,128" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 }
 
 function escapeHtml(value) {
@@ -22,9 +37,36 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;")
 }
 
+function getAvatarInitials(name) {
+  const parts = String(name || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+
+  if (parts.length === 0) {
+    return "?"
+  }
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase()
+  }
+
+  return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase()
+}
+
+function renderAvatarWithFallback(avatar, wrapperClass, imageClass = "") {
+  const safeAvatar = avatar || {}
+  const initials = getAvatarInitials(safeAvatar.name)
+  const imageClassAttr = imageClass ? ` class="${imageClass}"` : ""
+
+  return `<span class="${wrapperClass}" style="background:${safeAvatar.bg || "#d0d5dd"}"><span class="rr-avatar-fallback">${escapeHtml(initials)}</span>${safeAvatar.url ? `<img src="${safeAvatar.url}" alt=""${imageClassAttr} onerror="this.remove()"/>` : ""}</span>`
+}
+
 // Global state for current active tab
 let ACTIVE_TAB = "overview"
-
+// Global state for modal
+let SELECTED_ISSUE = null
+let MODAL_VISIBLE = false
 const BUTTONS = [
   { id: "overview", label: "Overview" },
   { id: "sprint", label: "Sprint" },
@@ -421,18 +463,46 @@ let PRODUCTION_DONE_COLLAPSED = false
 let STAKEHOLDERS_DONE_COLLAPSED = false
 
 const REG_AVATAR = {
-  alisa:   { url: "http://localhost:3845/assets/4507a3162dffac2d85eeb6e31d1a15c57091a204.png", bg: "#c7b9da" },
-  kate:    { url: "http://localhost:3845/assets/2f1190870d753151f58657595136f67c584b5c8c.png", bg: "#c7b9da" },
-  kate2:   { url: "http://localhost:3845/assets/6ec94186cc6e3e60f69ecac1443984f93e6078eb.png", bg: "#dbc0dd" },
-  orlando: { url: "http://localhost:3845/assets/555cb3735701db8d4318f0d93edd1f4b64493b37.png", bg: "#cfc3a7" },
-  lana:    { url: "http://localhost:3845/assets/d688ab8bff2aebfc3cab587865468c4713ecad78.png", bg: "#d4b5ad" },
-  phoenix: { url: "http://localhost:3845/assets/2780e16db1a4a364d3d872737f7fe9563d7abb29.png", bg: "#aa9c75" },
-  candice: { url: "http://localhost:3845/assets/504bc691102d8a6217d1fc1f8e79a810b1842a0d.png", bg: "#a2a8cd" },
-  demi:    { url: "http://localhost:3845/assets/c9b5ff46a30dabca6ca1e017e1047cd06f04270b.png", bg: "#bea887" },
-  drew:    { url: "http://localhost:3845/assets/2e2cf1b6f441c6f28c3b0e1e0eb4863eb80b7401.png", bg: "#d1dfc3" },
-  loki:    { url: "http://localhost:3845/assets/d4b04f99db960f52b2cf64f40f4e56eb5cd841e3.png", bg: "#f0f1f3" },
-  noah:    { url: "http://localhost:3845/assets/ab41a74aead9e7cb47a87ad793df9b09ed9d1ea5.png", bg: "#f0f1f3" },
-  lucy:    { url: "http://localhost:3845/assets/cc20770e67dac754b967ba908e8faaf230d75581.png", bg: "#dbc0dd" },
+  alisa:   { url: "http://localhost:3845/assets/4507a3162dffac2d85eeb6e31d1a15c57091a204.png", bg: "#c7b9da", name: "Alisa Brown" },
+  kate:    { url: "http://localhost:3845/assets/2f1190870d753151f58657595136f67c584b5c8c.png", bg: "#c7b9da", name: "Kate Morrison" },
+  kate2:   { url: "http://localhost:3845/assets/6ec94186cc6e3e60f69ecac1443984f93e6078eb.png", bg: "#dbc0dd", name: "Kate Fox" },
+  orlando: { url: "http://localhost:3845/assets/555cb3735701db8d4318f0d93edd1f4b64493b37.png", bg: "#cfc3a7", name: "Orlando Diggs" },
+  lana:    { url: "http://localhost:3845/assets/d688ab8bff2aebfc3cab587865468c4713ecad78.png", bg: "#d4b5ad", name: "Lana Steiner" },
+  phoenix: { url: "http://localhost:3845/assets/2780e16db1a4a364d3d872737f7fe9563d7abb29.png", bg: "#aa9c75", name: "Phoenix Baker" },
+  candice: { url: "http://localhost:3845/assets/504bc691102d8a6217d1fc1f8e79a810b1842a0d.png", bg: "#a2a8cd", name: "Candice Wu" },
+  demi:    { url: "http://localhost:3845/assets/c9b5ff46a30dabca6ca1e017e1047cd06f04270b.png", bg: "#bea887", name: "Demi Wilkinson" },
+  drew:    { url: "http://localhost:3845/assets/2e2cf1b6f441c6f28c3b0e1e0eb4863eb80b7401.png", bg: "#d1dfc3", name: "Drew Cano" },
+  loki:    { url: "http://localhost:3845/assets/d4b04f99db960f52b2cf64f40f4e56eb5cd841e3.png", bg: "#f0f1f3", name: "Loki Hayes" },
+  noah:    { url: "http://localhost:3845/assets/ab41a74aead9e7cb47a87ad793df9b09ed9d1ea5.png", bg: "#f0f1f3", name: "Noah Bennett" },
+  lucy:    { url: "http://localhost:3845/assets/cc20770e67dac754b967ba908e8faaf230d75581.png", bg: "#dbc0dd", name: "Lucy Mendez" },
+  brooklyn: { url: "http://localhost:3845/assets/6ec94186cc6e3e60f69ecac1443984f93e6078eb.png", bg: "#dbc0dd", name: "Brooklyn Simmons" },
+  rene:    { url: "http://localhost:3845/assets/555cb3735701db8d4318f0d93edd1f4b64493b37.png", bg: "#cfc3a7", name: "Rene Wells" },
+}
+
+/* ── Issue Details & Comments Data ──────────────────────── */
+const ISSUE_DETAILS_MAP = {
+  "Document access denied.": {
+    scope: "STG",
+    priority: "urgent",
+    status: "review",
+    reporter: { ...REG_AVATAR.rene, name: "Rene Wells" },
+    assignee: { ...REG_AVATAR.orlando, name: "Orlando Diggs" },
+    description: "Users with valid access permissions receive an \"Access Denied\" error when attempting to open certain documents via direct URL or from the document list view.\n\nSteps to Reproduce:\n1. Log in as a user with the \"Editor\" role.\n2. Navigate to the Documents page.\n3. Select a document assigned to the user's group.\n4. Click the document title OR open the document via direct URL.\n\nExpected Result\nThe document opens successfully and displays its content.\n\nActual Result\nThe user receives a 403 Access Denied error page.\n\nIn some cases:\n- No error message is shown.\n- The user is redirected to the dashboard without explanation.",
+    comments: [
+      {
+        author: "Brooklyn Simmons",
+        avatar: REG_AVATAR.brooklyn,
+        timestamp: "5 days ago",
+        text: "To clarify with stakeholder.",
+      },
+      {
+        author: "Demi Wilkinson",
+        avatar: REG_AVATAR.demi,
+        timestamp: "2 days ago",
+        text: "This part need an update due to technical constraints.",
+      },
+    ],
+  },
 }
 
 const REGRESSION_ROWS = [
@@ -534,7 +604,7 @@ function renderRegPriority(key) {
 function renderRegAvatarGroup(assignees) {
   return `<div class="rr-reg-avatar-group">${
     assignees.map(av =>
-      `<div class="rr-reg-avatar" style="background:${av.bg}"><img src="${av.url}" alt="" onerror="this.style.display='none'"/></div>`
+      renderAvatarWithFallback(av, "rr-reg-avatar")
     ).join("")
   }</div>`
 }
@@ -556,7 +626,7 @@ function renderRegTableHeader() {
 
 function renderRegRow(row) {
   return `
-    <div class="rr-reg-row">
+    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
       <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope(row.scope)}</div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
@@ -574,7 +644,7 @@ function renderRegRow(row) {
 
 function renderRegDoneRow(row) {
   return `
-    <div class="rr-reg-row">
+    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
       <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope(row.scope)}</div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
@@ -657,7 +727,7 @@ function renderStakeholdersTableHeader() {
 
 function renderStakeholdersRow(row) {
   return `
-    <div class="rr-reg-row rr-reg-row--stakeholders">
+    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
@@ -675,7 +745,7 @@ function renderStakeholdersRow(row) {
 
 function renderStakeholdersDoneRow(row) {
   return `
-    <div class="rr-reg-row rr-reg-row--stakeholders">
+    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
@@ -791,6 +861,212 @@ function renderOverviewTab() {
   `
 }
 
+function renderIssueDescription(content) {
+  const text = String(content || "No description provided")
+  const lines = text.split(/\r?\n/)
+  const headingLines = new Set(["Steps to Reproduce:", "Expected Result", "Actual Result"])
+  const html = []
+  let inOrderedList = false
+
+  const closeList = () => {
+    if (inOrderedList) {
+      html.push("</ol>")
+      inOrderedList = false
+    }
+  }
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+
+    if (!trimmed) {
+      closeList()
+      html.push('<p class="rr-modal-description-paragraph rr-modal-description-paragraph--spacer"></p>')
+      continue
+    }
+
+    if (headingLines.has(trimmed)) {
+      closeList()
+      html.push(`<p class="rr-modal-description-heading">${escapeHtml(trimmed)}</p>`)
+      continue
+    }
+
+    const numberedItem = trimmed.match(/^\d+\.\s+(.*)$/)
+    if (numberedItem) {
+      if (!inOrderedList) {
+        html.push('<ol class="rr-modal-description-list">')
+        inOrderedList = true
+      }
+      html.push(`<li>${escapeHtml(numberedItem[1])}</li>`)
+      continue
+    }
+
+    closeList()
+    html.push(`<p class="rr-modal-description-paragraph">${escapeHtml(trimmed)}</p>`)
+  }
+
+  closeList()
+  return html.join("")
+}
+
+/* ── Issue Details Modal Rendering ─────────────────────────── */
+function renderIssueModal() {
+  if (!SELECTED_ISSUE || !MODAL_VISIBLE) return ""
+
+  const issue = SELECTED_ISSUE
+  const details = ISSUE_DETAILS_MAP[issue.issue] || {}
+  
+  const priorityColors = {
+    urgent: { color: "#e14040", bg: "#fcd6d6" },
+    high: { color: "#e14040", bg: "#fcd6d6" },
+    medium: { color: "#f79009", bg: "#fff3cd" },
+    low: { color: "#0e9255", bg: "#ddf7eb" },
+  }
+  
+  const scopeColors = {
+    "FE":    { bg: "#fef4e6", color: "#f79009" },
+    "BE":    { bg: "#e0e2e7", color: "#3d4350" },
+    "BE&FE": { bg: "#e0e2e7", color: "#3d4350" },
+    "Devops":{ bg: "#eee3f6", color: "#9b5bce" },
+    "STG":   { bg: "#eee3f6", color: "#9b5bce" },
+    "PROD":  { bg: "#e0e2e7", color: "#3d4350" },
+    "DEV":   { bg: "#fef4e6", color: "#f79009" },
+  }
+  
+  const statusColors = {
+    merged: { label: "Merged", bg: "#fbc6cd", color: "#d13245" },
+    review: { label: "Ready for review", bg: "#eee3f6", color: "#9b5bce" },
+    inprogress: { label: "In progress", bg: "#daebff", color: "#0067da" },
+    todo: { label: "To do", bg: "#e0e2e7", color: "#3d4350" },
+    error: { label: "Error", bg: "#fcdad7", color: "#c0362d" },
+    done: { label: "Done", bg: "#ddf7eb", color: "#0e9255" },
+  }
+  
+  const priorityConfig = priorityColors[issue.priority] || priorityColors.medium
+  const scopeKey = details.scope || issue.scope || "DEV"
+  const scopeConfig = scopeColors[scopeKey] || { bg: "#e0e2e7", color: "#3d4350" }
+  const statusKey = details.status || issue.statusStaging || "todo"
+  const statusConfig = statusColors[statusKey] || statusColors.todo
+  
+  const assignee = details.assignee || (issue.assignees && issue.assignees[0])
+  const derivedReporter = issue.reporter || assignee || (issue.assignees && issue.assignees[0]) || REG_AVATAR.alisa
+  const reporter = details.reporter || derivedReporter
+  
+  return `
+    <div class="rr-modal-overlay" data-action="close-modal">
+      <div class="rr-modal-backdrop"></div>
+      <div class="rr-modal-container">
+        <div class="rr-modal-header">
+          <div class="rr-modal-header-badge" style="background:${scopeConfig.bg};color:${scopeConfig.color}">
+            ${escapeHtml(scopeKey)}
+          </div>
+          <div class="rr-modal-header-title">${escapeHtml(issue.issue)}</div>
+          <div class="rr-modal-header-actions">
+            <button class="rr-modal-action-btn" title="Copy" type="button">
+              ${ICON.copy}
+            </button>
+            <button class="rr-modal-action-btn" data-action="close-modal" title="Close" type="button">
+              ${ICON.close}
+            </button>
+          </div>
+        </div>
+
+        <div class="rr-modal-content">
+          <div class="rr-modal-main">
+            <h2 class="rr-modal-title">${escapeHtml(issue.issue)}</h2>
+            
+            <div class="rr-modal-meta-grid">
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">PRIORITY</div>
+                <div class="rr-modal-meta-value" style="color:${priorityConfig.color}">
+                  ${renderRegPriority(issue.priority)}
+                </div>
+              </div>
+              
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">STATUS</div>
+                <span class="rr-modal-status-badge" style="background:${statusConfig.bg};color:${statusConfig.color}">
+                  ${escapeHtml(statusConfig.label || "To do")}
+                </span>
+              </div>
+              
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">ASSIGNEE</div>
+                <div class="rr-modal-assignee">
+                  ${renderAvatarWithFallback(assignee, "rr-modal-avatar-wrap", "rr-modal-avatar")}
+                  <span>${escapeHtml(assignee && assignee.name ? assignee.name : "Unassigned")}</span>
+                </div>
+              </div>
+              
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">REPORTER</div>
+                <div class="rr-modal-assignee">
+                  ${renderAvatarWithFallback(reporter, "rr-modal-avatar-wrap", "rr-modal-avatar")}
+                  <span>${escapeHtml(reporter && reporter.name ? reporter.name : "Alisa Brown")}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="rr-modal-section">
+              <button class="rr-modal-pr-button" type="button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                Pull Request
+              </button>
+            </div>
+            
+            <div class="rr-modal-section">
+              <div class="rr-modal-section-label">DESCRIPTION</div>
+              <div class="rr-modal-description" role="document">
+                ${renderIssueDescription(details.description || issue.issueSub || "No description provided")}
+              </div>
+            </div>
+          </div>
+
+          <div class="rr-modal-aside">
+            <div class="rr-modal-comments">
+              <div class="rr-modal-tools" role="toolbar" aria-label="Issue panel tools">
+                <button class="rr-modal-tool-btn is-active" type="button" title="Comments">${ICON.chatCircleSimple}</button>
+                <button class="rr-modal-tool-btn" type="button" title="Attach file">${ICON.paperclip}</button>
+                <button class="rr-modal-tool-btn" type="button" title="Link">${ICON.linkSimple}</button>
+                <button class="rr-modal-tool-btn" type="button" title="History">${ICON.clockCounterClockwise}</button>
+              </div>
+
+              ${details.comments && details.comments.length > 0 ? `
+                <div class="rr-modal-comments-list">
+                  ${details.comments.map(comment => `
+                    <div class="rr-modal-comment">
+                      ${renderAvatarWithFallback(comment.avatar, "rr-modal-comment-avatar-wrap", "rr-modal-comment-avatar")}
+                      <div class="rr-modal-comment-content">
+                        <div class="rr-modal-comment-header">
+                          <div class="rr-modal-comment-meta">
+                            <span class="rr-modal-comment-author">${escapeHtml(comment.author)}</span>
+                            <span class="rr-modal-comment-time">${escapeHtml(comment.timestamp)}</span>
+                          </div>
+                          <button class="rr-modal-comment-menu" type="button" title="Comment actions">${ICON.dotsThree}</button>
+                        </div>
+                        <div class="rr-modal-comment-text">${escapeHtml(comment.text)}</div>
+                      </div>
+                    </div>
+                  `).join("")}
+                </div>
+              ` : ""}
+              
+              <div class="rr-modal-input-area">
+                <input type="text" class="rr-modal-input" placeholder="Write a note..." />
+                <div class="rr-modal-input-actions">
+                  <button class="rr-modal-input-btn" type="button" title="Emoji">${ICON.smiley}</button>
+                  <button class="rr-modal-input-btn" type="button" title="Mention">${ICON.at}</button>
+                  <button class="rr-modal-input-btn" type="button" title="Add image">${ICON.image}</button>
+                  <button class="rr-modal-input-btn rr-modal-input-btn--send" type="button" title="Send">${ICON.arrowUp}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+}
+
 /* ── Sprint Tab Rendering ──────────────────────────────────── */
 function renderTestCaseStatus(result) {
   if (result === "blocked") {
@@ -899,20 +1175,23 @@ export function renderTestingTabFlow() {
     renderOverviewTab()
   
   return `
-    <section class="rr-testing" data-flow="testing-tab">
-      <div class="rr-testing-controls">
-        <div class="rr-testing-button-group" role="tablist">
-          ${renderButtons()}
+    <div class="rr-testing-wrapper">
+      <section class="rr-testing" data-flow="testing-tab">
+        <div class="rr-testing-controls">
+          <div class="rr-testing-button-group" role="tablist">
+            ${renderButtons()}
+          </div>
+          <div class="rr-testing-search">
+            <span class="rr-testing-search-icon" aria-hidden="true">
+              ${ICON.search}
+            </span>
+            <input class="rr-testing-search-input" type="text" placeholder="Search" />
+          </div>
         </div>
-        <div class="rr-testing-search">
-          <span class="rr-testing-search-icon" aria-hidden="true">
-            ${ICON.search}
-          </span>
-          <input class="rr-testing-search-input" type="text" placeholder="Search" />
-        </div>
-      </div>
-      ${tabContent}
-    </section>
+        ${tabContent}
+      </section>
+      ${renderIssueModal()}
+    </div>
   `
 }
 
@@ -991,6 +1270,54 @@ export function initTestingTab() {
       if (container) {
         container.outerHTML = renderTestingTabFlow()
         initTestingTab()
+      }
+    })
+  })
+
+  // Issue Modal – Open issue details
+  document.querySelectorAll("[data-action='open-issue-modal']").forEach((row) => {
+    row.addEventListener("click", (e) => {
+      // Don't open modal if clicking the PR button
+      if (e.target.closest(".rr-reg-github-btn")) {
+        return
+      }
+      
+      const issueData = row.getAttribute("data-issue")
+      if (issueData) {
+        try {
+          SELECTED_ISSUE = JSON.parse(issueData)
+          MODAL_VISIBLE = true
+          
+          // Re-render with modal
+          const wrapper = document.querySelector(".rr-testing-wrapper")
+          if (wrapper) {
+            wrapper.innerHTML = renderTestingTabFlow()
+            initTestingTab() // Re-attach event handlers
+          }
+        } catch (err) {
+          console.error("Failed to parse issue data:", err)
+        }
+      }
+    })
+  })
+
+  // Issue Modal – Close modal
+  document.querySelectorAll("[data-action='close-modal']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const clickedCloseButton = Boolean(e.target.closest(".rr-modal-action-btn"))
+      const clickedOverlay = e.currentTarget.classList.contains("rr-modal-overlay") && e.target === e.currentTarget
+      const clickedBackdrop = Boolean(e.target.closest(".rr-modal-backdrop"))
+
+      if (clickedCloseButton || clickedOverlay || clickedBackdrop) {
+        MODAL_VISIBLE = false
+        SELECTED_ISSUE = null
+        
+        // Re-render without modal
+        const wrapper = document.querySelector(".rr-testing-wrapper")
+        if (wrapper) {
+          wrapper.innerHTML = renderTestingTabFlow()
+          initTestingTab() // Re-attach event handlers
+        }
       }
     })
   })

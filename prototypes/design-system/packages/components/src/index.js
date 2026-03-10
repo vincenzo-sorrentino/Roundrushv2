@@ -1,5 +1,6 @@
 import "./primitives/rr-button.js"
 import "./primitives/rr-button-icon.js"
+import "./primitives/rr-button-tasks.js"
 import "./primitives/rr-button-link.js"
 import "./primitives/rr-input.js"
 import "./primitives/rr-mega-input.js"

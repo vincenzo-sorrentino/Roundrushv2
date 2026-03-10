@@ -143,6 +143,7 @@ const ALERT_VARIANTS = ["info", "success", "warning", "danger"]
 const FIGMA_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6353-98804&m=dev"
 const FIGMA_ICON_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=821-6261&m=dev"
 const FIGMA_LINK_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=821-7099&m=dev"
+const FIGMA_TASK_BUTTON_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=2318-3505&m=dev"
 const FIGMA_TABS_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6381-104724&m=dev"
 const FIGMA_INPUT_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=6373-31764&m=dev"
 const FIGMA_MEGA_INPUT_URL = "https://www.figma.com/design/01Dsb5eQkVmnsXWF6v4MJ5/Roundrush-Design-System?node-id=1106-66560&m=dev"
@@ -229,6 +230,16 @@ function renderLinkButtonMatrix() {
 
 function renderLinkButtonSizes() {
   return LINK_BUTTON_SIZES.map((size) => `<rr-button-link color="primary" size="${size}" icon-display="leading">Button CTA</rr-button-link>`).join("")
+}
+
+function renderTaskButtonPreview() {
+  return `
+    <div class="rr-library-task-button-demo" aria-label="Task button states">
+      <rr-button-tasks state="default" label="Tasks default"></rr-button-tasks>
+      <rr-button-tasks state="hover" label="Tasks hover"></rr-button-tasks>
+      <rr-button-tasks state="active" label="Tasks active"></rr-button-tasks>
+    </div>
+  `
 }
 
 function renderTabsMatrix(withBadge = false) {
@@ -655,6 +666,15 @@ export async function renderComponentsLibraryFlow() {
         <div class="rr-library-inline-row">
           ${renderLinkButtonSizes()}
         </div>
+      </section>
+
+      <section class="rr-library-section">
+        <div class="rr-library-section-head">
+          <h2>Task Button</h2>
+          <p>Icon button states from the tasks control in the design system.</p>
+          <a href="${FIGMA_TASK_BUTTON_URL}" target="_blank" rel="noreferrer">Open in Figma</a>
+        </div>
+        ${renderTaskButtonPreview()}
       </section>
 
       <section class="rr-library-section">
