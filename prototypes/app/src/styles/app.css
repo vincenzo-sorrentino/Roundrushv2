@@ -3769,10 +3769,14 @@ rr-alert.rr-req-info-callout {
   margin-top: 20px;
   width: fit-content;
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  box-sizing: border-box;
+  height: 36px;
   border: 1px solid var(--rr-sem-stroke-btnNeutral);
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   box-shadow: var(--rr-effects-shadow-xs, 0 1px 2px 0 rgba(16, 24, 40, 0.05));
   background: var(--rr-sem-background-field);
 }
@@ -3783,12 +3787,17 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-rm2-tab {
+  box-sizing: border-box;
   border: 0;
   border-right: 1px solid var(--rr-sem-stroke-btnNeutral);
   background: var(--rr-sem-background-field);
-  padding: 6px 8px;
-  min-height: 38px;
+  padding: 0 8px;
+  height: 100%;
+  min-height: 0;
   min-width: 62px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
   font-size: var(--rr-textTokens-fontSizes-paragraph-small, var(--rr-typography-fontSizeSm));
   line-height: var(--rr-typography-lineHeightParagraph);
   font-weight: var(--rr-typography-fontWeightRegular);
@@ -4743,7 +4752,7 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-rm2-tree-row {
-  min-height: 30px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -4800,6 +4809,9 @@ rr-alert.rr-req-info-callout {
   border: 0;
   background: transparent;
   text-align: left;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
   font-size: 14px;
   line-height: 18px;
   color: var(--rr-sem-textPrimary);
@@ -5482,7 +5494,7 @@ rr-alert.rr-req-info-callout {
 }
 
 /* ── Modal overlay ───────────────────────────────────────── */
-.rr-modal-overlay {
+.rr-kb .rr-modal-overlay {
   display: none;
   position: fixed;
   inset: 0;
@@ -5490,18 +5502,18 @@ rr-alert.rr-req-info-callout {
   align-items: center;
   justify-content: center;
 }
-.rr-modal-overlay.is-open {
+.rr-kb .rr-modal-overlay.is-open {
   display: flex;
 }
 
-.rr-modal-backdrop {
+.rr-kb .rr-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(16, 24, 40, 0.45);
   cursor: pointer;
 }
 
-.rr-modal-popup {
+.rr-kb .rr-modal-popup {
   position: relative;
   z-index: 1;
   background: #fcfcfd;
@@ -5515,14 +5527,14 @@ rr-alert.rr-req-info-callout {
   gap: 32px;
 }
 
-.rr-modal-content {
+.rr-kb .rr-modal-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: flex-start;
 }
 
-.rr-modal-icon {
+.rr-kb .rr-modal-icon {
   width: 48px;
   height: 48px;
   border-radius: 32px;
@@ -5531,18 +5543,18 @@ rr-alert.rr-req-info-callout {
   justify-content: center;
   flex-shrink: 0;
 }
-.rr-modal-icon svg {
+.rr-kb .rr-modal-icon svg {
   width: 24px;
   height: 24px;
 }
 
-.rr-modal-text {
+.rr-kb .rr-modal-text {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
 }
-.rr-modal-title {
+.rr-kb .rr-modal-title {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
@@ -5550,7 +5562,7 @@ rr-alert.rr-req-info-callout {
   color: var(--rr-sem-textPrimary, #14161b);
   letter-spacing: 0;
 }
-.rr-modal-body {
+.rr-kb .rr-modal-body {
   margin: 0;
   font-size: 14px;
   font-weight: 400;
@@ -5559,12 +5571,12 @@ rr-alert.rr-req-info-callout {
   letter-spacing: 0;
 }
 
-.rr-modal-buttons {
+.rr-kb .rr-modal-buttons {
   display: flex;
   gap: 12px;
   width: 100%;
 }
-.rr-modal-btn {
+.rr-kb .rr-modal-btn {
   flex: 1 0 0;
   display: flex;
   align-items: center;
@@ -5582,16 +5594,16 @@ rr-alert.rr-req-info-callout {
   white-space: nowrap;
   transition: opacity 0.15s;
 }
-.rr-modal-btn--neutral {
+.rr-kb .rr-modal-btn--neutral {
   background: var(--rr-sem-action-btnNeutral, #e0e2e7);
   color: var(--rr-sem-textPrimary, #14161b);
 }
-.rr-modal-btn--neutral:hover { opacity: 0.85; }
-.rr-modal-btn--primary {
+.rr-kb .rr-modal-btn--neutral:hover { opacity: 0.85; }
+.rr-kb .rr-modal-btn--primary {
   background: var(--rr-sem-actionPrimary, #0067da);
   color: #fff;
 }
-.rr-modal-btn--primary:hover { opacity: 0.9; }
+.rr-kb .rr-modal-btn--primary:hover { opacity: 0.9; }
 
 /* ── Empty state ──────────────────────────────────────────── */
 .rr-kb-empty {

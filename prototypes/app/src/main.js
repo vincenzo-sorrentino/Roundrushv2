@@ -17,7 +17,7 @@ const TAB_HEADER_ITEMS = [
   { id: "dashboard",    label: "Dashboard",    path: null },
   { id: "requirements", label: "Requirements", path: "/requirements/module" },
   { id: "roadmap",      label: "Roadmap",      path: null },
-  { id: "planning",     label: "Planning",     path: "/planning/kanban" },
+  { id: "planning",     label: "Planning",     path: "/planning/kanban", activePrefix: "/planning" },
   { id: "design",       label: "Design",       path: "/design/tab" },
   { id: "dependencies", label: "Dependencies", path: "/dependencies/uml" },
   { id: "testing",      label: "Testing",      path: "/testing/overview" },
@@ -26,7 +26,8 @@ const TAB_HEADER_ITEMS = [
 
 function renderTabHeader(currentPath) {
   const tabs = TAB_HEADER_ITEMS.map(tab => {
-    const isActive = tab.path && currentPath.startsWith(tab.path)
+    const activePath = tab.activePrefix || tab.path
+    const isActive = !!(activePath && currentPath.startsWith(activePath))
     const tabState = tab.path ? (isActive ? "selected" : "default") : "disabled"
     const tabMarkup = `<rr-tabs type="horizontal" state="${tabState}" label="${tab.label}"></rr-tabs>`
 

@@ -2270,6 +2270,8 @@ export function mountKanbanModuleFlow() {
     }
 
     if (action === "sprint-history") {
+      window.history.pushState({}, "", "/planning/old-sprint")
+      window.dispatchEvent(new PopStateEvent("popstate"))
       return
     }
 

@@ -1616,7 +1616,7 @@ export function mountRequirementsModuleFlow() {
 
   const state = {
     selectedNodeId: "AUT",
-    activeTab: "acceptance-laws",
+    activeTab: "description",
     isExplorerOpen: true,
     treeSearch: "",
     expandedTreeIds: new Set(["AUT", "tree-AUT-M001"]),
