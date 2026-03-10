@@ -9259,6 +9259,9 @@ rr-alert.rr-req-info-callout {
 
 .rr-testing {
   padding: 24px 24px 16px;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .rr-testing-header {

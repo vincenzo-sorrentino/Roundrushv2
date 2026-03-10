@@ -159,7 +159,7 @@ const TABLES = [
 
 /* ── Sprint Tab Data ─────────────────────────────────────── */
 // Track which modules are expanded
-const EXPANDED_MODULES = new Set(["AUT-001"])
+const EXPANDED_MODULES = new Set()
 
 const SPRINT_MODULES = [
   {
@@ -232,7 +232,41 @@ hasBlocker: true,
     avatarBg: "#c7b9da",
     hasBlocker: false,
     hasFlag: true,
-    testCases: [],
+    testCases: [
+      {
+        id: "TC-201",
+        description: "Verify login fails with invalid password and displays validation message",
+        idBadge: "ID-9201",
+        preConditions: "User account exists and is active",
+        steps: "1. Open login page\n2. Enter valid email\n3. Enter invalid password\n4. Submit form",
+        expectedResults: "- Login is rejected\n- Validation message is shown\n- User remains on login page",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-202",
+        description: "Verify account is locked after maximum failed attempts",
+        idBadge: "ID-9202",
+        preConditions: "Lockout policy is configured",
+        steps: "1. Try invalid password repeatedly\n2. Reach maximum attempts\n3. Try one more login",
+        expectedResults: "- Account is marked as locked\n- Login is blocked\n- Lockout message is displayed",
+        result: "blocked",
+        uatIssue: "Lockout timer value not synced with backend policy",
+        uatIssueStatus: "todo",
+      },
+      {
+        id: "TC-203",
+        description: "Verify successful login redirects user to dashboard",
+        idBadge: "ID-9203",
+        preConditions: "User has valid credentials",
+        steps: "1. Enter valid email and password\n2. Submit form\n3. Observe redirect",
+        expectedResults: "- Session is created\n- User is redirected to dashboard\n- Top navigation is visible",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+    ],
   },
   {
     id: "AUT-003",
@@ -240,7 +274,41 @@ hasBlocker: true,
     avatarBg: "#c7b9da",
     hasBlocker: false,
     hasFlag: false,
-    testCases: [],
+    testCases: [
+      {
+        id: "TC-301",
+        description: "Verify user stays authenticated after page refresh",
+        idBadge: "ID-9301",
+        preConditions: "User is logged in",
+        steps: "1. Open dashboard\n2. Refresh browser tab\n3. Observe session state",
+        expectedResults: "- User remains logged in\n- Current page is preserved\n- No extra login prompt appears",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-302",
+        description: "Verify expired session redirects user to login page",
+        idBadge: "ID-9302",
+        preConditions: "Session expiration is configured",
+        steps: "1. Log in\n2. Wait for token expiration\n3. Trigger API action",
+        expectedResults: "- Request is rejected as unauthorized\n- User is redirected to login\n- Session data is cleared",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-303",
+        description: "Verify user can log out from top navigation",
+        idBadge: "ID-9303",
+        preConditions: "User is logged in",
+        steps: "1. Click profile menu\n2. Select Logout\n3. Open protected route URL",
+        expectedResults: "- User is redirected to login\n- Protected route is not accessible\n- Session cookie is removed",
+        result: "fail",
+        uatIssue: "Logout does not clear remember-me cookie in some browsers",
+        uatIssueStatus: "review",
+      },
+    ],
   },
   {
     id: "AUT-004",
@@ -248,7 +316,41 @@ hasBlocker: true,
     avatarBg: "#c7b9da",
     hasBlocker: false,
     hasFlag: false,
-    testCases: [],
+    testCases: [
+      {
+        id: "TC-401",
+        description: "Verify reset password email is sent for registered account",
+        idBadge: "ID-9401",
+        preConditions: "Email service is available",
+        steps: "1. Open forgot password\n2. Enter registered email\n3. Submit form",
+        expectedResults: "- Success confirmation is shown\n- Reset email is sent\n- No sensitive user info is exposed",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-402",
+        description: "Verify reset link expires after configured time window",
+        idBadge: "ID-9402",
+        preConditions: "Reset token TTL is configured",
+        steps: "1. Request password reset\n2. Wait until link expires\n3. Open reset link",
+        expectedResults: "- Expired link page is displayed\n- User is asked to request new link\n- Password is not changed",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-403",
+        description: "Verify password strength validation appears on reset form",
+        idBadge: "ID-9403",
+        preConditions: "User has valid reset token",
+        steps: "1. Open reset form\n2. Enter weak password\n3. Submit form",
+        expectedResults: "- Validation feedback appears\n- Weak password is rejected\n- Form remains editable",
+        result: "blocked",
+        uatIssue: "Strength meter does not load on Safari",
+        uatIssueStatus: "todo",
+      },
+    ],
   },
   {
     id: "AUT-005",
@@ -256,7 +358,52 @@ hasBlocker: true,
     avatarBg: "#c7b9da",
     hasBlocker: false,
     hasFlag: false,
-    testCases: [],
+    testCases: [
+      {
+        id: "TC-501",
+        description: "Verify OTP input accepts valid 6-digit code",
+        idBadge: "ID-9501",
+        preConditions: "2FA is enabled for the user",
+        steps: "1. Login with valid credentials\n2. Enter valid OTP\n3. Submit verification",
+        expectedResults: "- OTP is accepted\n- Login completes successfully\n- User lands on dashboard",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-502",
+        description: "Verify invalid OTP displays error and keeps user on challenge screen",
+        idBadge: "ID-9502",
+        preConditions: "2FA challenge screen is displayed",
+        steps: "1. Enter invalid OTP\n2. Submit verification\n3. Observe error state",
+        expectedResults: "- OTP is rejected\n- Error message is visible\n- Retry remains available",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+      {
+        id: "TC-503",
+        description: "Verify backup code can be used when OTP device is unavailable",
+        idBadge: "ID-9503",
+        preConditions: "User has generated backup codes",
+        steps: "1. Select backup code option\n2. Enter unused backup code\n3. Submit verification",
+        expectedResults: "- Backup code is accepted\n- User is authenticated\n- Used backup code cannot be reused",
+        result: "fail",
+        uatIssue: "Used backup codes remain valid after successful login",
+        uatIssueStatus: "review",
+      },
+      {
+        id: "TC-504",
+        description: "Verify resend OTP action is rate limited",
+        idBadge: "ID-9504",
+        preConditions: "User is on OTP challenge screen",
+        steps: "1. Click Resend OTP repeatedly\n2. Observe button and response\n3. Check cooldown timer",
+        expectedResults: "- Resend is throttled\n- Cooldown message is shown\n- New OTP is issued after cooldown",
+        result: "pass",
+        uatIssue: "-",
+        uatIssueStatus: null,
+      },
+    ],
   },
 ]
 
@@ -455,6 +602,28 @@ export function renderTestingTabFlow() {
   `
 }
 
+function bindSprintModuleToggles() {
+  document.querySelectorAll(".rr-sprint-expand-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault()
+      const moduleId = e.currentTarget.getAttribute("data-module-id")
+
+      if (EXPANDED_MODULES.has(moduleId)) {
+        EXPANDED_MODULES.delete(moduleId)
+      } else {
+        EXPANDED_MODULES.add(moduleId)
+      }
+
+      // Re-render only Sprint modules, then rebind toggle handlers for new buttons.
+      const sprintContainer = document.querySelector(".rr-sprint-modules")
+      if (sprintContainer) {
+        sprintContainer.innerHTML = SPRINT_MODULES.map(renderModule).join("")
+        bindSprintModuleToggles()
+      }
+    })
+  })
+}
+
 /* ── Event Handlers & Interactivity ───────────────────────── */
 export function initTestingTab() {
   // Tab switching
@@ -472,23 +641,5 @@ export function initTestingTab() {
     })
   })
 
-  // Module expand/collapse
-  document.querySelectorAll(".rr-sprint-expand-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault()
-      const moduleId = e.currentTarget.getAttribute("data-module-id")
-      
-      if (EXPANDED_MODULES.has(moduleId)) {
-        EXPANDED_MODULES.delete(moduleId)
-      } else {
-        EXPANDED_MODULES.add(moduleId)
-      }
-      
-      // Re-render the Sprint tab
-      const sprintContainer = document.querySelector(".rr-sprint-modules")
-      if (sprintContainer) {
-        sprintContainer.innerHTML = SPRINT_MODULES.map(renderModule).join("")
-      }
-    })
-  })
+  bindSprintModuleToggles()
 }
