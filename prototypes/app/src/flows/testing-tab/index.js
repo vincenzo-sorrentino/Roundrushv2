@@ -472,21 +472,21 @@ const PRODUCTION_DONE_ROWS = [
 ]
 
 const STAKEHOLDERS_ROWS = [
-  { issue: "Document version mismatch.",               priority: "urgent", date: "07/02/26", reporter: REG_AVATAR.alisa,  assignees: [REG_AVATAR.kate2],                  statusStaging: "merged",     statusProd: "todo" },
-  { issue: "Document access denied.",                  priority: "urgent", date: "07/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.orlando],               statusStaging: "review",     statusProd: "todo" },
-  { issue: "Document upload failed.",                  priority: "high",   date: "08/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.lana],                  statusStaging: "review",     statusProd: "todo" },
-  { issue: "Document missing metadata.",               priority: "high",   date: "12/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.phoenix],               statusStaging: "inprogress", statusProd: "todo" },
-  { issue: "Document format error.",                   priority: "high",   date: "12/02/26", reporter: REG_AVATAR.noah,   assignees: [REG_AVATAR.candice],               statusStaging: "inprogress", statusProd: "todo" },
-  { issue: "Document corrupted.",                      priority: "medium", date: "12/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.lana, REG_AVATAR.demi], statusStaging: "merged",     statusProd: "todo" },
-  { issue: "Document missing.",                        priority: "medium", date: "12/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.lana],                  statusStaging: "merged",     statusProd: "todo" },
-  { issue: "Document upload issue.",                   priority: "medium", date: "08/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.drew],                  statusStaging: "error",      statusProd: "todo" },
-  { issue: "Document not accessible.",                 priority: "low",    date: "13/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.phoenix],               statusStaging: "todo",       statusProd: "todo" },
-  { issue: "Issue with file upload for the document.", priority: "low",    date: "08/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "todo",    statusProd: "todo" },
+  { issue: "Dashboard metrics not loading for external users.",   priority: "urgent", date: "07/02/26", reporter: REG_AVATAR.alisa,  assignees: [REG_AVATAR.kate2],                     statusStaging: "merged",     statusProd: "todo" },
+  { issue: "Stakeholder report export generates empty file.",     priority: "urgent", date: "07/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.orlando],                   statusStaging: "review",     statusProd: "todo" },
+  { issue: "User role permissions not applied after update.",     priority: "high",   date: "08/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.lana],                      statusStaging: "review",     statusProd: "todo" },
+  { issue: "Notification emails delayed by over 24 hours.",       priority: "high",   date: "12/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.phoenix],                   statusStaging: "inprogress", statusProd: "todo" },
+  { issue: "Portfolio overview page crashes on mobile.",          priority: "high",   date: "12/02/26", reporter: REG_AVATAR.noah,   assignees: [REG_AVATAR.candice],                   statusStaging: "inprogress", statusProd: "todo" },
+  { issue: "Approval workflow skips required sign-off step.",     priority: "medium", date: "12/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.lana, REG_AVATAR.demi],     statusStaging: "merged",     statusProd: "todo" },
+  { issue: "Audit log entries missing for bulk actions.",         priority: "medium", date: "12/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.lana],                      statusStaging: "merged",     statusProd: "todo" },
+  { issue: "Session timeout too aggressive for guest users.",     priority: "medium", date: "08/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.drew],                      statusStaging: "error",      statusProd: "todo" },
+  { issue: "Comment thread collapses unexpectedly on refresh.",   priority: "low",    date: "13/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.phoenix],                   statusStaging: "todo",       statusProd: "todo" },
+  { issue: "Search results incomplete for filtered queries.",     priority: "low",    date: "08/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.demi, REG_AVATAR.candice],  statusStaging: "todo",       statusProd: "todo" },
 ]
 
 const STAKEHOLDERS_DONE_ROWS = [
-  { issue: "Payment Processing Failure", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
-  { issue: "Delayed Payment Processing", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "done" },
+  { issue: "SSO login fails for external stakeholder accounts.", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
+  { issue: "Data export includes archived records incorrectly.", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "done" },
 ]
 
 /* ── Regressions Render Helpers ──────────────────────────────── */
@@ -572,6 +572,24 @@ function renderRegRow(row) {
     </div>`
 }
 
+function renderRegDoneRow(row) {
+  return `
+    <div class="rr-reg-row">
+      <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope(row.scope)}</div>
+      <div class="rr-reg-cell rr-reg-cell--issue">
+        <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--priority">${renderRegPriority(row.priority)}</div>
+      <div class="rr-reg-cell rr-reg-cell--date">${escapeHtml(row.date)}</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee"></div>
+      <div class="rr-reg-cell rr-reg-cell--pr">
+        <button class="rr-reg-github-btn" type="button" title="View PR">${REG_GITHUB_ICON}</button>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusStaging)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusProd)}</div>
+    </div>`
+}
+
 function renderRegressionsTab() {
   const chevronDown = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   const chevronRight = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
@@ -591,7 +609,7 @@ function renderRegressionsTab() {
         ${!REGRESSIONS_DONE_COLLAPSED ? `
         <div class="rr-reg-table-wrap">
           ${renderRegTableHeader()}
-          ${REGRESSION_DONE_ROWS.map(renderRegRow).join("")}
+          ${REGRESSION_DONE_ROWS.map(renderRegDoneRow).join("")}
         </div>` : ""}
       </div>
     </div>`
@@ -616,7 +634,7 @@ function renderProductionTab() {
         ${!PRODUCTION_DONE_COLLAPSED ? `
         <div class="rr-reg-table-wrap">
           ${renderRegTableHeader()}
-          ${PRODUCTION_DONE_ROWS.map(renderRegRow).join("")}
+          ${PRODUCTION_DONE_ROWS.map(renderRegDoneRow).join("")}
         </div>` : ""}
       </div>
     </div>`
@@ -655,6 +673,24 @@ function renderStakeholdersRow(row) {
     </div>`
 }
 
+function renderStakeholdersDoneRow(row) {
+  return `
+    <div class="rr-reg-row rr-reg-row--stakeholders">
+      <div class="rr-reg-cell rr-reg-cell--issue">
+        <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--priority">${renderRegPriority(row.priority)}</div>
+      <div class="rr-reg-cell">${escapeHtml(row.date)}</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">${renderRegAvatarGroup([row.reporter])}</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee"></div>
+      <div class="rr-reg-cell rr-reg-cell--pr">
+        <button class="rr-reg-github-btn" type="button" title="View PR">${REG_GITHUB_ICON}</button>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusStaging)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusProd)}</div>
+    </div>`
+}
+
 function renderStakeholdersTab() {
   const chevronDown = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   const chevronRight = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
@@ -674,7 +710,7 @@ function renderStakeholdersTab() {
         ${!STAKEHOLDERS_DONE_COLLAPSED ? `
         <div class="rr-reg-table-wrap">
           ${renderStakeholdersTableHeader()}
-          ${STAKEHOLDERS_DONE_ROWS.map(renderStakeholdersRow).join("")}
+          ${STAKEHOLDERS_DONE_ROWS.map(renderStakeholdersDoneRow).join("")}
         </div>` : ""}
       </div>
     </div>`
