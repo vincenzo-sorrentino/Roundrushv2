@@ -20,7 +20,7 @@ const TAB_HEADER_ITEMS = [
   { id: "planning",     label: "Planning",     path: "/planning/kanban" },
   { id: "design",       label: "Design",       path: "/design/tab" },
   { id: "dependencies", label: "Dependencies", path: "/dependencies/uml" },
-  { id: "testing",      label: "Testing",      path: null },
+  { id: "testing",      label: "Testing",      path: "/testing/overview" },
   { id: "docs",         label: "Docs",         path: "/docs/hub" },
 ]
 

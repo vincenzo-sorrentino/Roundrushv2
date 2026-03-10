@@ -11,6 +11,7 @@ import { renderDocsHubFlow, mountDocsHubFlow } from "../flows/docs-hub/index.js"
 import { renderDesignTabFlow, mountDesignTabFlow } from "../flows/design-tab/index.js"
 import { renderOldSprintFlow, mountOldSprintFlow } from "../flows/old-sprint/index.js"
 import { renderReleaseNotesFlow, mountReleaseNotesFlow } from "../flows/release-notes/index.js"
+import { renderTestingTabFlow, initTestingTab } from "../flows/testing-tab/index.js"
 
 const routes = [
   {
@@ -91,6 +92,13 @@ const routes = [
     path: "/design/tab",
     render: renderDesignTabFlow,
     mount: mountDesignTabFlow,
+    status: "approved"
+  },
+  {
+    id: "testing-tab",
+    path: "/testing/overview",
+    render: renderTestingTabFlow,
+    mount: initTestingTab,
     status: "approved"
   },
   {
