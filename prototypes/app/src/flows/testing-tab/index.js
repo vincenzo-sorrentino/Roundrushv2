@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════════════════════════════
+﻿/* ══════════════════════════════════════════════════════════════
    Testing Tab — "Sprint" View Implementation
    Matches Figma "Desktop - 42" (471:52266)
    ══════════════════════════════════════════════════════════════ */
@@ -23,14 +23,14 @@ function escapeHtml(value) {
 }
 
 // Global state for current active tab
-let ACTIVE_TAB = "sprint"
+let ACTIVE_TAB = "overview"
 
 const BUTTONS = [
   { id: "overview", label: "Overview" },
   { id: "sprint", label: "Sprint" },
   { id: "regressions", label: "Regressions" },
   { id: "production", label: "Production Issues" },
-  { id: "stakeholders", label: "Stakeholders' Issues" },
+  { id: "stakeholders", label: "Stakeholders’ Issues" },
 ]
 
 /* ── Overview Tab Data (original implementation) ─────────────── */
@@ -418,8 +418,10 @@ let REGRESSIONS_DONE_COLLAPSED = false
    Matches Figma "Desktop - 44" (471:54619)
    ══════════════════════════════════════════════════════════════ */
 let PRODUCTION_DONE_COLLAPSED = false
+let STAKEHOLDERS_DONE_COLLAPSED = false
 
 const REG_AVATAR = {
+  alisa:   { url: "http://localhost:3845/assets/4507a3162dffac2d85eeb6e31d1a15c57091a204.png", bg: "#c7b9da" },
   kate:    { url: "http://localhost:3845/assets/2f1190870d753151f58657595136f67c584b5c8c.png", bg: "#c7b9da" },
   kate2:   { url: "http://localhost:3845/assets/6ec94186cc6e3e60f69ecac1443984f93e6078eb.png", bg: "#dbc0dd" },
   orlando: { url: "http://localhost:3845/assets/555cb3735701db8d4318f0d93edd1f4b64493b37.png", bg: "#cfc3a7" },
@@ -428,6 +430,9 @@ const REG_AVATAR = {
   candice: { url: "http://localhost:3845/assets/504bc691102d8a6217d1fc1f8e79a810b1842a0d.png", bg: "#a2a8cd" },
   demi:    { url: "http://localhost:3845/assets/c9b5ff46a30dabca6ca1e017e1047cd06f04270b.png", bg: "#bea887" },
   drew:    { url: "http://localhost:3845/assets/2e2cf1b6f441c6f28c3b0e1e0eb4863eb80b7401.png", bg: "#d1dfc3" },
+  loki:    { url: "http://localhost:3845/assets/d4b04f99db960f52b2cf64f40f4e56eb5cd841e3.png", bg: "#f0f1f3" },
+  noah:    { url: "http://localhost:3845/assets/ab41a74aead9e7cb47a87ad793df9b09ed9d1ea5.png", bg: "#f0f1f3" },
+  lucy:    { url: "http://localhost:3845/assets/cc20770e67dac754b967ba908e8faaf230d75581.png", bg: "#dbc0dd" },
 }
 
 const REGRESSION_ROWS = [
@@ -464,6 +469,24 @@ const PRODUCTION_ROWS = [
 const PRODUCTION_DONE_ROWS = [
   { scope: "Devops", issue: "Login redirect loop on mobile devices.",   issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
   { scope: "FE",     issue: "Account creation email not delivered.",    issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew],  statusStaging: "done", statusProd: "done" },
+]
+
+const STAKEHOLDERS_ROWS = [
+  { issue: "Document version mismatch.",               priority: "urgent", date: "07/02/26", reporter: REG_AVATAR.alisa,  assignees: [REG_AVATAR.kate2],                  statusStaging: "merged",     statusProd: "todo" },
+  { issue: "Document access denied.",                  priority: "urgent", date: "07/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.orlando],               statusStaging: "review",     statusProd: "todo" },
+  { issue: "Document upload failed.",                  priority: "high",   date: "08/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.lana],                  statusStaging: "review",     statusProd: "todo" },
+  { issue: "Document missing metadata.",               priority: "high",   date: "12/02/26", reporter: REG_AVATAR.loki,   assignees: [REG_AVATAR.phoenix],               statusStaging: "inprogress", statusProd: "todo" },
+  { issue: "Document format error.",                   priority: "high",   date: "12/02/26", reporter: REG_AVATAR.noah,   assignees: [REG_AVATAR.candice],               statusStaging: "inprogress", statusProd: "todo" },
+  { issue: "Document corrupted.",                      priority: "medium", date: "12/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.lana, REG_AVATAR.demi], statusStaging: "merged",     statusProd: "todo" },
+  { issue: "Document missing.",                        priority: "medium", date: "12/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.lana],                  statusStaging: "merged",     statusProd: "todo" },
+  { issue: "Document upload issue.",                   priority: "medium", date: "08/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.drew],                  statusStaging: "error",      statusProd: "todo" },
+  { issue: "Document not accessible.",                 priority: "low",    date: "13/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.phoenix],               statusStaging: "todo",       statusProd: "todo" },
+  { issue: "Issue with file upload for the document.", priority: "low",    date: "08/02/26", reporter: REG_AVATAR.lucy,   assignees: [REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "todo",    statusProd: "todo" },
+]
+
+const STAKEHOLDERS_DONE_ROWS = [
+  { issue: "Payment Processing Failure", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
+  { issue: "Delayed Payment Processing", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "done" },
 ]
 
 /* ── Regressions Render Helpers ──────────────────────────────── */
@@ -594,6 +617,64 @@ function renderProductionTab() {
         <div class="rr-reg-table-wrap">
           ${renderRegTableHeader()}
           ${PRODUCTION_DONE_ROWS.map(renderRegRow).join("")}
+        </div>` : ""}
+      </div>
+    </div>`
+}
+
+function renderStakeholdersTableHeader() {
+  const sortIcon = `<svg width="12" height="12" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="24" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  return `
+    <div class="rr-reg-row rr-reg-row--header rr-reg-row--stakeholders">
+      <div class="rr-reg-cell rr-reg-cell--issue">Issue</div>
+      <div class="rr-reg-cell rr-reg-cell--priority">Priority ${sortIcon}</div>
+      <div class="rr-reg-cell">Date</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">Reporter</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">Assignee</div>
+      <div class="rr-reg-cell rr-reg-cell--pr">PR Link</div>
+      <div class="rr-reg-cell rr-reg-cell--status">Status Staging</div>
+      <div class="rr-reg-cell rr-reg-cell--status">Status Production</div>
+    </div>`
+}
+
+function renderStakeholdersRow(row) {
+  return `
+    <div class="rr-reg-row rr-reg-row--stakeholders">
+      <div class="rr-reg-cell rr-reg-cell--issue">
+        <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--priority">${renderRegPriority(row.priority)}</div>
+      <div class="rr-reg-cell">${escapeHtml(row.date)}</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">${renderRegAvatarGroup([row.reporter])}</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">${renderRegAvatarGroup(row.assignees)}</div>
+      <div class="rr-reg-cell rr-reg-cell--pr">
+        <button class="rr-reg-github-btn" type="button" title="View PR">${REG_GITHUB_ICON}</button>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusStaging)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusProd)}</div>
+    </div>`
+}
+
+function renderStakeholdersTab() {
+  const chevronDown = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const chevronRight = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const doneChevron = STAKEHOLDERS_DONE_COLLAPSED ? chevronRight : chevronDown
+
+  return `
+    <div class="rr-reg-container">
+      <div class="rr-reg-table-wrap">
+        ${renderStakeholdersTableHeader()}
+        ${STAKEHOLDERS_ROWS.map(renderStakeholdersRow).join("")}
+      </div>
+      <div class="rr-reg-done-section">
+        <div class="rr-reg-done-header">
+          <button class="rr-reg-done-toggle" type="button" data-action="toggle-stakeholders-done">${doneChevron}</button>
+          <span class="rr-reg-done-badge">Done</span>
+        </div>
+        ${!STAKEHOLDERS_DONE_COLLAPSED ? `
+        <div class="rr-reg-table-wrap">
+          ${renderStakeholdersTableHeader()}
+          ${STAKEHOLDERS_DONE_ROWS.map(renderStakeholdersRow).join("")}
         </div>` : ""}
       </div>
     </div>`
@@ -778,6 +859,7 @@ export function renderTestingTabFlow() {
     ACTIVE_TAB === "sprint"       ? renderSprintTab() :
     ACTIVE_TAB === "regressions"  ? renderRegressionsTab() :
     ACTIVE_TAB === "production"   ? renderProductionTab() :
+    ACTIVE_TAB === "stakeholders" ? renderStakeholdersTab() :
     renderOverviewTab()
   
   return `
@@ -857,6 +939,18 @@ export function initTestingTab() {
   document.querySelectorAll("[data-action='toggle-prod-done']").forEach((btn) => {
     btn.addEventListener("click", () => {
       PRODUCTION_DONE_COLLAPSED = !PRODUCTION_DONE_COLLAPSED
+      const container = document.querySelector('[data-flow="testing-tab"]')
+      if (container) {
+        container.outerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  // Stakeholders Issues – Done section toggle
+  document.querySelectorAll("[data-action='toggle-stakeholders-done']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      STAKEHOLDERS_DONE_COLLAPSED = !STAKEHOLDERS_DONE_COLLAPSED
       const container = document.querySelector('[data-flow="testing-tab"]')
       if (container) {
         container.outerHTML = renderTestingTabFlow()

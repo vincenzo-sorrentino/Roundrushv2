@@ -9958,3 +9958,9 @@ rr-alert.rr-req-info-callout {
   line-height: 18px;
   white-space: nowrap;
 }
+
+/* Stakeholders' Issues tab — same visual as Production/Regressions, different column grid */
+.rr-reg-row--stakeholders {
+  grid-template-columns: 1fr 120px 100px 82px 84px 74px 162px 162px;
+  min-width: 884px;
+}
