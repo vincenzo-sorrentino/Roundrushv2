@@ -36,15 +36,22 @@ function renderTabHeader(currentPath) {
     return `<span class="rr-tab-header-tab-slot rr-tab-header-tab-slot--static" aria-label="${tab.label}">${tabMarkup}</span>`
   }).join("")
 
-  return `
-    <header class="rr-tab-header" id="rr-tab-header">
-      <div class="rr-tab-header-tabs">${tabs}</div>
-      <div class="rr-tab-header-actions">
+  /* For Planning routes, the sprint selector is injected by the kanban module.
+     For other routes, show the default sync label + action. */
+  const isPlanning = currentPath.startsWith("/planning")
+  const actionsHtml = isPlanning
+    ? `<div class="rr-tab-header-actions" id="rr-tab-sprint-header"></div>`
+    : `<div class="rr-tab-header-actions">
         <span class="rr-tab-sync">${TAB_SYNC_TEXT}</span>
         <button type="button" class="rr-tab-sync-action" aria-label="Sync history">
           <img src="${TAB_SYNC_ICON_URL}" alt="" />
         </button>
-      </div>
+      </div>`
+
+  return `
+    <header class="rr-tab-header" id="rr-tab-header">
+      <div class="rr-tab-header-tabs">${tabs}</div>
+      ${actionsHtml}
     </header>
   `
 }
