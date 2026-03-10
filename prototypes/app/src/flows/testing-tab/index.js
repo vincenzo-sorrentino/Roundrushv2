@@ -407,6 +407,198 @@ hasBlocker: true,
   },
 ]
 
+/* ══════════════════════════════════════════════════════════════
+   Regressions Tab
+   Matches Figma "Desktop - 43" (471:52909)
+   ══════════════════════════════════════════════════════════════ */
+let REGRESSIONS_DONE_COLLAPSED = false
+
+/* ══════════════════════════════════════════════════════════════
+   Production Issues Tab
+   Matches Figma "Desktop - 44" (471:54619)
+   ══════════════════════════════════════════════════════════════ */
+let PRODUCTION_DONE_COLLAPSED = false
+
+const REG_AVATAR = {
+  kate:    { url: "http://localhost:3845/assets/2f1190870d753151f58657595136f67c584b5c8c.png", bg: "#c7b9da" },
+  kate2:   { url: "http://localhost:3845/assets/6ec94186cc6e3e60f69ecac1443984f93e6078eb.png", bg: "#dbc0dd" },
+  orlando: { url: "http://localhost:3845/assets/555cb3735701db8d4318f0d93edd1f4b64493b37.png", bg: "#cfc3a7" },
+  lana:    { url: "http://localhost:3845/assets/d688ab8bff2aebfc3cab587865468c4713ecad78.png", bg: "#d4b5ad" },
+  phoenix: { url: "http://localhost:3845/assets/2780e16db1a4a364d3d872737f7fe9563d7abb29.png", bg: "#aa9c75" },
+  candice: { url: "http://localhost:3845/assets/504bc691102d8a6217d1fc1f8e79a810b1842a0d.png", bg: "#a2a8cd" },
+  demi:    { url: "http://localhost:3845/assets/c9b5ff46a30dabca6ca1e017e1047cd06f04270b.png", bg: "#bea887" },
+  drew:    { url: "http://localhost:3845/assets/2e2cf1b6f441c6f28c3b0e1e0eb4863eb80b7401.png", bg: "#d1dfc3" },
+}
+
+const REGRESSION_ROWS = [
+  { scope: "FE",    issue: "Document version mismatch.",               issueSub: "DEV | 200 KB file validation error.",         priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.kate2],                                    statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "FE",    issue: "Document access denied.",                  issueSub: "DEV | 200 KB file format not supported.",     priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.orlando],                                  statusStaging: "review",     statusProd: "todo"   },
+  { scope: "BE",    issue: "Document upload failed.",                  issueSub: "PROD | 200 KB file exceeds allowed size.",    priority: "high",   date: "08/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "review",     statusProd: "todo"   },
+  { scope: "BE",    issue: "Document missing metadata.",               issueSub: "PROD | 200 KB file upload timeout.",          priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "inprogress", statusProd: "todo"   },
+  { scope: "FE",    issue: "Document format error.",                   issueSub: "STG | 200 KB file not processing correctly.", priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "inprogress", statusProd: "todo"   },
+  { scope: "BE",    issue: "Document corrupted.",                      issueSub: "",                                            priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.kate2, REG_AVATAR.orlando],                statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "FE",    issue: "Document missing.",                        issueSub: "",                                            priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "FE",    issue: "Document upload issue.",                   issueSub: "",                                            priority: "medium", date: "08/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "error",      statusProd: "todo"   },
+  { scope: "BE&FE", issue: "Document not accessible.",                 issueSub: "",                                            priority: "low",    date: "13/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "todo",       statusProd: "todo"   },
+  { scope: "BE&FE", issue: "Issue with file upload for the document.", issueSub: "",                                            priority: "low",    date: "08/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew], statusStaging: "todo",       statusProd: "todo"   },
+]
+
+const REGRESSION_DONE_ROWS = [
+  { scope: "Devops", issue: "Payment Processing Failure", issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
+  { scope: "FE",     issue: "Delayed Payment Processing", issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew],  statusStaging: "done", statusProd: "done" },
+]
+
+const PRODUCTION_ROWS = [
+  { scope: "FE",    issue: "Authentication token expired on refresh.",    issueSub: "", priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.kate2],                                    statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "FE",    issue: "User session ends unexpectedly mid-flow.",    issueSub: "", priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.orlando],                                  statusStaging: "review",     statusProd: "todo"   },
+  { scope: "BE",    issue: "API rate limiter blocking valid requests.",   issueSub: "", priority: "high",   date: "08/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "review",     statusProd: "todo"   },
+  { scope: "BE",    issue: "Payment gateway timeout on high load.",       issueSub: "", priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "inprogress", statusProd: "todo"   },
+  { scope: "FE",    issue: "Dashboard widget fails to render on Safari.", issueSub: "", priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "inprogress", statusProd: "todo"   },
+  { scope: "BE",    issue: "Push notifications not delivered to iOS.",    issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.kate2, REG_AVATAR.orlando],                statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "FE",    issue: "Export report hangs on large datasets.",      issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "FE",    issue: "Search index out of sync after data import.", issueSub: "", priority: "medium", date: "08/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "error",      statusProd: "todo"   },
+  { scope: "BE&FE", issue: "Role permissions not enforced on API level.", issueSub: "", priority: "low",    date: "13/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "todo",       statusProd: "todo"   },
+  { scope: "BE&FE", issue: "Data sync delay between staging and prod.",   issueSub: "", priority: "low",    date: "08/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew], statusStaging: "todo",       statusProd: "todo"   },
+]
+
+const PRODUCTION_DONE_ROWS = [
+  { scope: "Devops", issue: "Login redirect loop on mobile devices.",   issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
+  { scope: "FE",     issue: "Account creation email not delivered.",    issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew],  statusStaging: "done", statusProd: "done" },
+]
+
+/* ── Regressions Render Helpers ──────────────────────────────── */
+const REG_PRIORITY_ICONS = {
+  urgent: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,192 128,112 208,192" stroke="#e14040" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/><polyline points="48,128 128,48 208,128" stroke="#e14040" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  high:   `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,172 128,92 208,172" stroke="#e14040" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  medium: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><line x1="40" y1="100" x2="216" y2="100" stroke="#f79009" stroke-width="20" stroke-linecap="round"/><line x1="40" y1="156" x2="216" y2="156" stroke="#f79009" stroke-width="20" stroke-linecap="round"/></svg>`,
+  low:    `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,84 128,164 208,84" stroke="#0e9255" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+}
+
+const REG_PRIORITY_LABELS = { urgent: "Urgent", high: "High", medium: "Medium", low: "Low" }
+
+const REG_GITHUB_ICON = `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>`
+
+const REG_STATUS_CFG = {
+  merged:     { label: "Merged",           bg: "#fbc6cd", color: "#d13245" },
+  review:     { label: "Ready for review", bg: "#eee3f6", color: "#9b5bce" },
+  inprogress: { label: "In progress",      bg: "#daebff", color: "#0067da" },
+  todo:       { label: "To do",            bg: "#e0e2e7", color: "#3d4350" },
+  error:      { label: "Error",            bg: "#fcdad7", color: "#c0362d" },
+  done:       { label: "Done",             bg: "#ddf7eb", color: "#0e9255" },
+}
+
+const REG_SCOPE_CFG = {
+  "FE":    { bg: "#fef4e6", color: "#f79009" },
+  "BE":    { bg: "#e0e2e7", color: "#3d4350" },
+  "BE&FE": { bg: "#e0e2e7", color: "#3d4350" },
+  "Devops":{ bg: "#eee3f6", color: "#9b5bce" },
+}
+
+function renderRegScope(scope) {
+  const cfg = REG_SCOPE_CFG[scope] || REG_SCOPE_CFG["FE"]
+  return `<span class="rr-reg-scope" style="background:${cfg.bg};color:${cfg.color}">${escapeHtml(scope)}</span>`
+}
+
+function renderRegStatus(key) {
+  const cfg = REG_STATUS_CFG[key] || REG_STATUS_CFG.todo
+  return `<span class="rr-reg-status" style="background:${cfg.bg};color:${cfg.color}">${escapeHtml(cfg.label)}</span>`
+}
+
+function renderRegPriority(key) {
+  return `<span class="rr-reg-priority">${REG_PRIORITY_ICONS[key] || ""}${escapeHtml(REG_PRIORITY_LABELS[key] || key)}</span>`
+}
+
+function renderRegAvatarGroup(assignees) {
+  return `<div class="rr-reg-avatar-group">${
+    assignees.map(av =>
+      `<div class="rr-reg-avatar" style="background:${av.bg}"><img src="${av.url}" alt="" onerror="this.style.display='none'"/></div>`
+    ).join("")
+  }</div>`
+}
+
+function renderRegTableHeader() {
+  const sortIcon = `<svg width="12" height="12" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="24" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  return `
+    <div class="rr-reg-row rr-reg-row--header">
+      <div class="rr-reg-cell rr-reg-cell--scope">Scope</div>
+      <div class="rr-reg-cell rr-reg-cell--issue">Issue</div>
+      <div class="rr-reg-cell rr-reg-cell--priority">Priority ${sortIcon}</div>
+      <div class="rr-reg-cell rr-reg-cell--date">Date</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">Assignee</div>
+      <div class="rr-reg-cell rr-reg-cell--pr">PR Link</div>
+      <div class="rr-reg-cell rr-reg-cell--status">Status Staging</div>
+      <div class="rr-reg-cell rr-reg-cell--status">Status Production</div>
+    </div>`
+}
+
+function renderRegRow(row) {
+  return `
+    <div class="rr-reg-row">
+      <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope(row.scope)}</div>
+      <div class="rr-reg-cell rr-reg-cell--issue">
+        <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--priority">${renderRegPriority(row.priority)}</div>
+      <div class="rr-reg-cell rr-reg-cell--date">${escapeHtml(row.date)}</div>
+      <div class="rr-reg-cell rr-reg-cell--assignee">${renderRegAvatarGroup(row.assignees)}</div>
+      <div class="rr-reg-cell rr-reg-cell--pr">
+        <button class="rr-reg-github-btn" type="button" title="View PR">${REG_GITHUB_ICON}</button>
+      </div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusStaging)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusProd)}</div>
+    </div>`
+}
+
+function renderRegressionsTab() {
+  const chevronDown = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const chevronRight = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const doneChevron = REGRESSIONS_DONE_COLLAPSED ? chevronRight : chevronDown
+
+  return `
+    <div class="rr-reg-container">
+      <div class="rr-reg-table-wrap">
+        ${renderRegTableHeader()}
+        ${REGRESSION_ROWS.map(renderRegRow).join("")}
+      </div>
+      <div class="rr-reg-done-section">
+        <div class="rr-reg-done-header">
+          <button class="rr-reg-done-toggle" type="button" data-action="toggle-reg-done">${doneChevron}</button>
+          <span class="rr-reg-done-badge">Done</span>
+        </div>
+        ${!REGRESSIONS_DONE_COLLAPSED ? `
+        <div class="rr-reg-table-wrap">
+          ${renderRegTableHeader()}
+          ${REGRESSION_DONE_ROWS.map(renderRegRow).join("")}
+        </div>` : ""}
+      </div>
+    </div>`
+}
+
+function renderProductionTab() {
+  const chevronDown = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const chevronRight = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  const doneChevron = PRODUCTION_DONE_COLLAPSED ? chevronRight : chevronDown
+
+  return `
+    <div class="rr-reg-container">
+      <div class="rr-reg-table-wrap">
+        ${renderRegTableHeader()}
+        ${PRODUCTION_ROWS.map(renderRegRow).join("")}
+      </div>
+      <div class="rr-reg-done-section">
+        <div class="rr-reg-done-header">
+          <button class="rr-reg-done-toggle" type="button" data-action="toggle-prod-done">${doneChevron}</button>
+          <span class="rr-reg-done-badge">Done</span>
+        </div>
+        ${!PRODUCTION_DONE_COLLAPSED ? `
+        <div class="rr-reg-table-wrap">
+          ${renderRegTableHeader()}
+          ${PRODUCTION_DONE_ROWS.map(renderRegRow).join("")}
+        </div>` : ""}
+      </div>
+    </div>`
+}
+
 function renderButtons() {
   return BUTTONS.map((btn) => {
     const isActive = ACTIVE_TAB === btn.id
@@ -582,7 +774,11 @@ function renderSprintTab() {
 
 export function renderTestingTabFlow() {
   // Render the active tab content
-  const tabContent = ACTIVE_TAB === "sprint" ? renderSprintTab() : renderOverviewTab()
+  const tabContent =
+    ACTIVE_TAB === "sprint"       ? renderSprintTab() :
+    ACTIVE_TAB === "regressions"  ? renderRegressionsTab() :
+    ACTIVE_TAB === "production"   ? renderProductionTab() :
+    renderOverviewTab()
   
   return `
     <section class="rr-testing" data-flow="testing-tab">
@@ -631,15 +827,41 @@ export function initTestingTab() {
     btn.addEventListener("click", (e) => {
       const tabId = e.currentTarget.getAttribute("data-tab")
       ACTIVE_TAB = tabId
-      
-      // Re-render the entire tab
+
+      // Re-render only the testing section, leaving the tab header intact
       const container = document.querySelector('[data-flow="testing-tab"]')
-      if (container && container.parentElement) {
-        container.parentElement.innerHTML = renderTestingTabFlow()
+      if (container) {
+        container.outerHTML = renderTestingTabFlow()
         initTestingTab() // Re-attach event handlers
       }
     })
   })
 
-  bindSprintModuleToggles()
+  if (ACTIVE_TAB === "sprint") {
+    bindSprintModuleToggles()
+  }
+
+  // Regressions – Done section toggle
+  document.querySelectorAll("[data-action='toggle-reg-done']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      REGRESSIONS_DONE_COLLAPSED = !REGRESSIONS_DONE_COLLAPSED
+      const container = document.querySelector('[data-flow="testing-tab"]')
+      if (container) {
+        container.outerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  // Production Issues – Done section toggle
+  document.querySelectorAll("[data-action='toggle-prod-done']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      PRODUCTION_DONE_COLLAPSED = !PRODUCTION_DONE_COLLAPSED
+      const container = document.querySelector('[data-flow="testing-tab"]')
+      if (container) {
+        container.outerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
 }
