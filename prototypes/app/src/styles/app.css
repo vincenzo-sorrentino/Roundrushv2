@@ -11693,6 +11693,72 @@ rr-alert.rr-req-info-callout {
   border: 1px solid var(--rr-sem-stroke-btnNeutral, #a3a9b6);
 }
 
+.rr-roadmap--snapshot .rr-roadmap-module-resize-handle {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: auto;
+  border-radius: 4px;
+  transition: opacity 120ms ease;
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module-resize-handle--left {
+  left: 2px;
+  border-left: 2px solid rgba(59, 130, 246, 0.9);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module-resize-handle--right {
+  right: 2px;
+  border-right: 2px solid rgba(59, 130, 246, 0.9);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module:hover .rr-roadmap-module-resize-handle,
+.rr-roadmap--snapshot .rr-roadmap-module-resize-handle:hover,
+.rr-roadmap--snapshot .rr-roadmap-module.is-resizing .rr-roadmap-module-resize-handle {
+  opacity: 1;
+  background: rgba(59, 130, 246, 0.18);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--to-do .rr-roadmap-module-resize-handle {
+  background: rgba(163, 169, 182, 0.16);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--to-do .rr-roadmap-module-resize-handle--left {
+  border-left-color: rgba(163, 169, 182, 0.9);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--to-do .rr-roadmap-module-resize-handle--right {
+  border-right-color: rgba(163, 169, 182, 0.9);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--to-do:hover .rr-roadmap-module-resize-handle,
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--to-do .rr-roadmap-module-resize-handle:hover,
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--to-do.is-resizing .rr-roadmap-module-resize-handle {
+  background: rgba(163, 169, 182, 0.24);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--designing .rr-roadmap-module-resize-handle {
+  background: rgba(155, 91, 206, 0.16);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--designing .rr-roadmap-module-resize-handle--left {
+  border-left-color: rgba(155, 91, 206, 0.9);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--designing .rr-roadmap-module-resize-handle--right {
+  border-right-color: rgba(155, 91, 206, 0.9);
+}
+
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--designing:hover .rr-roadmap-module-resize-handle,
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--designing .rr-roadmap-module-resize-handle:hover,
+.rr-roadmap--snapshot .rr-roadmap-module.rr-roadmap-module--designing.is-resizing .rr-roadmap-module-resize-handle {
+  background: rgba(155, 91, 206, 0.24);
+}
+
 /* ── Settings modal ────────────────────────────────────────– */
 .rr-roadmap-settings-overlay {
   position: fixed;
@@ -12010,5 +12076,9 @@ rr-alert.rr-req-info-callout {
   .rr-roadmap-snapshot-icon-btn {
     width: 32px;
     height: 32px;
+  }
+
+  .rr-roadmap--snapshot .rr-roadmap-module-resize-handle {
+    width: 6px;
   }
 }

@@ -392,20 +392,37 @@ function renderTimelineHeader(sprintLayout, totalWeekColumns) {
   `
 }
 
-function renderModule(module, sprintLayout, currentSprintIndex) {
+function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns, options = {}) {
+  const { moduleKey = "", isSnapshotView = false, moduleResizeOverrides = {} } = options
   const color = STATUS_COLORS[module.status] || STATUS_COLORS["to-do"]
+  const isResizable = module.status !== "completed"
+  const resizeHandlesHtml = (isSnapshotView && isResizable)
+    ? '<div class="rr-roadmap-module-resize-handle rr-roadmap-module-resize-handle--left" data-action="resize-roadmap-module-left" aria-hidden="true"></div><div class="rr-roadmap-module-resize-handle rr-roadmap-module-resize-handle--right" data-action="resize-roadmap-module-right" aria-hidden="true"></div>'
+    : ""
   const subtleBackground = getSubtleSolidColor(color)
-  const { startColumn, colSpan } = mapModuleToColumns(module, sprintLayout, currentSprintIndex)
+  const mappedColumns = mapModuleToColumns(module, sprintLayout, currentSprintIndex)
+  const override = isSnapshotView ? moduleResizeOverrides[moduleKey] : null
+  const startColumn = Number.isFinite(override?.startColumn) ? override.startColumn : mappedColumns.startColumn
+  const maxSpan = Math.max(1, totalWeekColumns - startColumn + 1)
+  const requestedSpan = Number.isFinite(override?.colSpan) ? override.colSpan : mappedColumns.colSpan
+  const colSpan = Math.max(1, Math.min(maxSpan, requestedSpan))
 
   return `
-    <div class="rr-roadmap-module" style="grid-column:${startColumn} / span ${colSpan}; --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
+    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" style="grid-column:${startColumn} / span ${colSpan}; --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
+      ${resizeHandlesHtml}
       <span class="rr-roadmap-module-text">${escapeHtml(module.id)} · ${escapeHtml(module.title)}</span>
     </div>
   `
 }
 
-function renderTrack(trackLabel, modules, sprintLayout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex) {
-  const moduleBars = modules.map(module => renderModule(module, sprintLayout, currentSprintIndex)).join("")
+function renderTrack(trackLabel, modules, sprintLayout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, options = {}) {
+  const { isSnapshotView = false, moduleResizeOverrides = {} } = options
+  const trackKey = trackLabel.toLowerCase()
+  const moduleBars = modules.map((module, index) => renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns, {
+    moduleKey: `${trackKey}-${module.id}-${index}`,
+    isSnapshotView,
+    moduleResizeOverrides,
+  })).join("")
   const gridTemplate = `repeat(${totalWeekColumns}, var(--rr-roadmap-week-col-width))`
   const trackClass = trackLabel.toLowerCase() === "development" ? "rr-roadmap-track--development" : "rr-roadmap-track--design"
 
@@ -607,8 +624,8 @@ function renderRoadmapMainContent(state, sprintData, options = {}) {
 
       <div class="rr-roadmap-container" data-roadmap-view="${viewKey}" data-current-col-start="${currentSprintStart}" data-current-col-span="${currentSprintSpan}">
         ${renderTimelineHeader(layout, totalWeekColumns)}
-        ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
-        ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
+        ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides })}
+        ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides })}
       </div>
     </section>
   `
@@ -642,6 +659,7 @@ function createInitialState() {
     isSnapshotDropdownOpen: false,
     isSnapshotModalOpen: false,
     snapshotModalScrollLeft: 0,
+    moduleResizeOverrides: {},
   }
 }
 
@@ -717,14 +735,104 @@ export function mountRoadmapFlow() {
     state.snapshotModalScrollLeft = mainContainer ? mainContainer.scrollLeft : 0
     state.isSnapshotDropdownOpen = false
     state.isSnapshotModalOpen = true
+    state.moduleResizeOverrides = {}
     renderHeaderActions()
     render()
   }
 
   function closeSnapshotModal() {
     if (!state.isSnapshotModalOpen) return
+    stopModuleResize()
     state.isSnapshotModalOpen = false
     render()
+  }
+
+  let moduleResizeState = null
+  let previousUserSelectValue = ""
+  let previousCursorValue = ""
+
+  function stopModuleResize() {
+    if (!moduleResizeState) return
+    moduleResizeState.moduleEl.classList.remove("is-resizing")
+    moduleResizeState = null
+    document.removeEventListener("mousemove", handleModuleResizeMove)
+    document.removeEventListener("mouseup", handleModuleResizeUp)
+    document.body.style.userSelect = previousUserSelectValue
+    document.body.style.cursor = previousCursorValue
+  }
+
+  function applyModuleSpan(moduleStart, moduleSpan) {
+    if (!moduleResizeState) return
+    const safeStart = Math.max(1, Math.min(moduleResizeState.totalCols, moduleStart))
+    const safeSpan = Math.max(1, Math.min(moduleResizeState.totalCols - safeStart + 1, moduleSpan))
+    moduleResizeState.moduleEl.style.gridColumn = `${safeStart} / span ${safeSpan}`
+    moduleResizeState.moduleEl.dataset.moduleStart = String(safeStart)
+    moduleResizeState.moduleEl.dataset.moduleSpan = String(safeSpan)
+    state.moduleResizeOverrides[moduleResizeState.moduleKey] = {
+      startColumn: safeStart,
+      colSpan: safeSpan,
+    }
+  }
+
+  function handleModuleResizeMove(event) {
+    if (!moduleResizeState) return
+    const deltaX = event.clientX - moduleResizeState.startClientX
+    const deltaCols = Math.round(deltaX / moduleResizeState.weekColumnWidth)
+
+    if (moduleResizeState.side === "right") {
+      const nextSpan = moduleResizeState.startColSpan + deltaCols
+      applyModuleSpan(moduleResizeState.startColumn, nextSpan)
+      return
+    }
+
+    const endExclusive = moduleResizeState.startColumn + moduleResizeState.startColSpan
+    const nextStart = Math.max(1, Math.min(endExclusive - 1, moduleResizeState.startColumn + deltaCols))
+    const nextSpan = endExclusive - nextStart
+    applyModuleSpan(nextStart, nextSpan)
+  }
+
+  function handleModuleResizeUp() {
+    stopModuleResize()
+  }
+
+  function startModuleResize(side, event, handleEl) {
+    if (!state.isSnapshotModalOpen) return
+    if (event.button !== 0) return
+    const moduleEl = handleEl.closest(".rr-roadmap-module")
+    if (!moduleEl) return
+    const snapshotContainer = moduleEl.closest('.rr-roadmap-container[data-roadmap-view="snapshot"]')
+    if (!snapshotContainer) return
+    const roadmapEl = moduleEl.closest(".rr-roadmap")
+    const weekColWidthRaw = roadmapEl
+      ? getComputedStyle(roadmapEl).getPropertyValue("--rr-roadmap-week-col-width")
+      : "88"
+    const weekColumnWidth = Number.parseFloat(weekColWidthRaw) || 88
+    const startColumn = Number(moduleEl.dataset.moduleStart || "1")
+    const startColSpan = Number(moduleEl.dataset.moduleSpan || "1")
+    const totalCols = Number(moduleEl.dataset.moduleTotalCols || "1")
+    const moduleKey = moduleEl.dataset.moduleKey
+    if (!moduleKey) return
+
+    event.preventDefault()
+    previousUserSelectValue = document.body.style.userSelect
+    previousCursorValue = document.body.style.cursor
+    document.body.style.userSelect = "none"
+    document.body.style.cursor = "ew-resize"
+    moduleEl.classList.add("is-resizing")
+
+    moduleResizeState = {
+      moduleEl,
+      moduleKey,
+      side,
+      startClientX: event.clientX,
+      startColumn,
+      startColSpan,
+      totalCols,
+      weekColumnWidth,
+    }
+
+    document.addEventListener("mousemove", handleModuleResizeMove)
+    document.addEventListener("mouseup", handleModuleResizeUp)
   }
 
   function closeSnapshotDropdown() {
@@ -833,6 +941,20 @@ export function mountRoadmapFlow() {
     }
   }
 
+  function handleRootMouseDown(event) {
+    if (!state.isSnapshotModalOpen) return
+    const actionEl = event.target.closest("[data-action]")
+    if (!actionEl) return
+    const action = actionEl.dataset.action
+    if (action === "resize-roadmap-module-left") {
+      startModuleResize("left", event, actionEl)
+      return
+    }
+    if (action === "resize-roadmap-module-right") {
+      startModuleResize("right", event, actionEl)
+    }
+  }
+
   function handleRootChange(event) {
     if (!state.draftSettings) return
     const target = event.target
@@ -872,6 +994,7 @@ export function mountRoadmapFlow() {
   }
 
   root.addEventListener("click", handleRootClick)
+  root.addEventListener("mousedown", handleRootMouseDown)
   root.addEventListener("change", handleRootChange)
   document.addEventListener("keydown", handleKeyDown)
   document.addEventListener("click", handleDocumentClick)
@@ -879,7 +1002,9 @@ export function mountRoadmapFlow() {
 
   return function unmount() {
     root.removeEventListener("click", handleRootClick)
+    root.removeEventListener("mousedown", handleRootMouseDown)
     root.removeEventListener("change", handleRootChange)
+    stopModuleResize()
     document.removeEventListener("keydown", handleKeyDown)
     document.removeEventListener("click", handleDocumentClick)
 
