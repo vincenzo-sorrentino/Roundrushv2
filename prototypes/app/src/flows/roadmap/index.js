@@ -88,6 +88,9 @@ const SPRINT_LAYOUT = (() => {
 })()
 
 const TOTAL_WEEK_COLUMNS = SPRINT_LAYOUT.reduce((acc, sprint) => acc + sprint.weekCount, 0)
+const CURRENT_SPRINT = SPRINT_LAYOUT.find(sprint => sprint.isCurrent) || SPRINT_LAYOUT[0]
+const CURRENT_SPRINT_START = CURRENT_SPRINT?.columnStart || 1
+const CURRENT_SPRINT_SPAN = CURRENT_SPRINT?.weekCount || 1
 
 /* ── Module definitions: Development track ────────────────– */
 const DEV_MODULES = [
@@ -140,7 +143,7 @@ function renderSprintRow() {
 
 function renderWeeksRow() {
   return SPRINT_LAYOUT.flatMap(sprint => sprint.weekStarts.map(weekStart => `
-    <div class="rr-roadmap-week-cell">
+    <div class="rr-roadmap-week-cell${sprint.isCurrent ? " is-current" : ""}">
       <span class="rr-roadmap-week-label">${formatDateShort(weekStart)}</span>
     </div>
   `)).join("")
@@ -198,7 +201,7 @@ function renderTrack(trackLabel, modules) {
       <div class="rr-roadmap-track-header">
         <span class="rr-roadmap-track-label">${escapeHtml(trackLabel)}</span>
       </div>
-      <div class="rr-roadmap-track-grid" style="grid-template-columns:${gridTemplate};">
+      <div class="rr-roadmap-track-grid" style="grid-template-columns:${gridTemplate}; --rr-current-col-start:${CURRENT_SPRINT_START}; --rr-current-col-span:${CURRENT_SPRINT_SPAN};">
         ${moduleBars}
       </div>
     </div>

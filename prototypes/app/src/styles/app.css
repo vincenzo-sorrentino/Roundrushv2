@@ -11353,6 +11353,7 @@ rr-alert.rr-req-info-callout {
   padding: 0 12px;
   border-right: 1px solid var(--rr-sem-borderDefault);
   border-bottom: 1px solid var(--rr-sem-borderDefault);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -11362,6 +11363,7 @@ rr-alert.rr-req-info-callout {
 
 .rr-roadmap-sprint-cell.is-current {
   font-weight: var(--rr-typography-fontWeightBold);
+  background: #f4f5f7;
 }
 
 .rr-roadmap-sprint-dot {
@@ -11384,10 +11386,15 @@ rr-alert.rr-req-info-callout {
   height: 40px;
   padding: 0 12px;
   border-right: 1px solid var(--rr-sem-borderDefault);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   background: var(--rr-sem-surface);
+}
+
+.rr-roadmap-week-cell.is-current {
+  background: #f4f5f7;
 }
 
 /* ── Track row (Development or Design) ──────────────────────– */
@@ -11450,20 +11457,34 @@ rr-alert.rr-req-info-callout {
 .rr-roadmap-track-grid {
   display: grid;
   grid-auto-flow: row;
-  gap: 0;
+  column-gap: 0;
+  row-gap: 4px;
   height: 100%;
   min-height: 0;
   width: max-content;
   min-width: max-content;
   flex: 0 0 auto;
   align-content: center;
-  padding: 8px;
+  padding: 8px 0;
   position: relative;
+}
+
+.rr-roadmap-track-grid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc((var(--rr-current-col-start, 1) - 1) * var(--rr-roadmap-week-col-width));
+  width: calc(var(--rr-current-col-span, 1) * var(--rr-roadmap-week-col-width));
+  background: #f4f5f7;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ── Module bar (colored block) ─────────────────────────────– */
 .rr-roadmap-module {
   padding: 8px 12px;
+  margin: 0 2px;
   border: 2px solid;
   border-radius: 6px;
   font-size: 13px;
@@ -11478,6 +11499,8 @@ rr-alert.rr-req-info-callout {
   text-align: center;
   min-height: 48px;
   word-break: break-word;
+  position: relative;
+  z-index: 1;
 }
 
 .rr-roadmap-module:hover {
