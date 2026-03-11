@@ -18,15 +18,17 @@ The list view and the graph view share exactly the same JSON payload from the `D
 
 ## Acceptance Laws
 
-| ID    | Name                                                          | Status  |
-|-------|---------------------------------------------------------------|---------|
-| AL-01 | Production code implemented                                   | pending |
-| AL-02 | Unit and integration tests pass with 100% coverage           | pending |
-| AL-03 | Documentation updated (requirements, tests, comments, UML)   | pending |
-| AL-04 | End-to-end tests implemented and passed                      | pending |
-| AL-05 | Dependency map between modules updated                        | pending |
-| AL-06 | AI-generated regression tests based on dependency analysis pass 100% | pending |
-| AL-07 | Manual test suites completed (including smoke tests)          | pending |
+> Law definitions are maintained in [`requirements/documentation/acceptance-laws.md`](../../documentation/acceptance-laws.md). The table below tracks compliance status for this module.
+
+| ID    | Name                                                                                         | Status  |
+|-------|----------------------------------------------------------------------------------------------|---------|
+| AL-01 | All production code implemented                                                              | pending |
+| AL-02 | All automated unit and integration tests pass with 100% coverage                             | pending |
+| AL-03 | All documentation updated (requirements, tests, code comments, component docs, UML diagrams) | pending |
+| AL-04 | All end-to-end tests implemented and passed                                                  | pending |
+| AL-05 | Dependency map between modules updated                                                       | pending |
+| AL-06 | AI-generated regression tests based on dependency analysis pass 100%                        | pending |
+| AL-07 | All manual test suites (including smoke tests) completed                                     | pending |
 
 ---
 
@@ -34,48 +36,18 @@ The list view and the graph view share exactly the same JSON payload from the `D
 
 ### DEP-M002-F001 — Dependency table
 
-**User story**
-
-As a QA engineer or developer, I want to read the full dependency map as a structured table so that I can quickly find which modules are coupled and understand the reason behind each dependency in plain language.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The dependency payload has been loaded | The list view mounts | Every edge in the JSON is rendered as one row; no edges are omitted |
-| 2 | A row is rendered | — | The row displays all seven fields from the payload: `from_module`, `to_module`, `relation`, `interface`, `risk`, `confidence`, and `why` |
-| 3 | A row has `risk: "High"` | — | The risk cell shows a high-risk badge (red); Medium shows amber; Low shows blue — matching the colour convention used in the graph view |
-| 4 | A row has a `confidence` value | — | The confidence score is displayed as a percentage (e.g. `0.92` renders as `92%`); values below 80% display an additional warning indicator signalling that human verification is recommended |
-| 5 | The payload is empty | The list view mounts | A clear empty-state message is shown instead of an empty table |
+When the view loads, every edge in the dependency payload is rendered as one row in the table — none are omitted. Each row displays all seven fields from the JSON payload: `from_module`, `to_module`, `relation`, `interface`, `risk`, `confidence`, and `why`. The risk cell uses the same colour convention as the graph view: red for High, amber for Medium, blue for Low. Confidence scores are shown as percentages (e.g. `0.92` renders as `92%`), and any score below 80% carries an additional warning indicator to flag that the AI-detected connection warrants human review. If the payload is empty, a clear empty-state message is shown in place of the table.
 
 ---
 
-### DEP-M002-F002 — Filter and search
+### DEP-M002-F002 — Filter, search, and sort
 
-**User story**
+The toolbar above the table provides two filtering controls that apply simultaneously. A **module filter dropdown** lists every distinct `from_module` value in the dataset alongside an "All modules" option; selecting a module hides all rows where a different module is the source. A **text search field** filters rows by any text match across the entire row — module names, relation types, interface strings, confidence values, and the `why` column — making it easy to find a specific dependency by keyword. Clearing both controls restores the full unfiltered table. When the user arrives from a "View in list" deep-link in the graph view, the search field is pre-populated with the module name from the URL parameter so the table opens already scoped to the relevant module.
 
-As a QA engineer, I want to filter the dependency table by risk level and search by module name so that I can focus on the edges most relevant to my current regression scope.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The table is populated | The user types a module name into the search field | Rows are filtered in real time to show only edges where `from_module` or `to_module` contains the search string (case-insensitive) |
-| 2 | The table is populated | The user selects a risk level filter (High / Medium / Low / All) | Only rows matching the selected risk level are shown; selecting All restores the full table |
-| 3 | A filter or search is active | The user clears both inputs | The table returns to its full unfiltered state |
-| 4 | The user arrives from a "View in list" deep-link in the graph view (DEP-M001-F002) | The list view loads | The search field is pre-populated with the module name from the deep-link parameter and the table is already filtered accordingly |
+The **From** column header is interactive and toggles between ascending and descending alphabetical sort on each click. An arrow icon on the header reflects the current sort direction. Sorting applies on top of any active filter so the user can combine both without losing their scope.
 
 ---
 
 ### DEP-M002-F003 — View mode toggle
 
-**User story**
-
-As a user, I want to switch from the list view back to the graph view so that I can see the same dependency data as a visual diagram.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The user is on `/dependencies/list` | The user activates the graph view toggle | The browser navigates to `/dependencies/uml` (DEP-M001) |
-| 2 | A search filter is active when the user toggles to graph view | The graph view loads | The graph opens with the corresponding node visually highlighted or selected, preserving the user's context |
+A toggle control mirrors the one in DEP-M001. Activating it from `/dependencies/list` navigates back to `/dependencies/uml`. If a search filter is active when the user switches, the graph view opens with the corresponding node highlighted, preserving the context the user was working in.

@@ -19,15 +19,17 @@ Each row in the panel provides a direct deep-link back to the main dependency ma
 
 ## Acceptance Laws
 
-| ID    | Name                                                          | Status  |
-|-------|---------------------------------------------------------------|---------|
-| AL-01 | Production code implemented                                   | pending |
-| AL-02 | Unit and integration tests pass with 100% coverage           | pending |
-| AL-03 | Documentation updated (requirements, tests, comments, UML)   | pending |
-| AL-04 | End-to-end tests implemented and passed                      | pending |
-| AL-05 | Dependency map between modules updated                        | pending |
-| AL-06 | AI-generated regression tests based on dependency analysis pass 100% | pending |
-| AL-07 | Manual test suites completed (including smoke tests)          | pending |
+> Law definitions are maintained in [`requirements/documentation/acceptance-laws.md`](../../documentation/acceptance-laws.md). The table below tracks compliance status for this module.
+
+| ID    | Name                                                                                         | Status  |
+|-------|----------------------------------------------------------------------------------------------|---------|
+| AL-01 | All production code implemented                                                              | pending |
+| AL-02 | All automated unit and integration tests pass with 100% coverage                             | pending |
+| AL-03 | All documentation updated (requirements, tests, code comments, component docs, UML diagrams) | pending |
+| AL-04 | All end-to-end tests implemented and passed                                                  | pending |
+| AL-05 | Dependency map between modules updated                                                       | pending |
+| AL-06 | AI-generated regression tests based on dependency analysis pass 100%                        | pending |
+| AL-07 | All manual test suites (including smoke tests) completed                                     | pending |
 
 ---
 
@@ -35,33 +37,10 @@ Each row in the panel provides a direct deep-link back to the main dependency ma
 
 ### DEP-M003-F001 — Scoped dependency list
 
-**User story**
-
-As a developer reviewing a specific module in the requirements view or the sprint board, I want to see only the dependencies that involve that module so that I can quickly assess its coupling without navigating away to the full dependency map.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | A module is open in the requirements detail view | The user opens the Dependencies sub-view | The panel resolves the current module's ID and loads only the edges from `Dependency_Edges` where `from_module` or `to_module` matches that ID |
-| 2 | A module card is expanded in the sprint board bottom-sheet | The user opens the Dependencies tab | The same scoped filter is applied using the module ID of the card in context |
-| 3 | The scoped results are loaded | — | Each row displays: direction indicator (depends on / depended on by), the counterpart module ID, relation type, interface, risk badge, confidence score, and the `why` explanation |
-| 4 | The module has no edges in the global map | The panel loads | A clear empty-state message is shown: "No dependencies defined for this module" |
-| 5 | The panel renders | — | No controls for creating or editing dependencies are shown; the panel is strictly read-only |
+When the user opens the Dependencies sub-view on a requirements module detail page, or the Dependencies tab in the sprint board bottom-sheet for a specific module card, the panel resolves the current module's ID and loads only the edges from the global `Dependency_Edges` table where that ID appears as `from_module` or `to_module`. Each row shows a direction indicator (depends on / depended on by), the counterpart module ID, relation type, interface string, risk badge, confidence score, and the `why` explanation in natural language. If the module has no recorded edges, the panel shows a clear empty-state message instead of a blank table. No controls for creating or editing dependencies are shown — the panel is strictly read-only; all authoring happens in the global map via DEP-M001 and DEP-M002.
 
 ---
 
 ### DEP-M003-F002 — Deep-link to main map
 
-**User story**
-
-As a developer, I want to jump from a scoped module dependency row directly into the full global map with that module highlighted so that I can see the wider context without losing my place.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | The scoped dependency panel is showing at least one row | — | Each row has a "View in map" action |
-| 2 | The user activates "View in map" on a row | — | The browser navigates to `/dependencies/uml` with the module node highlighted and the graph centred on it |
-| 3 | The user activates "View in list" on a row | — | The browser navigates to `/dependencies/list` with the module name pre-populated in the search field (DEP-M002-F002 AC4) |
-| 4 | The user follows a deep-link and then navigates back | — | The browser back button returns them to the requirements module or sprint board at the exact scroll and tab position they left |
+Every row in the scoped panel provides two navigation actions: "View in map" and "View in list". Activating "View in map" navigates to `/dependencies/uml` with that module node highlighted and the graph centred on it. Activating "View in list" navigates to `/dependencies/list` with the module name pre-populated in the search field, matching the deep-link pre-filter behaviour described in DEP-M002. After following either deep-link, the browser back button returns the user to the requirements module or sprint board at the exact scroll position and tab they left.
