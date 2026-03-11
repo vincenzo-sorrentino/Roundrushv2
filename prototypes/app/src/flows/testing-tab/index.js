@@ -111,6 +111,9 @@ function renderAddIssueModal() {
   const activeTool = ADD_ISSUE_MODAL_TOOL
   const selectedPriority = ADD_ISSUE_PRIORITY_OPTIONS.find((option) => option.id === ADD_ISSUE_PRIORITY)
   const selectedPriorityLabel = selectedPriority ? selectedPriority.label : "Select priority"
+  const isAttachmentsTool = activeTool === "attachments"
+  const isDependenciesTool = activeTool === "related"
+  const isHistoryTool = activeTool === "history"
 
   return `
     <div class="rr-modal-overlay">
@@ -190,20 +193,59 @@ function renderAddIssueModal() {
               <button class="rr-modal-tool-btn ${activeTool === "history" ? "is-active" : ""}" data-action="switch-add-issue-tool" data-tool="history" type="button" title="History">${ICON.clockCounterClockwise}</button>
             </div>
 
-            <div class="rr-add-issue-empty">
-              <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.notes}</span>
-              <p class="rr-add-issue-empty-title">No notes</p>
-            </div>
+            ${isAttachmentsTool ? `
+              <div class="rr-add-issue-attachments">
+                <div class="rr-add-issue-empty rr-add-issue-empty--attachments">
+                  <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.paperclip}</span>
+                  <p class="rr-add-issue-empty-title">No attachments</p>
+                </div>
 
-            <div class="rr-modal-input-area rr-add-issue-input-area">
-              <input type="text" class="rr-modal-input" placeholder="Write a note..." />
-              <div class="rr-modal-input-actions">
-                <button class="rr-modal-input-btn" type="button" title="Emoji">${ICON.smiley}</button>
-                <button class="rr-modal-input-btn" type="button" title="Mention">${ICON.at}</button>
-                <button class="rr-modal-input-btn" type="button" title="Add image">${ICON.image}</button>
-                <button class="rr-modal-input-btn rr-modal-input-btn--send" type="button" title="Send">${ICON.arrowUp}</button>
+                <button class="rr-add-issue-dropzone" type="button" title="Attach files">
+                  <span class="rr-add-issue-dropzone-icon" aria-hidden="true">${ICON.arrowUp}</span>
+                  <span class="rr-add-issue-dropzone-text">Drop files to attach or browse</span>
+                </button>
+
+                <div class="rr-add-issue-divider" aria-hidden="true">
+                  <span></span>
+                  <p>OR</p>
+                  <span></span>
+                </div>
+
+                <div class="rr-add-issue-link-row">
+                  <input class="rr-add-issue-link-input" type="text" placeholder="Paste link to image or video..." aria-label="Attachment link" />
+                  <button class="rr-add-issue-link-send" type="button" title="Add link">${ICON.arrowUp}</button>
+                </div>
               </div>
-            </div>
+            ` : isDependenciesTool ? `
+              <div class="rr-add-issue-dependencies">
+                <div class="rr-add-issue-empty rr-add-issue-empty--dependencies">
+                  <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.gitFork}</span>
+                  <p class="rr-add-issue-empty-title">No linked issues</p>
+                </div>
+              </div>
+            ` : isHistoryTool ? `
+              <div class="rr-add-issue-history">
+                <div class="rr-add-issue-empty rr-add-issue-empty--history">
+                  <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.clockCounterClockwise}</span>
+                  <p class="rr-add-issue-empty-title">No history</p>
+                </div>
+              </div>
+            ` : `
+              <div class="rr-add-issue-empty">
+                <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.notes}</span>
+                <p class="rr-add-issue-empty-title">No notes</p>
+              </div>
+
+              <div class="rr-modal-input-area rr-add-issue-input-area">
+                <input type="text" class="rr-modal-input" placeholder="Write a note..." />
+                <div class="rr-modal-input-actions">
+                  <button class="rr-modal-input-btn" type="button" title="Emoji">${ICON.smiley}</button>
+                  <button class="rr-modal-input-btn" type="button" title="Mention">${ICON.at}</button>
+                  <button class="rr-modal-input-btn" type="button" title="Add image">${ICON.image}</button>
+                  <button class="rr-modal-input-btn rr-modal-input-btn--send" type="button" title="Send">${ICON.arrowUp}</button>
+                </div>
+              </div>
+            `}
           </div>
         </div>
 

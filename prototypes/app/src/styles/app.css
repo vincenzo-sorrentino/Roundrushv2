@@ -9555,6 +9555,155 @@ rr-alert.rr-req-info-callout {
   font-weight: 500;
 }
 
+.rr-add-issue-attachments {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.rr-add-issue-empty--attachments {
+  min-height: 230px;
+}
+
+.rr-add-issue-empty--attachments .rr-add-issue-empty-icon {
+  color: #3d4350;
+}
+
+.rr-add-issue-dependencies {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.rr-add-issue-empty--dependencies {
+  min-height: 100%;
+}
+
+.rr-add-issue-empty--dependencies .rr-add-issue-empty-icon {
+  color: #3d4350;
+}
+
+.rr-add-issue-history {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.rr-add-issue-empty--history {
+  min-height: 100%;
+}
+
+.rr-add-issue-empty--history .rr-add-issue-empty-icon {
+  color: #3d4350;
+}
+
+.rr-add-issue-dropzone {
+  border: 1px dashed #a3a9b6;
+  border-radius: 16px;
+  background: #ffffff;
+  min-height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 32px;
+  cursor: pointer;
+}
+
+.rr-add-issue-dropzone-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #daebff;
+  color: #0067da;
+}
+
+.rr-add-issue-dropzone-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.rr-add-issue-dropzone-text {
+  color: #667085;
+  font-size: var(--rr-typography-fontSizeSm);
+  line-height: var(--rr-typography-lineHeightParagraph);
+  text-align: center;
+}
+
+.rr-add-issue-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.rr-add-issue-divider span {
+  flex: 1;
+  height: 1px;
+  background: #d0d5dd;
+}
+
+.rr-add-issue-divider p {
+  margin: 0;
+  color: #a3a9b6;
+  font-size: var(--rr-typography-fontSizeSm);
+  line-height: var(--rr-typography-lineHeightParagraph);
+}
+
+.rr-add-issue-link-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.rr-add-issue-link-input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: 1px solid #a3a9b6;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #667085;
+  background: #ffffff;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.rr-add-issue-link-input::placeholder {
+  color: #667085;
+}
+
+.rr-add-issue-link-input:focus {
+  outline: none;
+  border-color: #98a2b3;
+}
+
+.rr-add-issue-link-send {
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #91c5ff;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.rr-add-issue-link-send svg {
+  width: 20px;
+  height: 20px;
+}
+
 .rr-add-issue-input-area {
   margin-top: 0;
 }
