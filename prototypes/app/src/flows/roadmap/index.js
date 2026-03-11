@@ -151,6 +151,9 @@ const DESIGN_MODULES = [
 const SETTINGS_ICON_PATH = "M8.99928 5.62499C8.33177 5.62499 7.67925 5.82293 7.12423 6.19378C6.56921 6.56463 6.13663 7.09173 5.88119 7.70843C5.62574 8.32513 5.5589 9.00373 5.68913 9.65842C5.81935 10.3131 6.14079 10.9145 6.61279 11.3865C7.0848 11.8585 7.68616 12.1799 8.34085 12.3101C8.99554 12.4404 9.67414 12.3735 10.2908 12.1181C10.9075 11.8626 11.4346 11.4301 11.8055 10.875C12.1763 10.32 12.3743 9.6675 12.3743 8.99999C12.3733 8.10517 12.0175 7.24726 11.3847 6.61453C10.752 5.9818 9.8941 5.62592 8.99928 5.62499ZM8.99928 11.25C8.55427 11.25 8.11926 11.118 7.74925 10.8708C7.37924 10.6236 7.09085 10.2722 6.92055 9.86102C6.75025 9.44989 6.7057 8.99749 6.79251 8.56103C6.87933 8.12458 7.09362 7.72366 7.40829 7.409C7.72296 7.09433 8.12387 6.88004 8.56033 6.79322C8.99678 6.7064 9.44918 6.75096 9.86032 6.92126C10.2715 7.09155 10.6229 7.37994 10.8701 7.74995C11.1173 8.11996 11.2493 8.55498 11.2493 8.99999C11.2493 9.59672 11.0122 10.169 10.5903 10.591C10.1683 11.0129 9.59602 11.25 8.99928 11.25ZM16.7294 7.53819C16.7138 7.45898 16.6812 7.38407 16.634 7.31855C16.5868 7.25304 16.5261 7.19845 16.4559 7.1585L14.3585 5.96319L14.3501 3.59928C14.3498 3.51787 14.3319 3.43748 14.2975 3.36368C14.2632 3.28987 14.2132 3.2244 14.1511 3.17178C13.3902 2.52821 12.5141 2.03502 11.5692 1.71842C11.4948 1.69324 11.4159 1.68392 11.3377 1.69106C11.2595 1.69821 11.1836 1.72166 11.115 1.75991L8.99928 2.94256L6.88147 1.7578C6.81281 1.71933 6.73684 1.69571 6.65848 1.68844C6.58012 1.68117 6.50111 1.69043 6.42655 1.71561C5.48235 2.03452 4.6072 2.52959 3.84748 3.1746C3.78544 3.22713 3.73553 3.29249 3.70118 3.36617C3.66683 3.43985 3.64885 3.5201 3.6485 3.60139L3.63795 5.96741L1.54053 7.16272C1.47036 7.20267 1.40961 7.25726 1.36241 7.32277C1.31522 7.38829 1.28268 7.4632 1.26701 7.54241C1.07506 8.50701 1.07506 9.49999 1.26701 10.4646C1.28268 10.5438 1.31522 10.6187 1.36241 10.6842C1.40961 10.7497 1.47036 10.8043 1.54053 10.8443L3.63795 12.0396L3.64639 14.4035C3.64664 14.4849 3.66457 14.5653 3.69892 14.6391C3.73328 14.7129 3.78324 14.7784 3.84537 14.831C4.6062 15.4746 5.48236 15.9678 6.42725 16.2844C6.50166 16.3095 6.58052 16.3189 6.65875 16.3117C6.73698 16.3046 6.81285 16.2811 6.88147 16.2429L8.99928 15.0574L11.1171 16.2422C11.2009 16.2889 11.2954 16.3131 11.3913 16.3125C11.4527 16.3125 11.5138 16.3025 11.572 16.283C12.5161 15.9645 13.3912 15.4699 14.1511 14.8254C14.2131 14.7728 14.263 14.7075 14.2974 14.6338C14.3317 14.5601 14.3497 14.4799 14.3501 14.3986L14.3606 12.0326L16.458 10.8373C16.5282 10.7973 16.5889 10.7427 16.6361 10.6772C16.6833 10.6117 16.7159 10.5368 16.7315 10.4576C16.9224 9.49373 16.9217 8.50175 16.7294 7.53819ZM15.6747 9.9928L13.6659 11.1354C13.5779 11.1854 13.505 11.2583 13.455 11.3463C13.4142 11.4166 13.3713 11.4912 13.3277 11.5615C13.2719 11.6501 13.2422 11.7527 13.2419 11.8575L13.2314 14.1251C12.6914 14.5491 12.0899 14.8882 11.4476 15.1305L9.42115 14.0013C9.33703 13.9548 9.24238 13.9306 9.14623 13.931H9.13287C9.04779 13.931 8.96201 13.931 8.87694 13.931C8.77631 13.9285 8.67682 13.9528 8.58865 14.0013L6.56084 15.1333C5.91714 14.8928 5.31394 14.5554 4.77209 14.1328L4.76436 11.8687C4.76401 11.7638 4.7343 11.661 4.67858 11.572C4.63498 11.5017 4.59209 11.4314 4.55201 11.3569C4.50232 11.2675 4.42945 11.1932 4.34108 11.1417L2.33014 9.99632C2.22608 9.33806 2.22608 8.66754 2.33014 8.00928L4.33545 6.8646C4.42347 6.81455 4.49634 6.74167 4.54639 6.65366C4.58717 6.58335 4.63006 6.50881 4.67365 6.4385C4.72946 6.34983 4.75918 6.24725 4.75944 6.14249L4.76998 3.87491C5.30993 3.45089 5.91148 3.11182 6.55381 2.86944L8.5774 3.99866C8.66547 4.04748 8.76503 4.07176 8.86569 4.06897C8.95076 4.06897 9.03655 4.06897 9.12162 4.06897C9.22225 4.07149 9.32174 4.04722 9.4099 3.99866L11.4377 2.86663C12.0814 3.10715 12.6846 3.44455 13.2265 3.86717L13.2342 6.13124C13.2345 6.23621 13.2643 6.33899 13.32 6.42796C13.3636 6.49827 13.4065 6.56858 13.4465 6.64311C13.4962 6.73249 13.5691 6.80681 13.6575 6.85827L15.6684 8.00366C15.7739 8.66242 15.7751 9.33367 15.6719 9.9928H15.6747Z"
 const ROADMAP_SECONDARY_ICON_PATH = "M15.1875 2.8125H9.5625V1.6875C9.5625 1.53832 9.50324 1.39524 9.39775 1.28975C9.29226 1.18426 9.14918 1.125 9 1.125C8.85082 1.125 8.70774 1.18426 8.60225 1.28975C8.49676 1.39524 8.4375 1.53832 8.4375 1.6875V2.8125H2.8125C2.51413 2.8125 2.22798 2.93103 2.017 3.142C1.80603 3.35298 1.6875 3.63913 1.6875 3.9375V12.375C1.6875 12.6734 1.80603 12.9595 2.017 13.1705C2.22798 13.3815 2.51413 13.5 2.8125 13.5H5.58L4.06055 15.3984C3.96731 15.515 3.92418 15.6638 3.94067 15.8121C3.95715 15.9605 4.03189 16.0962 4.14844 16.1895C4.26499 16.2827 4.4138 16.3258 4.56215 16.3093C4.71049 16.2929 4.84621 16.2181 4.93945 16.1016L7.02 13.5H10.98L13.0605 16.1016C13.1067 16.1593 13.1638 16.2073 13.2285 16.243C13.2933 16.2786 13.3644 16.3012 13.4379 16.3093C13.5113 16.3175 13.5856 16.3111 13.6566 16.2905C13.7276 16.27 13.7939 16.2356 13.8516 16.1895C13.9093 16.1433 13.9573 16.0862 13.993 16.0215C14.0286 15.9567 14.0512 15.8856 14.0593 15.8121C14.0675 15.7387 14.0611 15.6644 14.0405 15.5934C14.02 15.5224 13.9856 15.4561 13.9395 15.3984L12.42 13.5H15.1875C15.4859 13.5 15.772 13.3815 15.983 13.1705C16.194 12.9595 16.3125 12.6734 16.3125 12.375V3.9375C16.3125 3.63913 16.194 3.35298 15.983 3.142C15.772 2.93103 15.4859 2.8125 15.1875 2.8125ZM15.1875 12.375H2.8125V3.9375H15.1875V12.375Z"
 const ROADMAP_PLUS_ICON_PATH = "M10 4.16666C10 3.93654 9.81312 3.74966 9.58333 3.74966C9.35355 3.74966 9.16666 3.93654 9.16666 4.16666V9.16666H4.16666C3.93654 9.16666 3.74966 9.35355 3.74966 9.58333C3.74966 9.81312 3.93654 9.99999 4.16666 9.99999H9.16666V15C9.16666 15.2298 9.35355 15.4167 9.58333 15.4167C9.81312 15.4167 10 15.2298 10 15V9.99999H15C15.2298 9.99999 15.4167 9.81312 15.4167 9.58333C15.4167 9.35355 15.2298 9.16666 15 9.16666H10V4.16666Z"
+const ROADMAP_SNAPSHOT_IMAGE_ICON_PATH = "M13.5 2.5H2.5C2.23478 2.5 1.98043 2.60536 1.79289 2.79289C1.60536 2.98043 1.5 3.23478 1.5 3.5V12.5C1.5 12.7652 1.60536 13.0196 1.79289 13.2071C1.98043 13.3946 2.23478 13.5 2.5 13.5H13.5C13.7652 13.5 14.0196 13.3946 14.2071 13.2071C14.3946 13.0196 14.5 12.7652 14.5 12.5V3.5C14.5 3.23478 14.3946 2.98043 14.2071 2.79289C14.0196 2.60536 13.7652 2.5 13.5 2.5ZM13.5 3.5V9.92188L11.8706 8.29313C11.7778 8.20024 11.6675 8.12656 11.5462 8.07629C11.4248 8.02602 11.2948 8.00015 11.1634 8.00015C11.0321 8.00015 10.902 8.02602 10.7807 8.07629C10.6594 8.12656 10.5491 8.20024 10.4563 8.29313L9.20625 9.54313L6.45625 6.79313C6.26873 6.60573 6.01448 6.50046 5.74937 6.50046C5.48427 6.50046 5.23002 6.60573 5.0425 6.79313L2.5 9.33562V3.5H13.5ZM2.5 10.75L5.75 7.5L10.75 12.5H2.5V10.75ZM13.5 12.5H12.1644L9.91438 10.25L11.1644 9L13.5 11.3363V12.5ZM9 6.25C9 6.10166 9.04399 5.95666 9.1264 5.83332C9.20881 5.70999 9.32594 5.61386 9.46299 5.55709C9.60003 5.50032 9.75083 5.48547 9.89632 5.51441C10.0418 5.54335 10.1754 5.61478 10.2803 5.71967C10.3852 5.82456 10.4567 5.9582 10.4856 6.10368C10.5145 6.24917 10.4997 6.39997 10.4429 6.53701C10.3861 6.67406 10.29 6.79119 10.1667 6.8736C10.0433 6.95601 9.89834 7 9.75 7C9.55109 7 9.36032 6.92098 9.21967 6.78033C9.07902 6.63968 9 6.44891 9 6.25Z"
+const ROADMAP_SNAPSHOT_PDF_ICON_PATH = "M17.5 11.875C17.5 12.0408 17.4342 12.1997 17.3169 12.3169C17.1997 12.4342 17.0408 12.5 16.875 12.5H15V13.75H16.25C16.4158 13.75 16.5747 13.8158 16.6919 13.9331C16.8092 14.0503 16.875 14.2092 16.875 14.375C16.875 14.5408 16.8092 14.6997 16.6919 14.8169C16.5747 14.9342 16.4158 15 16.25 15H15V16.25C15 16.4158 14.9342 16.5747 14.8169 16.6919C14.6997 16.8092 14.5408 16.875 14.375 16.875C14.2092 16.875 14.0503 16.8092 13.9331 16.6919C13.8158 16.5747 13.75 16.4158 13.75 16.25V11.875C13.75 11.7092 13.8158 11.5503 13.9331 11.4331C14.0503 11.3158 14.2092 11.25 14.375 11.25H16.875C17.0408 11.25 17.1997 11.3158 17.3169 11.4331C17.4342 11.5503 17.5 11.7092 17.5 11.875ZM7.1875 13.4375C7.1875 14.0177 6.95703 14.5741 6.5468 14.9843C6.13656 15.3945 5.58016 15.625 5 15.625H4.375V16.25C4.375 16.4158 4.30915 16.5747 4.19194 16.6919C4.07473 16.8092 3.91576 16.875 3.75 16.875C3.58424 16.875 3.42527 16.8092 3.30806 16.6919C3.19085 16.5747 3.125 16.4158 3.125 16.25V11.875C3.125 11.7092 3.19085 11.5503 3.30806 11.4331C3.42527 11.3158 3.58424 11.25 3.75 11.25H5C5.58016 11.25 6.13656 11.4805 6.5468 11.8907C6.95703 12.3009 7.1875 12.8573 7.1875 13.4375ZM5.9375 13.4375C5.9375 13.1889 5.83873 12.9504 5.66291 12.7746C5.4871 12.5988 5.24864 12.5 5 12.5H4.375V14.375H5C5.24864 14.375 5.4871 14.2762 5.66291 14.1004C5.83873 13.9246 5.9375 13.6861 5.9375 13.4375ZM12.8125 14.0625C12.8125 14.8084 12.5162 15.5238 11.9887 16.0512C11.4613 16.5787 10.7459 16.875 10 16.875H8.75C8.58424 16.875 8.42527 16.8092 8.30806 16.6919C8.19085 16.5747 8.125 16.4158 8.125 16.25V11.875C8.125 11.7092 8.19085 11.5503 8.30806 11.4331C8.42527 11.3158 8.58424 11.25 8.75 11.25H10C10.7459 11.25 11.4613 11.5463 11.9887 12.0738C12.5162 12.6012 12.8125 13.3166 12.8125 14.0625ZM11.5625 14.0625C11.5625 13.6481 11.3979 13.2507 11.1049 12.9576C10.8118 12.6646 10.4144 12.5 10 12.5H9.375V15.625H10C10.4144 15.625 10.8118 15.4604 11.1049 15.1674C11.3979 14.8743 11.5625 14.4769 11.5625 14.0625ZM3.125 8.75V3.125C3.125 2.79348 3.2567 2.47554 3.49112 2.24112C3.72554 2.0067 4.04348 1.875 4.375 1.875H11.875C11.9571 1.87494 12.0384 1.89105 12.1143 1.92241C12.1902 1.95378 12.2591 1.99979 12.3172 2.05781L16.6922 6.43281C16.7502 6.4909 16.7962 6.55985 16.8276 6.63572C16.859 6.71159 16.8751 6.7929 16.875 6.875V8.75C16.875 8.91576 16.8092 9.07473 16.6919 9.19194C16.5747 9.30915 16.4158 9.375 16.25 9.375C16.0842 9.375 15.9253 9.30915 15.8081 9.19194C15.6908 9.07473 15.625 8.91576 15.625 8.75V7.5H11.875C11.7092 7.5 11.5503 7.43415 11.4331 7.31694C11.3158 7.19973 11.25 7.04076 11.25 6.875V3.125H4.375V8.75C4.375 8.91576 4.30915 9.07473 4.19194 9.19194C4.07473 9.30915 3.91576 9.375 3.75 9.375C3.58424 9.375 3.42527 9.30915 3.30806 9.19194C3.19085 9.07473 3.125 8.91576 3.125 8.75ZM12.5 6.25H14.7414L12.5 4.00859V6.25Z"
+const ROADMAP_SNAPSHOT_SAVE_ICON_PATH = "M17.1336 5.62501L14.375 2.86641C14.2593 2.74983 14.1217 2.65741 13.97 2.59451C13.8183 2.5316 13.6556 2.49948 13.4914 2.50001H3.75C3.41848 2.50001 3.10054 2.6317 2.86612 2.86612C2.6317 3.10054 2.5 3.41849 2.5 3.75001V16.25C2.5 16.5815 2.6317 16.8995 2.86612 17.1339C3.10054 17.3683 3.41848 17.5 3.75 17.5H16.25C16.5815 17.5 16.8995 17.3683 17.1339 17.1339C17.3683 16.8995 17.5 16.5815 17.5 16.25V6.5086C17.5005 6.34439 17.4684 6.18171 17.4055 6.03002C17.3426 5.87833 17.2502 5.74066 17.1336 5.62501ZM13.125 16.25H6.875V11.875H13.125V16.25ZM16.25 16.25H14.375V11.875C14.375 11.5435 14.2433 11.2255 14.0089 10.9911C13.7745 10.7567 13.4565 10.625 13.125 10.625H6.875C6.54348 10.625 6.22554 10.7567 5.99112 10.9911C5.7567 11.2255 5.625 11.5435 5.625 11.875V16.25H3.75V3.75001H13.4914L16.25 6.5086V16.25ZM12.5 5.62501C12.5 5.79077 12.4342 5.94974 12.3169 6.06695C12.1997 6.18416 12.0408 6.25001 11.875 6.25001H7.5C7.33424 6.25001 7.17527 6.18416 7.05806 6.06695C6.94085 5.94974 6.875 5.79077 6.875 5.62501C6.875 5.45925 6.94085 5.30027 7.05806 5.18306C7.17527 5.06585 7.33424 5.00001 7.5 5.00001H11.875C12.0408 5.00001 12.1997 5.06585 12.3169 5.18306C12.4342 5.30027 12.5 5.45925 12.5 5.62501Z"
 const ROADMAP_SNAPSHOT_LABEL = "Sprint 15"
 const ROADMAP_SNAPSHOTS = ["Snapshot 7", "Snapshot 6", "Snapshot 5", "Snapshot 4", "Snapshot 3", "Snapshot 2"]
 
@@ -538,8 +541,45 @@ function renderRoadmapSettingsModal(draftSettings, memberPickerOpen = false) {
   `
 }
 
-function buildView(state) {
-  const sprintData = buildSprintLayout(state.settings)
+function renderRoadmapSnapshotModal(contentHtml) {
+  return `
+    <div class="rr-roadmap-snapshot-overlay" data-action="close-roadmap-snapshot-modal">
+      <div class="rr-roadmap-snapshot-modal" role="dialog" aria-modal="true" aria-label="Roadmap snapshot">
+        <div class="rr-roadmap-snapshot-header">
+          <p class="rr-roadmap-snapshot-title">Roadmap Snapshot</p>
+
+          <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Export snapshot image" title="Export snapshot image">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="${ROADMAP_SNAPSHOT_IMAGE_ICON_PATH}" fill="#14161B"/>
+            </svg>
+          </button>
+
+          <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Export snapshot PDF" title="Export snapshot PDF">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="${ROADMAP_SNAPSHOT_PDF_ICON_PATH}" fill="#14161B"/>
+            </svg>
+          </button>
+
+          <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Save snapshot" title="Save snapshot">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="${ROADMAP_SNAPSHOT_SAVE_ICON_PATH}" fill="#14161B"/>
+            </svg>
+          </button>
+
+          <button type="button" class="rr-roadmap-snapshot-icon-btn rr-roadmap-snapshot-icon-btn--close" data-action="close-roadmap-snapshot-modal" aria-label="Close snapshot" title="Close snapshot">
+            <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true" focusable="false">
+              <path d="M4.05 3.1L9 8.06L13.95 3.1L14.9 4.05L9.95 9L14.9 13.95L13.95 14.9L9 9.94L4.05 14.9L3.1 13.95L8.05 9L3.1 4.05L4.05 3.1Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+        ${contentHtml}
+      </div>
+    </div>
+  `
+}
+
+function renderRoadmapMainContent(state, sprintData, options = {}) {
+  const { viewKey = "main", isSnapshotView = false } = options
   const { layout, totalWeekColumns, currentSprintIndex, currentSprintStart, currentSprintSpan } = sprintData
   const sprintDuration = Number(state.settings.sprintDurationWeeks) || 3
   const placeholderStartNo = Math.max(1, ROADMAP_SPRINT_START_NO - ROADMAP_HISTORY_SPRINTS_COUNT)
@@ -554,7 +594,7 @@ function buildView(state) {
   ]
 
   return `
-    <section class="rr-roadmap" data-flow="roadmap" style="--rr-roadmap-sprint-duration-weeks:${sprintDuration};">
+    <section class="rr-roadmap${isSnapshotView ? " rr-roadmap--snapshot" : ""}" data-flow="roadmap" style="--rr-roadmap-sprint-duration-weeks:${sprintDuration};">
       <div class="rr-roadmap-header">
         <div class="rr-roadmap-header-left">
           <p class="rr-roadmap-dates">Project dates: ${formatDateShortWithYear(state.settings.projectStartDate)} - ${formatDateShortWithYear(state.settings.projectEndDate)}</p>
@@ -565,14 +605,26 @@ function buildView(state) {
         </div>
       </div>
 
-      <div class="rr-roadmap-container" data-current-col-start="${currentSprintStart}" data-current-col-span="${currentSprintSpan}">
+      <div class="rr-roadmap-container" data-roadmap-view="${viewKey}" data-current-col-start="${currentSprintStart}" data-current-col-span="${currentSprintSpan}">
         ${renderTimelineHeader(layout, totalWeekColumns)}
         ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
         ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
       </div>
-
-      ${state.isModalOpen ? renderRoadmapSettingsModal(state.draftSettings, state.memberPickerOpen) : ""}
     </section>
+  `
+}
+
+function buildView(state) {
+  const sprintData = buildSprintLayout(state.settings)
+  const mainContent = renderRoadmapMainContent(state, sprintData, { viewKey: "main" })
+  const snapshotModal = state.isSnapshotModalOpen
+    ? renderRoadmapSnapshotModal(renderRoadmapMainContent(state, sprintData, { viewKey: "snapshot", isSnapshotView: true }))
+    : ""
+
+  return `
+    ${mainContent}
+    ${state.isModalOpen ? renderRoadmapSettingsModal(state.draftSettings, state.memberPickerOpen) : ""}
+    ${snapshotModal}
   `
 }
 
@@ -588,6 +640,8 @@ function createInitialState() {
     isModalOpen: false,
     memberPickerOpen: false,
     isSnapshotDropdownOpen: false,
+    isSnapshotModalOpen: false,
+    snapshotModalScrollLeft: 0,
   }
 }
 
@@ -609,20 +663,26 @@ export function mountRoadmapFlow() {
   }
 
   function render() {
-    const previousContainer = root.querySelector(".rr-roadmap-container")
-    const previousScrollLeft = previousContainer ? previousContainer.scrollLeft : 0
+    const previousMainContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="main"]')
+    const previousMainScrollLeft = previousMainContainer ? previousMainContainer.scrollLeft : 0
     root.innerHTML = buildView(state)
 
-    const nextContainer = root.querySelector(".rr-roadmap-container")
-    if (nextContainer && hasAutoScrolled) {
-      nextContainer.scrollLeft = previousScrollLeft
+    const nextMainContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="main"]')
+    const snapshotContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="snapshot"]')
+
+    if (nextMainContainer && hasAutoScrolled) {
+      nextMainContainer.scrollLeft = previousMainScrollLeft
+    }
+
+    if (snapshotContainer && state.isSnapshotModalOpen) {
+      snapshotContainer.scrollLeft = state.snapshotModalScrollLeft
     }
 
     if (!hasAutoScrolled) {
-      if (nextContainer) {
+      if (nextMainContainer) {
         setTimeout(() => {
-          const currentColStart = Number(nextContainer.dataset.currentColStart || "1")
-          const currentColSpan = Number(nextContainer.dataset.currentColSpan || "1")
+          const currentColStart = Number(nextMainContainer.dataset.currentColStart || "1")
+          const currentColSpan = Number(nextMainContainer.dataset.currentColSpan || "1")
           const roadmapEl = root.querySelector(".rr-roadmap")
           const weekColWidthRaw = roadmapEl
             ? getComputedStyle(roadmapEl).getPropertyValue("--rr-roadmap-week-col-width")
@@ -630,8 +690,8 @@ export function mountRoadmapFlow() {
           const weekColWidth = Number.parseFloat(weekColWidthRaw) || 88
 
           const currentCenterX = ((currentColStart - 1) + (currentColSpan / 2)) * weekColWidth
-          const targetScrollLeft = Math.max(0, currentCenterX - (nextContainer.clientWidth / 2))
-          nextContainer.scrollLeft = targetScrollLeft
+          const targetScrollLeft = Math.max(0, currentCenterX - (nextMainContainer.clientWidth / 2))
+          nextMainContainer.scrollLeft = targetScrollLeft
         }, 100)
       }
       hasAutoScrolled = true
@@ -649,6 +709,21 @@ export function mountRoadmapFlow() {
     state.draftSettings = deepCloneSettings(state.settings)
     state.isModalOpen = true
     state.memberPickerOpen = false
+    render()
+  }
+
+  function openSnapshotModal() {
+    const mainContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="main"]')
+    state.snapshotModalScrollLeft = mainContainer ? mainContainer.scrollLeft : 0
+    state.isSnapshotDropdownOpen = false
+    state.isSnapshotModalOpen = true
+    renderHeaderActions()
+    render()
+  }
+
+  function closeSnapshotModal() {
+    if (!state.isSnapshotModalOpen) return
+    state.isSnapshotModalOpen = false
     render()
   }
 
@@ -678,6 +753,11 @@ export function mountRoadmapFlow() {
     }
 
     if (action === "create-roadmap-snapshot" || action === "select-roadmap-snapshot") {
+      if (action === "create-roadmap-snapshot") {
+        openSnapshotModal()
+        return
+      }
+
       closeSnapshotDropdown()
       return
     }
@@ -736,6 +816,13 @@ export function mountRoadmapFlow() {
       return
     }
 
+    if (action === "close-roadmap-snapshot-modal") {
+      if (actionEl.classList.contains("rr-roadmap-snapshot-modal")) return
+      if (actionEl.classList.contains("rr-roadmap-snapshot-overlay") && event.target !== actionEl) return
+      closeSnapshotModal()
+      return
+    }
+
     if (state.memberPickerOpen) {
       const clickedInsidePicker = Boolean(event.target.closest(".rr-roadmap-member-picker"))
       const clickedPickerToggle = Boolean(event.target.closest('[data-action="toggle-team-member-picker"]'))
@@ -769,6 +856,11 @@ export function mountRoadmapFlow() {
   }
 
   function handleKeyDown(event) {
+    if (event.key === "Escape" && state.isSnapshotModalOpen) {
+      closeSnapshotModal()
+      return
+    }
+
     if (event.key === "Escape" && state.isModalOpen) {
       closeSettingsModal(false)
     }

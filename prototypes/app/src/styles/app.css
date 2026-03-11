@@ -11620,6 +11620,79 @@ rr-alert.rr-req-info-callout {
   word-break: break-word;
 }
 
+/* ── Snapshot modal (full viewport roadmap) ───────────────– */
+.rr-roadmap-snapshot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: rgba(20, 22, 27, 0.46);
+  padding: 16px;
+}
+
+.rr-roadmap-snapshot-modal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--rr-sem-background-pageLight, #f8f9fb);
+  box-shadow: 0 24px 48px rgba(16, 24, 40, 0.24);
+  display: flex;
+  flex-direction: column;
+}
+
+.rr-roadmap--snapshot {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+.rr-roadmap-snapshot-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--rr-sem-stroke-primary, #e0e2e7);
+  background: var(--rr-sem-background-page, #fcfcfd);
+  flex-shrink: 0;
+}
+
+.rr-roadmap-snapshot-title {
+  margin: 0;
+  flex: 1;
+  color: var(--rr-sem-textPrimary, #14161b);
+  font-size: var(--rr-typography-fontSizeMd, 16px);
+  line-height: var(--rr-typography-lineHeightParagraph, 18px);
+  font-weight: var(--rr-typography-fontWeightRegular, 400);
+}
+
+.rr-roadmap-snapshot-icon-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--rr-sem-textPrimary, #14161b);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.rr-roadmap-snapshot-icon-btn svg {
+  display: block;
+}
+
+.rr-roadmap-snapshot-icon-btn:hover {
+  background: var(--rr-sem-background-navHover, #f0f1f3);
+}
+
+.rr-roadmap-snapshot-icon-btn--close {
+  border: 1px solid var(--rr-sem-stroke-btnNeutral, #a3a9b6);
+}
+
 /* ── Settings modal ────────────────────────────────────────– */
 .rr-roadmap-settings-overlay {
   position: fixed;
@@ -11915,5 +11988,27 @@ rr-alert.rr-req-info-callout {
 
   .rr-roadmap-settings-body {
     padding: 14px 14px 16px;
+  }
+
+  .rr-roadmap-snapshot-overlay {
+    padding: 8px;
+  }
+
+  .rr-roadmap-snapshot-modal {
+    border-radius: 12px;
+  }
+
+  .rr-roadmap-snapshot-header {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .rr-roadmap-snapshot-title {
+    font-size: 14px;
+  }
+
+  .rr-roadmap-snapshot-icon-btn {
+    width: 32px;
+    height: 32px;
   }
 }
