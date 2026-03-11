@@ -90,6 +90,15 @@ const PROTOTYPE_GROUPS = [
         module: "DEP-M001"
       },
       {
+        id: "testing-tab",
+        title: "Testing Overview",
+        subtitle: "Testing status by environment with pass rates and health badges.",
+        route: "/testing/overview",
+        status: "approved",
+        epic: "TST",
+        module: "TST-M001"
+      },
+      {
         id: "docs-hub",
         title: "Docs Hub",
         subtitle: "Project documentation hub with search and section cards.",

@@ -1,0 +1,46 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+button {
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border: 0;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--rr-sem-iconSecondary, #3d4350);
+  cursor: pointer;
+  transition: background 120ms ease-in-out;
+}
+
+button .icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button .icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+button[data-state="hover"] {
+  background: var(--rr-sem-background-card, #f0f1f3);
+}
+
+button[data-state="active"] {
+  background: var(--rr-sem-action-primarySelection, #daebff);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

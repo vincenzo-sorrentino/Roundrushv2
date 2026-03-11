@@ -1,7 +1,10 @@
 import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
 import path from "node:path"
 
-const filePath = path.resolve("design-system/source/figma/components.raw.json")
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const filePath = path.resolve(__dirname, "../../../source/figma/components.raw.json")
 const source = JSON.parse(readFileSync(filePath, "utf8"))
 const expected = [
   "rr-button",

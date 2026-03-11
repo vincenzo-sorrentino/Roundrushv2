@@ -1,5 +1,14 @@
 import { execSync } from "node:child_process"
 
+function tryGitFiles(command) {
+  try {
+    const output = execSync(command, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })
+    return output.split("\n").filter(Boolean)
+  } catch {
+    return null
+  }
+}
+
 function getChangedFiles() {
   if (process.argv.length > 2) {
     return process.argv.slice(2)
@@ -9,12 +18,23 @@ function getChangedFiles() {
   const head = process.env.HEAD_SHA
 
   if (base && head) {
-    const output = execSync(`git diff --name-only ${base} ${head}`, { encoding: "utf8" })
-    return output.split("\n").filter(Boolean)
+    const files = tryGitFiles(`git diff --name-only ${base} ${head}`)
+    if (files) {
+      return files
+    }
   }
 
-  const output = execSync("git diff --name-only HEAD~1 HEAD", { encoding: "utf8" })
-  return output.split("\n").filter(Boolean)
+  const previousHeadFiles = tryGitFiles("git diff --name-only HEAD~1 HEAD")
+  if (previousHeadFiles) {
+    return previousHeadFiles
+  }
+
+  const headFiles = tryGitFiles("git show --pretty= --name-only HEAD")
+  if (headFiles) {
+    return headFiles
+  }
+
+  return []
 }
 
 const changedFiles = getChangedFiles()
