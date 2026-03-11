@@ -14,15 +14,17 @@ Provide a timeline-oriented view where product managers can schedule epics and m
 
 ## Acceptance Laws
 
-| ID    | Name                                                          | Status  |
-|-------|---------------------------------------------------------------|---------|
-| AL-01 | Production code implemented                                   | pending |
-| AL-02 | Unit and integration tests pass with 100% coverage           | pending |
-| AL-03 | Documentation updated (requirements, tests, comments, UML)   | pending |
-| AL-04 | End-to-end tests implemented and passed                      | pending |
-| AL-05 | Dependency map between modules updated                        | pending |
-| AL-06 | AI-generated regression tests based on dependency analysis pass 100% | pending |
-| AL-07 | Manual test suites completed (including smoke tests)          | pending |
+> Law definitions are maintained in [`requirements/documentation/acceptance-laws.md`](../../documentation/acceptance-laws.md). The table below tracks compliance status for this module.
+
+| ID    | Name                                                                                         | Status  |
+|-------|----------------------------------------------------------------------------------------------|---------|
+| AL-01 | All production code implemented                                                              | pending |
+| AL-02 | All automated unit and integration tests pass with 100% coverage                             | pending |
+| AL-03 | All documentation updated (requirements, tests, code comments, component docs, UML diagrams) | pending |
+| AL-04 | All end-to-end tests implemented and passed                                                  | pending |
+| AL-05 | Dependency map between modules updated                                                       | pending |
+| AL-06 | AI-generated regression tests based on dependency analysis pass 100%                        | pending |
+| AL-07 | All manual test suites (including smoke tests) completed                                     | pending |
 
 ---
 
@@ -31,13 +33,3 @@ Provide a timeline-oriented view where product managers can schedule epics and m
 ### RMP-M001-F001 — Timeline view
 
 > **Status: placeholder** — This functionality is yet to be fully specified. Replace this section with the real specification when the epic moves from discovery into drafting.
-
-**User story**
-
-As a product manager, I want to view a timeline of epics and modules so that I can plan delivery dates and communicate the roadmap to the team.
-
-**Acceptance criteria**
-
-| # | Given | When | Then |
-|---|-------|------|------|
-| 1 | TODO | TODO | TODO — replace with real acceptance criteria during drafting |

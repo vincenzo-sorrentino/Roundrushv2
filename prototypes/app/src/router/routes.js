@@ -81,6 +81,13 @@ const routes = [
     status: "approved"
   },
   {
+    id: "dependencies-list",
+    path: "/dependencies/list",
+    render: renderDependenciesUmlFlow,
+    mount: mountDependenciesUmlFlow,
+    status: "approved"
+  },
+  {
     id: "docs-hub",
     path: "/docs/hub",
     render: renderDocsHubFlow,
