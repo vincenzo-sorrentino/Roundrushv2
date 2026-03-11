@@ -11485,7 +11485,7 @@ rr-alert.rr-req-info-callout {
 .rr-roadmap-module {
   padding: 8px 12px;
   margin: 0 2px;
-  border: 2px solid;
+  border: 2px solid transparent;
   border-radius: 6px;
   font-size: 13px;
   font-weight: var(--rr-typography-fontWeightMedium);
@@ -11495,8 +11495,8 @@ rr-alert.rr-req-info-callout {
   transition: opacity 0.15s, box-shadow 0.15s;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
+  text-align: left;
   min-height: 48px;
   word-break: break-word;
   position: relative;
@@ -11505,11 +11505,14 @@ rr-alert.rr-req-info-callout {
 
 .rr-roadmap-module:hover {
   opacity: 0.85;
+  border-color: var(--rr-roadmap-module-color, transparent);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .rr-roadmap-module-text {
   display: block;
+  width: 100%;
+  text-align: left;
   font-size: 12px;
   font-weight: var(--rr-typography-fontWeightMedium);
   overflow: hidden;
