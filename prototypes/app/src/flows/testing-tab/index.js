@@ -682,7 +682,6 @@ const ISSUE_MODAL_ATTACHMENTS = [
 ]
 
 const ISSUE_MODAL_PLAY_BG = "http://localhost:3845/assets/3df5e28ae1564c866cea2734eeb2cd98435a7846.svg"
-const ISSUE_MODAL_PLAY_ICON = "http://localhost:3845/assets/8266f660760eed5a5315590e65ca724c4066a5e3.svg"
 const ISSUE_MODAL_HISTORY_AVATAR_RENE = "http://localhost:3845/assets/501bde5384c13a2e469fcc8407daa6da0960c687.png"
 const ISSUE_MODAL_HISTORY_AVATAR_LANA = "http://localhost:3845/assets/30d4a462ea7b6e1428ffcb7ed5d646ca522e5a23.png"
 const ISSUE_MODAL_HISTORY_AVATAR_ORLANDO = "http://localhost:3845/assets/05be041b58b5e1fe37be4a6bb5a74f76d7c0f06d.png"
@@ -752,6 +751,20 @@ const ISSUE_DETAILS_MAP = {
   },
   "Document version mismatch.": {
     description: "Uploaded documents show an outdated or incorrect version label after sync, causing reviewers to validate against stale content.",
+    comments: [
+      {
+        author: "Brooklyn Simmons",
+        avatar: REG_AVATAR.brooklyn,
+        timestamp: "5 days ago",
+        text: "To clarify with stakeholder.",
+      },
+      {
+        author: "Demi Wilkinson",
+        avatar: REG_AVATAR.demi,
+        timestamp: "2 days ago",
+        text: "This part need an update due to technical constraints.",
+      },
+    ],
   },
   "Document upload failed.": {
     description: "Valid files intermittently fail during upload and return a generic error, preventing users from completing submission workflows.",
@@ -785,6 +798,20 @@ const ISSUE_DETAILS_MAP = {
   },
   "Authentication token expired on refresh.": {
     description: "Refreshing an active session invalidates the auth token too early, forcing unexpected re-authentication.",
+    comments: [
+      {
+        author: "Brooklyn Simmons",
+        avatar: REG_AVATAR.brooklyn,
+        timestamp: "5 days ago",
+        text: "To clarify with stakeholder.",
+      },
+      {
+        author: "Demi Wilkinson",
+        avatar: REG_AVATAR.demi,
+        timestamp: "2 days ago",
+        text: "This part need an update due to technical constraints.",
+      },
+    ],
   },
   "User session ends unexpectedly mid-flow.": {
     description: "User sessions terminate during active workflows, causing unsaved progress and repeated task entry.",
@@ -821,6 +848,20 @@ const ISSUE_DETAILS_MAP = {
   },
   "Dashboard metrics not loading for external users.": {
     description: "External stakeholder accounts see empty dashboard metric cards because API responses fail entitlement checks.",
+    comments: [
+      {
+        author: "Brooklyn Simmons",
+        avatar: REG_AVATAR.brooklyn,
+        timestamp: "5 days ago",
+        text: "To clarify with stakeholder.",
+      },
+      {
+        author: "Demi Wilkinson",
+        avatar: REG_AVATAR.demi,
+        timestamp: "2 days ago",
+        text: "This part need an update due to technical constraints.",
+      },
+    ],
   },
   "Stakeholder report export generates empty file.": {
     description: "Report exports complete successfully but produce empty files when filters include stakeholder-specific scopes.",
@@ -1276,7 +1317,6 @@ function renderIssueModalAttachments(details) {
               <span class="rr-modal-attachment-overlay" aria-hidden="true"></span>
               <span class="rr-modal-attachment-play" aria-hidden="true">
                 <img class="rr-modal-attachment-play-bg" src="${ISSUE_MODAL_PLAY_BG}" alt="" />
-                <img class="rr-modal-attachment-play-icon" src="${ISSUE_MODAL_PLAY_ICON}" alt="" />
               </span>
             ` : ""}
           </button>
@@ -1532,6 +1572,13 @@ function renderIssueModal() {
                       </div>
                     </div>
                   `).join("")}
+                </div>
+              ` : ""}
+
+              ${activeTool === "comments" && (!details.comments || details.comments.length === 0) ? `
+                <div class="rr-add-issue-empty">
+                  <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.notes}</span>
+                  <p class="rr-add-issue-empty-title">No notes</p>
                 </div>
               ` : ""}
 

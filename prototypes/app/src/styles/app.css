@@ -8960,12 +8960,17 @@ rr-alert.rr-req-info-callout {
   flex-wrap: wrap;
   gap: 12px;
   align-content: flex-start;
+  width: 100%;
 }
 
 .rr-modal-attachment-card {
   position: relative;
-  width: 94px;
-  height: 94px;
+  flex: 0 0 calc((100% - 24px) / 3);
+  max-width: calc((100% - 24px) / 3);
+  min-width: 0;
+  width: auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
   border: none;
   border-radius: 8.356px;
   padding: 0;
@@ -8997,8 +9002,7 @@ rr-alert.rr-req-info-callout {
   transform: translate(-50%, -50%);
 }
 
-.rr-modal-attachment-play-bg,
-.rr-modal-attachment-play-icon {
+.rr-modal-attachment-play-bg {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -11035,9 +11039,11 @@ rr-alert.rr-req-info-callout {
 
 /* ── Scope badge ── */
 .rr-reg-scope {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 14px;
