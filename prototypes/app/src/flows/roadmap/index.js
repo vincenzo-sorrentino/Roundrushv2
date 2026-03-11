@@ -433,6 +433,12 @@ function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns
   `
 }
 
+function renderSprintDividers(sprintLayout) {
+  return sprintLayout.slice(1).map(sprint =>
+    `<div class="rr-roadmap-sprint-divider" style="left:calc((${sprint.columnStart - 1}) * var(--rr-roadmap-week-col-width));" aria-hidden="true"></div>`
+  ).join("")
+}
+
 function renderTrack(trackLabel, modules, sprintLayout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, options = {}) {
   const { isSnapshotView = false, moduleResizeOverrides = {}, moduleDragOverrides = {} } = options
   const trackKey = trackLabel.toLowerCase()
@@ -452,6 +458,7 @@ function renderTrack(trackLabel, modules, sprintLayout, totalWeekColumns, curren
         <span class="rr-roadmap-track-label">${escapeHtml(trackLabel)}</span>
       </div>
       <div class="rr-roadmap-track-grid" style="grid-template-columns:${gridTemplate}; --rr-current-col-start:${currentSprintStart}; --rr-current-col-span:${currentSprintSpan};">
+        ${renderSprintDividers(sprintLayout)}
         ${moduleBars}
       </div>
     </div>
