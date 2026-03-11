@@ -393,22 +393,36 @@ function renderTimelineHeader(sprintLayout, totalWeekColumns) {
 }
 
 function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns, options = {}) {
-  const { moduleKey = "", isSnapshotView = false, moduleResizeOverrides = {} } = options
+  const { moduleKey = "", isSnapshotView = false, moduleResizeOverrides = {}, moduleDragOverrides = {}, trackName = "" } = options
   const color = STATUS_COLORS[module.status] || STATUS_COLORS["to-do"]
+  const isDraggable = isSnapshotView && module.status !== "completed"
   const isResizable = module.status !== "completed"
   const resizeHandlesHtml = (isSnapshotView && isResizable)
     ? '<div class="rr-roadmap-module-resize-handle rr-roadmap-module-resize-handle--left" data-action="resize-roadmap-module-left" aria-hidden="true"></div><div class="rr-roadmap-module-resize-handle rr-roadmap-module-resize-handle--right" data-action="resize-roadmap-module-right" aria-hidden="true"></div>'
     : ""
   const subtleBackground = getSubtleSolidColor(color)
   const mappedColumns = mapModuleToColumns(module, sprintLayout, currentSprintIndex)
-  const override = isSnapshotView ? moduleResizeOverrides[moduleKey] : null
-  const startColumn = Number.isFinite(override?.startColumn) ? override.startColumn : mappedColumns.startColumn
-  const maxSpan = Math.max(1, totalWeekColumns - startColumn + 1)
-  const requestedSpan = Number.isFinite(override?.colSpan) ? override.colSpan : mappedColumns.colSpan
-  const colSpan = Math.max(1, Math.min(maxSpan, requestedSpan))
+  
+  // Apply drag overrides first (they take precedence)
+  const dragOverride = isSnapshotView ? moduleDragOverrides[moduleKey] : null
+  let startColumn, colSpan
+  
+  if (dragOverride) {
+    startColumn = dragOverride.startColumn
+    colSpan = dragOverride.colSpan
+  } else {
+    // Otherwise apply resize overrides
+    const resizeOverride = isSnapshotView ? moduleResizeOverrides[moduleKey] : null
+    startColumn = Number.isFinite(resizeOverride?.startColumn) ? resizeOverride.startColumn : mappedColumns.startColumn
+    const maxSpan = Math.max(1, totalWeekColumns - startColumn + 1)
+    const requestedSpan = Number.isFinite(resizeOverride?.colSpan) ? resizeOverride.colSpan : mappedColumns.colSpan
+    colSpan = Math.max(1, Math.min(maxSpan, requestedSpan))
+  }
+  
+  const draggableAttr = isDraggable ? 'data-draggable-module="true"' : ""
 
   return `
-    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" style="grid-column:${startColumn} / span ${colSpan}; --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
+    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" data-module-track="${escapeHtml(trackName)}" ${draggableAttr} style="grid-column:${startColumn} / span ${colSpan}; --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
       ${resizeHandlesHtml}
       <span class="rr-roadmap-module-text">${escapeHtml(module.id)} · ${escapeHtml(module.title)}</span>
     </div>
@@ -416,18 +430,20 @@ function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns
 }
 
 function renderTrack(trackLabel, modules, sprintLayout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, options = {}) {
-  const { isSnapshotView = false, moduleResizeOverrides = {} } = options
+  const { isSnapshotView = false, moduleResizeOverrides = {}, moduleDragOverrides = {} } = options
   const trackKey = trackLabel.toLowerCase()
   const moduleBars = modules.map((module, index) => renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns, {
     moduleKey: `${trackKey}-${module.id}-${index}`,
     isSnapshotView,
     moduleResizeOverrides,
+    moduleDragOverrides,
+    trackName: trackLabel,
   })).join("")
   const gridTemplate = `repeat(${totalWeekColumns}, var(--rr-roadmap-week-col-width))`
   const trackClass = trackLabel.toLowerCase() === "development" ? "rr-roadmap-track--development" : "rr-roadmap-track--design"
 
   return `
-    <div class="rr-roadmap-track ${trackClass}">
+    <div class="rr-roadmap-track ${trackClass}" data-track="${trackKey}">
       <div class="rr-roadmap-track-header">
         <span class="rr-roadmap-track-label">${escapeHtml(trackLabel)}</span>
       </div>
@@ -601,14 +617,59 @@ function renderRoadmapMainContent(state, sprintData, options = {}) {
   const sprintDuration = Number(state.settings.sprintDurationWeeks) || 3
   const placeholderStartNo = Math.max(1, ROADMAP_SPRINT_START_NO - ROADMAP_HISTORY_SPRINTS_COUNT)
   const placeholderEndNo = ROADMAP_SPRINT_START_NO - 1
-  const developmentModules = [
+  let developmentModules = [
     ...buildPlaceholderModules("DEV", placeholderStartNo, placeholderEndNo),
     ...DEV_MODULES,
   ]
-  const designModules = [
+  let designModules = [
     ...buildPlaceholderModules("DSN", placeholderStartNo, placeholderEndNo),
     ...DESIGN_MODULES,
   ]
+
+  // Handle module drag overrides - move modules between tracks in snapshot view
+  if (isSnapshotView && Object.keys(state.moduleDragOverrides).length > 0) {
+    const draggedModulesToMove = []
+    
+    // Find which modules need to be moved between tracks
+    for (const [moduleKey, dragOverride] of Object.entries(state.moduleDragOverrides)) {
+      if (!dragOverride.track) continue
+      const keyParts = moduleKey.split("-")
+      const currentTrackKey = keyParts[0]
+      const targetTrackKey = dragOverride.track.toLowerCase()
+      
+      // If track changed, mark for movement
+      if (currentTrackKey !== targetTrackKey) {
+        draggedModulesToMove.push({ moduleKey, currentTrackKey, targetTrackKey, dragOverride })
+      }
+    }
+    
+    // Move modules between tracks
+    for (const { moduleKey, currentTrackKey, targetTrackKey } of draggedModulesToMove) {
+      if (currentTrackKey === "development") {
+        // Find and move from Development to Design
+        for (let i = developmentModules.length - 1; i >= 0; i--) {
+          const module = developmentModules[i]
+          const testKey = `development-${module.id}-${i}`
+          // Match based on module ID and approximate position
+          if (module.id && moduleKey.includes(module.id)) {
+            designModules.push(module)
+            developmentModules.splice(i, 1)
+            break
+          }
+        }
+      } else if (currentTrackKey === "design") {
+        // Find and move from Design to Development
+        for (let i = designModules.length - 1; i >= 0; i--) {
+          const module = designModules[i]
+          if (module.id && moduleKey.includes(module.id)) {
+            developmentModules.push(module)
+            designModules.splice(i, 1)
+            break
+          }
+        }
+      }
+    }
+  }
 
   return `
     <section class="rr-roadmap${isSnapshotView ? " rr-roadmap--snapshot" : ""}" data-flow="roadmap" style="--rr-roadmap-sprint-duration-weeks:${sprintDuration};">
@@ -624,8 +685,8 @@ function renderRoadmapMainContent(state, sprintData, options = {}) {
 
       <div class="rr-roadmap-container" data-roadmap-view="${viewKey}" data-current-col-start="${currentSprintStart}" data-current-col-span="${currentSprintSpan}">
         ${renderTimelineHeader(layout, totalWeekColumns)}
-        ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides })}
-        ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides })}
+        ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides, moduleDragOverrides: state.moduleDragOverrides })}
+        ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides, moduleDragOverrides: state.moduleDragOverrides })}
       </div>
     </section>
   `
@@ -660,6 +721,7 @@ function createInitialState() {
     isSnapshotModalOpen: false,
     snapshotModalScrollLeft: 0,
     moduleResizeOverrides: {},
+    moduleDragOverrides: {},
   }
 }
 
@@ -736,6 +798,7 @@ export function mountRoadmapFlow() {
     state.isSnapshotDropdownOpen = false
     state.isSnapshotModalOpen = true
     state.moduleResizeOverrides = {}
+    state.moduleDragOverrides = {}
     renderHeaderActions()
     render()
   }
@@ -743,6 +806,7 @@ export function mountRoadmapFlow() {
   function closeSnapshotModal() {
     if (!state.isSnapshotModalOpen) return
     stopModuleResize()
+    stopModuleDrag()
     state.isSnapshotModalOpen = false
     render()
   }
@@ -793,6 +857,147 @@ export function mountRoadmapFlow() {
 
   function handleModuleResizeUp() {
     stopModuleResize()
+  }
+
+  /* ── Drag handlers ────────────────────────────────────────── */
+  let moduleDragState = null
+  let dragPreviousUserSelectValue = ""
+  let dragPreviousCursorValue = ""
+
+  function stopModuleDrag() {
+    if (!moduleDragState) return
+    moduleDragState.moduleEl.classList.remove("is-dragging")
+    moduleDragState = null
+    document.removeEventListener("mousemove", handleModuleDragMove)
+    document.removeEventListener("mouseup", handleModuleDragUp)
+    document.body.style.userSelect = dragPreviousUserSelectValue
+    document.body.style.cursor = dragPreviousCursorValue
+  }
+
+  function handleModuleDragMove(event) {
+    if (!moduleDragState) return
+    
+    // Calculate horizontal movement (column changes)
+    const deltaX = event.clientX - moduleDragState.startClientX
+    const deltaCols = Math.round(deltaX / moduleDragState.weekColumnWidth)
+    const nextStartColumn = Math.max(1, Math.min(moduleDragState.totalCols, moduleDragState.startColumn + deltaCols))
+    const maxSpan = Math.max(1, moduleDragState.totalCols - nextStartColumn + 1)
+    const nextColSpan = Math.min(moduleDragState.colSpan, maxSpan)
+    
+    // Calculate vertical movement (track changes)
+    const deltaY = event.clientY - moduleDragState.startClientY
+    let nextTrack = moduleDragState.track
+    
+    // Check which track is under the mouse
+    const tracks = root.querySelectorAll('.rr-roadmap-track')
+    if (tracks.length >= 2) {
+      const devTrack = tracks[0]
+      const desTrack = tracks[1]
+      const devRect = devTrack.getBoundingClientRect()
+      const desRect = desTrack.getBoundingClientRect()
+      const mouseY = event.clientY
+      
+      // Determine which track the module should be in based on mouse Y position
+      if (mouseY >= desRect.top && mouseY <= desRect.bottom) {
+        nextTrack = "Design"
+      } else if (mouseY >= devRect.top && mouseY <= devRect.bottom) {
+        nextTrack = "Development"
+      }
+    }
+    
+    // Update module position
+    moduleDragState.moduleEl.style.gridColumn = `${nextStartColumn} / span ${nextColSpan}`
+    moduleDragState.moduleEl.dataset.moduleStart = String(nextStartColumn)
+    moduleDragState.moduleEl.dataset.moduleSpan = String(nextColSpan)
+    moduleDragState.moduleEl.dataset.moduleTrack = nextTrack
+    
+    // Update drag state for next move
+    moduleDragState.nextStartColumn = nextStartColumn
+    moduleDragState.nextColSpan = nextColSpan
+    moduleDragState.nextTrack = nextTrack
+  }
+
+  function handleModuleDragUp() {
+    if (!moduleDragState) return
+    
+    // Generate the old track key for the module
+    const oldTrackKey = moduleDragState.track.toLowerCase()
+    const oldModuleKey = `${oldTrackKey}-${moduleDragState.moduleId}-${moduleDragState.moduleIndex}`
+    
+    // Generate the new track key if the track changed
+    const newTrackKey = moduleDragState.nextTrack.toLowerCase()
+    const finalModuleKey = `${newTrackKey}-${moduleDragState.moduleId}-${moduleDragState.moduleIndex}`
+    
+    if (moduleDragState.nextTrack !== moduleDragState.track || 
+        moduleDragState.nextStartColumn !== moduleDragState.startColumn || 
+        moduleDragState.nextColSpan !== moduleDragState.colSpan) {
+      
+      // Remove old key if track changed
+      if (moduleDragState.nextTrack !== moduleDragState.track && state.moduleDragOverrides[oldModuleKey]) {
+        delete state.moduleDragOverrides[oldModuleKey]
+      }
+      
+      // Store drag override with new key and track information
+      state.moduleDragOverrides[finalModuleKey] = {
+        startColumn: moduleDragState.nextStartColumn,
+        colSpan: moduleDragState.nextColSpan,
+        track: moduleDragState.nextTrack,
+      }
+      render()
+    }
+    
+    stopModuleDrag()
+  }
+
+  function startModuleDrag(event, moduleEl) {
+    if (!state.isSnapshotModalOpen) return
+    if (event.button !== 0) return
+    
+    const moduleKey = moduleEl.dataset.moduleKey
+    const moduleTrack = moduleEl.dataset.moduleTrack || "Development"
+    const startColumn = Number(moduleEl.dataset.moduleStart || "1")
+    const colSpan = Number(moduleEl.dataset.moduleSpan || "1")
+    const totalCols = Number(moduleEl.dataset.moduleTotalCols || "1")
+    
+    if (!moduleKey) return
+    
+    // Extract module index from moduleKey (format: "track-moduleId-index")
+    const keyParts = moduleKey.split("-")
+    const moduleIndex = Number(keyParts[keyParts.length - 1]) || 0
+    const moduleId = keyParts.slice(1, -1).join("-")
+    
+    event.preventDefault()
+    dragPreviousUserSelectValue = document.body.style.userSelect
+    dragPreviousCursorValue = document.body.style.cursor
+    document.body.style.userSelect = "none"
+    document.body.style.cursor = "grabbing"
+    moduleEl.classList.add("is-dragging")
+    
+    const roadmapEl = moduleEl.closest(".rr-roadmap")
+    const weekColWidthRaw = roadmapEl
+      ? getComputedStyle(roadmapEl).getPropertyValue("--rr-roadmap-week-col-width")
+      : "88"
+    const weekColumnWidth = Number.parseFloat(weekColWidthRaw) || 88
+    
+    moduleDragState = {
+      moduleEl,
+      moduleKey,
+      moduleId,
+      moduleIndex,
+      track: moduleTrack,
+      nextTrack: moduleTrack,
+      startColumn,
+      nextStartColumn: startColumn,
+      colSpan,
+      nextColSpan: colSpan,
+      totalCols,
+      weekColumnWidth,
+      startClientX: event.clientX,
+      startClientY: event.clientY,
+    }
+    
+    document.addEventListener("mousemove", handleModuleDragMove)
+    document.addEventListener("mouseup", handleModuleDragUp)
   }
 
   function startModuleResize(side, event, handleEl) {
@@ -944,14 +1149,22 @@ export function mountRoadmapFlow() {
   function handleRootMouseDown(event) {
     if (!state.isSnapshotModalOpen) return
     const actionEl = event.target.closest("[data-action]")
-    if (!actionEl) return
-    const action = actionEl.dataset.action
-    if (action === "resize-roadmap-module-left") {
-      startModuleResize("left", event, actionEl)
-      return
+    if (actionEl) {
+      const action = actionEl.dataset.action
+      if (action === "resize-roadmap-module-left") {
+        startModuleResize("left", event, actionEl)
+        return
+      }
+      if (action === "resize-roadmap-module-right") {
+        startModuleResize("right", event, actionEl)
+        return
+      }
     }
-    if (action === "resize-roadmap-module-right") {
-      startModuleResize("right", event, actionEl)
+    
+    // Check for draggable module click (but not on resize handles)
+    const moduleEl = event.target.closest("[data-draggable-module]")
+    if (moduleEl && !event.target.closest(".rr-roadmap-module-resize-handle")) {
+      startModuleDrag(event, moduleEl)
     }
   }
 
@@ -1005,6 +1218,7 @@ export function mountRoadmapFlow() {
     root.removeEventListener("mousedown", handleRootMouseDown)
     root.removeEventListener("change", handleRootChange)
     stopModuleResize()
+    stopModuleDrag()
     document.removeEventListener("keydown", handleKeyDown)
     document.removeEventListener("click", handleDocumentClick)
 

@@ -11620,6 +11620,22 @@ rr-alert.rr-req-info-callout {
   word-break: break-word;
 }
 
+/* ── Module dragging styles ────────────────────────────── */
+.rr-roadmap--snapshot [data-draggable-module="true"] {
+  cursor: grab;
+}
+
+.rr-roadmap--snapshot [data-draggable-module="true"]:hover {
+  cursor: grab;
+}
+
+.rr-roadmap--snapshot [data-draggable-module="true"].is-dragging {
+  opacity: 0.7;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  cursor: grabbing;
+  z-index: 10;
+}
+
 /* ── Snapshot modal (full viewport roadmap) ───────────────– */
 .rr-roadmap-snapshot-overlay {
   position: fixed;
