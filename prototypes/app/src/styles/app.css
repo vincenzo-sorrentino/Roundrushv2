@@ -3767,12 +3767,14 @@ rr-alert.rr-req-info-callout {
 /* Tabs (detail panel tabs) */
 .rr-rm2-tabs {
   margin-top: 20px;
-  width: fit-content;
-  display: inline-flex;
+  width: max-content;
+  display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
   box-sizing: border-box;
   height: 36px;
+  min-height: 36px;
+  max-height: 36px;
   border: 1px solid var(--rr-sem-stroke-btnNeutral);
   border-radius: 8px;
   overflow-x: auto;
@@ -3794,6 +3796,7 @@ rr-alert.rr-req-info-callout {
   padding: 0 8px;
   height: 100%;
   min-height: 0;
+  max-height: 100%;
   min-width: 62px;
   display: inline-flex;
   align-items: center;
@@ -4752,11 +4755,14 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-rm2-tree-row {
-  min-height: 36px;
+  box-sizing: border-box;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px;
+  padding: 0 4px;
   border-radius: 4px;
   border-left: 2px solid transparent;
   transition: all 120ms ease-in-out;
@@ -4806,10 +4812,12 @@ rr-alert.rr-req-info-callout {
 
 .rr-rm2-tree-select,
 .rr-rm2-tree-label {
+  box-sizing: border-box;
   border: 0;
   background: transparent;
   text-align: left;
-  min-height: 36px;
+  height: 100%;
+  min-height: 0;
   display: flex;
   align-items: center;
   font-size: 14px;
