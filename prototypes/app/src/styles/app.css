@@ -8735,8 +8735,13 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-modal-action-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+}
+
+.rr-modal-action-btn .rr-modal-copy-icon {
+  width: 18px;
+  height: 18px;
 }
 
 /* Modal Content */
@@ -9165,8 +9170,8 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-modal-tool-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
 .rr-modal-tool-btn:hover {
