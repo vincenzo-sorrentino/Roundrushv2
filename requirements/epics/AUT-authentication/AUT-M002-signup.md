@@ -3,9 +3,8 @@ id: AUT-M002
 title: Signup
 epic: AUT
 status: draft
-prototype_routes:
-  - /auth/signup/team
-  - /auth/signup/guest
+prototype_route: /auth/signup/team
+prototype_route_secondary: /auth/signup/guest
 functionalities:
   - AUT-M002-F001
   - AUT-M002-F002
