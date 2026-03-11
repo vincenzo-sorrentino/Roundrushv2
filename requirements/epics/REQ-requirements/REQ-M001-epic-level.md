@@ -16,7 +16,7 @@ functionalities:
 
 ## Overview
 
-Show the epic-level detail view so that stakeholders can understand the overall epic and drill into its components. The view includes an explorer sidebar for navigating the full requirement hierarchy, a summary metrics grid, and four tabs: Description, Acceptance Laws, Modules, and Prototypes.
+Show the epic-level detail view so that stakeholders can understand the overall epic and drill into its components. The view includes an explorer sidebar for navigating the full requirement hierarchy, a summary metrics grid, and four tabs: Description, Acceptance Laws, Dependencies, and Modules. The Description tab is the default view when an epic node is first selected.
 
 ## Acceptance Laws
 
@@ -56,22 +56,22 @@ When viewing an epic, a compact metrics grid below the breadcrumb gives an insta
 
 ### REQ-M001-F004 — Description tab
 
-The Description tab presents a complete picture of the epic: its core metadata (ID, short title, full title, design state, and module list), its objective written in plain language, a bullet list of everything that is in scope, and a bullet list of what is explicitly out of scope. This is the primary reference for anyone trying to understand what the epic is about and what it intentionally does not cover.
+The Description tab is the default view when an epic node is first selected. It presents a complete picture of the epic: a YAML-style metadata block showing the ID, short title, full title, design state, and module list, followed by the objective written in plain language, a bullet list of everything that is in scope, and a bullet list of what is explicitly out of scope. This is the primary reference for anyone trying to understand what the epic covers and what it intentionally does not.
 
 ---
 
 ### REQ-M001-F005 — Acceptance Laws tab
 
-The Acceptance Laws tab shows a structured table of all seven shared laws that define when work in this epic can be considered complete. Each law has an ID, a name, an evidence field describing what proof is required, and a colour-coded status badge. This tab is the default view when an epic node is first selected, so the compliance picture is always front and centre before diving into modules or prototypes.
+The Acceptance Laws tab shows a structured table of all seven shared laws that define when work in this epic can be considered complete. Each row has an ID, a law name, a short description, an evidence field describing what proof is required, and a colour-coded status badge. The table reflects the epic's overall compliance across all its modules — a law is considered passing at the epic level only when every module within the epic satisfies it. The tab header and column structure are identical at epic, module, and functionality level, giving users a consistent compliance reference anywhere in the hierarchy.
 
 ---
 
 ### REQ-M001-F006 — Modules tab
 
-The Modules tab lists every module that belongs to the epic in a table with its code, title, scope summary, and a colour-coded status badge. An "Open" button on each row navigates directly to that module's detail view, updating the breadcrumb, the sidebar selection, and the full content panel in a single click. If the epic has no modules yet, a clear empty-state message is shown instead of an empty table.
+The Modules tab lists every module that belongs to the epic in a table with four columns: Module (code and title as a clickable navigation link), Prototype (a direct link icon to open the module's prototype in a new tab, disabled if no prototype is linked), Prototype status (a colour-coded badge reflecting the prototype's validation stage), and Module status (a colour-coded badge reflecting the module's implementation stage). Clicking the module name navigates directly to that module's detail view, updating the breadcrumb and sidebar selection. If the epic has no modules yet, a clear empty-state message is shown instead of the table.
 
 ---
 
-### REQ-M001-F007 — Prototypes tab
+### REQ-M001-F007 — Dependencies tab
 
-The Prototypes tab surfaces all design artefacts linked to the epic as a grid of cards. Each card shows the prototype name, version, a status badge, a brief flow description, and a direct link to open it. Prototype links open in a new browser tab so the user never loses their place in the requirements view. If no prototypes have been linked yet, the tab displays a simple "No prototype references" message.
+The Dependencies tab surfaces the full set of dependency edges in which this epic's modules participate. The edges are drawn from the same global `Dependency_Edges` payload used by the DEP module, rendered here as a flat table with columns for From module, To module, Relation type, Interface, Risk level, Confidence score, and a natural-language Why explanation. This gives reviewers a direct, in-context view of how the epic's modules interconnect with the rest of the system without leaving the requirements view. The table is read-only; all authoring of dependency data happens through the DEP module (DEP-M001 and DEP-M002).

@@ -8,12 +8,11 @@ functionalities:
   - REQ-M003-F001
   - REQ-M003-F002
   - REQ-M003-F003
-  - REQ-M003-F004
 ---
 
 ## Overview
 
-Show the functionality-level detail view so that developers and testers can read the full description, expected outcomes, edge cases, and access the linked prototype for a single functionality. The view has four tabs: Description (the default), Acceptance Laws, Functionalities (sibling list), and Prototype.
+Show the functionality-level detail view so that developers and testers can read the complete specification for a single functionality. Unlike the epic and module levels, the functionality view has no tab bar — all information is rendered in a single content card that the user reads top to bottom.
 
 ## Acceptance Laws
 
@@ -33,24 +32,18 @@ Show the functionality-level detail view so that developers and testers can read
 
 ## Functionalities
 
-### REQ-M003-F001 — Description tab
+### REQ-M003-F001 — Functionality description card
 
-The Description tab is the default view when a functionality is opened. It consolidates everything a developer or tester needs in one place: the functionality's metadata, a plain-language description of what it covers, a numbered list of expected outcomes written in context–action–result form, any relevant edge cases or error paths worth knowing about, and a reference to the prototype flow that visualises the feature. Selecting this tab always brings the user back to this full summary.
-
----
-
-### REQ-M003-F002 — Acceptance Laws tab
-
-The Acceptance Laws tab at functionality level shows the same seven shared laws table that appears at epic and module level, providing a consistent compliance reference regardless of how deep into the hierarchy the user is working. Each row shows the law ID, name, evidence type, and a colour-coded status badge. Because the laws are shared at the epic level, the table is identical for every functionality within that epic.
+When a functionality node is selected in the explorer tree, the main panel renders a single content card with no tab bar. The card opens with a heading labelled “Description”, followed by a YAML-style metadata block showing the functionality ID, parent module ID, and short title. Below the metadata the card is divided into four sections rendered in order: User story (a plain-language sentence describing the actor, their intent, and the desired outcome), Acceptance criteria (a numbered list in Given / When / Then form covering all key paths including success, error, and edge paths), Edge cases and negative paths (free-form prose covering non-happy-path scenarios, invalid inputs, and security considerations), and Prototype references (a plain-text reference identifying the linked prototype and the specific flow within it). All content in this card is HTML-escaped before rendering.
 
 ---
 
-### REQ-M003-F003 — Functionalities tab (sibling list)
+### REQ-M003-F002 — Sibling functionality navigation via the explorer tree
 
-When the user is inside a functionality, this tab lists all the other functionalities that belong to the same parent module, making it easy to move between related features without navigating backwards. The currently selected functionality is visually highlighted in the list. Clicking another row navigates to it immediately — the breadcrumb, the detail title, and all tabs update in place so the user never loses their sense of position.
+From the functionality view the user navigates to sibling functionalities — other functionalities belonging to the same parent module — by clicking the relevant node in the explorer sidebar rather than through a dedicated tab. The explorer tree expands the parent module automatically when a functionality is active and highlights the current node, making all siblings visible at a glance. Clicking a sibling in the tree loads it in the main panel and updates the breadcrumb. The currently active functionality is visually distinguished from the others in the tree.
 
 ---
 
-### REQ-M003-F004 — Prototype tab
+### REQ-M003-F003 — Prototype access from functionality context
 
-At functionality level the Prototype tab shows a single card for the prototype linked to the parent module. The card includes the prototype's name, version, status badge, a short description, and an "Open prototype" link that opens in a new browser tab. If no prototype is linked to the parent module, the tab shows a clear empty-state message instead of a blank area.
+The functionality description card includes a Prototype references section at the bottom that names the prototype and flow associated with the functionality. The reference is a plain-text label — no interactive button inside the card itself. Access to the actual prototype is available through the Prototypes tab at module level (REQ-M002-F004), which the user can reach by navigating up one level to the parent module in the explorer tree.

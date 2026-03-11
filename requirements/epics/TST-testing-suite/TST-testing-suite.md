@@ -5,24 +5,40 @@ title: Test management and execution tracking
 design_state: discovery
 modules:
   - TST-M001
+  - TST-M002
+  - TST-M003
+  - TST-M004
 ---
 
 ## Objective
 
-Provide a structured area where QA engineers and developers can define test cases, record execution results, and track quality metrics — so that testing evidence lives alongside requirements and always reflects the current state of the product.
+Centralise, validate, and visualise all testing activity in RoundRush — covering automated test execution, code coverage, regression test generation, manual test sessions, and Acceptance Law verification — so that every quality signal is traceable, up to date, and never manually maintained.
+
+Testing in RoundRush V2 is proactive and AI-assisted. The testing suite must be designed before each sprint or development cycle begins, based on new requirements, dependency graph analysis, and historical regression patterns. The platform dashboard is a read-only visualisation layer driven entirely by automated API payloads triggered by repository events and CI/CD pipelines.
 
 ## In scope
 
-- Test case definition and organisation
-- Test execution tracking (runs, results per case)
-- Quality metrics and pass/fail reporting
-- Linking test cases back to requirement functionalities
+- Test case planning and organisation (structured JSON/YAML committed to Git)
+- Test execution tracking per environment with pass, fail, and blocked counts
+- Unique test ID scheme establishing the traceability anchor between planning and execution
+- Requirement-to-test bidirectional traceability
+- CI/CD execution result ingestion via structured API payloads
+- Test status synchronisation without manual dashboard updates
+- Acceptance Law progress tracking per module derived from test results
+- Unit, integration, and end-to-end test coverage per module
+- UAT library and executed UAT session instances
+- Non-functional testing library and sessions
+- AI-driven regression scenario generation based on dependency graph analysis
+- Coverage evolution visualisation and coverage drop detection
+- Recurring failure pattern identification
+- Manual UAT status submission via CLI tool or IDE extension with evidence attachment
+- Bug ticket and screen-recording linking per blocked or failed test case
 
 ## Out of scope
 
-- Automated test runner and CI/CD pipeline configuration
-- Performance and load testing
-- Mobile device lab management
+- CI/CD pipeline infrastructure configuration and hosting
+- Test framework or runner selection (Cypress, Playwright, etc.)
+- Local device lab management for mobile testing
 
 ---
 
