@@ -931,24 +931,15 @@ export function mountRoadmapFlow() {
   function calcDropTarget(clientX, clientY) {
     if (!moduleDragState) return null
 
-    // Determine target track
+    // Track is fixed to the original section: cross-section drag is not allowed.
     const dragRoot = moduleDragState.dragRootEl || root
-    const tracks = dragRoot.querySelectorAll('.rr-roadmap-track')
-    let nextTrack = moduleDragState.track
-    for (const track of tracks) {
-      const rect = track.getBoundingClientRect()
-      if (clientY >= rect.top && clientY <= rect.bottom) {
-        const label = track.querySelector('.rr-roadmap-track-label')
-        nextTrack = label ? label.textContent.trim() : nextTrack
-        break
-      }
-    }
+    const nextTrack = moduleDragState.track
 
-    // Determine target grid column by finding the track grid under the cursor
+    // Determine target grid column only within the original track grid
     let nextStartColumn = moduleDragState.nextStartColumn
-    const trackGrids = dragRoot.querySelectorAll('.rr-roadmap-track-grid')
-    for (const grid of trackGrids) {
-      const gridRect = grid.getBoundingClientRect()
+    const sourceGrid = getTrackGridByName(nextTrack)
+    if (sourceGrid) {
+      const gridRect = sourceGrid.getBoundingClientRect()
       if (clientX >= gridRect.left && clientX <= gridRect.right) {
         const relX = clientX - gridRect.left
         const deltaCols = Math.round(relX / moduleDragState.weekColumnWidth)
@@ -958,7 +949,6 @@ export function mountRoadmapFlow() {
           moduleDragState.totalCols - moduleDragState.colSpan + 1,
           deltaCols - anchorCol + 1
         ))
-        break
       }
     }
 
