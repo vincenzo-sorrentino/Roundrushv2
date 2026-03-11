@@ -18,10 +18,9 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000
 const ROADMAP_BASE_SPRINT_COUNT = 6
 const ROADMAP_SPRINT_START_NO = 11
 const ROADMAP_CURRENT_SPRINT_NO = 13
+const ROADMAP_HISTORY_SPRINTS_COUNT = 10
 const DEFAULT_START_DATE = "2025-09-28"
 const DEFAULT_END_DATE = "2026-06-06"
-
-const SETTINGS_CALENDAR_ICON_URL = "http://localhost:3845/assets/745b8c88ae9d8d50ba0eba69800615d6cf94fef1.svg"
 
 function toDateUtc(dateStr) {
   if (!dateStr) return null
@@ -184,7 +183,35 @@ function buildSprints(projectStartDate, projectEndDate, sprintDurationWeeks) {
     index += 1
   }
 
-  return sprints
+  const historySprints = []
+  for (let sprintNo = ROADMAP_SPRINT_START_NO - 1; sprintNo >= 1; sprintNo -= 1) {
+    const offset = ROADMAP_SPRINT_START_NO - sprintNo
+    if (offset > ROADMAP_HISTORY_SPRINTS_COUNT) break
+    const historyEnd = addDays(start, -(offset * sprintLengthDays))
+    const historyStart = addDays(historyEnd, -(sprintLengthDays - 1))
+    historySprints.push({
+      id: `s${sprintNo}`,
+      sprintNo,
+      startDate: toIsoDate(historyStart),
+      endDate: toIsoDate(historyEnd),
+    })
+  }
+
+  return [...historySprints.reverse(), ...sprints]
+}
+
+function buildPlaceholderModules(trackPrefix, startNo, endNo) {
+  const modules = []
+  for (let sprintNo = startNo; sprintNo <= endNo; sprintNo += 1) {
+    modules.push({
+      id: `${trackPrefix}-PLH-${String(sprintNo).padStart(3, "0")}`,
+      title: `Historical placeholder sprint ${sprintNo}`,
+      status: "completed",
+      sprintStartNo: sprintNo,
+      sprintEndNo: sprintNo,
+    })
+  }
+  return modules
 }
 
 function getWeekStartsForSprint(sprint) {
@@ -204,10 +231,7 @@ function getWeekStartsForSprint(sprint) {
 function buildSprintLayout(settings) {
   const sprints = buildSprints(settings.projectStartDate, settings.projectEndDate, settings.sprintDurationWeeks)
   let nextColumnStart = 1
-  const preferredCurrentIndex = Math.min(
-    Math.max(0, ROADMAP_CURRENT_SPRINT_NO - ROADMAP_SPRINT_START_NO),
-    Math.max(0, sprints.length - 1),
-  )
+  const preferredCurrentSprintNo = ROADMAP_CURRENT_SPRINT_NO
 
   const layout = sprints.map((sprint, index) => {
     const weekStarts = getWeekStartsForSprint(sprint)
@@ -220,7 +244,7 @@ function buildSprintLayout(settings) {
       weekStarts,
       weekCount,
       columnStart,
-      isCurrent: index === preferredCurrentIndex,
+      isCurrent: sprint.sprintNo === preferredCurrentSprintNo,
     }
   })
 
@@ -380,7 +404,38 @@ function renderTeamAvatars(team, options = {}) {
   return `<div class="${groupClass}">${avatarHtml}</div>`
 }
 
-function renderRoadmapSettingsModal(draftSettings) {
+function renderRoadmapMemberPicker(draftSettings) {
+  const selectedIds = new Set(draftSettings.team.map(member => member.id))
+  const availableMembers = TEAM.filter(member => !selectedIds.has(member.id))
+
+  if (availableMembers.length === 0) {
+    return `
+      <div class="rr-roadmap-member-picker" role="listbox" aria-label="Select team member">
+        <p class="rr-roadmap-member-picker-empty">All users are already in this team</p>
+      </div>
+    `
+  }
+
+  return `
+    <div class="rr-roadmap-member-picker" role="listbox" aria-label="Select team member">
+      ${availableMembers.map(member => {
+        const image = String(member.image || "").trim()
+        const avatar = image
+          ? `<img alt="" src="${image}" />`
+          : `<span class="rr-roadmap-avatar-fallback">${escapeHtml(getInitials(member.name))}</span>`
+
+        return `
+          <button type="button" class="rr-roadmap-member-picker-item" data-action="select-team-member" data-member-id="${escapeHtml(member.id)}" role="option" aria-label="Add ${escapeHtml(member.name)}">
+            <span class="rr-roadmap-avatar rr-roadmap-avatar--picker">${avatar}</span>
+            <span class="rr-roadmap-member-picker-name">${escapeHtml(member.name)}</span>
+          </button>
+        `
+      }).join("")}
+    </div>
+  `
+}
+
+function renderRoadmapSettingsModal(draftSettings, memberPickerOpen = false) {
   if (!draftSettings) return ""
   const sprintLabel = `${draftSettings.sprintDurationWeeks} week${draftSettings.sprintDurationWeeks > 1 ? "s" : ""}`
 
@@ -400,7 +455,6 @@ function renderRoadmapSettingsModal(draftSettings) {
           <label class="rr-roadmap-settings-field">
             <span class="rr-roadmap-settings-label">Project start date</span>
             <span class="rr-roadmap-settings-input-wrap">
-              <img src="${SETTINGS_CALENDAR_ICON_URL}" alt="" aria-hidden="true" class="rr-roadmap-settings-input-icon" />
               <input type="date" class="rr-roadmap-settings-input" data-setting="projectStartDate" value="${escapeHtml(draftSettings.projectStartDate)}" />
             </span>
           </label>
@@ -408,7 +462,6 @@ function renderRoadmapSettingsModal(draftSettings) {
           <label class="rr-roadmap-settings-field">
             <span class="rr-roadmap-settings-label">Project end date</span>
             <span class="rr-roadmap-settings-input-wrap">
-              <img src="${SETTINGS_CALENDAR_ICON_URL}" alt="" aria-hidden="true" class="rr-roadmap-settings-input-icon" />
               <input type="date" class="rr-roadmap-settings-input" data-setting="projectEndDate" value="${escapeHtml(draftSettings.projectEndDate)}" />
             </span>
           </label>
@@ -432,11 +485,17 @@ function renderRoadmapSettingsModal(draftSettings) {
             <span class="rr-roadmap-settings-label">Team members</span>
             <div class="rr-roadmap-modal-team-row">
               ${renderTeamAvatars(draftSettings.team, { avatarClass: "rr-roadmap-avatar rr-roadmap-avatar--modal", groupClass: "rr-roadmap-avatars rr-roadmap-avatars--modal" })}
-              <button type="button" class="rr-roadmap-avatar-add" data-action="add-team-member" aria-label="Add team member">
+              <button type="button" class="rr-roadmap-avatar-add" data-action="toggle-team-member-picker" aria-label="Add team member" aria-expanded="${memberPickerOpen ? "true" : "false"}" aria-haspopup="listbox">
                 <span>+</span>
               </button>
+              ${memberPickerOpen ? renderRoadmapMemberPicker(draftSettings) : ""}
             </div>
           </div>
+        </div>
+
+        <div class="rr-add-issue-footer rr-roadmap-settings-footer">
+          <rr-button variant="neutral" size="sm" data-action="cancel-roadmap-settings">Cancel</rr-button>
+          <rr-button variant="primary" size="sm" data-action="save-roadmap-settings">Save</rr-button>
         </div>
       </div>
     </div>
@@ -446,9 +505,20 @@ function renderRoadmapSettingsModal(draftSettings) {
 function buildView(state) {
   const sprintData = buildSprintLayout(state.settings)
   const { layout, totalWeekColumns, currentSprintIndex, currentSprintStart, currentSprintSpan } = sprintData
+  const sprintDuration = Number(state.settings.sprintDurationWeeks) || 3
+  const placeholderStartNo = Math.max(1, ROADMAP_SPRINT_START_NO - ROADMAP_HISTORY_SPRINTS_COUNT)
+  const placeholderEndNo = ROADMAP_SPRINT_START_NO - 1
+  const developmentModules = [
+    ...buildPlaceholderModules("DEV", placeholderStartNo, placeholderEndNo),
+    ...DEV_MODULES,
+  ]
+  const designModules = [
+    ...buildPlaceholderModules("DSN", placeholderStartNo, placeholderEndNo),
+    ...DESIGN_MODULES,
+  ]
 
   return `
-    <section class="rr-roadmap" data-flow="roadmap">
+    <section class="rr-roadmap" data-flow="roadmap" style="--rr-roadmap-sprint-duration-weeks:${sprintDuration};">
       <div class="rr-roadmap-header">
         <div class="rr-roadmap-header-left">
           <p class="rr-roadmap-dates">Project dates: ${formatDateShortWithYear(state.settings.projectStartDate)} - ${formatDateShortWithYear(state.settings.projectEndDate)}</p>
@@ -461,11 +531,11 @@ function buildView(state) {
 
       <div class="rr-roadmap-container" data-current-col-start="${currentSprintStart}" data-current-col-span="${currentSprintSpan}">
         ${renderTimelineHeader(layout, totalWeekColumns)}
-        ${renderTrack("Development", DEV_MODULES, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
-        ${renderTrack("Design", DESIGN_MODULES, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
+        ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
+        ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex)}
       </div>
 
-      ${state.isModalOpen ? renderRoadmapSettingsModal(state.draftSettings) : ""}
+      ${state.isModalOpen ? renderRoadmapSettingsModal(state.draftSettings, state.memberPickerOpen) : ""}
     </section>
   `
 }
@@ -480,6 +550,7 @@ function createInitialState() {
     }),
     draftSettings: null,
     isModalOpen: false,
+    memberPickerOpen: false,
   }
 }
 
@@ -496,14 +567,20 @@ export function mountRoadmapFlow() {
   let hasAutoScrolled = false
 
   function render() {
+    const previousContainer = root.querySelector(".rr-roadmap-container")
+    const previousScrollLeft = previousContainer ? previousContainer.scrollLeft : 0
     root.innerHTML = buildView(state)
 
+    const nextContainer = root.querySelector(".rr-roadmap-container")
+    if (nextContainer && hasAutoScrolled) {
+      nextContainer.scrollLeft = previousScrollLeft
+    }
+
     if (!hasAutoScrolled) {
-      const container = root.querySelector(".rr-roadmap-container")
-      if (container) {
+      if (nextContainer) {
         setTimeout(() => {
-          const currentColStart = Number(container.dataset.currentColStart || "1")
-          const currentColSpan = Number(container.dataset.currentColSpan || "1")
+          const currentColStart = Number(nextContainer.dataset.currentColStart || "1")
+          const currentColSpan = Number(nextContainer.dataset.currentColSpan || "1")
           const roadmapEl = root.querySelector(".rr-roadmap")
           const weekColWidthRaw = roadmapEl
             ? getComputedStyle(roadmapEl).getPropertyValue("--rr-roadmap-week-col-width")
@@ -511,8 +588,8 @@ export function mountRoadmapFlow() {
           const weekColWidth = Number.parseFloat(weekColWidthRaw) || 88
 
           const currentCenterX = ((currentColStart - 1) + (currentColSpan / 2)) * weekColWidth
-          const targetScrollLeft = Math.max(0, currentCenterX - (container.clientWidth / 2))
-          container.scrollLeft = targetScrollLeft
+          const targetScrollLeft = Math.max(0, currentCenterX - (nextContainer.clientWidth / 2))
+          nextContainer.scrollLeft = targetScrollLeft
         }, 100)
       }
       hasAutoScrolled = true
@@ -527,13 +604,18 @@ export function mountRoadmapFlow() {
   function openSettingsModal() {
     state.draftSettings = deepCloneSettings(state.settings)
     state.isModalOpen = true
+    state.memberPickerOpen = false
     render()
   }
 
-  function closeSettingsModal() {
-    commitDraftSettings()
+  function closeSettingsModal(saveChanges = false) {
+    if (saveChanges) {
+      commitDraftSettings()
+    }
+
     state.draftSettings = null
     state.isModalOpen = false
+    state.memberPickerOpen = false
     render()
   }
 
@@ -549,21 +631,50 @@ export function mountRoadmapFlow() {
     if (!actionEl) return
 
     const action = actionEl.dataset.action
-    if (action === "close-roadmap-settings") {
-      if (actionEl.classList.contains("rr-roadmap-settings-modal")) return
-      if (actionEl.classList.contains("rr-roadmap-settings-overlay") && event.target !== actionEl) return
-      closeSettingsModal()
+    if (action === "cancel-roadmap-settings") {
+      closeSettingsModal(false)
       return
     }
 
-    if (action === "add-team-member" && state.draftSettings) {
-      const nextIndex = state.draftSettings.team.length + 1
-      state.draftSettings.team.push({
-        id: `u-new-${nextIndex}`,
-        name: `New member ${nextIndex}`,
-        image: "",
-      })
+    if (action === "save-roadmap-settings") {
+      closeSettingsModal(true)
+      return
+    }
+
+    if (action === "toggle-team-member-picker" && state.draftSettings) {
+      state.memberPickerOpen = !state.memberPickerOpen
       render()
+      return
+    }
+
+    if (action === "select-team-member" && state.draftSettings) {
+      const memberId = actionEl.dataset.memberId
+      const nextMember = TEAM.find(member => member.id === memberId)
+      const exists = state.draftSettings.team.some(member => member.id === memberId)
+
+      if (nextMember && !exists) {
+        state.draftSettings.team.push({ ...nextMember })
+      }
+
+      state.memberPickerOpen = false
+      render()
+      return
+    }
+
+    if (action === "close-roadmap-settings") {
+      if (actionEl.classList.contains("rr-roadmap-settings-modal")) return
+      if (actionEl.classList.contains("rr-roadmap-settings-overlay") && event.target !== actionEl) return
+      closeSettingsModal(false)
+      return
+    }
+
+    if (state.memberPickerOpen) {
+      const clickedInsidePicker = Boolean(event.target.closest(".rr-roadmap-member-picker"))
+      const clickedPickerToggle = Boolean(event.target.closest('[data-action="toggle-team-member-picker"]'))
+      if (!clickedInsidePicker && !clickedPickerToggle) {
+        state.memberPickerOpen = false
+        render()
+      }
     }
   }
 
@@ -591,7 +702,7 @@ export function mountRoadmapFlow() {
 
   function handleKeyDown(event) {
     if (event.key === "Escape" && state.isModalOpen) {
-      closeSettingsModal()
+      closeSettingsModal(false)
     }
   }
 
