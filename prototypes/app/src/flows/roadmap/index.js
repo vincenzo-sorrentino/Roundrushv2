@@ -866,7 +866,12 @@ export function mountRoadmapFlow() {
 
   function stopModuleDrag() {
     if (!moduleDragState) return
-    moduleDragState.moduleEl.classList.remove("is-dragging")
+    // Remove ghost
+    if (moduleDragState.ghostEl) {
+      moduleDragState.ghostEl.remove()
+    }
+    // Restore original tile
+    moduleDragState.moduleEl.style.visibility = ""
     moduleDragState = null
     document.removeEventListener("mousemove", handleModuleDragMove)
     document.removeEventListener("mouseup", handleModuleDragUp)
@@ -874,130 +879,157 @@ export function mountRoadmapFlow() {
     document.body.style.cursor = dragPreviousCursorValue
   }
 
-  function handleModuleDragMove(event) {
-    if (!moduleDragState) return
-    
-    // Calculate horizontal movement (column changes)
-    const deltaX = event.clientX - moduleDragState.startClientX
-    const deltaCols = Math.round(deltaX / moduleDragState.weekColumnWidth)
-    const nextStartColumn = Math.max(1, Math.min(moduleDragState.totalCols, moduleDragState.startColumn + deltaCols))
-    const maxSpan = Math.max(1, moduleDragState.totalCols - nextStartColumn + 1)
-    const nextColSpan = Math.min(moduleDragState.colSpan, maxSpan)
-    
-    // Calculate vertical movement (track changes)
-    const deltaY = event.clientY - moduleDragState.startClientY
-    let nextTrack = moduleDragState.track
-    
-    // Check which track is under the mouse
+  function calcDropTarget(clientX, clientY) {
+    if (!moduleDragState) return null
+
+    // Determine target track
     const tracks = root.querySelectorAll('.rr-roadmap-track')
-    if (tracks.length >= 2) {
-      const devTrack = tracks[0]
-      const desTrack = tracks[1]
-      const devRect = devTrack.getBoundingClientRect()
-      const desRect = desTrack.getBoundingClientRect()
-      const mouseY = event.clientY
-      
-      // Determine which track the module should be in based on mouse Y position
-      if (mouseY >= desRect.top && mouseY <= desRect.bottom) {
-        nextTrack = "Design"
-      } else if (mouseY >= devRect.top && mouseY <= devRect.bottom) {
-        nextTrack = "Development"
+    let nextTrack = moduleDragState.track
+    for (const track of tracks) {
+      const rect = track.getBoundingClientRect()
+      if (clientY >= rect.top && clientY <= rect.bottom) {
+        const label = track.querySelector('.rr-roadmap-track-label')
+        nextTrack = label ? label.textContent.trim() : nextTrack
+        break
       }
     }
-    
-    // Update module position
-    moduleDragState.moduleEl.style.gridColumn = `${nextStartColumn} / span ${nextColSpan}`
-    moduleDragState.moduleEl.dataset.moduleStart = String(nextStartColumn)
-    moduleDragState.moduleEl.dataset.moduleSpan = String(nextColSpan)
-    moduleDragState.moduleEl.dataset.moduleTrack = nextTrack
-    
-    // Update drag state for next move
-    moduleDragState.nextStartColumn = nextStartColumn
-    moduleDragState.nextColSpan = nextColSpan
-    moduleDragState.nextTrack = nextTrack
+
+    // Determine target grid column by finding the track grid under the cursor
+    let nextStartColumn = moduleDragState.nextStartColumn
+    const trackGrids = root.querySelectorAll('.rr-roadmap-track-grid')
+    for (const grid of trackGrids) {
+      const gridRect = grid.getBoundingClientRect()
+      if (clientX >= gridRect.left && clientX <= gridRect.right) {
+        const relX = clientX - gridRect.left
+        const deltaCols = Math.round(relX / moduleDragState.weekColumnWidth)
+        // Anchor the column so the grab offset is preserved
+        const anchorCol = Math.round(moduleDragState.grabOffsetX / moduleDragState.weekColumnWidth)
+        nextStartColumn = Math.max(1, Math.min(
+          moduleDragState.totalCols - moduleDragState.colSpan + 1,
+          deltaCols - anchorCol + 1
+        ))
+        break
+      }
+    }
+
+    const maxSpan = Math.max(1, moduleDragState.totalCols - nextStartColumn + 1)
+    const nextColSpan = Math.min(moduleDragState.colSpan, maxSpan)
+    return { nextStartColumn, nextColSpan, nextTrack }
+  }
+
+  function handleModuleDragMove(event) {
+    if (!moduleDragState) return
+
+    // Move ghost freely with the mouse
+    const ghostEl = moduleDragState.ghostEl
+    ghostEl.style.left = `${event.clientX - moduleDragState.grabOffsetX}px`
+    ghostEl.style.top  = `${event.clientY - moduleDragState.grabOffsetY}px`
+
+    // Compute snapped target (for drop indicator and state)
+    const target = calcDropTarget(event.clientX, event.clientY)
+    if (!target) return
+    moduleDragState.nextStartColumn = target.nextStartColumn
+    moduleDragState.nextColSpan     = target.nextColSpan
+    moduleDragState.nextTrack       = target.nextTrack
   }
 
   function handleModuleDragUp() {
     if (!moduleDragState) return
-    
-    // Generate the old track key for the module
-    const oldTrackKey = moduleDragState.track.toLowerCase()
-    const oldModuleKey = `${oldTrackKey}-${moduleDragState.moduleId}-${moduleDragState.moduleIndex}`
-    
-    // Generate the new track key if the track changed
-    const newTrackKey = moduleDragState.nextTrack.toLowerCase()
+
+    const oldTrackKey   = moduleDragState.track.toLowerCase()
+    const newTrackKey   = moduleDragState.nextTrack.toLowerCase()
+    const oldModuleKey  = `${oldTrackKey}-${moduleDragState.moduleId}-${moduleDragState.moduleIndex}`
     const finalModuleKey = `${newTrackKey}-${moduleDragState.moduleId}-${moduleDragState.moduleIndex}`
-    
-    if (moduleDragState.nextTrack !== moduleDragState.track || 
-        moduleDragState.nextStartColumn !== moduleDragState.startColumn || 
-        moduleDragState.nextColSpan !== moduleDragState.colSpan) {
-      
-      // Remove old key if track changed
-      if (moduleDragState.nextTrack !== moduleDragState.track && state.moduleDragOverrides[oldModuleKey]) {
+
+    const moved =
+      moduleDragState.nextTrack       !== moduleDragState.track ||
+      moduleDragState.nextStartColumn !== moduleDragState.startColumn ||
+      moduleDragState.nextColSpan     !== moduleDragState.colSpan
+
+    if (moved) {
+      // Clean up old key when track changes
+      if (moduleDragState.nextTrack !== moduleDragState.track) {
         delete state.moduleDragOverrides[oldModuleKey]
       }
-      
-      // Store drag override with new key and track information
       state.moduleDragOverrides[finalModuleKey] = {
         startColumn: moduleDragState.nextStartColumn,
-        colSpan: moduleDragState.nextColSpan,
-        track: moduleDragState.nextTrack,
+        colSpan:     moduleDragState.nextColSpan,
+        track:       moduleDragState.nextTrack,
       }
-      render()
     }
-    
+
     stopModuleDrag()
+    if (moved) render()
   }
 
   function startModuleDrag(event, moduleEl) {
     if (!state.isSnapshotModalOpen) return
     if (event.button !== 0) return
-    
-    const moduleKey = moduleEl.dataset.moduleKey
+
+    const moduleKey  = moduleEl.dataset.moduleKey
     const moduleTrack = moduleEl.dataset.moduleTrack || "Development"
-    const startColumn = Number(moduleEl.dataset.moduleStart || "1")
-    const colSpan = Number(moduleEl.dataset.moduleSpan || "1")
-    const totalCols = Number(moduleEl.dataset.moduleTotalCols || "1")
-    
+    const startColumn = Number(moduleEl.dataset.moduleStart   || "1")
+    const colSpan     = Number(moduleEl.dataset.moduleSpan    || "1")
+    const totalCols   = Number(moduleEl.dataset.moduleTotalCols || "1")
     if (!moduleKey) return
-    
-    // Extract module index from moduleKey (format: "track-moduleId-index")
-    const keyParts = moduleKey.split("-")
+
+    const keyParts   = moduleKey.split("-")
     const moduleIndex = Number(keyParts[keyParts.length - 1]) || 0
-    const moduleId = keyParts.slice(1, -1).join("-")
-    
-    event.preventDefault()
-    dragPreviousUserSelectValue = document.body.style.userSelect
-    dragPreviousCursorValue = document.body.style.cursor
-    document.body.style.userSelect = "none"
-    document.body.style.cursor = "grabbing"
-    moduleEl.classList.add("is-dragging")
-    
+    const moduleId   = keyParts.slice(1, -1).join("-")
+
     const roadmapEl = moduleEl.closest(".rr-roadmap")
     const weekColWidthRaw = roadmapEl
       ? getComputedStyle(roadmapEl).getPropertyValue("--rr-roadmap-week-col-width")
       : "88"
     const weekColumnWidth = Number.parseFloat(weekColWidthRaw) || 88
-    
+
+    // Grab offset — where inside the tile the user clicked
+    const tileRect = moduleEl.getBoundingClientRect()
+    const grabOffsetX = event.clientX - tileRect.left
+    const grabOffsetY = event.clientY - tileRect.top
+
+    event.preventDefault()
+    dragPreviousUserSelectValue = document.body.style.userSelect
+    dragPreviousCursorValue     = document.body.style.cursor
+    document.body.style.userSelect = "none"
+    document.body.style.cursor     = "grabbing"
+
+    // Build a ghost clone that floats freely
+    const ghostEl = moduleEl.cloneNode(true)
+    ghostEl.classList.add("rr-roadmap-module-drag-ghost")
+    ghostEl.style.width  = `${tileRect.width}px`
+    ghostEl.style.height = `${tileRect.height}px`
+    ghostEl.style.left   = `${tileRect.left}px`
+    ghostEl.style.top    = `${tileRect.top}px`
+    // Strip resize handles from ghost (already aria-hidden, just keep it clean)
+    for (const handle of ghostEl.querySelectorAll(".rr-roadmap-module-resize-handle")) {
+      handle.remove()
+    }
+    document.body.appendChild(ghostEl)
+
+    // Hide the original in-grid tile
+    moduleEl.style.visibility = "hidden"
+
     moduleDragState = {
       moduleEl,
+      ghostEl,
       moduleKey,
       moduleId,
       moduleIndex,
-      track: moduleTrack,
-      nextTrack: moduleTrack,
+      track:           moduleTrack,
+      nextTrack:       moduleTrack,
       startColumn,
       nextStartColumn: startColumn,
       colSpan,
-      nextColSpan: colSpan,
+      nextColSpan:     colSpan,
       totalCols,
       weekColumnWidth,
-      startClientX: event.clientX,
-      startClientY: event.clientY,
+      grabOffsetX,
+      grabOffsetY,
     }
-    
+
     document.addEventListener("mousemove", handleModuleDragMove)
-    document.addEventListener("mouseup", handleModuleDragUp)
+    document.addEventListener("mouseup",   handleModuleDragUp)
   }
 
   function startModuleResize(side, event, handleEl) {

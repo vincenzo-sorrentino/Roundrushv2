@@ -11629,11 +11629,19 @@ rr-alert.rr-req-info-callout {
   cursor: grab;
 }
 
-.rr-roadmap--snapshot [data-draggable-module="true"].is-dragging {
-  opacity: 0.7;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+/* Ghost tile that follows the mouse freely during drag */
+.rr-roadmap-module-drag-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.85;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
   cursor: grabbing;
-  z-index: 10;
+  border-radius: inherit;
+  /* Remove grid constraints */
+  grid-column: unset !important;
+  transform: rotate(1.5deg);
+  transition: box-shadow 80ms ease;
 }
 
 /* ── Snapshot modal (full viewport roadmap) ───────────────– */
