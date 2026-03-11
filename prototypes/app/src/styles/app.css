@@ -11629,6 +11629,19 @@ rr-alert.rr-req-info-callout {
   cursor: grab;
 }
 
+/* Dashed drop-slot indicator shown in the target grid cell */
+.rr-roadmap-module-drop-indicator {
+  border: 2px dashed var(--rr-roadmap-module-color, #6b7280);
+  border-radius: 6px;
+  background: transparent;
+  pointer-events: none;
+  align-self: center;
+  opacity: 0.55;
+  position: relative;
+  z-index: 2;
+  min-height: 48px;
+}
+
 /* Ghost tile that follows the mouse freely during drag */
 .rr-roadmap-module-drag-ghost {
   position: fixed;

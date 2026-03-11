@@ -405,11 +405,12 @@ function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns
   
   // Apply drag overrides first (they take precedence)
   const dragOverride = isSnapshotView ? moduleDragOverrides[moduleKey] : null
-  let startColumn, colSpan
+  let startColumn, colSpan, gridRow
   
   if (dragOverride) {
     startColumn = dragOverride.startColumn
     colSpan = dragOverride.colSpan
+    gridRow = dragOverride.gridRow
   } else {
     // Otherwise apply resize overrides
     const resizeOverride = isSnapshotView ? moduleResizeOverrides[moduleKey] : null
@@ -417,12 +418,15 @@ function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns
     const maxSpan = Math.max(1, totalWeekColumns - startColumn + 1)
     const requestedSpan = Number.isFinite(resizeOverride?.colSpan) ? resizeOverride.colSpan : mappedColumns.colSpan
     colSpan = Math.max(1, Math.min(maxSpan, requestedSpan))
+    gridRow = undefined
   }
   
   const draggableAttr = isDraggable ? 'data-draggable-module="true"' : ""
 
+  const gridRowStyle = Number.isFinite(Number(gridRow)) ? `grid-row:${Number(gridRow)};` : ""
+
   return `
-    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" data-module-track="${escapeHtml(trackName)}" ${draggableAttr} style="grid-column:${startColumn} / span ${colSpan}; --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
+    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" data-module-track="${escapeHtml(trackName)}" ${draggableAttr} style="grid-column:${startColumn} / span ${colSpan}; ${gridRowStyle} --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
       ${resizeHandlesHtml}
       <span class="rr-roadmap-module-text">${escapeHtml(module.id)} · ${escapeHtml(module.title)}</span>
     </div>
@@ -870,6 +874,10 @@ export function mountRoadmapFlow() {
     if (moduleDragState.ghostEl) {
       moduleDragState.ghostEl.remove()
     }
+    // Remove drop indicator
+    if (moduleDragState.dropIndicatorEl) {
+      moduleDragState.dropIndicatorEl.remove()
+    }
     // Restore original tile
     moduleDragState.moduleEl.style.visibility = ""
     moduleDragState = null
@@ -879,11 +887,53 @@ export function mountRoadmapFlow() {
     document.body.style.cursor = dragPreviousCursorValue
   }
 
+  function updateDropIndicator(target) {
+    if (!moduleDragState) return
+    const { nextStartColumn, nextColSpan, nextTrack, nextGridRow } = target
+
+    // Find the grid that belongs to the target track
+    const dragRoot = moduleDragState.dragRootEl || root
+    const tracks = dragRoot.querySelectorAll('.rr-roadmap-track')
+    let targetGrid = null
+    for (const track of tracks) {
+      const label = track.querySelector('.rr-roadmap-track-label')
+      const trackName = label ? label.textContent.trim() : ""
+      if (trackName === nextTrack) {
+        targetGrid = track.querySelector('.rr-roadmap-track-grid')
+        break
+      }
+    }
+    if (!targetGrid) return
+
+    // Create indicator on first use
+    if (!moduleDragState.dropIndicatorEl) {
+      const ind = document.createElement("div")
+      ind.className = "rr-roadmap-module-drop-indicator"
+      targetGrid.appendChild(ind)
+      moduleDragState.dropIndicatorEl = ind
+      moduleDragState.dropIndicatorGrid = targetGrid
+    }
+
+    const ind = moduleDragState.dropIndicatorEl
+
+    // Move to a different grid if track changed
+    if (moduleDragState.dropIndicatorGrid !== targetGrid) {
+      targetGrid.appendChild(ind)
+      moduleDragState.dropIndicatorGrid = targetGrid
+    }
+
+    // Keep indicator in the same row as the dragged module's slot.
+    ind.style.gridRow = String(nextGridRow)
+    ind.style.gridColumn = `${nextStartColumn} / span ${nextColSpan}`
+    ind.style.height = `${moduleDragState.tileHeight}px`
+  }
+
   function calcDropTarget(clientX, clientY) {
     if (!moduleDragState) return null
 
     // Determine target track
-    const tracks = root.querySelectorAll('.rr-roadmap-track')
+    const dragRoot = moduleDragState.dragRootEl || root
+    const tracks = dragRoot.querySelectorAll('.rr-roadmap-track')
     let nextTrack = moduleDragState.track
     for (const track of tracks) {
       const rect = track.getBoundingClientRect()
@@ -896,7 +946,7 @@ export function mountRoadmapFlow() {
 
     // Determine target grid column by finding the track grid under the cursor
     let nextStartColumn = moduleDragState.nextStartColumn
-    const trackGrids = root.querySelectorAll('.rr-roadmap-track-grid')
+    const trackGrids = dragRoot.querySelectorAll('.rr-roadmap-track-grid')
     for (const grid of trackGrids) {
       const gridRect = grid.getBoundingClientRect()
       if (clientX >= gridRect.left && clientX <= gridRect.right) {
@@ -914,7 +964,68 @@ export function mountRoadmapFlow() {
 
     const maxSpan = Math.max(1, moduleDragState.totalCols - nextStartColumn + 1)
     const nextColSpan = Math.min(moduleDragState.colSpan, maxSpan)
-    return { nextStartColumn, nextColSpan, nextTrack }
+    const nextGridRow = findFirstAvailableRow(nextTrack, nextStartColumn, nextColSpan)
+    if (!nextGridRow) {
+      return {
+        nextStartColumn: moduleDragState.nextStartColumn,
+        nextColSpan: moduleDragState.nextColSpan,
+        nextTrack: moduleDragState.nextTrack,
+        nextGridRow: moduleDragState.nextGridRow,
+      }
+    }
+    return { nextStartColumn, nextColSpan, nextTrack, nextGridRow }
+  }
+
+  function columnsOverlap(startA, spanA, startB, spanB) {
+    const endA = startA + spanA - 1
+    const endB = startB + spanB - 1
+    return !(endA < startB || endB < startA)
+  }
+
+  function getTrackGridByName(trackName) {
+    const dragRoot = moduleDragState?.dragRootEl || root
+    const tracks = dragRoot.querySelectorAll('.rr-roadmap-track')
+    for (const track of tracks) {
+      const label = track.querySelector('.rr-roadmap-track-label')
+      const name = label ? label.textContent.trim() : ""
+      if (name === trackName) {
+        return track.querySelector('.rr-roadmap-track-grid')
+      }
+    }
+    return null
+  }
+
+  function findFirstAvailableRow(trackName, nextStartColumn, nextColSpan) {
+    const grid = getTrackGridByName(trackName)
+    if (!grid) return null
+
+    const gridStyle = getComputedStyle(grid)
+    const rowGap = Number.parseFloat(gridStyle.rowGap) || 0
+    const paddingTop = Number.parseFloat(gridStyle.paddingTop) || 0
+    const paddingBottom = Number.parseFloat(gridStyle.paddingBottom) || 0
+    const tileHeight = Math.max(1, moduleDragState.tileHeight || 48)
+    const availableHeight = Math.max(0, grid.clientHeight - paddingTop - paddingBottom)
+    const maxRowsBySpace = Math.max(1, Math.floor((availableHeight + rowGap) / (tileHeight + rowGap)))
+
+    const modules = Array.from(grid.querySelectorAll('.rr-roadmap-module'))
+      .filter(el => el !== moduleDragState.moduleEl)
+
+    const occupiedByRow = new Map()
+    for (const el of modules) {
+      const row = Number.parseInt(getComputedStyle(el).gridRowStart, 10) || 1
+      const start = Number(el.dataset.moduleStart || "1")
+      const span = Number(el.dataset.moduleSpan || "1")
+      if (!occupiedByRow.has(row)) occupiedByRow.set(row, [])
+      occupiedByRow.get(row).push({ start, span })
+    }
+
+    for (let row = 1; row <= maxRowsBySpace; row += 1) {
+      const rowItems = occupiedByRow.get(row) || []
+      const collides = rowItems.some(item => columnsOverlap(nextStartColumn, nextColSpan, item.start, item.span))
+      if (!collides) return row
+    }
+
+    return null
   }
 
   function handleModuleDragMove(event) {
@@ -931,6 +1042,8 @@ export function mountRoadmapFlow() {
     moduleDragState.nextStartColumn = target.nextStartColumn
     moduleDragState.nextColSpan     = target.nextColSpan
     moduleDragState.nextTrack       = target.nextTrack
+    moduleDragState.nextGridRow     = target.nextGridRow
+    updateDropIndicator(target)
   }
 
   function handleModuleDragUp() {
@@ -944,7 +1057,8 @@ export function mountRoadmapFlow() {
     const moved =
       moduleDragState.nextTrack       !== moduleDragState.track ||
       moduleDragState.nextStartColumn !== moduleDragState.startColumn ||
-      moduleDragState.nextColSpan     !== moduleDragState.colSpan
+      moduleDragState.nextColSpan     !== moduleDragState.colSpan ||
+      moduleDragState.nextGridRow     !== moduleDragState.gridRow
 
     if (moved) {
       // Clean up old key when track changes
@@ -955,6 +1069,7 @@ export function mountRoadmapFlow() {
         startColumn: moduleDragState.nextStartColumn,
         colSpan:     moduleDragState.nextColSpan,
         track:       moduleDragState.nextTrack,
+        gridRow:     moduleDragState.nextGridRow,
       }
     }
 
@@ -976,6 +1091,7 @@ export function mountRoadmapFlow() {
     const keyParts   = moduleKey.split("-")
     const moduleIndex = Number(keyParts[keyParts.length - 1]) || 0
     const moduleId   = keyParts.slice(1, -1).join("-")
+    const dragRootEl = moduleEl.closest('.rr-roadmap--snapshot') || root
 
     const roadmapEl = moduleEl.closest(".rr-roadmap")
     const weekColWidthRaw = roadmapEl
@@ -985,6 +1101,8 @@ export function mountRoadmapFlow() {
 
     // Grab offset — where inside the tile the user clicked
     const tileRect = moduleEl.getBoundingClientRect()
+    const computedRowStart = Number.parseInt(getComputedStyle(moduleEl).gridRowStart, 10)
+    const initialGridRow = Number.isFinite(computedRowStart) && computedRowStart > 0 ? computedRowStart : 1
     const grabOffsetX = event.clientX - tileRect.left
     const grabOffsetY = event.clientY - tileRect.top
 
@@ -1013,6 +1131,9 @@ export function mountRoadmapFlow() {
     moduleDragState = {
       moduleEl,
       ghostEl,
+      dropIndicatorEl:   null,
+      dropIndicatorGrid: null,
+      dragRootEl,
       moduleKey,
       moduleId,
       moduleIndex,
@@ -1022,11 +1143,22 @@ export function mountRoadmapFlow() {
       nextStartColumn: startColumn,
       colSpan,
       nextColSpan:     colSpan,
+      gridRow:         initialGridRow,
+      nextGridRow:     initialGridRow,
       totalCols,
       weekColumnWidth,
       grabOffsetX,
       grabOffsetY,
+      tileHeight:      tileRect.height,
     }
+
+    // Show dashed target slot immediately on click-and-hold, even before first mousemove.
+    updateDropIndicator({
+      nextStartColumn: startColumn,
+      nextColSpan: colSpan,
+      nextTrack: moduleTrack,
+      nextGridRow: initialGridRow,
+    })
 
     document.addEventListener("mousemove", handleModuleDragMove)
     document.addEventListener("mouseup",   handleModuleDragUp)
