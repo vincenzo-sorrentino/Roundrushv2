@@ -10515,22 +10515,22 @@ rr-alert.rr-req-info-callout {
 
 .rr-testing-button-group {
   display: flex;
-  border: 1px solid #a3a9b6;
+  border: 1px solid var(--rr-sem-borderDefault, #a3a9b6);
   border-radius: 8px;
   overflow: hidden;
-  background: #ffffff;
+  background: var(--rr-sem-surfaceField, #ffffff);
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 }
 
 .rr-testing-btn {
   border: none;
-  background: #ffffff;
+  background: var(--rr-sem-surfaceField, #ffffff);
   padding: 6px 12px;
   font-size: 14px;
   line-height: 18px;
   color: var(--rr-sem-textPrimary, #14161b);
   cursor: pointer;
-  border-right: 1px solid #a3a9b6;
+  border-right: 1px solid var(--rr-sem-borderDefault, #a3a9b6);
   font-family: inherit;
 }
 
@@ -10539,7 +10539,7 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-testing-btn.is-active {
-  background: #f0f1f3;
+  background: var(--rr-sem-background-fieldHover, #f0f1f3);
 }
 
 .rr-testing-btn:focus-visible {
@@ -10566,8 +10566,8 @@ rr-alert.rr-req-info-callout {
   width: 100%;
   height: 36px;
   border-radius: 8px;
-  border: 1px solid #a3a9b6;
-  background: #ffffff;
+  border: 1px solid var(--rr-sem-borderDefault, #a3a9b6);
+  background: var(--rr-sem-surfaceField, #ffffff);
   padding: 8px 12px 8px 36px;
   font-size: 14px;
   line-height: 20px;
@@ -10593,15 +10593,15 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-testing-table-card {
-  border: 1px solid #e0e2e7;
+  border: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--rr-sem-background-table, #ffffff);
   overflow: hidden;
 }
 
 .rr-testing-table-title {
-  background: #f2f8ff;
-  border-bottom: 1px solid #e0e2e7;
+  background: var(--rr-sem-surfaceSubtle, #f2f8ff);
+  border-bottom: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
   text-align: center;
   font-size: 12px;
   font-weight: 700;
@@ -10620,7 +10620,7 @@ rr-alert.rr-req-info-callout {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) 94px 94px 94px 94px 94px 94px 162px;
   align-items: center;
-  border-bottom: 1px solid #e6e8ee;
+  border-bottom: 1px solid var(--rr-sem-borderDefault, #e6e8ee);
   min-width: 940px;
 }
 
@@ -10629,7 +10629,7 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-testing-row--header {
-  background: #ffffff;
+  background: var(--rr-sem-background-table, #ffffff);
 }
 
 .rr-testing-row--header .rr-testing-cell {
@@ -10680,8 +10680,8 @@ rr-alert.rr-req-info-callout {
   gap: 24px;
   padding: 10px 16px;
   border-radius: 8px;
-  border: 1px solid #e0e2e7;
-  background: #f5f6f8;
+  border: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
+  background: var(--rr-sem-surfaceSubtle, #f5f6f8);
   font-size: 13px;
   color: var(--rr-sem-textSecondary, #3d4350);
 }
@@ -10953,7 +10953,7 @@ rr-alert.rr-req-info-callout {
 
 /* ── Table wrapper ── */
 .rr-reg-table-wrap {
-  border: 1px solid #e0e2e7;
+  border: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
   border-radius: 8px;
   overflow: hidden;
   overflow-x: auto;
@@ -10964,8 +10964,8 @@ rr-alert.rr-req-info-callout {
   display: grid;
   grid-template-columns: 97px 1fr 120px 100px 84px 74px 162px 162px;
   align-items: stretch;
-  border-bottom: 1px solid #e0e2e7;
-  background: #ffffff;
+  border-bottom: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
+  background: var(--rr-sem-background-table, #ffffff);
   min-width: 880px;
 }
 
@@ -10974,11 +10974,11 @@ rr-alert.rr-req-info-callout {
 }
 
 .rr-reg-row:not(.rr-reg-row--header):hover {
-  background: #f5f6f8;
+  background: var(--rr-sem-background-tableHover, #f5f6f8);
 }
 
 .rr-reg-row[data-action="open-issue-modal"] .rr-reg-issue-title {
-  color: #14161b;
+  color: var(--rr-sem-textPrimary, #14161b);
   cursor: pointer;
 }
 
@@ -10989,7 +10989,7 @@ rr-alert.rr-req-info-callout {
 
 /* ── Header row ── */
 .rr-reg-row--header {
-  background: #ffffff;
+  background: var(--rr-sem-background-table, #ffffff);
 }
 
 .rr-reg-row--header .rr-reg-cell {
@@ -10997,7 +10997,7 @@ rr-alert.rr-req-info-callout {
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
-  color: #3d4350;
+  color: var(--rr-sem-textSecondary, #3d4350);
   gap: 4px;
 }
 
@@ -11009,7 +11009,7 @@ rr-alert.rr-req-info-callout {
   height: 44px;
   font-size: 14px;
   line-height: 18px;
-  color: #14161b;
+  color: var(--rr-sem-textPrimary, #14161b);
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -11055,7 +11055,7 @@ rr-alert.rr-req-info-callout {
 .rr-reg-issue-title {
   font-size: 14px;
   line-height: 18px;
-  color: #14161b;
+  color: var(--rr-sem-textPrimary, #14161b);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11065,7 +11065,7 @@ rr-alert.rr-req-info-callout {
 .rr-reg-issue-sub {
   font-size: 12px;
   line-height: 18px;
-  color: #667085;
+  color: var(--rr-sem-textSecondary, #667085);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11079,7 +11079,7 @@ rr-alert.rr-req-info-callout {
   gap: 8px;
   font-size: 14px;
   line-height: 18px;
-  color: #14161b;
+  color: var(--rr-sem-textPrimary, #14161b);
   white-space: nowrap;
 }
 
@@ -11098,7 +11098,7 @@ rr-alert.rr-req-info-callout {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--rr-sem-surface, #ffffff);
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
@@ -11124,16 +11124,16 @@ rr-alert.rr-req-info-callout {
   align-items: center;
   justify-content: center;
   padding: 6px 12px;
-  border: 1px solid #a3a9b6;
+  border: 1px solid var(--rr-sem-borderDefault, #a3a9b6);
   border-radius: 8px;
   background: transparent;
   cursor: pointer;
-  color: #14161b;
+  color: var(--rr-sem-textPrimary, #14161b);
   flex-shrink: 0;
 }
 
 .rr-reg-github-btn:hover {
-  background: #f0f1f3;
+  background: var(--rr-sem-background-fieldHover, #f0f1f3);
 }
 
 /* ── Status badge ── */
@@ -11172,12 +11172,12 @@ rr-alert.rr-req-info-callout {
   background: transparent;
   cursor: pointer;
   border-radius: 4px;
-  color: #14161b;
+  color: var(--rr-sem-textPrimary, #14161b);
   line-height: 1;
 }
 
 .rr-reg-done-toggle:hover {
-  background: #f0f1f3;
+  background: var(--rr-sem-background-fieldHover, #f0f1f3);
 }
 
 .rr-reg-done-badge {
@@ -11239,6 +11239,8 @@ rr-alert.rr-req-info-callout {
   align-items: center;
   gap: var(--rr-spacing-md);
   margin-left: auto;
+  flex: 0 0 auto;
+  min-height: 24px;
 }
 
 .rr-roadmap-team-count {
@@ -11254,18 +11256,23 @@ rr-alert.rr-req-info-callout {
   gap: 0;
   align-items: center;
   flex-shrink: 0;
+  flex: 0 0 auto;
+  min-height: 24px;
 }
 
 .rr-roadmap-avatar {
   position: relative;
   width: 24px;
   height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
   border-radius: var(--rr-radius-md);
   border: 2px solid var(--rr-sem-surface);
   overflow: hidden;
   flex-shrink: 0;
   margin-right: -8px;
-  box-sizing: border-box;
 }
 
 .rr-roadmap-avatar:last-child {
@@ -11275,6 +11282,10 @@ rr-alert.rr-req-info-callout {
 .rr-roadmap-avatar img {
   width: 24px;
   height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
   object-fit: cover;
   object-position: center;
   display: block;
