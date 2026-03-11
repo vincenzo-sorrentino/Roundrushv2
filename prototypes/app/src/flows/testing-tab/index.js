@@ -24,6 +24,7 @@ const ICON = {
   at: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="104" cy="112" r="48" stroke="currentColor" stroke-width="16"/><path d="M152,112a48,48,0,1,1-48-48" stroke="currentColor" stroke-width="16"/><path d="M128,156v40a40,40,0,0,1-40,40" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   image: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><rect x="32" y="48" width="192" height="160" rx="16" stroke="currentColor" stroke-width="16"/><circle cx="92" cy="108" r="16" fill="currentColor"/><path d="M32 172l52-52 44 44 28-28 68 68" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   paperclip: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><path d="M216,120v72a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V88a40,40,0,0,1,40-40h72" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="152 32 216 32 216 96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  gitFork: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><circle cx="64" cy="48" r="20" stroke="currentColor" stroke-width="16"/><circle cx="192" cy="80" r="20" stroke="currentColor" stroke-width="16"/><circle cx="64" cy="208" r="20" stroke="currentColor" stroke-width="16"/><path d="M84 48h36a40 40 0 0 1 40 40v0" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><path d="M64 68v100" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   send: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><polyline points="232 32 104 160 232 32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M232,32,104,160,40,192a16,16,0,0,1-20-20l32-64" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   arrowUp: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="128" y1="216" x2="128" y2="56" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,128 128,56 200,128" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 }
@@ -67,6 +68,7 @@ let ACTIVE_TAB = "overview"
 // Global state for modal
 let SELECTED_ISSUE = null
 let MODAL_VISIBLE = false
+let ISSUE_MODAL_TOOL = "history"
 const BUTTONS = [
   { id: "overview", label: "Overview" },
   { id: "sprint", label: "Sprint" },
@@ -479,6 +481,31 @@ const REG_AVATAR = {
   rene:    { url: "http://localhost:3845/assets/555cb3735701db8d4318f0d93edd1f4b64493b37.png", bg: "#cfc3a7", name: "Rene Wells" },
 }
 
+const ISSUE_MODAL_ATTACHMENTS = [
+  {
+    url: "http://localhost:3845/assets/b32a89c46b368fe66c10652698fb8fea4d31a63f.png",
+    type: "video",
+  },
+  {
+    url: "http://localhost:3845/assets/5eb09a579a993a8c98c5d0be927ff09114216df8.png",
+    type: "image",
+  },
+  {
+    url: "http://localhost:3845/assets/205aa03909fb9337568d32d68be65044d4bb2512.png",
+    type: "image",
+  },
+  {
+    url: "http://localhost:3845/assets/76024a0393388402b643f98a5d90a7f5a9262c20.png",
+    type: "image",
+  },
+]
+
+const ISSUE_MODAL_PLAY_BG = "http://localhost:3845/assets/3df5e28ae1564c866cea2734eeb2cd98435a7846.svg"
+const ISSUE_MODAL_PLAY_ICON = "http://localhost:3845/assets/8266f660760eed5a5315590e65ca724c4066a5e3.svg"
+const ISSUE_MODAL_HISTORY_AVATAR_RENE = "http://localhost:3845/assets/501bde5384c13a2e469fcc8407daa6da0960c687.png"
+const ISSUE_MODAL_HISTORY_AVATAR_LANA = "http://localhost:3845/assets/30d4a462ea7b6e1428ffcb7ed5d646ca522e5a23.png"
+const ISSUE_MODAL_HISTORY_AVATAR_ORLANDO = "http://localhost:3845/assets/05be041b58b5e1fe37be4a6bb5a74f76d7c0f06d.png"
+
 /* ── Issue Details & Comments Data ──────────────────────── */
 const ISSUE_DETAILS_MAP = {
   "Document access denied.": {
@@ -500,6 +527,45 @@ const ISSUE_DETAILS_MAP = {
         avatar: REG_AVATAR.demi,
         timestamp: "2 days ago",
         text: "This part need an update due to technical constraints.",
+      },
+    ],
+    relatedIssues: [
+      {
+        scope: "STG",
+        title: "Document upload issue",
+      },
+      {
+        scope: "STG",
+        title: "Document not accessible",
+      },
+    ],
+    history: [
+      {
+        date: "19/02/26",
+        event: "Ready for review",
+        author: "Orlando Diggs",
+        avatar: {
+          url: ISSUE_MODAL_HISTORY_AVATAR_ORLANDO,
+          bg: "#cfc3a7",
+        },
+      },
+      {
+        date: "17/02/26",
+        event: "Added Orlando Diggs as assignee",
+        author: "Lana Steiner",
+        avatar: {
+          url: ISSUE_MODAL_HISTORY_AVATAR_LANA,
+          bg: "#d4b5ad",
+        },
+      },
+      {
+        date: "14/02/26",
+        event: "Issue created",
+        author: "Rene Wells",
+        avatar: {
+          url: ISSUE_MODAL_HISTORY_AVATAR_RENE,
+          bg: "#dfcc9f",
+        },
       },
     ],
   },
@@ -908,6 +974,134 @@ function renderIssueDescription(content) {
   return html.join("")
 }
 
+function renderIssueModalAttachments(details) {
+  const attachments = Array.isArray(details.attachments) && details.attachments.length > 0
+    ? details.attachments
+    : ISSUE_MODAL_ATTACHMENTS
+
+  return `
+    <div class="rr-modal-attachments" role="region" aria-label="Issue attachments">
+      ${attachments.map((attachment) => {
+        const isVideo = attachment.type === "video"
+        return `
+          <button class="rr-modal-attachment-card ${isVideo ? "is-video" : ""}" type="button" title="Open attachment">
+            <img class="rr-modal-attachment-image" src="${attachment.url}" alt="" loading="lazy" />
+            ${isVideo ? `
+              <span class="rr-modal-attachment-overlay" aria-hidden="true"></span>
+              <span class="rr-modal-attachment-play" aria-hidden="true">
+                <img class="rr-modal-attachment-play-bg" src="${ISSUE_MODAL_PLAY_BG}" alt="" />
+                <img class="rr-modal-attachment-play-icon" src="${ISSUE_MODAL_PLAY_ICON}" alt="" />
+              </span>
+            ` : ""}
+          </button>
+        `
+      }).join("")}
+    </div>
+  `
+}
+
+function renderIssueModalRelatedIssues(details) {
+  const relatedIssues = Array.isArray(details.relatedIssues) && details.relatedIssues.length > 0
+    ? details.relatedIssues
+    : [
+        { scope: "STG", title: "Document upload issue" },
+        { scope: "STG", title: "Document not accessible" },
+      ]
+
+  return `
+    <div class="rr-modal-related" role="region" aria-label="Related issues">
+      ${relatedIssues.map((item) => `
+        <button class="rr-modal-related-row" type="button" title="Open related issue">
+          <span class="rr-modal-related-scope-cell">
+            <span class="rr-modal-related-scope-badge">${escapeHtml(item.scope || "STG")}</span>
+          </span>
+          <span class="rr-modal-related-title-cell">${escapeHtml(item.title || "Untitled issue")}</span>
+        </button>
+      `).join("")}
+    </div>
+  `
+}
+
+function renderIssueModalHistory(details, reporter, assignee, statusLabel) {
+  const reporterName = reporter && reporter.name ? reporter.name : "Unknown reporter"
+  const reporterAvatar = {
+    url: reporter && reporter.url ? reporter.url : "",
+    bg: reporter && reporter.bg ? reporter.bg : "#d0d5dd",
+  }
+  const assigneeName = assignee && assignee.name ? assignee.name : "Unassigned"
+  const assigneeAvatar = {
+    url: assignee && assignee.url ? assignee.url : "",
+    bg: assignee && assignee.bg ? assignee.bg : "#d0d5dd",
+  }
+  const issueStatusLabel = statusLabel || "To do"
+
+  const history = Array.isArray(details.history) && details.history.length > 0
+    ? details.history
+    : [
+        {
+          date: "19/02/26",
+          event: "Ready for review",
+          author: "Orlando Diggs",
+          avatar: { url: ISSUE_MODAL_HISTORY_AVATAR_ORLANDO, bg: "#cfc3a7" },
+        },
+        {
+          date: "17/02/26",
+          event: "Added Orlando Diggs as assignee",
+          author: "Lana Steiner",
+          avatar: { url: ISSUE_MODAL_HISTORY_AVATAR_LANA, bg: "#d4b5ad" },
+        },
+        {
+          date: "14/02/26",
+          event: "Issue created",
+          author: reporterName,
+          avatar: reporterAvatar,
+        },
+      ]
+
+  const historyWithReporterForCreation = history.map((item) => {
+    const eventText = String(item && item.event ? item.event : "").trim().toLowerCase()
+    if (eventText === "issue created") {
+      return {
+        ...item,
+        author: reporterName,
+        avatar: reporterAvatar,
+      }
+    }
+    if (eventText === "ready for review") {
+      return {
+        ...item,
+        event: issueStatusLabel,
+        author: assigneeName,
+        avatar: assigneeAvatar,
+      }
+    }
+    if (eventText.includes("as assignee")) {
+      return {
+        ...item,
+        event: `Added ${assigneeName} as assignee`,
+      }
+    }
+    return item
+  })
+
+  return `
+    <div class="rr-modal-history" role="region" aria-label="Issue history">
+      <span class="rr-modal-history-line" aria-hidden="true"></span>
+      ${historyWithReporterForCreation.map((item, index) => `
+        <span class="rr-modal-history-node" style="top:${index * 86}px" aria-hidden="true"></span>
+        <div class="rr-modal-history-card" style="top:${index * 86 - 12}px">
+          <p class="rr-modal-history-date">${escapeHtml(item.date || "")}</p>
+          <p class="rr-modal-history-event">${escapeHtml(item.event || "")}</p>
+          <div class="rr-modal-history-author-row">
+            ${renderAvatarWithFallback({ url: item.avatar && item.avatar.url, bg: item.avatar && item.avatar.bg, name: item.author }, "rr-modal-history-avatar-wrap", "rr-modal-history-avatar")}
+            <span class="rr-modal-history-author">${escapeHtml(item.author || "")}</span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `
+}
+
 /* ── Issue Details Modal Rendering ─────────────────────────── */
 function renderIssueModal() {
   if (!SELECTED_ISSUE || !MODAL_VISIBLE) return ""
@@ -946,6 +1140,7 @@ function renderIssueModal() {
   const scopeConfig = scopeColors[scopeKey] || { bg: "#e0e2e7", color: "#3d4350" }
   const statusKey = details.status || issue.statusStaging || "todo"
   const statusConfig = statusColors[statusKey] || statusColors.todo
+  const activeTool = ISSUE_MODAL_TOOL
   
   const assignee = details.assignee || (issue.assignees && issue.assignees[0])
   const derivedReporter = issue.reporter || assignee || (issue.assignees && issue.assignees[0]) || REG_AVATAR.alisa
@@ -1024,13 +1219,17 @@ function renderIssueModal() {
           <div class="rr-modal-aside">
             <div class="rr-modal-comments">
               <div class="rr-modal-tools" role="toolbar" aria-label="Issue panel tools">
-                <button class="rr-modal-tool-btn is-active" type="button" title="Comments">${ICON.chatCircleSimple}</button>
-                <button class="rr-modal-tool-btn" type="button" title="Attach file">${ICON.paperclip}</button>
-                <button class="rr-modal-tool-btn" type="button" title="Link">${ICON.linkSimple}</button>
-                <button class="rr-modal-tool-btn" type="button" title="History">${ICON.clockCounterClockwise}</button>
+                <button class="rr-modal-tool-btn ${activeTool === "comments" ? "is-active" : ""}" data-action="switch-modal-tool" data-tool="comments" type="button" title="Comments">${ICON.chatCircleSimple}</button>
+                <button class="rr-modal-tool-btn ${activeTool === "attachments" ? "is-active" : ""}" data-action="switch-modal-tool" data-tool="attachments" type="button" title="Attach file">${ICON.paperclip}</button>
+                <button class="rr-modal-tool-btn ${activeTool === "related" ? "is-active" : ""}" data-action="switch-modal-tool" data-tool="related" type="button" title="Related issues">${ICON.gitFork}</button>
+                <button class="rr-modal-tool-btn ${activeTool === "history" ? "is-active" : ""}" data-action="switch-modal-tool" data-tool="history" type="button" title="History">${ICON.clockCounterClockwise}</button>
               </div>
 
-              ${details.comments && details.comments.length > 0 ? `
+              ${activeTool === "attachments" ? renderIssueModalAttachments(details) : ""}
+              ${activeTool === "related" ? renderIssueModalRelatedIssues(details) : ""}
+              ${activeTool === "history" ? renderIssueModalHistory(details, reporter, assignee, statusConfig.label || "To do") : ""}
+
+              ${activeTool === "comments" && details.comments && details.comments.length > 0 ? `
                 <div class="rr-modal-comments-list">
                   ${details.comments.map(comment => `
                     <div class="rr-modal-comment">
@@ -1049,8 +1248,8 @@ function renderIssueModal() {
                   `).join("")}
                 </div>
               ` : ""}
-              
-              <div class="rr-modal-input-area">
+
+              ${activeTool === "comments" ? `<div class="rr-modal-input-area">
                 <input type="text" class="rr-modal-input" placeholder="Write a note..." />
                 <div class="rr-modal-input-actions">
                   <button class="rr-modal-input-btn" type="button" title="Emoji">${ICON.smiley}</button>
@@ -1058,7 +1257,7 @@ function renderIssueModal() {
                   <button class="rr-modal-input-btn" type="button" title="Add image">${ICON.image}</button>
                   <button class="rr-modal-input-btn rr-modal-input-btn--send" type="button" title="Send">${ICON.arrowUp}</button>
                 </div>
-              </div>
+              </div>` : ""}
             </div>
           </div>
         </div>
@@ -1287,6 +1486,7 @@ export function initTestingTab() {
         try {
           SELECTED_ISSUE = JSON.parse(issueData)
           MODAL_VISIBLE = true
+          ISSUE_MODAL_TOOL = "history"
           
           // Re-render with modal
           const wrapper = document.querySelector(".rr-testing-wrapper")
@@ -1301,6 +1501,22 @@ export function initTestingTab() {
     })
   })
 
+  // Issue Modal – Switch right panel tool
+  document.querySelectorAll("[data-action='switch-modal-tool']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const tool = e.currentTarget.getAttribute("data-tool")
+      if (!tool || tool === ISSUE_MODAL_TOOL) return
+
+      ISSUE_MODAL_TOOL = tool
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
   // Issue Modal – Close modal
   document.querySelectorAll("[data-action='close-modal']").forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -1311,6 +1527,7 @@ export function initTestingTab() {
       if (clickedCloseButton || clickedOverlay || clickedBackdrop) {
         MODAL_VISIBLE = false
         SELECTED_ISSUE = null
+        ISSUE_MODAL_TOOL = "history"
         
         // Re-render without modal
         const wrapper = document.querySelector(".rr-testing-wrapper")
