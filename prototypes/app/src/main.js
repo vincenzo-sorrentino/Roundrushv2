@@ -14,13 +14,14 @@ const TAB_SYNC_ICON_URL = "http://localhost:3845/assets/42ec88ad5e301cefafc623f7
 const TAB_SYNC_TEXT = "Last sync: 28/02/26"
 
 const TAB_HEADER_ITEMS = [
-  { id: "dashboard", label: "Dashboard", path: null },
+  { id: "dashboard",    label: "Dashboard",    path: null },
   { id: "requirements", label: "Requirements", path: "/requirements/module" },
-  { id: "planning", label: "Planning", path: "/planning/kanban" },
+  { id: "roadmap",      label: "Roadmap",      path: null },
+  { id: "planning",     label: "Planning",     path: "/planning/kanban" },
+  { id: "design",       label: "Design",       path: "/design/tab" },
   { id: "dependencies", label: "Dependencies", path: "/dependencies/uml" },
-  { id: "issues", label: "Issues", path: null },
-  { id: "docs", label: "Docs", path: "/docs/hub" },
-  { id: "design", label: "Design", path: null },
+  { id: "testing",      label: "Testing",      path: null },
+  { id: "docs",         label: "Docs",         path: "/docs/hub" },
 ]
 
 function renderTabHeader(currentPath) {
@@ -37,10 +38,17 @@ function renderTabHeader(currentPath) {
   }).join("")
 
   /* For Planning routes, the sprint selector is injected by the kanban module.
+     For Docs routes, the history toggle is injected by the docs-hub module.
      For other routes, show the default sync label + action. */
   const isPlanning = currentPath.startsWith("/planning")
+  const isDocs     = currentPath.startsWith("/docs")
+  const isDesign   = currentPath.startsWith("/design")
   const actionsHtml = isPlanning
     ? `<div class="rr-tab-header-actions" id="rr-tab-sprint-header"></div>`
+    : isDocs
+    ? `<div class="rr-tab-header-actions" id="rr-tab-docs-header"></div>`
+    : isDesign
+    ? `<div class="rr-tab-header-actions"></div>`
     : `<div class="rr-tab-header-actions">
         <span class="rr-tab-sync">${TAB_SYNC_TEXT}</span>
         <button type="button" class="rr-tab-sync-action" aria-label="Sync history">

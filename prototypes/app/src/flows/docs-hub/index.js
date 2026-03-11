@@ -29,6 +29,19 @@ const ICON = {
   caretRight: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 
   close: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><line x1="64" y1="64" x2="192" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="192" y1="64" x2="64" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+
+  closeSmall: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="64" y1="64" x2="192" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="192" y1="64" x2="64" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+
+  clockCounterClockwise: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="88" stroke="currentColor" stroke-width="16"/><polyline points="128,76 128,128 96,156" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M78 34 A96 96 0 0 0 32 96" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,8 78,34 104,20" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  funnelSimple: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="40" y1="80" x2="216" y2="80" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="72" y1="128" x2="184" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="104" y1="176" x2="152" y2="176" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+
+  /* Code / Copy icons (Phosphor) */
+  code: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><polyline points="80,64 24,128 80,192" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="176,64 232,128 176,192" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  copy: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><rect x="48" y="96" width="144" height="144" rx="8" stroke="currentColor" stroke-width="16" stroke-linejoin="round"/><path d="M96 96V56a8 8 0 0 1 8-8h96a8 8 0 0 1 8 8v136a8 8 0 0 1-8 8h-40" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+
+  clockCounterClockwiseMd: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M224 48v56h-56" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 128A96 96 0 1 0 59.06 61.37L224 104" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="128,72 128,128 168,152" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 }
 
 /* ── Helpers ───────────────────────────────────────────────── */
@@ -48,6 +61,139 @@ const CATEGORY_COLOR = {
 function catStyle(cat) {
   const c = CATEGORY_COLOR[cat] || { bg: "#f1f3f5", text: "#495057" }
   return `background:${c.bg};color:${c.text}`
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DOC HISTORY — per-section audit entries
+   ══════════════════════════════════════════════════════════════ */
+const DOC_HISTORY = {
+  "acceptance-laws": [
+    { date: "08/03/26", entries: [
+      { action: "Changed", detail: "AL-07 sign-off now requires both QA lead and engineering lead approval before the module can close", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+      { action: "Removed", detail: "AL-08 visual consistency check removed — moved to the design review checklist outside compliance scope", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+    ]},
+    { date: "05/03/26", entries: [
+      { action: "Changed", detail: "AL-02 coverage threshold raised from 75% to 80% to align with updated project quality standards", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
+    ]},
+    { date: "28/02/26", entries: [
+      { action: "Added", detail: "AL-07 — Required manual suites section with QA sign-off log and 48-hour turnaround SLA", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+    { date: "14/02/26", entries: [
+      { action: "Changed", detail: "AL-05 evidence: PR description must now include a dependency review summary as a required field", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+    ]},
+    { date: "03/02/26", entries: [
+      { action: "Added", detail: "AL-06 — Regression test suite coverage derived from the module dependency map added as acceptance gate", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+    ]},
+  ],
+  "integration-api": [
+    { date: "07/03/26", entries: [
+      { action: "Added", detail: "Section 7 — Pagination contract: cursor-based strategy mandated for all list endpoints returning > 100 items", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+    { date: "03/03/26", entries: [
+      { action: "Added", detail: "Section 6 — Contract-first: OpenAPI 3.1 spec must be reviewed and approved before implementation starts", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+      { action: "Changed", detail: "Error response schema updated — detail and code fields are now mandatory in every 4xx and 5xx response", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+    ]},
+    { date: "19/02/26", entries: [
+      { action: "Changed", detail: "Auth token expiry reduced from 60 min to 30 min following security audit finding #SA-14", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+    { date: "04/02/26", entries: [
+      { action: "Deprecated", detail: "v1 webhook payload format deprecated — consumers must migrate to v2 schema by end of Q2 2026", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+    ]},
+  ],
+  "architecture-principles": [
+    { date: "07/03/26", entries: [
+      { action: "Changed", detail: "ADR acceptance rule now requires two senior engineer approvals to reduce single-reviewer risk", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+    { date: "21/02/26", entries: [
+      { action: "Added", detail: "Section 5 — Data ownership model: domain-specific write permissions with read-optimised denormalised projections", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+      { action: "Added", detail: "Section 6 — Bounded context map documenting service ownership boundaries and change authority per domain", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+    { date: "08/02/26", entries: [
+      { action: "Changed", detail: "Dependency direction tightened — domain services may no longer import directly from infrastructure adapters", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
+    ]},
+    { date: "20/01/26", entries: [
+      { action: "Removed", detail: "Event sourcing removed as a mandatory constraint in AP-03 — retained as a recommended pattern only", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+  ],
+  "development-standards": [
+    { date: "09/03/26", entries: [
+      { action: "Changed", detail: "Default exports banned from shared utilities — improves IDE auto-import traceability across the codebase", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+    { date: "04/03/26", entries: [
+      { action: "Added", detail: "TypeScript strict mode: no implicit any, no @ts-ignore without an inline justification comment", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
+      { action: "Added", detail: "Naming convention appendix: PascalCase for components, camelCase for utils, SCREAMING_SNAKE_CASE for constants", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
+    ]},
+    { date: "17/02/26", entries: [
+      { action: "Changed", detail: "PR review rule: mandatory local testing now required for all user-facing feature changes before requesting review", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+    ]},
+    { date: "02/02/26", entries: [
+      { action: "Removed", detail: "Flow types removed from approved typing tools — TypeScript only going forward in all new and migrated files", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
+    ]},
+  ],
+  "git-commit-policies": [
+    { date: "06/03/26", entries: [
+      { action: "Changed", detail: "Branch age reduced from 4 weeks to 2 weeks without an open PR before an automated deletion warning fires", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+    ]},
+    { date: "24/02/26", entries: [
+      { action: "Added", detail: "Squash-merge mandated as the only permitted strategy for feature branches to maintain a linear history", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+      { action: "Changed", detail: "Conventional commit scope validation added to CI — commits without a recognised scope fail the lint check", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+    { date: "10/02/26", entries: [
+      { action: "Added", detail: "Protected branch ruleset for main: no force-push, no deletion, required status checks must pass before merge", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
+    ]},
+  ],
+  "documentation-standards": [
+    { date: "02/03/26", entries: [
+      { action: "Changed", detail: "Stale doc threshold reduced from 180 days to 90 days before flagged as outdated in the governance report", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
+      { action: "Added", detail: "'Owner' and 'Last reviewed' metadata fields now mandatory in every spec file header", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+    ]},
+    { date: "12/02/26", entries: [
+      { action: "Added", detail: "CI validator (validate-spec-links.mjs) to enforce required sections and internal link integrity on every push", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+    { date: "28/01/26", entries: [
+      { action: "Renamed", detail: "Section 'Style guide' renamed to 'Formatting standards' to better reflect prose and structural scope", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
+    ]},
+  ],
+  "testing-obligations": [
+    { date: "08/03/26", entries: [
+      { action: "Changed", detail: "E2E environment updated — all assertions now target deployed staging, not local dev servers", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+    ]},
+    { date: "26/02/26", entries: [
+      { action: "Added", detail: "Visual regression via Chromatic approved for design system components only, not application flows", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+      { action: "Changed", detail: "Mutation score threshold introduced at 60% — applies to domain logic modules starting Q2 2026", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+    { date: "11/02/26", entries: [
+      { action: "Added", detail: "Test co-location rule: unit tests must reside in the same package as the module under test", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
+    ]},
+    { date: "27/01/26", entries: [
+      { action: "Removed", detail: "Jest snapshot tests removed from approved suite types — replaced with assertion-based component tests", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+    ]},
+  ],
+  "security-constraints": [
+    { date: "07/03/26", entries: [
+      { action: "Changed", detail: "Critical vulnerability patch window tightened from 48 h to 24 h for any CVSS score >= 9.0", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+      { action: "Added", detail: "SC-09 — Mandatory SBOM (Software Bill of Materials) generation on every production release build", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+    { date: "20/02/26", entries: [
+      { action: "Added", detail: "Rate limiting: 5 failed logins per 15-minute window per IP before temporary lockout is enforced", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
+    ]},
+    { date: "05/02/26", entries: [
+      { action: "Changed", detail: "Secret scanning extended — pre-commit hooks now required in addition to CI-level scanning", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+  ],
+  "release-policies": [
+    { date: "05/03/26", entries: [
+      { action: "Added", detail: "Pre-production promotion gate made mandatory between staging and production for all release candidates", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
+      { action: "Changed", detail: "48-hour freeze window now required before any planned production deployment — no exceptions without VP sign-off", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
+    ]},
+    { date: "18/02/26", entries: [
+      { action: "Changed", detail: "Rollback decision window reduced from 30 minutes to 15 minutes after incident confirmed by on-call engineer", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+    { date: "30/01/26", entries: [
+      { action: "Added", detail: "Post-release smoke test checklist: 5 critical user flows must pass within 10 minutes of go-live", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
+      { action: "Removed", detail: "Manual approval gate for hotfixes removed — replaced by engineer-owned decision with escalation protocol", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+    ]},
+  ],
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -204,7 +350,14 @@ const DOC_SECTIONS = [
         anchor: "error-shape", heading: "5. Error response shape",
         blocks: [
           { type: "p", text: "All error responses must conform to the following shape to enable consistent client-side handling:" },
-          { type: "ul", items: ['{ "code": "ERR_MODULE_NOT_FOUND", "message": "Human-readable summary.", "details": {} }', "Error codes are SCREAMING_SNAKE_CASE and unique across the platform.", "'message' is safe to display to end users; 'details' is for developer debugging only.", "Stack traces must never appear in API error responses."] },
+          { type: "code", label: "Error response", lines: [
+            `{`,
+            `  "code": "ERR_MODULE_NOT_FOUND",`,
+            `  "message": "Module could not be located.",`,
+            `  "details": { "moduleId": "KAN-042" }`,
+            `}`,
+          ]},
+          { type: "ul", items: ["Error codes are SCREAMING_SNAKE_CASE and unique across the platform.", "'message' is safe to display to end users; 'details' is for developer debugging only.", "Stack traces must never appear in API error responses."] },
         ],
       },
       {
@@ -285,6 +438,13 @@ const DOC_SECTIONS = [
         anchor: "code-style", heading: "2. Code style & linting",
         blocks: [
           { type: "p", text: "All JavaScript and TypeScript files are formatted by Prettier (config in .prettierrc) and linted by ESLint (config in .eslintrc.js). Both run in CI and as a pre-commit hook." },
+          { type: "code", label: "ESLint disable — must include reason comment", lines: [
+            `// eslint-disable-next-line @typescript-eslint/no-explicit-any`,
+            `// Reason: third-party callback signature requires unknown shape`,
+            `function handleCallback(payload: any) {`,
+            `  processEvent(payload)`,
+            `}`,
+          ]},
           { type: "ul", items: ["Never disable ESLint rules with // eslint-disable without a comment explaining why.", "Prettier auto-format must be applied before every commit.", "TypeScript strict mode is enabled: no implicit any, no @ts-ignore without justification."] },
         ],
       },
@@ -337,7 +497,17 @@ const DOC_SECTIONS = [
         anchor: "commits", heading: "3. Commit message format",
         blocks: [
           { type: "p", text: "We use Conventional Commits. Format: <type>(<scope>): <description>." },
-          { type: "ul", items: ["feat(auth): add OTP verification step", "fix(kanban): correct sprint boundary date calculation", "docs(acceptance-laws): update AL-05 evidence requirements", "The scope is the module or domain affected.", "Breaking changes must add BREAKING CHANGE: in the commit footer."] },
+          { type: "code", label: "Conventional commit examples", lines: [
+            `feat(auth): add OTP verification step`,
+            `fix(kanban): correct sprint boundary date calculation`,
+            `docs(acceptance-laws): update AL-05 evidence requirements`,
+            ``,
+            `# Breaking change footer`,
+            `refactor(api)!: rename /modules endpoint to /epics`,
+            ``,
+            `BREAKING CHANGE: all clients must update endpoint references`,
+          ]},
+          { type: "ul", items: ["The scope is the module or domain affected.", "Breaking changes must add BREAKING CHANGE: in the commit footer."] },
         ],
       },
       {
@@ -555,7 +725,6 @@ function renderHubCard(section) {
         <div class="rr-docs-hub-card-icon">${ICON[section.icon] || ICON.fileText}</div>
         <h3 class="rr-docs-hub-card-title">${escapeHtml(section.title)}</h3>
       </div>
-      <span class="rr-docs-hub-card-cat" style="${catStyle(section.category)}">${escapeHtml(section.category)}</span>
       <p class="rr-docs-hub-card-desc">${escapeHtml(section.shortDescription)}</p>
     </article>
   `
@@ -583,20 +752,20 @@ function renderHubView(filteredSections, query) {
     : filteredSections.map(renderHubCard).join("")
   return `
     <div class="rr-docs-hub" id="rr-docs-hub-view">
-      <div class="rr-docs-hub-inner">
-        <div class="rr-docs-hub-hero">
-          <h1 class="rr-docs-hub-title">Project documentation HUB</h1>
-          <div class="rr-docs-hub-search-wrap">
-            <div class="rr-docs-hub-search-field">
-              <span class="rr-docs-search-icon" aria-hidden="true">${ICON.search}</span>
-              <input type="text" class="rr-docs-search-input" id="rr-docs-hub-search"
-                placeholder="Search documentation…" autocomplete="off" aria-label="Search documentation"
-                value="${escapeHtml(query)}" />
-              <button type="button" class="rr-docs-search-clear ${query ? "visible" : ""}" id="rr-docs-hub-clear" aria-label="Clear search">${ICON.close}</button>
-            </div>
-            <div id="rr-docs-hub-dd-host"></div>
+      <div class="rr-docs-hub-hero">
+        <h1 class="rr-docs-hub-title">Project documentation HUB</h1>
+        <div class="rr-docs-hub-search-wrap">
+          <div class="rr-docs-hub-search-field">
+            <span class="rr-docs-search-icon" aria-hidden="true">${ICON.search}</span>
+            <input type="text" class="rr-docs-search-input" id="rr-docs-hub-search"
+              placeholder="Search documentation…" autocomplete="off" aria-label="Search documentation"
+              value="${escapeHtml(query)}" />
+            <button type="button" class="rr-docs-search-clear ${query ? "visible" : ""}" id="rr-docs-hub-clear" aria-label="Clear search">${ICON.close}</button>
           </div>
+          <div id="rr-docs-hub-dd-host"></div>
         </div>
+      </div>
+      <div class="rr-docs-hub-grid-wrap">
         <div class="rr-docs-hub-grid" id="rr-docs-hub-grid">${grid}</div>
       </div>
     </div>
@@ -640,9 +809,59 @@ function renderContentBlock(block) {
       return `<p class="rr-docs-article-label">${escapeHtml(block.text)}</p>`
     case "ul":
       return `<ul class="rr-docs-article-ul">${block.items.map(i => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`
+    case "code": {
+      const id = `rr-cb-${Math.random().toString(36).slice(2, 8)}`
+      const label = block.label || ""
+      const lines = (block.lines || []).map(l => escapeHtml(l)).join("\n")
+      return `
+        <div class="rr-docs-code-block" id="${id}">
+          ${label ? `<div class="rr-docs-code-label">${ICON.code}<span>${escapeHtml(label)}</span></div>` : ""}
+          <div class="rr-docs-code-wrap">
+            <pre class="rr-docs-code-pre"><code>${lines}</code></pre>
+            <button type="button" class="rr-docs-code-copy" data-target="${id}" aria-label="Copy code">${ICON.copy}</button>
+          </div>
+        </div>
+      `
+    }
     default:
       return ""
   }
+}
+
+function renderHistoryDrawer(sectionId) {
+  const groups = DOC_HISTORY[sectionId] || []
+  const bodyHtml = groups.length
+    ? groups.map(group => `
+      <div class="rr-docs-history-group">
+        <div class="rr-docs-history-date">${escapeHtml(group.date)}</div>
+        ${group.entries.map(entry => `
+          <div class="rr-docs-history-entry">
+            <p class="rr-docs-history-action">
+              <span class="rr-docs-history-action-type">${escapeHtml(entry.action)}</span>
+              <span class="rr-docs-history-action-detail"> "${escapeHtml(entry.detail)}"</span>
+            </p>
+            <div class="rr-docs-history-user">
+              <div class="rr-docs-history-avatar" style="background:${entry.color}">${escapeHtml(entry.initials)}</div>
+              <span class="rr-docs-history-username">${escapeHtml(entry.user)}</span>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `).join("")
+    : `<div class="rr-docs-history-empty">No history recorded yet</div>`
+
+  return `
+    <aside class="rr-docs-history" id="rr-docs-history-panel">
+      <div class="rr-docs-history-header">
+        <h3 class="rr-docs-history-title">History</h3>
+        <div class="rr-docs-history-btns">
+          <button type="button" class="rr-docs-history-btn" aria-label="Filter history">${ICON.funnelSimple}</button>
+          <button type="button" class="rr-docs-history-btn" id="rr-docs-history-close" aria-label="Close history">${ICON.closeSmall}</button>
+        </div>
+      </div>
+      <div class="rr-docs-history-body">${bodyHtml}</div>
+    </aside>
+  `
 }
 
 function renderArticle(section) {
@@ -666,6 +885,8 @@ function renderArticle(section) {
           </div>
           <div id="rr-docs-detail-dd-host"></div>
         </div>
+        <button type="button" class="rr-docs-history-toggle" id="rr-docs-history-toggle"
+          aria-label="Toggle history" aria-pressed="false">${ICON.clockCounterClockwiseMd}</button>
       </div>
       <h1 class="rr-docs-article-h1">${escapeHtml(section.title)}</h1>
       <div class="rr-docs-article-body">
@@ -675,13 +896,14 @@ function renderArticle(section) {
   `
 }
 
-function renderDetailView(activeSectionId) {
+function renderDetailView(activeSectionId, historyOpen = false) {
   const section = DOC_SECTIONS.find(s => s.id === activeSectionId) || DOC_SECTIONS[0]
   return `
     <div class="rr-docs-detail" id="rr-docs-detail-view">
       ${renderLeftNav(section.id)}
       <div class="rr-docs-detail-divider"></div>
-      ${renderArticle(section)}
+      ${renderArticle(section, historyOpen)}
+      ${historyOpen ? renderHistoryDrawer(section.id) : ""}
     </div>
   `
 }
@@ -752,62 +974,80 @@ const DOCS_STYLES = `
 }
 .rr-docs-dd-icon {
   flex-shrink: 0; width: 28px; height: 28px;
-  background: #eef2ff; border-radius: 6px;
-  display: flex; align-items: center; justify-content: center; color: #4263eb;
+  background: var(--rr-sem-action-primarySelection, #daebff); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--rr-sem-text-actionLink, #0067da);
 }
 .rr-docs-dd-text { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .rr-docs-dd-title { font-size: 13px; font-weight: var(--rr-typography-fontWeightMedium); color: var(--rr-sem-textPrimary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rr-docs-dd-cat  { font-size: 11px; color: var(--rr-sem-textMuted); }
 .rr-docs-dd-arrow { flex-shrink: 0; color: var(--rr-sem-textMuted); display: flex; align-items: center; }
 
+/* ── Root containment — height chain so the article can scroll independently */
+.rr-docs-root {
+  height: 100%;
+  overflow: hidden;
+}
+#rr-docs-view-host {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 /* ── Hub view ─────────────────────────────────────────────── */
 .rr-docs-hub {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 48px 32px 64px;
-  min-height: 100%;
-  background: var(--rr-sem-background-pageLight, #fafafa);
+  display: flex; flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--rr-sem-background-pageLight, #fff);
 }
-.rr-docs-hub-inner { width: 100%; max-width: 960px; display: flex; flex-direction: column; gap: 40px; }
-.rr-docs-hub-hero  { display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+.rr-docs-hub-hero {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  padding: 56px 32px;
+  text-align: center;
+  background: var(--rr-sem-background-primarySubtle, #f2f8ff);
+  width: 100%;
+}
 .rr-docs-hub-title {
   margin: 0;
-  font-size: 32px; font-weight: var(--rr-typography-fontWeightMedium);
-  color: var(--rr-sem-textPrimary); line-height: 1.2; letter-spacing: -0.01em;
+  font-size: var(--rr-typography-fontSizeH3, 28px); font-weight: var(--rr-typography-fontWeightMedium);
+  color: var(--rr-sem-textPrimary); line-height: 1.2;
 }
-.rr-docs-hub-search-wrap { position: relative; width: 100%; max-width: 440px; }
+.rr-docs-hub-search-wrap { position: relative; width: 100%; max-width: 480px; }
+.rr-docs-hub-grid-wrap { padding: 24px 24px 64px; flex: 1; }
 .rr-docs-hub-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
 }
 @media (max-width: 800px) { .rr-docs-hub-grid { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 520px)  { .rr-docs-hub-grid { grid-template-columns: 1fr; } .rr-docs-hub { padding: 24px 16px 48px; } }
+@media (max-width: 520px)  { .rr-docs-hub-grid { grid-template-columns: 1fr; } .rr-docs-hub-hero { padding: 32px 16px; } .rr-docs-hub-grid-wrap { padding: 16px 16px 48px; } }
 
 .rr-docs-hub-card {
-  display: flex; flex-direction: column; gap: 10px; padding: 20px;
+  display: flex; flex-direction: column; gap: 8px; padding: 20px;
   background: var(--rr-sem-surface, #fff);
   border: 1px solid var(--rr-sem-borderDefault);
-  border-radius: 12px; cursor: pointer;
+  border-radius: 8px; cursor: pointer;
   transition: border-color .15s, box-shadow .15s, transform .1s;
 }
 .rr-docs-hub-card:hover { border-color: var(--rr-sem-actionPrimary); box-shadow: 0 4px 16px rgba(16,24,40,.08); transform: translateY(-1px); }
 .rr-docs-hub-card:focus-visible { outline: 2px solid var(--rr-sem-actionPrimary); outline-offset: 2px; }
-.rr-docs-hub-card-header { display: flex; align-items: center; gap: 12px; }
+.rr-docs-hub-card-header { display: flex; align-items: center; gap: 8px; }
 .rr-docs-hub-card-icon {
-  flex-shrink: 0; width: 36px; height: 36px; background: #eef2ff;
-  border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #4263eb;
+  flex-shrink: 0; width: 40px; height: 40px;
+  background: var(--rr-sem-action-primarySelection, #daebff);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--rr-sem-text-actionLink, #0067da);
 }
-.rr-docs-hub-card-title { margin: 0; font-size: 14px; font-weight: var(--rr-typography-fontWeightMedium); color: var(--rr-sem-textPrimary); line-height: 1.3; }
-.rr-docs-hub-card-cat {
-  display: inline-flex; align-items: center; align-self: flex-start;
-  padding: 2px 8px; border-radius: 999px;
-  font-size: 11px; font-weight: var(--rr-typography-fontWeightMedium);
-}
-.rr-docs-hub-card-desc { margin: 0; font-size: 13px; color: var(--rr-sem-textSecondary); line-height: 1.6; }
+.rr-docs-hub-card-title { margin: 0; font-size: var(--rr-typography-fontSizeMd, 16px); font-weight: 400; color: var(--rr-sem-textPrimary); line-height: 1.4; }
+.rr-docs-hub-card-desc { margin: 0; font-size: var(--rr-typography-fontSizeTiny, 12px); color: var(--rr-sem-text-tertiary, #667085); line-height: 1.6; }
 .rr-docs-no-results { grid-column: 1/-1; display: flex; justify-content: center; padding: 48px 0; font-size: 14px; color: var(--rr-sem-textMuted); }
 
 /* ── Detail view ──────────────────────────────────────────── */
 .rr-docs-detail {
   display: flex;
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
   background: var(--rr-sem-background-pageLight, #fafafa);
 }
 .rr-docs-detail-divider {
@@ -819,9 +1059,8 @@ const DOCS_STYLES = `
 .rr-docs-detail-nav {
   width: 260px; flex-shrink: 0;
   padding: 24px 0;
+  height: 100%;
   overflow-y: auto;
-  position: sticky; top: 0;
-  max-height: 100vh;
   background: var(--rr-sem-surface, #fff);
 }
 .rr-docs-nav-list, .rr-docs-nav-sub-list {
@@ -862,15 +1101,16 @@ const DOCS_STYLES = `
   overflow-y: auto;
 }
 .rr-docs-article-top {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 16px; margin-bottom: 16px;
+  display: flex; align-items: center;
+  gap: 12px; margin-bottom: 16px;
 }
 .rr-docs-article-icon {
-  width: 44px; height: 44px; background: #eef2ff;
+  width: 44px; height: 44px; flex-shrink: 0;
+  background: var(--rr-sem-action-primarySelection, #daebff);
   border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; color: #4263eb; flex-shrink: 0;
+  justify-content: center; color: var(--rr-sem-text-actionLink, #0067da);
 }
-.rr-docs-detail-search-wrap { position: relative; width: 220px; }
+.rr-docs-detail-search-wrap { position: relative; flex: 1; min-width: 0; max-width: 360px; }
 .rr-docs-detail-search-field .rr-docs-search-input { height: 36px; font-size: 13px; }
 .rr-docs-article-h1 {
   margin: 0 0 24px;
@@ -909,6 +1149,130 @@ const DOCS_STYLES = `
   content: "·"; position: absolute; left: 4px;
   color: var(--rr-sem-textMuted); font-weight: bold;
 }
+
+/* ── History toggle button (article top-bar) ────────────── */
+.rr-docs-history-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--rr-sem-borderDefault);
+  border-radius: 8px; cursor: pointer;
+  color: var(--rr-sem-textMuted);
+  transition: background .12s, color .12s, border-color .12s;
+}
+.rr-docs-history-toggle:hover { border-color: var(--rr-sem-actionPrimary); color: var(--rr-sem-actionPrimary); }
+.rr-docs-history-toggle.active {
+  background: var(--rr-sem-action-primarySelection, #daebff);
+  border-color: var(--rr-sem-stroke-btnPrimary, #0067da);
+  color: var(--rr-sem-text-actionLink, #0067da);
+}
+
+/* ── History drawer ─────────────────────────────────────── */
+.rr-docs-history {
+  width: 200px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  border-left: 1px solid var(--rr-sem-borderDefault);
+  background: var(--rr-sem-surface, #fff);
+  height: 100%; overflow: hidden;
+}
+.rr-docs-history-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--rr-sem-borderDefault);
+  flex-shrink: 0;
+}
+.rr-docs-history-title {
+  margin: 0;
+  font-size: var(--rr-typography-fontSizeSm, 14px);
+  font-weight: var(--rr-typography-fontWeightMedium);
+  color: var(--rr-sem-textPrimary);
+}
+.rr-docs-history-btns { display: flex; align-items: center; gap: 2px; }
+.rr-docs-history-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  background: none; border: none; border-radius: 6px;
+  cursor: pointer; color: var(--rr-sem-textMuted); padding: 0;
+  transition: background .1s, color .1s;
+}
+.rr-docs-history-btn:hover { background: var(--rr-sem-surfaceHover); color: var(--rr-sem-textPrimary); }
+.rr-docs-history-body { flex: 1; overflow-y: auto; }
+.rr-docs-history-date {
+  padding: 12px 16px 6px;
+  font-size: 11px; font-weight: var(--rr-typography-fontWeightMedium);
+  color: var(--rr-sem-textMuted); letter-spacing: 0.04em;
+}
+.rr-docs-history-entry {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--rr-sem-borderDefault);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.rr-docs-history-entry:last-child { border-bottom: none; }
+.rr-docs-history-action {
+  margin: 0;
+  font-size: var(--rr-typography-fontSizeTiny, 12px); line-height: 1.5;
+  color: var(--rr-sem-textSecondary);
+}
+.rr-docs-history-action-type { font-weight: var(--rr-typography-fontWeightMedium); color: var(--rr-sem-textPrimary); }
+.rr-docs-history-action-detail { color: var(--rr-sem-text-actionLink, #0067da); }
+.rr-docs-history-user { display: flex; align-items: center; gap: 6px; }
+.rr-docs-history-avatar {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: var(--rr-typography-fontWeightMedium);
+  color: #3d3d3d; flex-shrink: 0; text-transform: uppercase;
+}
+.rr-docs-history-username {
+  font-size: 12px; color: var(--rr-sem-textSecondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rr-docs-history-empty {
+  padding: 24px 16px;
+  font-size: 13px; color: var(--rr-sem-textMuted); text-align: center;
+}
+
+/* ── Code blocks ──────────────────────────────────────────── */
+.rr-docs-code-block {
+  margin: 12px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--rr-sem-borderDefault);
+}
+.rr-docs-code-label {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  background: var(--rr-sem-surface, #fff);
+  border-bottom: 1px solid var(--rr-sem-borderDefault);
+  font-size: 12px; font-weight: var(--rr-typography-fontWeightMedium);
+  color: var(--rr-sem-textSecondary);
+}
+.rr-docs-code-label svg { flex-shrink: 0; color: var(--rr-sem-textMuted); }
+.rr-docs-code-wrap {
+  position: relative;
+  background: #1c2128;
+}
+.rr-docs-code-pre {
+  margin: 0;
+  padding: 16px 48px 16px 16px;
+  overflow-x: auto;
+  font-family: 'Menlo', 'Consolas', 'Monaco', monospace;
+  font-size: 12px; line-height: 1.7;
+  color: #cdd9e5;
+  white-space: pre;
+}
+.rr-docs-code-copy {
+  position: absolute; top: 8px; right: 8px;
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px; cursor: pointer;
+  color: #8b949e;
+  transition: background .12s, color .12s;
+  padding: 0;
+}
+.rr-docs-code-copy:hover { background: rgba(255,255,255,0.15); color: #cdd9e5; }
+.rr-docs-code-copy.copied { color: #57ab5a; border-color: #57ab5a; }
 </style>
 `
 
@@ -934,6 +1298,7 @@ export function mountDocsHubFlow() {
     view: "hub",
     activeSectionId: null,
     hubQuery: "",
+    historyOpen: false,
   }
 
   /* ── Search helper ──────────────────────────────────────── */
@@ -954,7 +1319,7 @@ export function mountDocsHubFlow() {
       viewHost.innerHTML = renderHubView(searchSections(state.hubQuery), state.hubQuery)
       attachHubEvents()
     } else {
-      viewHost.innerHTML = renderDetailView(state.activeSectionId)
+      viewHost.innerHTML = renderDetailView(state.activeSectionId, state.historyOpen)
       attachDetailEvents()
     }
   }
@@ -1084,6 +1449,32 @@ export function mountDocsHubFlow() {
       const wrap = root.querySelector(".rr-docs-detail-search-wrap")
       if (wrap && !wrap.contains(e.target) && ddHost) ddHost.innerHTML = ""
     })
+
+    /* ── History toggle (article-top clock button) ─────── */
+    const histToggle = document.getElementById("rr-docs-history-toggle")
+    if (state.historyOpen && histToggle) {
+      histToggle.classList.add("active")
+      histToggle.setAttribute("aria-pressed", "true")
+    }
+    histToggle?.addEventListener("click", () => {
+      state.historyOpen ? closeHistory() : openHistory()
+    })
+    document.getElementById("rr-docs-history-close")?.addEventListener("click", closeHistory)
+
+    /* Copy button handler for code blocks */
+    document.querySelectorAll(".rr-docs-code-copy").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const blockId = btn.dataset.target
+        const pre = document.getElementById(blockId)?.querySelector("code")
+        if (!pre) return
+        navigator.clipboard?.writeText(pre.textContent).then(() => {
+          btn.classList.add("copied")
+          setTimeout(() => btn.classList.remove("copied"), 1500)
+        })
+      })
+    })
+
+    /* Copy button handler for code blocks */
   }
 
   /* ── Shared dropdown events ─────────────────────────────── */
@@ -1106,6 +1497,26 @@ export function mountDocsHubFlow() {
     state.activeSectionId = section.id
     render()
     setTimeout(() => document.getElementById("rr-docs-article")?.scrollTo(0, 0), 0)
+  }
+
+  /* ── History open/close ─────────────────────────────── */
+  function openHistory() {
+    if (state.view !== "detail") return
+    if (document.getElementById("rr-docs-history-panel")) return // already open
+    const detailView = document.getElementById("rr-docs-detail-view")
+    if (!detailView) return
+    detailView.insertAdjacentHTML("beforeend", renderHistoryDrawer(state.activeSectionId))
+    document.getElementById("rr-docs-history-close")?.addEventListener("click", closeHistory)
+    const toggle = document.getElementById("rr-docs-history-toggle")
+    if (toggle) { toggle.classList.add("active"); toggle.setAttribute("aria-pressed", "true") }
+    state.historyOpen = true
+  }
+
+  function closeHistory() {
+    document.getElementById("rr-docs-history-panel")?.remove()
+    const toggle = document.getElementById("rr-docs-history-toggle")
+    if (toggle) { toggle.classList.remove("active"); toggle.setAttribute("aria-pressed", "false") }
+    state.historyOpen = false
   }
 
   render()

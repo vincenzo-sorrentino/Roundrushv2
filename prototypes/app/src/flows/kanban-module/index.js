@@ -19,6 +19,8 @@ const ICON = {
   check: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><polyline points="40,128 96,184 216,64" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   caretDoubleUp: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,160 128,80 208,160" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="48,208 128,128 208,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   close: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><line x1="64" y1="64" x2="192" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="192" y1="64" x2="64" y2="192" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  link: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M144 80h32a40 40 0 0 1 0 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 0 1 0-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  github: `<svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24,40,40,0,0,0-40-40,8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68Z"/></svg>`,
 }
 
 /* ── Helpers ───────────────────────────────────────────────── */
@@ -676,6 +678,82 @@ function renderCloseSprintButton(sprint) {
    Matches Figma 382:43742
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Overview tab: per-module rich content ────────────────── */
+const OVERVIEW_CONTENT = {
+  "LOG-001": {
+    description: "Allows registered users to authenticate using email and password. Failed attempts surface a neutral inline error without revealing which field was wrong; repeated failures temporarily lock the account to guard against brute-force access.",
+    protoRoute: "/log/login/default",
+    features: {
+      "LOG-001-F01": "User enters credentials and clicks Log in. Correct credentials land the user directly in their workspace. Incorrect ones show a neutral inline error. Multiple consecutive failures trigger a temporary lockout with plain-language guidance.",
+      "LOG-001-F02": "An optional remember me checkbox stores an encrypted session token so returning users are re-authenticated without re-entering credentials for up to 30 days.",
+    },
+  },
+  "LOG-002": {
+    description: "Manages the full authentication lifecycle including JWT issuance, OAuth provider integrations, and session revocation across multiple devices or browser tabs.",
+    protoRoute: "/log/auth/flow",
+    features: {
+      "AUT-002-F01": "Issues short-lived JWTs with a refresh token rotation strategy. Handles session timeout and triggers silent renewal before expiry to avoid disrupting active users.",
+      "AUT-002-F02": "Supports Google, GitHub and Microsoft OAuth flows with error handling for callback failures. Users can link an OAuth identity to an existing email-password account.",
+    },
+  },
+  "LOG-003": {
+    description: "Self-service password reset workflow. Users receive a time-limited link via email to set a new password, with clear guidance shown if the link has expired or is invalid.",
+    protoRoute: "/log/recovery/email",
+  },
+  "LOG-004": {
+    description: "Silent JWT refresh cycle keeps users authenticated across sessions without requiring a re-login, while enforcing per-device token revocation on explicit logout.",
+    protoRoute: "/log/session/renew",
+  },
+  "AUT-M001": {
+    description: "Allow registered users to authenticate securely using their email and password. If a user forgets their password they can request a reset link by email and set a new password through a time-limited secure flow.",
+    protoRoute: "/auth/login/default",
+    features: {
+      "AUT-001-F01": `The user enters their email address and password and clicks "Log in". If the credentials are correct they land straight in their workspace. If something is wrong, a neutral inline error appears — it doesn't reveal whether the email or the password failed. After several consecutive failed attempts the account is temporarily locked to guard against brute-force access.`,
+      "AUT-001-F02": `From the login screen a user who can't remember their password clicks "Forgot password" and is asked for their email address. A time-limited reset link is sent to that address. Clicking the link opens a form where the user sets a new password; on success they are taken to the login screen to sign in with the new credentials.`,
+    },
+  },
+  "AUT-M002": {
+    description: "Provides OAuth sign-in via Google, GitHub and Microsoft. Users can choose to link an OAuth identity to an existing account. Handles callback errors with clear user-facing messages and fallback paths.",
+    protoRoute: "/auth/oauth/callback",
+  },
+  "TEM-001": {
+    description: "Guided multi-step wizard for creating a new team workspace. Covers name, avatar, initial member invitations and role assignment in a single cohesive flow.",
+    protoRoute: "/team/create/wizard",
+  },
+  "TEM-002": {
+    description: "RBAC role management for team members. Admins can assign, elevate or revoke roles. Permission boundaries are enforced at both UI and API layer.",
+    protoRoute: "/team/roles/manage",
+  },
+  "TEM-003": {
+    description: "Central settings page for team-level preferences: name, timezone, notification defaults, billing plan and danger-zone destructive actions.",
+    protoRoute: "/team/settings",
+  },
+  "REQ-001": {
+    description: "Full CRUD interface for requirement modules — create, edit, archive and restore. Changes are version-logged with audit trail and support optimistic locking.",
+    protoRoute: "/req/modules/crud",
+  },
+  "REQ-002": {
+    description: "Automated validation engine that checks each module's acceptance laws on save. Surfaces violations inline and maintains a historical pass/fail log per sprint.",
+    protoRoute: "/req/acceptance-laws",
+  },
+  "REQ-003": {
+    description: "Interactive graph visualisation of inter-module dependencies. Allows filtering by epic, highlighting critical paths and exporting the current view.",
+    protoRoute: "/req/dependencies/graph",
+  },
+  "DEP-001": {
+    description: "Renders the full dependency tree as a collapsible node graph. Supports zoom, pan and node selection to drill into individual module coupling details.",
+    protoRoute: "/dep/tree/view",
+  },
+  "DEP-002": {
+    description: "Static analysis pass that detects circular dependencies and surfaces them as blocking issues before a sprint is confirmed.",
+    protoRoute: "/dep/circular/detect",
+  },
+  "SET-001": {
+    description: "User-level profile page covering avatar, display name, contact details, notification preferences and linked OAuth accounts.",
+    protoRoute: "/settings/profile",
+  },
+}
+
 /* ── Detail panel status config (extended) ─────────────────── */
 const DETAIL_STATUS_CONFIG = {
   ...STATUS_CONFIG,
@@ -962,8 +1040,9 @@ function renderDetailTasksTab(moduleData, collapsedFeatures) {
           Priority ${ICON.arrowDown}
         </button>
       </span>
-      <span class="rr-detail-th rr-detail-th--assignee">Assignee</span>
       <span class="rr-detail-th rr-detail-th--due">Due Date</span>
+      <span class="rr-detail-th rr-detail-th--assignee">Assignee</span>
+      <span class="rr-detail-th rr-detail-th--pr">PR Link</span>
       <span class="rr-detail-th rr-detail-th--status">Status</span>
     </div>
   `
@@ -978,8 +1057,9 @@ function renderDetailTasksTab(moduleData, collapsedFeatures) {
           <span class="rr-detail-feature-label">${escapeHtml(feature.id)} - ${escapeHtml(feature.title)}</span>
         </span>
         <span class="rr-detail-cell rr-detail-cell--priority"></span>
-        <span class="rr-detail-cell rr-detail-cell--assignee"></span>
         <span class="rr-detail-cell rr-detail-cell--due"></span>
+        <span class="rr-detail-cell rr-detail-cell--assignee"></span>
+        <span class="rr-detail-cell rr-detail-cell--pr"></span>
         <span class="rr-detail-cell rr-detail-cell--status"></span>
       </div>
     `
@@ -991,8 +1071,11 @@ function renderDetailTasksTab(moduleData, collapsedFeatures) {
           <span class="rr-detail-task-label">${escapeHtml(task.title)}</span>
         </span>
         <span class="rr-detail-cell rr-detail-cell--priority">${renderDetailPriority(task.priority)}</span>
-        <span class="rr-detail-cell rr-detail-cell--assignee">${renderAvatarGroup(task.assignees, 0)}</span>
         <span class="rr-detail-cell rr-detail-cell--due">${escapeHtml(task.dueDate)}</span>
+        <span class="rr-detail-cell rr-detail-cell--assignee">${renderAvatarGroup(task.assignees, 0)}</span>
+        <span class="rr-detail-cell rr-detail-cell--pr">
+          <button type="button" class="rr-detail-pr-link-btn" data-action="noop" title="View PR">${ICON.github}</button>
+        </span>
         <span class="rr-detail-cell rr-detail-cell--status">${renderDetailStatus(task.status)}</span>
       </div>
     `).join("")
@@ -1150,25 +1233,25 @@ function renderDependenciesTab(mod) {
       </span>
       <span class="rr-dep-th rr-dep-th--to">To</span>
       <span class="rr-dep-th rr-dep-th--relation">Relation</span>
-      <span class="rr-dep-th rr-dep-th--iface">Interface / Contract</span>
+      <span class="rr-dep-th rr-dep-th--iface">Interface</span>
       <span class="rr-dep-th rr-dep-th--risk">Risk</span>
-      <span class="rr-dep-th rr-dep-th--conf" style="justify-content:flex-end">Conf %</span>
-      <span class="rr-dep-th rr-dep-th--why">Rationale</span>
+      <span class="rr-dep-th rr-dep-th--conf">Conf</span>
+      <span class="rr-dep-th rr-dep-th--why">Why</span>
     </div>
   `
 
   const rows = deps.map(dep => {
-    const risk = DEPENDENCY_RISK_CONFIG[dep.risk] || DEPENDENCY_RISK_CONFIG.low
-    const riskBadge = `<span class="rr-dep-risk-badge" style="background:${risk.bg};color:${risk.text}">${escapeHtml(risk.label)}</span>`
-    const confPct = Math.round(dep.conf * 100)
+    const riskKey = dep.risk in DEPENDENCY_RISK_CONFIG ? dep.risk : "low"
+    const riskLabel = DEPENDENCY_RISK_CONFIG[riskKey].label
+    const riskBadge = `<span class="rr-dep-risk-badge rr-dep-risk-badge--${riskKey}">${escapeHtml(riskLabel)}</span>`
     return `
       <div class="rr-dep-row">
         <span class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</span>
         <span class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</span>
-        <span class="rr-dep-cell rr-dep-cell--relation"><code class="rr-dep-relation-chip">${escapeHtml(dep.relation)}</code></span>
+        <span class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</span>
         <span class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</span>
         <span class="rr-dep-cell rr-dep-cell--risk">${riskBadge}</span>
-        <span class="rr-dep-cell rr-dep-cell--conf">${confPct}%</span>
+        <span class="rr-dep-cell rr-dep-cell--conf">${dep.conf.toFixed(2)}</span>
         <span class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</span>
       </div>
     `
@@ -1546,27 +1629,215 @@ function renderTestCasesTab(mod) {
   `
 }
 
+/* ── UAT Issues config & data ──────────────────────────────── */
+const UAT_SCOPE_CONFIG = {
+  "FE":     { bg: "#fef4e6", text: "#f79009" },
+  "BE":     { bg: "#dce9fc", text: "#0067da" },
+  "BE&FE":  { bg: "#ede8f5", text: "#7037c0" },
+  "Devops": { bg: "#d4f5e3", text: "#0e9255" },
+}
+
+const UAT_STATUS_CONFIG = {
+  "merged":      { bg: "#fbc6cd", text: "#d13245", label: "Merged" },
+  "open":        { bg: "#fef4e6", text: "#f79009",  label: "Open" },
+  "in-progress": { bg: "#dce9fc", text: "#0067da",  label: "In Progress" },
+  "fixed":       { bg: "#d4f5e3", text: "#0e9255",  label: "Fixed" },
+  "closed":      { bg: "#e0e2e7", text: "#3d4350",  label: "Closed" },
+  "to-do":       { bg: "#e0e2e7", text: "#3d4350",  label: "To do" },
+}
+
+function getModuleUATIssues(moduleId) {
+  const issueDb = {
+    "LOG-001": [
+      { id: "UAT-001", scope: "FE",     title: "Document version mismatch on login screen.",         priority: "urgent", date: "07/02/26", assignees: ["u4"], status: "merged" },
+      { id: "UAT-002", scope: "BE",     title: "Login endpoint returns 500 on empty password.",      priority: "high",   date: "08/02/26", assignees: ["u2"], status: "fixed" },
+      { id: "UAT-003", scope: "FE",     title: "Remember me checkbox state not persisted.",          priority: "medium", date: "10/02/26", assignees: ["u5"], status: "in-progress" },
+      { id: "UAT-004", scope: "BE&FE",  title: "CSRF token missing on form resubmit.",               priority: "high",   date: "11/02/26", assignees: ["u4"], status: "open" },
+      { id: "UAT-005", scope: "FE",     title: "Password field autofill breaks validation.",         priority: "low",    date: "12/02/26", assignees: ["u2"], status: "to-do" },
+      { id: "UAT-006", scope: "BE",     title: "Rate limiting not enforced per IP.",                 priority: "urgent", date: "08/02/26", assignees: ["u5"], status: "fixed" },
+      { id: "UAT-007", scope: "FE",     title: "Error message overlaps button on small viewports.",  priority: "low",    date: "14/02/26", assignees: ["u4"], status: "closed" },
+      { id: "UAT-008", scope: "BE&FE",  title: "Session cookie missing HttpOnly flag.",              priority: "high",   date: "09/02/26", assignees: ["u2"], status: "merged" },
+      { id: "UAT-009", scope: "Devops", title: "CI pipeline fails on lint step.",                    priority: "medium", date: "15/02/26", assignees: ["u1"], status: "in-progress" },
+      { id: "UAT-010", scope: "FE",     title: "Keyboard navigation skips submit button.",           priority: "medium", date: "16/02/26", assignees: ["u5"], status: "to-do" },
+    ],
+    "LOG-002": [
+      { id: "UAT-011", scope: "BE",     title: "OAuth token not revoked on logout.",                 priority: "urgent", date: "10/02/26", assignees: ["u6"], status: "in-progress" },
+      { id: "UAT-012", scope: "FE",     title: "Google sign-in button missing ARIA label.",          priority: "low",    date: "11/02/26", assignees: ["u1"], status: "to-do" },
+      { id: "UAT-013", scope: "BE&FE",  title: "GitHub OAuth state param not validated.",            priority: "high",   date: "09/02/26", assignees: ["u6"], status: "open" },
+      { id: "UAT-014", scope: "BE",     title: "Refresh token not rotated on use.",                  priority: "urgent", date: "08/02/26", assignees: ["u1"], status: "fixed" },
+      { id: "UAT-015", scope: "FE",     title: "Account linking modal z-index conflict.",            priority: "medium", date: "12/02/26", assignees: ["u6"], status: "closed" },
+    ],
+  }
+
+  if (issueDb[moduleId]) return issueDb[moduleId]
+
+  const seed = hashModuleId(moduleId)
+  const scopes   = ["FE", "BE", "BE&FE", "Devops"]
+  const statuses = ["open", "in-progress", "fixed", "merged", "closed", "to-do"]
+  const titles = [
+    "UI component renders incorrectly in Safari.",
+    "API response missing required field.",
+    "Data validation inconsistency between front/back.",
+    "Environment variable missing in staging.",
+    "Loading spinner not dismissed on error.",
+    "Tooltip overflows viewport on edge cases.",
+    "Date format inconsistent across locales.",
+    "Button disabled state not accessible.",
+  ]
+  const count = 4 + (seed % 5)
+  return Array.from({ length: count }, (_, i) => ({
+    id: `${moduleId}-UAT-${i + 1}`,
+    scope:    scopes[((seed * (i + 1)) ^ (seed >>> 3)) % scopes.length],
+    title:    titles[((seed + i * 7) ^ (seed >>> 2)) % titles.length],
+    priority: ["urgent","high","medium","low"][((seed ^ (i * 0x1f)) >>> 0) % 4],
+    date:     `${String(15 + (i % 13)).padStart(2,"0")}/02/26`,
+    assignees: [["u1","u2","u3","u4","u5","u6","u7","u8"][(seed + i) % 8]],
+    status:   statuses[((seed ^ (i * 0x2b)) >>> 0) % statuses.length],
+  }))
+}
+
+/* ── Detail panel: UAT Issues tab ──────────────────────────── */
+function renderUATIssuesTab(mod) {
+  const issues = getModuleUATIssues(mod.id)
+
+  const ths = `
+    <div class="rr-uat-thead">
+      <span class="rr-uat-th rr-uat-th--scope">Scope</span>
+      <span class="rr-uat-th rr-uat-th--issue">Issue</span>
+      <span class="rr-uat-th rr-uat-th--priority">
+        <button type="button" class="rr-kb-sort-btn is-active" data-action="noop">
+          Priority ${ICON.arrowDown}
+        </button>
+      </span>
+      <span class="rr-uat-th rr-uat-th--date">Date</span>
+      <span class="rr-uat-th rr-uat-th--assignee">Assignee</span>
+      <span class="rr-uat-th rr-uat-th--pr">PR Link</span>
+      <span class="rr-uat-th rr-uat-th--status">Status Stg/Dev</span>
+    </div>
+  `
+
+  if (issues.length === 0) {
+    return `
+      <div class="rr-uat-table">
+        ${ths}
+        <div class="rr-uat-tbody">
+          <div class="rr-uat-empty"><p>No UAT issues found for this module.</p></div>
+        </div>
+      </div>
+    `
+  }
+
+  const rows = issues.map(issue => {
+    const scopeCfg  = UAT_SCOPE_CONFIG[issue.scope] ?? UAT_SCOPE_CONFIG["FE"]
+    const statusCfg = UAT_STATUS_CONFIG[issue.status] ?? UAT_STATUS_CONFIG["to-do"]
+    const priCfg    = PRIORITY_CONFIG[issue.priority]
+    return `
+      <div class="rr-uat-row">
+        <span class="rr-uat-cell rr-uat-cell--scope">
+          <span class="rr-uat-scope-badge" style="background:${scopeCfg.bg};color:${scopeCfg.text}">${escapeHtml(issue.scope)}</span>
+        </span>
+        <span class="rr-uat-cell rr-uat-cell--issue">${escapeHtml(issue.title)}</span>
+        <span class="rr-uat-cell rr-uat-cell--priority">
+          ${priCfg ? `<span class="rr-kb-priority" style="color:${priCfg.color}">${ICON[priCfg.icon]}<span>${escapeHtml(priCfg.label)}</span></span>` : ""}
+        </span>
+        <span class="rr-uat-cell rr-uat-cell--date">${escapeHtml(issue.date)}</span>
+        <span class="rr-uat-cell rr-uat-cell--assignee">${renderAvatarGroup(issue.assignees, 0)}</span>
+        <span class="rr-uat-cell rr-uat-cell--pr">
+          <button type="button" class="rr-detail-pr-link-btn" data-action="noop" title="View PR">${ICON.github}</button>
+        </span>
+        <span class="rr-uat-cell rr-uat-cell--status">
+          <span class="rr-uat-status-badge" style="background:${statusCfg.bg};color:${statusCfg.text}">${escapeHtml(statusCfg.label)}</span>
+        </span>
+      </div>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-uat-table">
+      ${ths}
+      <div class="rr-uat-tbody">${rows}</div>
+    </div>
+  `
+}
+
+/* ── Detail panel: overview tab ────────────────────────────── */
+function renderOverviewTab(mod, moduleData) {
+  const epicPrefix = mod.id.split("-")[0]
+  const content = OVERVIEW_CONTENT[mod.id] || {}
+  const statusCfg = DETAIL_STATUS_CONFIG[mod.status] || DETAIL_STATUS_CONFIG["to-do"]
+  const protoRoute = content.protoRoute || `/${epicPrefix.toLowerCase()}/m/${mod.id.toLowerCase()}`
+  const overviewText = content.description ||
+    `Manages the ${mod.title} workflow within the ${epicPrefix} epic. ${mod.tasksComplete} of ${mod.tasksTotal} implementation tasks are complete with ${mod.testPercent}% test coverage.`
+
+  const features = moduleData.features || []
+  const featureRows = features.map(f => {
+    const desc = content.features?.[f.id] ||
+      `Implementation of the ${f.title} functionality covering all associated tasks, error handling, and edge-case coverage.`
+    return `
+      <div class="rr-overview-feature">
+        <h3 class="rr-overview-feature-title">${escapeHtml(f.id)} — ${escapeHtml(f.title)}</h3>
+        <p class="rr-overview-feature-desc">${escapeHtml(desc)}</p>
+      </div>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-overview-body">
+      <div class="rr-overview-title-row">
+        <span class="rr-overview-title">${escapeHtml(mod.id)} — ${escapeHtml(mod.title)}</span>
+        <span class="rr-overview-badge" style="background:${statusCfg.bg};color:${statusCfg.text}">${escapeHtml(statusCfg.label)}</span>
+      </div>
+      <button type="button" class="rr-overview-proto-btn">
+        ${ICON.link}
+        Prototype
+      </button>
+      <div class="rr-overview-desc-section">
+        <span class="rr-overview-section-label">Description</span>
+        <div class="rr-overview-divider"></div>
+        <div class="rr-overview-meta-row">
+          <div class="rr-overview-meta-col">
+            <span class="rr-overview-meta-label">ID</span>
+            <span class="rr-overview-meta-value">${escapeHtml(mod.id)}</span>
+          </div>
+          <div class="rr-overview-meta-col">
+            <span class="rr-overview-meta-label">Title</span>
+            <span class="rr-overview-meta-value">${escapeHtml(mod.title)}</span>
+          </div>
+          <div class="rr-overview-meta-col">
+            <span class="rr-overview-meta-label">Epic</span>
+            <span class="rr-overview-meta-value">${escapeHtml(epicPrefix)}</span>
+          </div>
+          <div class="rr-overview-meta-col">
+            <span class="rr-overview-meta-label">Status</span>
+            <span class="rr-overview-meta-value">${escapeHtml(statusCfg.label)}</span>
+          </div>
+          <div class="rr-overview-meta-col">
+            <span class="rr-overview-meta-label">Prototype route</span>
+            <span class="rr-overview-meta-value">${escapeHtml(protoRoute)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="rr-overview-divider"></div>
+      <h2 class="rr-overview-h">Overview</h2>
+      <p class="rr-overview-text">${escapeHtml(overviewText)}</p>
+      <div class="rr-overview-divider"></div>
+      <h2 class="rr-overview-h">Functionalities</h2>
+      ${featureRows}
+      <div class="rr-overview-divider"></div>
+    </div>
+  `
+}
+
 /* ── Detail panel: placeholder tab content ─────────────────── */
 function renderDetailTabContent(tabId, mod, moduleData, collapsedFeatures) {
+  if (tabId === "overview") return renderOverviewTab(mod, moduleData)
   if (tabId === "acceptance-laws") return renderAcceptanceLawsTab(mod)
   if (tabId === "tasks") return renderDetailTasksTab(moduleData, collapsedFeatures)
   if (tabId === "dependencies") return renderDependenciesTab(mod)
   if (tabId === "test-cases") return renderTestCasesTab(mod)
+  if (tabId === "uat-issues") return renderUATIssuesTab(mod)
 
   const placeholders = {
-    overview: {
-      title: "Module Overview",
-      description: "High-level summary, acceptance criteria and module metadata.",
-      items: [
-        { label: "Module ID", value: mod.id },
-        { label: "Title", value: mod.title },
-        { label: "Priority", value: PRIORITY_CONFIG[mod.priority]?.label || mod.priority },
-        { label: "Status", value: STATUS_CONFIG[mod.status]?.label || mod.status },
-        { label: "Tasks Progress", value: `${mod.tasksComplete}/${mod.tasksTotal}` },
-        { label: "Test Coverage", value: `${mod.testPercent}%` },
-        { label: "Last Update", value: mod.lastUpdate },
-      ],
-    },
     "test-cases": {
       title: "Test Cases",
       description: "Unit, integration and E2E test cases linked to this module.",
