@@ -45,6 +45,50 @@ const SPRINTS = [
   { id: "s16", startDate: "2026-03-19", endDate: "2026-04-08" },
 ]
 
+const MS_PER_DAY = 24 * 60 * 60 * 1000
+
+function toDateUtc(dateStr) {
+  return new Date(`${dateStr}T00:00:00Z`)
+}
+
+function addDays(date, days) {
+  return new Date(date.getTime() + days * MS_PER_DAY)
+}
+
+function getWeekStartsForSprint(sprint) {
+  const start = toDateUtc(sprint.startDate)
+  const end = toDateUtc(sprint.endDate)
+  const weeks = []
+
+  for (let cursor = start; cursor <= end; cursor = addDays(cursor, 7)) {
+    weeks.push(cursor)
+  }
+
+  return weeks
+}
+
+const SPRINT_LAYOUT = (() => {
+  let nextColumnStart = 1
+
+  return SPRINTS.map((sprint, index) => {
+    const weekStarts = getWeekStartsForSprint(sprint)
+    const weekCount = Math.max(1, weekStarts.length)
+    const columnStart = nextColumnStart
+    nextColumnStart += weekCount
+
+    return {
+      ...sprint,
+      sprintNo: 11 + index,
+      weekStarts,
+      weekCount,
+      columnStart,
+      isCurrent: sprint.id === "s13",
+    }
+  })
+})()
+
+const TOTAL_WEEK_COLUMNS = SPRINT_LAYOUT.reduce((acc, sprint) => acc + sprint.weekCount, 0)
+
 /* ── Module definitions: Development track ────────────────– */
 const DEV_MODULES = [
   { id: "AUT-001", title: "Login form",                         status: "completed", sprintStart: 0, sprintEnd: 1 },
@@ -71,34 +115,71 @@ const DESIGN_MODULES = [
 ]
 
 /* ── Helper: Format date to DD/MM ──────────────────────────– */
-function formatDateShort(dateStr) {
-  if (!dateStr) return ""
-  const [year, month, day] = dateStr.split("-")
+function formatDateShort(value) {
+  if (!value) return ""
+  if (value instanceof Date) {
+    const day = String(value.getUTCDate()).padStart(2, "0")
+    const month = String(value.getUTCMonth() + 1).padStart(2, "0")
+    return `${day}/${month}`
+  }
+
+  const [year, month, day] = String(value).split("-")
   return `${day}/${month}`
 }
 
-/* ── Render sprint date headers ────────────────────────────– */
-function renderSprintHeaders() {
-  return SPRINTS.map(sprint => `
-    <div class="rr-roadmap-sprint-cell">
-      <div class="rr-roadmap-sprint-header">
-        <span class="rr-roadmap-sprint-date">${formatDateShort(sprint.startDate)}</span>
-        <span class="rr-roadmap-sprint-separator">·</span>
-        <span class="rr-roadmap-sprint-date">${formatDateShort(sprint.endDate)}</span>
-      </div>
+/* ── Render two-row timeline header ────────────────────────– */
+function renderSprintRow() {
+  return SPRINT_LAYOUT.map(sprint => `
+    <div class="rr-roadmap-sprint-cell${sprint.isCurrent ? " is-current" : ""}"
+         style="grid-column:${sprint.columnStart} / span ${sprint.weekCount};">
+      ${sprint.isCurrent ? '<span class="rr-roadmap-sprint-dot" aria-hidden="true"></span>' : ""}
+      <span class="rr-roadmap-sprint-label">Sprint ${sprint.sprintNo}</span>
     </div>
   `).join("")
+}
+
+function renderWeeksRow() {
+  return SPRINT_LAYOUT.flatMap(sprint => sprint.weekStarts.map(weekStart => `
+    <div class="rr-roadmap-week-cell">
+      <span class="rr-roadmap-week-label">${formatDateShort(weekStart)}</span>
+    </div>
+  `)).join("")
+}
+
+function renderTimelineHeader() {
+  const gridTemplate = `repeat(${TOTAL_WEEK_COLUMNS}, var(--rr-roadmap-week-col-width))`
+  return `
+    <div class="rr-roadmap-timeline-header">
+      <div style="display: flex; flex-direction: row; min-width: min-content; width: max-content;">
+        <div class="rr-roadmap-track-header-spacer" style="display: flex; flex-direction: column;">
+          <div class="rr-roadmap-track-header-spacer-top"></div>
+          <div class="rr-roadmap-track-header-spacer-bottom"></div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div class="rr-roadmap-sprint-headers-row" style="grid-template-columns:${gridTemplate};">
+            ${renderSprintRow()}
+          </div>
+          <div class="rr-roadmap-weeks-row" style="grid-template-columns:${gridTemplate};">
+            ${renderWeeksRow()}
+          </div>
+        </div>
+      </div>
+    </div>
+  `
 }
 
 /* ── Render module bar ─────────────────────────────────────– */
 function renderModule(module) {
   const color = STATUS_COLORS[module.status] || STATUS_COLORS["to-do"]
-  const colSpan = module.sprintEnd - module.sprintStart + 1
-  const offsetSpan = module.sprintStart
+  const startSprint = SPRINT_LAYOUT[module.sprintStart]
+  const endSprint = SPRINT_LAYOUT[module.sprintEnd]
+  const startColumn = startSprint.columnStart
+  const endColumnExclusive = endSprint.columnStart + endSprint.weekCount
+  const colSpan = Math.max(1, endColumnExclusive - startColumn)
   
   return `
     <div class="rr-roadmap-module"
-         style="grid-column: ${offsetSpan + 2} / span ${colSpan}; background-color: ${color.replace('#', '')}20; border-color: ${color}">
+         style="grid-column: ${startColumn} / span ${colSpan}; background-color: ${color.replace('#', '')}20; border-color: ${color}">
       <span class="rr-roadmap-module-text">${escapeHtml(module.id)} · ${escapeHtml(module.title)}</span>
     </div>
   `
@@ -107,13 +188,17 @@ function renderModule(module) {
 /* ── Render track row (Development or Design) ──────────────– */
 function renderTrack(trackLabel, modules) {
   const moduleBars = modules.map(renderModule).join("")
+  const gridTemplate = `repeat(${TOTAL_WEEK_COLUMNS}, var(--rr-roadmap-week-col-width))`
+  const trackClass = trackLabel.toLowerCase() === "development"
+    ? "rr-roadmap-track--development"
+    : "rr-roadmap-track--design"
   
   return `
-    <div class="rr-roadmap-track">
+    <div class="rr-roadmap-track ${trackClass}">
       <div class="rr-roadmap-track-header">
         <span class="rr-roadmap-track-label">${escapeHtml(trackLabel)}</span>
       </div>
-      <div class="rr-roadmap-track-grid">
+      <div class="rr-roadmap-track-grid" style="grid-template-columns:${gridTemplate};">
         ${moduleBars}
       </div>
     </div>
@@ -146,13 +231,7 @@ function buildView() {
       </div>
 
       <div class="rr-roadmap-container">
-        <!-- Sprint date headers row -->
-        <div class="rr-roadmap-timeline-header">
-          <div class="rr-roadmap-track-header-spacer"></div>
-          <div class="rr-roadmap-sprint-headers-row">
-            ${renderSprintHeaders()}
-          </div>
-        </div>
+        ${renderTimelineHeader()}
 
         <!-- Development track -->
         ${renderTrack("Development", DEV_MODULES)}
