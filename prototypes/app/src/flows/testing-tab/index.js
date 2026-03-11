@@ -8,6 +8,7 @@ const ICON = {
   search: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="116" cy="116" r="72" stroke="currentColor" stroke-width="16"/><line x1="168" y1="168" x2="224" y2="224" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   caretRight: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   caretDown: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,96 128,176 208,96" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  user: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.4329 13.2497C13.481 11.6041 12.0142 10.4241 10.3023 9.86475C11.1491 9.36066 11.8069 8.59255 12.1749 7.67837C12.5429 6.76419 12.6006 5.7545 12.3392 4.80435C12.0778 3.85419 11.5117 3.01612 10.7279 2.41883C9.94408 1.82153 8.98587 1.49805 8.00041 1.49805C7.01496 1.49805 6.05674 1.82153 5.27293 2.41883C4.48911 3.01612 3.92304 3.85419 3.66163 4.80435C3.40022 5.7545 3.45793 6.76419 3.82591 7.67837C4.19388 8.59255 4.85177 9.36066 5.69854 9.86475C3.98666 10.4235 2.51979 11.6035 1.56791 13.2497C1.53301 13.3067 1.50985 13.37 1.49982 13.436C1.48978 13.502 1.49307 13.5694 1.50949 13.6341C1.52591 13.6988 1.55512 13.7596 1.59541 13.8128C1.63569 13.8661 1.68624 13.9107 1.74405 13.9441C1.80187 13.9775 1.86579 13.999 1.93204 14.0073C1.9983 14.0156 2.06554 14.0105 2.1298 13.9924C2.19407 13.9743 2.25405 13.9435 2.30622 13.9018C2.35838 13.8601 2.40168 13.8084 2.43354 13.7497C3.61104 11.7147 5.69229 10.4997 8.00041 10.4997C10.3085 10.4997 12.3898 11.7147 13.5673 13.7497C13.5992 13.8084 13.6424 13.8601 13.6946 13.9018C13.7468 13.9435 13.8068 13.9743 13.871 13.9924C13.9353 14.0105 14.0025 14.0156 14.0688 14.0073C14.135 13.999 14.199 13.9775 14.2568 13.9441C14.3146 13.9107 14.3651 13.8661 14.4054 13.8128C14.4457 13.7596 14.4749 13.6988 14.4913 13.6341C14.5078 13.5694 14.511 13.502 14.501 13.436C14.491 13.37 14.4678 13.3067 14.4329 13.2497ZM4.50041 5.99975C4.50041 5.30751 4.70568 4.63082 5.09027 4.05525C5.47485 3.47968 6.02148 3.03108 6.66102 2.76617C7.30056 2.50126 8.0043 2.43195 8.68323 2.567C9.36216 2.70205 9.9858 3.03539 10.4753 3.52487C10.9648 4.01436 11.2981 4.638 11.4332 5.31693C11.5682 5.99586 11.4989 6.6996 11.234 7.33914C10.9691 7.97868 10.5205 8.52531 9.94491 8.90989C9.36934 9.29448 8.69265 9.49975 8.00041 9.49975C7.07246 9.49875 6.1828 9.12969 5.52664 8.47353C4.87047 7.81736 4.50141 6.9277 4.50041 5.99975Z" fill="#3D4350"/></svg>`,
   folderSimple: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><path d="M216,72H130.67a8,8,0,0,1-4.8-1.6L99.2,50.4A8,8,0,0,0,94.4,48.8L68.53,48H40a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H216a8,8,0,0,0,8-8V80A8,8,0,0,0,216,72Z" fill="currentColor"/></svg>`,
   prohibit: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><line x1="60" y1="196" x2="196" y2="60" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   flag: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><path d="M40 216V48" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><path d="M40,96c32-16,64,16,96,0s64-16,96,0V48c-32,16-64-16-96,0s-64,16-96,0Z" fill="currentColor" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -70,6 +71,10 @@ let ACTIVE_TAB = "overview"
 let SELECTED_ISSUE = null
 let MODAL_VISIBLE = false
 let ISSUE_MODAL_TOOL = "comments"
+let ADD_ISSUE_MODAL_VISIBLE = false
+let ADD_ISSUE_MODAL_TOOL = "comments"
+let ADD_ISSUE_PRIORITY = ""
+let ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
 const BUTTONS = [
   { id: "overview", label: "Overview" },
   { id: "sprint", label: "Sprint" },
@@ -79,6 +84,13 @@ const BUTTONS = [
 ]
 
 const TESTING_HEADER_ACTIONS_ID = "rr-tab-testing-header"
+const ADD_ISSUE_REPORTER = { name: "Edward Franz", bg: "#dbd0bd" }
+const ADD_ISSUE_PRIORITY_OPTIONS = [
+  { id: "urgent", label: "Urgent" },
+  { id: "high", label: "High" },
+  { id: "medium", label: "Medium" },
+  { id: "low", label: "Low" },
+]
 
 function updateTestingHeaderActions() {
   const actionsContainer = document.getElementById(TESTING_HEADER_ACTIONS_ID)
@@ -87,8 +99,121 @@ function updateTestingHeaderActions() {
   }
 
   actionsContainer.innerHTML = ACTIVE_TAB === "stakeholders"
-    ? `<rr-button-icon type="primary" size="xs" label="Add stakeholder issue"></rr-button-icon>`
+    ? `<rr-button-icon data-action="open-add-issue-modal" type="primary" size="xs" label="Add stakeholder issue"></rr-button-icon>`
     : ""
+}
+
+function renderAddIssueModal() {
+  if (!ADD_ISSUE_MODAL_VISIBLE) {
+    return ""
+  }
+
+  const activeTool = ADD_ISSUE_MODAL_TOOL
+  const selectedPriority = ADD_ISSUE_PRIORITY_OPTIONS.find((option) => option.id === ADD_ISSUE_PRIORITY)
+  const selectedPriorityLabel = selectedPriority ? selectedPriority.label : "Select priority"
+
+  return `
+    <div class="rr-modal-overlay">
+      <div class="rr-modal-backdrop"></div>
+      <div class="rr-modal-container rr-modal-container--add-issue">
+        <div class="rr-modal-header rr-add-issue-header">
+          <div class="rr-modal-header-title">New task</div>
+          <div class="rr-modal-header-actions">
+            <button class="rr-modal-action-btn" data-action="close-add-issue-modal-x" title="Close" type="button">
+              ${ICON.close}
+            </button>
+          </div>
+        </div>
+
+        <div class="rr-modal-content rr-add-issue-content">
+          <div class="rr-modal-main rr-add-issue-main">
+            <h2 class="rr-modal-title rr-add-issue-title" contenteditable="true" role="textbox" aria-label="Task title">New task</h2>
+
+            <div class="rr-modal-meta-grid rr-add-issue-meta-grid">
+              <div class="rr-modal-meta-item rr-add-issue-priority">
+                <div class="rr-modal-meta-label">PRIORITY</div>
+                <button class="rr-add-issue-select" data-action="toggle-add-issue-priority" type="button" aria-label="Select priority" aria-haspopup="listbox" aria-expanded="${ADD_ISSUE_PRIORITY_DROPDOWN_OPEN ? "true" : "false"}">
+                  <span class="rr-add-issue-select-icon ${ADD_ISSUE_PRIORITY_DROPDOWN_OPEN ? "is-open" : ""}">${ICON.caretDown}</span>
+                  <span>${escapeHtml(selectedPriorityLabel)}</span>
+                </button>
+                ${ADD_ISSUE_PRIORITY_DROPDOWN_OPEN ? `
+                  <div class="rr-add-issue-priority-menu" role="listbox" aria-label="Priority options">
+                    ${ADD_ISSUE_PRIORITY_OPTIONS.map((option) => `
+                      <button
+                        class="rr-add-issue-priority-option ${option.id === ADD_ISSUE_PRIORITY ? "is-selected" : ""}"
+                        data-action="select-add-issue-priority"
+                        data-priority="${option.id}"
+                        type="button"
+                        role="option"
+                        aria-selected="${option.id === ADD_ISSUE_PRIORITY ? "true" : "false"}"
+                      >
+                        ${escapeHtml(option.label)}
+                      </button>
+                    `).join("")}
+                  </div>
+                ` : ""}
+              </div>
+
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">STATUS</div>
+                <span class="rr-add-issue-status">To do</span>
+              </div>
+
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">ASSIGNEE</div>
+                <button class="rr-add-issue-assignee" type="button" aria-label="Select assignee">
+                  <span class="rr-add-issue-assignee-icon">${ICON.user}</span>
+                  <span>No Assignee</span>
+                </button>
+              </div>
+
+              <div class="rr-modal-meta-item">
+                <div class="rr-modal-meta-label">REPORTER</div>
+                <div class="rr-modal-assignee">
+                  ${renderAvatarWithFallback(ADD_ISSUE_REPORTER, "rr-modal-avatar-wrap", "rr-modal-avatar")}
+                  <span>${escapeHtml(ADD_ISSUE_REPORTER.name)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="rr-add-issue-description-block">
+              <div class="rr-modal-meta-label">DESCRIPTION</div>
+              <textarea class="rr-add-issue-description" placeholder="Add description..." aria-label="Task description"></textarea>
+            </div>
+          </div>
+
+          <div class="rr-modal-aside rr-add-issue-aside">
+            <div class="rr-modal-tools" role="toolbar" aria-label="Add issue tools">
+              <button class="rr-modal-tool-btn ${activeTool === "comments" ? "is-active" : ""}" data-action="switch-add-issue-tool" data-tool="comments" type="button" title="Notes">${ICON.notes}</button>
+              <button class="rr-modal-tool-btn ${activeTool === "attachments" ? "is-active" : ""}" data-action="switch-add-issue-tool" data-tool="attachments" type="button" title="Attach file">${ICON.paperclip}</button>
+              <button class="rr-modal-tool-btn ${activeTool === "related" ? "is-active" : ""}" data-action="switch-add-issue-tool" data-tool="related" type="button" title="Related issues">${ICON.gitFork}</button>
+              <button class="rr-modal-tool-btn ${activeTool === "history" ? "is-active" : ""}" data-action="switch-add-issue-tool" data-tool="history" type="button" title="History">${ICON.clockCounterClockwise}</button>
+            </div>
+
+            <div class="rr-add-issue-empty">
+              <span class="rr-add-issue-empty-icon" aria-hidden="true">${ICON.notes}</span>
+              <p class="rr-add-issue-empty-title">No notes</p>
+            </div>
+
+            <div class="rr-modal-input-area rr-add-issue-input-area">
+              <input type="text" class="rr-modal-input" placeholder="Write a note..." />
+              <div class="rr-modal-input-actions">
+                <button class="rr-modal-input-btn" type="button" title="Emoji">${ICON.smiley}</button>
+                <button class="rr-modal-input-btn" type="button" title="Mention">${ICON.at}</button>
+                <button class="rr-modal-input-btn" type="button" title="Add image">${ICON.image}</button>
+                <button class="rr-modal-input-btn rr-modal-input-btn--send" type="button" title="Send">${ICON.arrowUp}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rr-add-issue-footer">
+          <rr-button variant="neutral" size="sm">Cancel</rr-button>
+          <rr-button variant="primary" size="sm" data-action="submit-add-issue">Add Issue</rr-button>
+        </div>
+      </div>
+    </div>
+  `
 }
 
 /* ── Overview Tab Data (original implementation) ─────────────── */
@@ -1508,6 +1633,7 @@ export function renderTestingTabFlow() {
         </div>
         ${tabContent}
       </section>
+      ${renderAddIssueModal()}
       ${renderIssueModal()}
     </div>
   `
@@ -1538,6 +1664,24 @@ function bindSprintModuleToggles() {
 /* ── Event Handlers & Interactivity ───────────────────────── */
 export function initTestingTab() {
   updateTestingHeaderActions()
+
+  const openAddIssueButton = document.querySelector(`#${TESTING_HEADER_ACTIONS_ID} rr-button-icon[data-action='open-add-issue-modal']`)
+  if (openAddIssueButton) {
+    openAddIssueButton.addEventListener("click", () => {
+      ADD_ISSUE_MODAL_VISIBLE = true
+      ADD_ISSUE_MODAL_TOOL = "comments"
+      ADD_ISSUE_PRIORITY = ""
+      ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
+      MODAL_VISIBLE = false
+      SELECTED_ISSUE = null
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  }
 
   // Tab switching
   document.querySelectorAll("[data-tab]").forEach((btn) => {
@@ -1605,6 +1749,7 @@ export function initTestingTab() {
       const issueData = row.getAttribute("data-issue")
       if (issueData) {
         try {
+          ADD_ISSUE_MODAL_VISIBLE = false
           SELECTED_ISSUE = JSON.parse(issueData)
           MODAL_VISIBLE = true
           ISSUE_MODAL_TOOL = "comments"
@@ -1629,6 +1774,79 @@ export function initTestingTab() {
       if (!tool || tool === ISSUE_MODAL_TOOL) return
 
       ISSUE_MODAL_TOOL = tool
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  // Add Issue Modal – Switch right panel tool
+  document.querySelectorAll("[data-action='switch-add-issue-tool']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const tool = e.currentTarget.getAttribute("data-tool")
+      if (!tool || tool === ADD_ISSUE_MODAL_TOOL) return
+
+      ADD_ISSUE_MODAL_TOOL = tool
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  // Add Issue Modal – Priority dropdown toggle
+  document.querySelectorAll("[data-action='toggle-add-issue-priority']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = !ADD_ISSUE_PRIORITY_DROPDOWN_OPEN
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  // Add Issue Modal – Priority dropdown select option
+  document.querySelectorAll("[data-action='select-add-issue-priority']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const priority = e.currentTarget.getAttribute("data-priority") || ""
+      ADD_ISSUE_PRIORITY = priority
+      ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  // Add Issue Modal – Close only from top-right X button
+  document.querySelectorAll("[data-action='close-add-issue-modal-x']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      ADD_ISSUE_MODAL_VISIBLE = false
+      ADD_ISSUE_MODAL_TOOL = "comments"
+      ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
+
+      const wrapper = document.querySelector(".rr-testing-wrapper")
+      if (wrapper) {
+        wrapper.innerHTML = renderTestingTabFlow()
+        initTestingTab()
+      }
+    })
+  })
+
+  document.querySelectorAll("[data-action='submit-add-issue']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      ADD_ISSUE_MODAL_VISIBLE = false
+      ADD_ISSUE_MODAL_TOOL = "comments"
+      ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
 
       const wrapper = document.querySelector(".rr-testing-wrapper")
       if (wrapper) {
