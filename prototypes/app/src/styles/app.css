@@ -11306,6 +11306,88 @@ rr-alert.rr-req-info-callout {
   background: var(--rr-sem-background-navHover, #f0f1f3);
 }
 
+.rr-roadmap-snapshot-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.rr-roadmap-snapshot-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  max-width: min(320px, calc(100vw - 24px));
+  background: var(--rr-sem-surface, #fcfcfd);
+  border: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+  padding: 16px;
+  z-index: 70;
+}
+
+.rr-roadmap-snapshot-item {
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--rr-sem-surface, #fcfcfd);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rr-roadmap-snapshot-item:hover {
+  background: var(--rr-sem-background-navHover, #f0f1f3);
+}
+
+.rr-roadmap-snapshot-item:focus-visible {
+  outline: 1px solid var(--rr-sem-borderFocus, #a3a9b6);
+  outline-offset: 0;
+}
+
+.rr-roadmap-snapshot-plus {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.rr-roadmap-snapshot-plus svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.rr-roadmap-snapshot-text {
+  font-size: var(--rr-typography-fontSizeMd);
+  line-height: var(--rr-typography-lineHeightParagraph);
+  font-weight: var(--rr-typography-fontWeightRegular);
+  color: var(--rr-sem-textPrimary, #14161b);
+}
+
+.rr-roadmap-snapshot-group {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rr-sem-borderDefault, #d0d5dd);
+}
+
+.rr-roadmap-snapshot-group-label {
+  margin: 0;
+  padding: 0 8px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  font-size: var(--rr-typography-fontSizeMd);
+  line-height: var(--rr-typography-lineHeightParagraph);
+  font-weight: var(--rr-typography-fontWeightRegular);
+  color: var(--rr-sem-textPrimary, #14161b);
+}
+
 /* ── Main scrollable container ──────────────────────────────– */
 .rr-roadmap-container {
   flex: 1;
@@ -11383,7 +11465,7 @@ rr-alert.rr-req-info-callout {
 .rr-roadmap-sprint-dot {
   width: 8px;
   height: 8px;
-  border-radius: var(--rr-radius-full);
+  border-radius: 50%;
   background: #12b76a;
   flex-shrink: 0;
 }
