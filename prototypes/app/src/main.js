@@ -44,12 +44,15 @@ function renderTabHeader(currentPath) {
   const isPlanning = currentPath.startsWith("/planning")
   const isDocs     = currentPath.startsWith("/docs")
   const isDesign   = currentPath.startsWith("/design")
+  const isTesting  = currentPath.startsWith("/testing")
   const actionsHtml = isPlanning
     ? `<div class="rr-tab-header-actions" id="rr-tab-sprint-header"></div>`
     : isDocs
     ? `<div class="rr-tab-header-actions" id="rr-tab-docs-header"></div>`
     : isDesign
     ? `<div class="rr-tab-header-actions"></div>`
+    : isTesting
+    ? `<div class="rr-tab-header-actions" id="rr-tab-testing-header"></div>`
     : `<div class="rr-tab-header-actions">
         <span class="rr-tab-sync">${TAB_SYNC_TEXT}</span>
         <button type="button" class="rr-tab-sync-action" aria-label="Sync history">

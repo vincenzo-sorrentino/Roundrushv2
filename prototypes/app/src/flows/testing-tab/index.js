@@ -78,6 +78,19 @@ const BUTTONS = [
   { id: "stakeholders", label: "Stakeholders’ Issues" },
 ]
 
+const TESTING_HEADER_ACTIONS_ID = "rr-tab-testing-header"
+
+function updateTestingHeaderActions() {
+  const actionsContainer = document.getElementById(TESTING_HEADER_ACTIONS_ID)
+  if (!actionsContainer) {
+    return
+  }
+
+  actionsContainer.innerHTML = ACTIVE_TAB === "stakeholders"
+    ? `<rr-button-icon type="primary" size="xs" label="Add stakeholder issue"></rr-button-icon>`
+    : ""
+}
+
 /* ── Overview Tab Data (original implementation) ─────────────── */
 const STATUS_CONFIG = {
   completed: { label: "Completed", bg: "#ddf7eb", text: "#0e9255" },
@@ -1524,6 +1537,8 @@ function bindSprintModuleToggles() {
 
 /* ── Event Handlers & Interactivity ───────────────────────── */
 export function initTestingTab() {
+  updateTestingHeaderActions()
+
   // Tab switching
   document.querySelectorAll("[data-tab]").forEach((btn) => {
     btn.addEventListener("click", (e) => {
