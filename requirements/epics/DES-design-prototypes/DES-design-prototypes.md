@@ -2,7 +2,7 @@
 id: DES
 title_short: Design
 title: Design prototypes management
-design_state: draft
+design_state: drafting
 modules:
   - DES-M001
   - DES-M002

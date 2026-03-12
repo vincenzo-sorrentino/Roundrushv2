@@ -2,7 +2,7 @@
 id: RMP
 title_short: Roadmap
 title: Roadmap timeline and snapshot planning
-design_state: draft
+design_state: drafting
 modules:
   - RMP-M001
   - RMP-M002

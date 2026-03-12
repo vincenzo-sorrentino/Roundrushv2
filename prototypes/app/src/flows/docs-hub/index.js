@@ -85,102 +85,6 @@ const DOC_HISTORY = {
       { action: "Added", detail: "AL-06 — Regression test suite coverage derived from the module dependency map added as acceptance gate", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
     ]},
   ],
-  "integration-api": [
-    { date: "07/03/26", entries: [
-      { action: "Added", detail: "Section 7 — Pagination contract: cursor-based strategy mandated for all list endpoints returning > 100 items", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-    { date: "03/03/26", entries: [
-      { action: "Added", detail: "Section 6 — Contract-first: OpenAPI 3.1 spec must be reviewed and approved before implementation starts", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
-      { action: "Changed", detail: "Error response schema updated — detail and code fields are now mandatory in every 4xx and 5xx response", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
-    ]},
-    { date: "19/02/26", entries: [
-      { action: "Changed", detail: "Auth token expiry reduced from 60 min to 30 min following security audit finding #SA-14", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-    ]},
-    { date: "04/02/26", entries: [
-      { action: "Deprecated", detail: "v1 webhook payload format deprecated — consumers must migrate to v2 schema by end of Q2 2026", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
-    ]},
-  ],
-  "architecture-principles": [
-    { date: "07/03/26", entries: [
-      { action: "Changed", detail: "ADR acceptance rule now requires two senior engineer approvals to reduce single-reviewer risk", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-    ]},
-    { date: "21/02/26", entries: [
-      { action: "Added", detail: "Section 5 — Data ownership model: domain-specific write permissions with read-optimised denormalised projections", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
-      { action: "Added", detail: "Section 6 — Bounded context map documenting service ownership boundaries and change authority per domain", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-    { date: "08/02/26", entries: [
-      { action: "Changed", detail: "Dependency direction tightened — domain services may no longer import directly from infrastructure adapters", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
-    ]},
-    { date: "20/01/26", entries: [
-      { action: "Removed", detail: "Event sourcing removed as a mandatory constraint in AP-03 — retained as a recommended pattern only", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-    ]},
-  ],
-  "development-standards": [
-    { date: "09/03/26", entries: [
-      { action: "Changed", detail: "Default exports banned from shared utilities — improves IDE auto-import traceability across the codebase", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-    { date: "04/03/26", entries: [
-      { action: "Added", detail: "TypeScript strict mode: no implicit any, no @ts-ignore without an inline justification comment", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
-      { action: "Added", detail: "Naming convention appendix: PascalCase for components, camelCase for utils, SCREAMING_SNAKE_CASE for constants", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
-    ]},
-    { date: "17/02/26", entries: [
-      { action: "Changed", detail: "PR review rule: mandatory local testing now required for all user-facing feature changes before requesting review", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
-    ]},
-    { date: "02/02/26", entries: [
-      { action: "Removed", detail: "Flow types removed from approved typing tools — TypeScript only going forward in all new and migrated files", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
-    ]},
-  ],
-  "git-commit-policies": [
-    { date: "06/03/26", entries: [
-      { action: "Changed", detail: "Branch age reduced from 4 weeks to 2 weeks without an open PR before an automated deletion warning fires", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
-    ]},
-    { date: "24/02/26", entries: [
-      { action: "Added", detail: "Squash-merge mandated as the only permitted strategy for feature branches to maintain a linear history", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-      { action: "Changed", detail: "Conventional commit scope validation added to CI — commits without a recognised scope fail the lint check", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-    { date: "10/02/26", entries: [
-      { action: "Added", detail: "Protected branch ruleset for main: no force-push, no deletion, required status checks must pass before merge", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
-    ]},
-  ],
-  "documentation-standards": [
-    { date: "02/03/26", entries: [
-      { action: "Changed", detail: "Stale doc threshold reduced from 180 days to 90 days before flagged as outdated in the governance report", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
-      { action: "Added", detail: "'Owner' and 'Last reviewed' metadata fields now mandatory in every spec file header", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
-    ]},
-    { date: "12/02/26", entries: [
-      { action: "Added", detail: "CI validator (validate-spec-links.mjs) to enforce required sections and internal link integrity on every push", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-    { date: "28/01/26", entries: [
-      { action: "Renamed", detail: "Section 'Style guide' renamed to 'Formatting standards' to better reflect prose and structural scope", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
-    ]},
-  ],
-  "testing-obligations": [
-    { date: "08/03/26", entries: [
-      { action: "Changed", detail: "E2E environment updated — all assertions now target deployed staging, not local dev servers", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
-    ]},
-    { date: "26/02/26", entries: [
-      { action: "Added", detail: "Visual regression via Chromatic approved for design system components only, not application flows", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-      { action: "Changed", detail: "Mutation score threshold introduced at 60% — applies to domain logic modules starting Q2 2026", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-    { date: "11/02/26", entries: [
-      { action: "Added", detail: "Test co-location rule: unit tests must reside in the same package as the module under test", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
-    ]},
-    { date: "27/01/26", entries: [
-      { action: "Removed", detail: "Jest snapshot tests removed from approved suite types — replaced with assertion-based component tests", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
-    ]},
-  ],
-  "security-constraints": [
-    { date: "07/03/26", entries: [
-      { action: "Changed", detail: "Critical vulnerability patch window tightened from 48 h to 24 h for any CVSS score >= 9.0", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
-      { action: "Added", detail: "SC-09 — Mandatory SBOM (Software Bill of Materials) generation on every production release build", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-    ]},
-    { date: "20/02/26", entries: [
-      { action: "Added", detail: "Rate limiting: 5 failed logins per 15-minute window per IP before temporary lockout is enforced", user: "Olivia Rhye", initials: "OR", color: "#a9c0d4" },
-    ]},
-    { date: "05/02/26", entries: [
-      { action: "Changed", detail: "Secret scanning extended — pre-commit hooks now required in addition to CI-level scanning", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
-    ]},
-  ],
   "definition-of-done": [
     { date: "11/03/26", entries: [
       { action: "Added", detail: "Initial document: module, flow, and component DoD checklists plus CI validation checks", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
@@ -209,17 +113,9 @@ const DOC_HISTORY = {
       { action: "Added", detail: "Initial document: spec lifecycle, Figma-to-code sync, component scaffold, and full build chain reference", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
     ]},
   ],
-  "release-policies": [
-    { date: "05/03/26", entries: [
-      { action: "Added", detail: "Pre-production promotion gate made mandatory between staging and production for all release candidates", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
-      { action: "Changed", detail: "48-hour freeze window now required before any planned production deployment — no exceptions without VP sign-off", user: "Andi Lane", initials: "AL", color: "#d4c4ab" },
-    ]},
-    { date: "18/02/26", entries: [
-      { action: "Changed", detail: "Rollback decision window reduced from 30 minutes to 15 minutes after incident confirmed by on-call engineer", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
-    ]},
-    { date: "30/01/26", entries: [
-      { action: "Added", detail: "Post-release smoke test checklist: 5 critical user flows must pass within 10 minutes of go-live", user: "Candice Wu", initials: "CW", color: "#a7a9cd" },
-      { action: "Removed", detail: "Manual approval gate for hotfixes removed — replaced by engineer-owned decision with escalation protocol", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
+  "api-specification": [
+    { date: "12/03/26", entries: [
+      { action: "Added", detail: "Initial document: project integration flow, Copilot integration requirements, API responsibilities, and repository organisation guidelines", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
     ]},
   ],
 }
@@ -374,367 +270,6 @@ const DOC_SECTIONS = [
         anchor: "ci-checks", heading: "5. CI validation checks",
         blocks: [
           { type: "ul", items: ["npm run validate:specs exits with code 0.", "All prototype routes render without runtime errors.", "npm run build:tokens completes without errors.", "npm run test passes across all workspaces."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 2. Integration (API) ───────────────────────────────── */
-  {
-    id: "integration-api",
-    title: "Integration (API)",
-    icon: "gitFork",
-    category: "Engineering",
-    shortDescription: "API contracts, versioning strategy, and integration standards across internal and external services.",
-    tags: ["api", "rest", "integration", "versioning", "contracts"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "This document defines the integration standards that govern how modules communicate across internal service boundaries and how external APIs are designed, versioned, and maintained." },
-          { type: "p", text: "Consistency in API shape, authentication, and error responses is critical for maintainability as the number of integrations grows. These standards apply to all HTTP APIs, event-driven contracts, and SDK interfaces produced by the platform." },
-        ],
-      },
-      {
-        anchor: "api-design", heading: "2. API design principles",
-        blocks: [
-          { type: "p", text: "All APIs must follow REST conventions with predictable resource-based URLs. Endpoints are nouns, HTTP verbs describe the action, and plural resource names are used consistently." },
-          { type: "ul", items: ["Use nouns for resources: /users, /modules, /sprints.", "Use standard HTTP verbs: GET, POST, PUT, PATCH, DELETE.", "Return appropriate HTTP status codes — never 200 for errors.", "Avoid verbs in URLs: prefer POST /sessions over POST /login."] },
-        ],
-      },
-      {
-        anchor: "versioning", heading: "3. Versioning strategy",
-        blocks: [
-          { type: "label", text: "Approach" },
-          { type: "p", text: "APIs are versioned using URI path versioning: /api/v1/, /api/v2/. Semver is used for the public SDK — breaking changes require a major version bump." },
-          { type: "label", text: "Backward compatibility rules" },
-          { type: "ul", items: ["Adding new optional fields to a response is non-breaking.", "Removing or renaming fields requires a new major version.", "Changing a field type is always a breaking change.", "Deprecation notices must be communicated at least one sprint before removal."] },
-        ],
-      },
-      {
-        anchor: "auth", heading: "4. Authentication & authorisation",
-        blocks: [
-          { type: "p", text: "All API endpoints (except public health checks) must require a valid JWT bearer token in the Authorization header." },
-          { type: "ul", items: ["Tokens are short-lived (1 hour) and rotated via refresh tokens.", "Permission scopes are evaluated per-request, not cached on the token.", "Service-to-service calls use dedicated service accounts with minimal scope.", "Tokens must never be logged or included in error responses."] },
-        ],
-      },
-      {
-        anchor: "error-shape", heading: "5. Error response shape",
-        blocks: [
-          { type: "p", text: "All error responses must conform to the following shape to enable consistent client-side handling:" },
-          { type: "code", label: "Error response", lines: [
-            `{`,
-            `  "code": "ERR_MODULE_NOT_FOUND",`,
-            `  "message": "Module could not be located.",`,
-            `  "details": { "moduleId": "KAN-042" }`,
-            `}`,
-          ]},
-          { type: "ul", items: ["Error codes are SCREAMING_SNAKE_CASE and unique across the platform.", "'message' is safe to display to end users; 'details' is for developer debugging only.", "Stack traces must never appear in API error responses."] },
-        ],
-      },
-      {
-        anchor: "contracts", heading: "6. Contract-first development",
-        blocks: [
-          { type: "p", text: "All new APIs must have an OpenAPI 3.1 spec committed before implementation begins. The spec is the contract and the source of truth for generated client SDKs and mocks." },
-          { type: "ul", items: ["Specs live in /api/specs/ alongside the service code.", "Breaking spec changes require a PR review from at least one consumer team.", "Consumer-driven contract tests are run in CI against all active integrations."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 3. Architecture principles ─────────────────────────── */
-  {
-    id: "architecture-principles",
-    title: "Architecture principles",
-    icon: "gitBranch",
-    category: "Engineering",
-    shortDescription: "Core structural decisions and system design rules that govern how the platform is built and extended.",
-    tags: ["architecture", "adr", "design", "system", "patterns"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "This document records the foundational architectural decisions that shape the RoundRush platform. These are not preferences — they are the constraints within which all modules are designed and extended." },
-          { type: "p", text: "When a new feature requires revisiting a principle, an ADR must be filed before implementation begins." },
-        ],
-      },
-      {
-        anchor: "domain-separation", heading: "2. Domain separation",
-        blocks: [
-          { type: "p", text: "Each business domain (Authentication, Requirements, Planning, Dependencies, Docs) is a bounded context. Modules within a domain may share internal state; modules across domains must communicate through defined interfaces only." },
-          { type: "ul", items: ["Cross-domain direct database access is prohibited.", "Domain boundaries are reflected in the folder structure: src/domains/<name>/.", "Shared utilities live in src/shared/ and must have no domain-specific imports."] },
-        ],
-      },
-      {
-        anchor: "coupling", heading: "3. Module coupling policy",
-        blocks: [
-          { type: "label", text: "Allowed coupling" },
-          { type: "ul", items: ["Module A may import from Module B if B is listed as a dependency in A's requirement file.", "Shared design system components may be imported by any module."] },
-          { type: "label", text: "Prohibited coupling" },
-          { type: "ul", items: ["Circular dependencies between any two modules.", "A module importing internals of another module (only the exported public API).", "Domain-crossing state sharing without an event or API contract."] },
-        ],
-      },
-      {
-        anchor: "adr-process", heading: "4. ADR process",
-        blocks: [
-          { type: "p", text: "An Architecture Decision Record (ADR) is required for any decision that changes a module boundary, introduces a new external dependency, adopts or deprecates a pattern, or deviates from these principles." },
-          { type: "ul", items: ["ADRs are stored in requirements/_governance/decisions/.", "Format: ADR-NNNN-short-title.md with sections: Context, Decision, Consequences.", "Once accepted, ADRs are immutable — superseding decisions require a new ADR.", "All team members may propose an ADR; acceptance requires two senior engineer approvals."] },
-        ],
-      },
-      {
-        anchor: "data-ownership", heading: "5. Data ownership",
-        blocks: [
-          { type: "p", text: "Each piece of data is owned by exactly one domain. Only the owning domain's service may write to that data. Other domains must request changes through the owner's API." },
-          { type: "ul", items: ["User profile data is owned by the Authentication domain.", "Sprint and task data is owned by the Planning domain.", "Module and requirement data is owned by the Requirements domain.", "Denormalised read models are allowed for performance but must be kept in sync via events."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 4. Development standards ───────────────────────────── */
-  {
-    id: "development-standards",
-    title: "Development standards",
-    icon: "gear",
-    category: "Engineering",
-    shortDescription: "Code quality rules, linting configuration, naming conventions, and toolchain setup for the project.",
-    tags: ["code-quality", "linting", "naming", "standards", "toolchain"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "This document defines the coding standards, toolchain configuration, and review expectations that apply to all code contributed to the RoundRush platform. Consistent standards reduce cognitive load, simplify onboarding, and make automated quality enforcement reliable." },
-        ],
-      },
-      {
-        anchor: "code-style", heading: "2. Code style & linting",
-        blocks: [
-          { type: "p", text: "All JavaScript and TypeScript files are formatted by Prettier (config in .prettierrc) and linted by ESLint (config in .eslintrc.js). Both run in CI and as a pre-commit hook." },
-          { type: "code", label: "ESLint disable — must include reason comment", lines: [
-            `// eslint-disable-next-line @typescript-eslint/no-explicit-any`,
-            `// Reason: third-party callback signature requires unknown shape`,
-            `function handleCallback(payload: any) {`,
-            `  processEvent(payload)`,
-            `}`,
-          ]},
-          { type: "ul", items: ["Never disable ESLint rules with // eslint-disable without a comment explaining why.", "Prettier auto-format must be applied before every commit.", "TypeScript strict mode is enabled: no implicit any, no @ts-ignore without justification."] },
-        ],
-      },
-      {
-        anchor: "naming", heading: "3. Naming conventions",
-        blocks: [
-          { type: "ul", items: ["Files & folders: kebab-case (user-profile.ts, auth-domain/).", "Variables & functions: camelCase.", "Classes & types: PascalCase.", "Constants: SCREAMING_SNAKE_CASE for module-level, camelCase for function-scoped.", "CSS classes: BEM-inspired with project prefix rr- (rr-sidebar, rr-sidebar__item)."] },
-        ],
-      },
-      {
-        anchor: "imports", heading: "4. Import ordering",
-        blocks: [
-          { type: "p", text: "Imports are ordered by the ESLint import/order rule: node builtins → external packages → internal aliases → relative paths. Blank lines separate each group." },
-          { type: "ul", items: ["Prefer named exports over default exports for utilities and components.", "Avoid barrel files (index.ts re-exporting everything) in large domains.", "Circular imports are a lint-time error."] },
-        ],
-      },
-      {
-        anchor: "review", heading: "5. Code review expectations",
-        blocks: [
-          { type: "p", text: "All PRs require at least one approving review before merge. Reviews are expected to cover correctness, security, performance, and alignment with these standards." },
-          { type: "ul", items: ["Reviewers must test the change locally for any user-facing feature.", "Comments marked 'nit:' are optional improvements — they must not block merge.", "Comments without 'nit:' are blocking until resolved or explicitly dismissed.", "Large PRs (>500 lines changed) should be split or discussed first in a design thread."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 5. Git & commit policies ───────────────────────────── */
-  {
-    id: "git-commit-policies",
-    title: "Git & commit policies",
-    icon: "gitFork",
-    category: "Workflow",
-    shortDescription: "Branching strategy, commit message format, PR process, and merge requirements for the team.",
-    tags: ["git", "commits", "branching", "pr", "merge", "workflow"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "This document defines the version control conventions that keep the repository history clean, auditable, and useful for automation. These rules apply to all contributors." },
-        ],
-      },
-      {
-        anchor: "branching", heading: "2. Branching strategy",
-        blocks: [
-          { type: "p", text: "We use a trunk-based development model. main is the single integration branch. Short-lived feature branches are created for each task and merged within one sprint." },
-          { type: "ul", items: ["Branch naming: <type>/<ticket-id>-short-description (e.g. feat/KAN-042-module-detail-overlay).", "Types: feat, fix, chore, docs, refactor, test.", "Branches older than two weeks without a PR must be deleted.", "main is protected — direct pushes are blocked for all contributors including admins."] },
-        ],
-      },
-      {
-        anchor: "commits", heading: "3. Commit message format",
-        blocks: [
-          { type: "p", text: "We use Conventional Commits. Format: <type>(<scope>): <description>." },
-          { type: "code", label: "Conventional commit examples", lines: [
-            `feat(auth): add OTP verification step`,
-            `fix(kanban): correct sprint boundary date calculation`,
-            `docs(acceptance-laws): update AL-05 evidence requirements`,
-            ``,
-            `# Breaking change footer`,
-            `refactor(api)!: rename /modules endpoint to /epics`,
-            ``,
-            `BREAKING CHANGE: all clients must update endpoint references`,
-          ]},
-          { type: "ul", items: ["The scope is the module or domain affected.", "Breaking changes must add BREAKING CHANGE: in the commit footer."] },
-        ],
-      },
-      {
-        anchor: "pr-process", heading: "4. PR process",
-        blocks: [
-          { type: "ul", items: ["Every PR must reference a ticket in its title or description.", "PRs must pass all CI checks before requesting review.", "Add relevant team members as reviewers — at minimum one peer and one domain lead.", "Squash-merge is the default merge strategy for feature branches.", "Self-merge is not permitted except for trivial documentation fixes."] },
-        ],
-      },
-      {
-        anchor: "merge-requirements", heading: "5. Merge requirements",
-        blocks: [
-          { type: "p", text: "A PR may be merged only when all of the following are satisfied:" },
-          { type: "ul", items: ["At least one approving review from a team member.", "All CI checks green (lint, build, unit tests).", "No unresolved blocking comments.", "Branch is up to date with main (rebase required, not merge commit)."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 6. Documentation standards ────────────────────────── */
-  {
-    id: "documentation-standards",
-    title: "Documentation standards",
-    icon: "fileText",
-    category: "Governance",
-    shortDescription: "How to write and maintain requirements, component docs, API references, and technical notes.",
-    tags: ["docs", "writing", "requirements", "maintenance", "standards"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "Documentation is a first-class engineering deliverable at RoundRush. This document defines the hierarchy of documentation types, the required sections for each, writing style guidelines, and the maintenance and review process." },
-        ],
-      },
-      {
-        anchor: "hierarchy", heading: "2. Documentation hierarchy",
-        blocks: [
-          { type: "p", text: "The platform documentation follows the same hierarchy as the requirements: Epic → Module → Functionality." },
-          { type: "ul", items: ["Epic .md — overview, acceptance laws aggregate, module list.", "Module .md — scope, acceptance laws, functionality list, dependency notes.", "Functionality .md — user story, acceptance criteria, edge cases, prototype reference.", "Governance docs — ADRs, conventions, workflows (in requirements/_governance/)."] },
-        ],
-      },
-      {
-        anchor: "writing-style", heading: "3. Writing style guidelines",
-        blocks: [
-          { type: "ul", items: ["Use present tense: 'The system displays…' not 'The system will display…'", "Write for a reader who is smart but unfamiliar with context — avoid jargon without definition.", "Acceptance criteria use Given/When/Then format.", "Keep sentences short. One idea per sentence.", "Avoid vague qualifiers: 'quickly', 'easily', 'robust'. Quantify where possible."] },
-        ],
-      },
-      {
-        anchor: "required-sections", heading: "4. Required sections by document type",
-        blocks: [
-          { type: "label", text: "Module document" },
-          { type: "ul", items: ["## Overview — one-paragraph scope statement.", "## Acceptance Laws — AL-01 through AL-07 table.", "## Functionalities — linked list of functionality docs.", "## Dependencies — other modules this module depends on."] },
-          { type: "label", text: "Functionality document" },
-          { type: "ul", items: ["## Overview — user story.", "## Acceptance Criteria — Given/When/Then list.", "## Edge Cases — explicit handling of non-happy paths.", "## Prototype Reference — link to prototype flow."] },
-        ],
-      },
-      {
-        anchor: "review", heading: "5. Review & maintenance",
-        blocks: [
-          { type: "p", text: "Documentation changes must be reviewed alongside the code changes that motivated them. A PR that modifies behaviour without updating the relevant docs will be rejected." },
-          { type: "ul", items: ["Documentation PRs require one approving review from a team member.", "Stale docs (last updated > 90 days without a review) are flagged in the weekly governance report.", "The CI validator (validate-spec-links.mjs) enforces required sections and internal link integrity on every push."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 7. Testing obligations ─────────────────────────────── */
-  {
-    id: "testing-obligations",
-    title: "Testing obligations",
-    icon: "testTube",
-    category: "Quality",
-    shortDescription: "Coverage thresholds, required test types per module, frameworks, and the CI test pipeline structure.",
-    tags: ["testing", "coverage", "e2e", "unit", "integration", "qa"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "This document specifies the types of tests required per module, coverage thresholds, approved testing frameworks, and how all tests integrate into the CI pipeline." },
-          { type: "p", text: "Testing is not a box to check. Every test must be designed to catch a specific failure mode and must be readable enough that a new contributor can understand its intent within two minutes." },
-        ],
-      },
-      {
-        anchor: "coverage", heading: "2. Coverage thresholds",
-        blocks: [
-          { type: "ul", items: ["Statement coverage: >= 80% per module, >= 75% project-wide.", "Branch coverage: >= 70% per module.", "Critical paths (authentication, payment, data mutation) require >= 90% statement coverage.", "Coverage reports are generated per-module in CI and published as a PR comment."] },
-        ],
-      },
-      {
-        anchor: "test-types", heading: "3. Required test types",
-        blocks: [
-          { type: "label", text: "Unit tests — all modules" },
-          { type: "ul", items: ["Cover all exported functions and classes.", "Pure logic isolated from I/O. Use mocks for all external dependencies.", "Run in < 30 seconds total."] },
-          { type: "label", text: "Integration tests — modules with external dependencies" },
-          { type: "ul", items: ["Test the full interaction with a real database, queue, or external service (use containers in CI).", "Cover all service boundaries defined in the dependency map."] },
-          { type: "label", text: "End-to-end tests — user-facing modules" },
-          { type: "ul", items: ["Cover every acceptance criterion that involves a user interaction.", "Run against the deployed staging environment.", "Assertions on visible UI state, not internal implementation."] },
-          { type: "label", text: "Regression tests — dependency-driven" },
-          { type: "ul", items: ["Automatically scoped by the dependency map for each module change.", "Must achieve 100% pass rate — no exemptions."] },
-        ],
-      },
-      {
-        anchor: "frameworks", heading: "4. Approved frameworks",
-        blocks: [
-          { type: "ul", items: ["Unit & integration: Vitest (preferred) or Jest.", "E2E: Playwright (preferred). Cypress is grandfathered for existing suites.", "Contract testing: Pact.", "Visual regression: Chromatic (design system only)."] },
-        ],
-      },
-      {
-        anchor: "ci-pipeline", heading: "5. CI pipeline structure",
-        blocks: [
-          { type: "p", text: "Tests run in the following order to fail fast: lint → build → unit → integration → E2E → regression. Each stage must pass before the next begins." },
-          { type: "ul", items: ["Unit and integration tests run on all PRs.", "E2E tests run only on PRs targeting main or on a scheduled nightly run.", "Regression tests run when the dependency map indicates impact.", "Test results are archived as CI artifacts for 30 days."] },
-        ],
-      },
-    ],
-  },
-
-  /* ── 8. Security constraints ────────────────────────────── */
-  {
-    id: "security-constraints",
-    title: "Security constraints",
-    icon: "lockSimple",
-    category: "Governance",
-    shortDescription: "Authentication requirements, data handling rules, threat model guidelines, and OWASP compliance.",
-    tags: ["security", "auth", "owasp", "privacy", "compliance"],
-    article: [
-      {
-        anchor: "purpose", heading: "1. Purpose",
-        blocks: [
-          { type: "p", text: "Security is a non-negotiable constraint on all modules. This document defines the minimum security requirements derived from the OWASP Top 10 and our internal threat model. Every engineer is responsible for understanding and applying these constraints." },
-        ],
-      },
-      {
-        anchor: "authentication", heading: "2. Authentication requirements",
-        blocks: [
-          { type: "ul", items: ["All non-public endpoints must validate a JWT with HS256 or RS256.", "Tokens expire in 60 minutes; refresh tokens expire in 30 days.", "Failed login attempts must be rate-limited: five attempts per 15-minute window per IP.", "Multi-factor authentication is mandatory for accounts with admin or deployment permissions.", "Password reset tokens must be single-use and expire within 30 minutes."] },
-        ],
-      },
-      {
-        anchor: "input-validation", heading: "3. Input validation",
-        blocks: [
-          { type: "p", text: "All data entering the system at an external boundary (API endpoints, webhooks, file uploads) must be validated and sanitised before use." },
-          { type: "ul", items: ["Use schema validation (Zod or Joi) at every API boundary — never trust client input.", "Parameterised queries only — string interpolation into SQL or NoSQL queries is prohibited.", "HTML output must be escaped — use the platform's XSS-safe rendering utilities.", "File uploads must validate MIME type server-side, not from the client-supplied Content-Type."] },
-        ],
-      },
-      {
-        anchor: "secrets", heading: "4. Secrets management",
-        blocks: [
-          { type: "ul", items: ["No secrets in source code, commit history, or environment variable files committed to the repo.", "Use the platform secrets manager (Vault or equivalent) for all sensitive values.", "Rotate secrets immediately if accidental exposure is suspected.", "Log access to secrets — unexplained access patterns must trigger an incident review."] },
-        ],
-      },
-      {
-        anchor: "vulnerability-reporting", heading: "5. Vulnerability reporting",
-        blocks: [
-          { type: "p", text: "Security vulnerabilities found in the platform must be reported immediately to the security lead via the private security channel — do not open a public issue." },
-          { type: "ul", items: ["Critical vulnerabilities (CVSS >= 9.0) must be patched and deployed within 24 hours.", "High severity (CVSS 7.0–8.9) must be resolved within one week.", "All resolved vulnerabilities must have a post-incident writeup."] },
         ],
       },
     ],
@@ -948,47 +483,85 @@ const DOC_SECTIONS = [
     ],
   },
 
-  /* ── 9. Release policies ─────────────────────────────────── */
+  /* ── API Specification ───────────────────────────────────── */
   {
-    id: "release-policies",
-    title: "Release policies",
+    id: "api-specification",
+    title: "RoundRush API Specification",
     icon: "rocket",
-    category: "Workflow",
-    shortDescription: "Deployment process, release gates, version numbering, and rollback procedures for all environments.",
-    tags: ["release", "deployment", "versioning", "rollback", "pipeline"],
+    category: "Engineering",
+    shortDescription: "How external repositories integrate with RoundRush V2: project connection, Copilot integration, API responsibilities, and required repository structure.",
+    tags: ["api", "integration", "copilot", "sync", "repository", "automation"],
     article: [
       {
         anchor: "purpose", heading: "1. Purpose",
         blocks: [
-          { type: "p", text: "This document defines the end-to-end process for deploying software from a merged main branch to production. It covers release gates, versioning conventions, feature flag lifecycle, and the rollback procedure." },
+          { type: "p", text: "The RoundRush API module defines how external repositories integrate with RoundRush V2. This is not merely a technical API description — it is the backbone of the synchronisation model between repository truth and RoundRush visualisation." },
         ],
       },
       {
-        anchor: "pipeline", heading: "2. Deployment pipeline",
+        anchor: "project-integration", heading: "2. Project Integration Flow",
         blocks: [
-          { type: "p", text: "Deployments follow a promotion model: main → Staging → Pre-production → Production. Each promotion is triggered manually after the previous environment is verified." },
-          { type: "ul", items: ["Staging is auto-deployed on every merge to main.", "Pre-production is deployed on-demand for release candidate verification.", "Production deployment requires explicit approval from the release owner.", "All deployments are immutable artefacts — no patching deployed containers."] },
+          { type: "p", text: "Each new project must complete the following steps before any synchronisation can occur. No project may operate in V2 without formal API integration." },
+          { type: "ul", items: ["Connect the repository to RoundRush.", "Generate a secure project-specific API key.", "Store the key securely in project environment variables.", "Configure Copilot integration for automated synchronisation."] },
         ],
       },
       {
-        anchor: "release-gates", heading: "3. Release gates",
+        anchor: "copilot-integration", heading: "3. Copilot Integration Requirement",
         blocks: [
-          { type: "p", text: "A release candidate may not be promoted to production unless all of the following gates are satisfied:" },
-          { type: "ul", items: ["All seven Acceptance Laws are in Pass status for every module in the release.", "Pre-production smoke tests green.", "No open P1 or P2 incidents in the system.", "Release notes prepared and reviewed.", "On-call engineer confirmed and available for the deployment window."] },
+          { type: "p", text: "Every integrated repository must include a copilot-instructions directory at the root level. This directory must not become a monolithic instruction file — it must reference modular sub-files to avoid bloating and degradation over time." },
+          { type: "label", text: "Required structure" },
+          { type: "code", label: "Copilot instructions layout", lines: [
+            "/copilot-instructions/",
+            "/copilot-instructions/main.md",
+            "/copilot-instructions/rr-sync.md",
+            "/copilot-instructions/testing.md",
+            "/copilot-instructions/governance.md",
+          ]},
+          { type: "label", text: "Mandatory synchronisation paragraph" },
+          { type: "p", text: "Inside rr-sync.md, the following paragraph must be included verbatim: \"At each new commit, all progress and structural changes must be mirrored to RoundRush via the RoundRush API. The AI agent must evaluate updated requirements, modified modules, testing results, coverage metrics, documentation changes, and dependency updates, and push the corresponding status update to RoundRush automatically.\"" },
+          { type: "ul", items: ["Automatic API push after every commit.", "Deterministic synchronisation.", "Elimination of manual reporting."] },
         ],
       },
       {
-        anchor: "versioning", heading: "4. Versioning rules",
+        anchor: "api-responsibilities", heading: "4. API Responsibilities",
         blocks: [
-          { type: "p", text: "Platform versions follow Semantic Versioning (semver): MAJOR.MINOR.PATCH." },
-          { type: "ul", items: ["MAJOR: breaking changes to any public API or significant UX overhaul.", "MINOR: new features that are backward-compatible.", "PATCH: bug fixes, performance improvements, and documentation updates.", "Release versions are tagged in git: v1.4.2.", "Pre-release candidates: v1.4.2-rc.1."] },
+          { type: "p", text: "The RoundRush V2 API must accept and process all state changes from connected repositories. It is designed for AI readability, with deterministic request schemas, explicit payload examples, and validation constraints." },
+          { type: "ul", items: [
+            "Accept updates about requirement progress.",
+            "Accept validation of Acceptance Laws.",
+            "Track branch creation, PR status, and merge state.",
+            "Track test execution results and coverage.",
+            "Store dependency graph updates.",
+            "Log sprint associations.",
+            "Register user role (developer, QA, designer).",
+          ]},
         ],
       },
       {
-        anchor: "rollback", heading: "5. Rollback procedure",
+        anchor: "repository-structure", heading: "5. Repository Organisation Guidelines",
         blocks: [
-          { type: "p", text: "If a production incident is caused by a release, the rollback decision must be made within 15 minutes of incident confirmation." },
-          { type: "ul", items: ["Rollback is performed by promoting the previous verified production artefact — not by reverting the code.", "Database migrations that are not backward-compatible block immediate rollback; a fast-forward fix must be applied instead.", "Post-rollback, a mandatory post-incident review must be completed within 48 hours.", "The root cause must be fixed and verified in staging before the next production deployment."] },
+          { type: "p", text: "The API specification defines a required project boilerplate structure to ensure consistent mirroring between repository layout and RoundRush visualisation." },
+          { type: "code", label: "Required project structure", lines: [
+            "/requirements/",
+            "/requirements/modules/",
+            "/tests/",
+            "/tests/unit/",
+            "/tests/integration/",
+            "/tests/e2e/",
+            "/docs/",
+            "/docs/uml/",
+            "/project-governance/",
+            "/dependency-map/",
+            "/prototypes/",
+          ]},
+          { type: "label", text: "Documentation rules" },
+          { type: "ul", items: [
+            "Where testing suites must reside.",
+            "How dependency maps must be stored.",
+            "How requirements are structured.",
+            "Naming conventions for modules and features.",
+            "Documentation update rules.",
+          ]},
         ],
       },
     ],
