@@ -16,7 +16,7 @@ const TAB_SYNC_TEXT = "Last sync: 28/02/26"
 const TAB_HEADER_ITEMS = [
   { id: "dashboard",    label: "Dashboard",    path: null },
   { id: "requirements", label: "Requirements", path: "/requirements/module" },
-  { id: "roadmap",      label: "Roadmap",      path: null },
+  { id: "roadmap",      label: "Roadmap",      path: "/planning/roadmap", activePrefix: "/planning/roadmap" },
   { id: "planning",     label: "Planning",     path: "/planning/kanban", activePrefix: "/planning" },
   { id: "design",       label: "Design",       path: "/design/tab" },
   { id: "dependencies", label: "Dependencies", path: "/dependencies/uml" },
@@ -25,9 +25,24 @@ const TAB_HEADER_ITEMS = [
 ]
 
 function renderTabHeader(currentPath) {
-  const tabs = TAB_HEADER_ITEMS.map(tab => {
+  // Find all tabs that match the current path
+  const matches = TAB_HEADER_ITEMS.filter(tab => {
     const activePath = tab.activePrefix || tab.path
-    const isActive = !!(activePath && currentPath.startsWith(activePath))
+    return activePath && currentPath.startsWith(activePath)
+  })
+  
+  // If multiple matches, pick the most specific one (longest activePrefix)
+  let mostSpecificTab = null
+  if (matches.length > 0) {
+    mostSpecificTab = matches.reduce((longest, current) => {
+      const currentPrefix = current.activePrefix || current.path
+      const longestPrefix = longest.activePrefix || longest.path
+      return (currentPrefix.length > longestPrefix.length) ? current : longest
+    })
+  }
+  
+  const tabs = TAB_HEADER_ITEMS.map(tab => {
+    const isActive = mostSpecificTab === tab
     const tabState = tab.path ? (isActive ? "selected" : "default") : "disabled"
     const tabMarkup = `<rr-tabs type="horizontal" state="${tabState}" label="${tab.label}"></rr-tabs>`
 

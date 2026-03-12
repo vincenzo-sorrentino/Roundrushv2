@@ -12,6 +12,7 @@ import { renderDesignTabFlow, mountDesignTabFlow } from "../flows/design-tab/ind
 import { renderOldSprintFlow, mountOldSprintFlow } from "../flows/old-sprint/index.js"
 import { renderReleaseNotesFlow, mountReleaseNotesFlow } from "../flows/release-notes/index.js"
 import { renderTestingTabFlow, initTestingTab } from "../flows/testing-tab/index.js"
+import { renderRoadmapFlow, mountRoadmapFlow } from "../flows/roadmap/index.js"
 
 const routes = [
   {
@@ -120,6 +121,13 @@ const routes = [
     path: "/planning/release-notes",
     render: renderReleaseNotesFlow,
     mount: mountReleaseNotesFlow,
+    status: "approved"
+  },
+  {
+    id: "roadmap",
+    path: "/planning/roadmap",
+    render: renderRoadmapFlow,
+    mount: mountRoadmapFlow,
     status: "approved"
   }
 ]
