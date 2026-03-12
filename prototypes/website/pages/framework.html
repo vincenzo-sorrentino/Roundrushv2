@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Roundrush framework — a philosophy for structured software execution with humans and AI agents working together." />
+  <title>Framework — Roundrush</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/website/css/main.css" />
+  <link rel="stylesheet" href="/website/css/layout.css" />
+  <link rel="stylesheet" href="/website/css/components.css" />
+</head>
+<body>
+
+<!-- Header & footer injected by components.js -->
+
+<div class="ws-page">
+  <main class="ws-page-content" id="main-content">
+
+    <!-- ── Page Intro ────────────────────────────────────────── -->
+    <section class="ws-page-intro" aria-labelledby="framework-heading">
+      <div class="ws-container">
+        <h1 class="ws-page-intro-title" id="framework-heading">
+          The Roundrush framework
+        </h1>
+        <p class="ws-page-intro-subtitle">
+          Roundrush is more than a tool. It defines how humans and AI agents
+          collaborate to execute software — with clarity, accountability,
+          and a shared understanding of what needs to happen.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Philosophy sections ───────────────────────────────── -->
+    <section class="ws-section" aria-label="Framework principles">
+      <div class="ws-container ws-container--narrow">
+
+        <!-- 01 — Structure over chaos -->
+        <div class="ws-philosophy-block">
+          <div class="ws-philosophy-number" aria-hidden="true">01</div>
+          <div class="ws-philosophy-content">
+            <h2 class="ws-philosophy-title" id="principle-1">Structure over chaos</h2>
+            <p class="ws-philosophy-body">
+              Traditional task tools were built for lists, not for execution. They
+              capture work but don't define how work flows. Teams end up importing
+              their own implicit processes — some formal, most informal — and
+              the result is fragmentation. Context lives in people's heads.
+              Decisions get lost in chat threads. New team members — human or AI —
+              have no structured way to understand what's happening or why.
+            </p>
+            <p class="ws-philosophy-body" style="margin-top: 1rem;">
+              Roundrush starts with structure. Work isn't just a list of tasks;
+              it's a hierarchy with requirements flowing into epics, modules, and
+              executable work items. That structure is the foundation everything
+              else is built on.
+            </p>
+          </div>
+        </div>
+
+        <!-- 02 — Humans and agents share the same system -->
+        <div class="ws-philosophy-block">
+          <div class="ws-philosophy-number" aria-hidden="true">02</div>
+          <div class="ws-philosophy-content">
+            <h2 class="ws-philosophy-title" id="principle-2">Humans and agents share the same system</h2>
+            <p class="ws-philosophy-body">
+              Most AI coding tools bolt onto existing workflows as an afterthought.
+              An agent opens a file, writes some code, and returns a result. It has
+              no knowledge of priorities, dependencies, or decisions that led to
+              the current state of the work. It cannot coordinate reliably, because
+              it has no shared context with the team.
+            </p>
+            <p class="ws-philosophy-body" style="margin-top: 1rem;">
+              In Roundrush, AI agents are first-class participants. They read the
+              same requirements, operate within the same task hierarchy, and report
+              progress through the same mechanisms as humans. When an agent takes
+              an action, it's visible. When a human reviews, the agent's context is
+              fully available. The system treats both as collaborators within a
+              shared execution framework.
+            </p>
+          </div>
+        </div>
+
+        <!-- 03 — Execution with accountability -->
+        <div class="ws-philosophy-block">
+          <div class="ws-philosophy-number" aria-hidden="true">03</div>
+          <div class="ws-philosophy-content">
+            <h2 class="ws-philosophy-title" id="principle-3">Execution with accountability</h2>
+            <p class="ws-philosophy-body">
+              Shipping software reliably requires more than good intentions. It
+              requires clarity at every level: who owns what, what done actually
+              means, what needs to happen before something can move forward, and
+              who reviewed what and when. Without that structure, accountability
+              diffuses and delivery suffers.
+            </p>
+            <p class="ws-philosophy-body" style="margin-top: 1rem;">
+              Roundrush builds accountability into the system. Every work item has
+              an owner. Every task has defined completion criteria. Dependencies are
+              explicit. Reviews are traceable. The full history of a requirement —
+              from definition to delivery — is preserved in one place, accessible
+              to any team member or agent that needs it.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Core principles grid ──────────────────────────────── -->
+    <section class="ws-section ws-section--alt ws-section--bordered-top" aria-labelledby="principles-heading">
+      <div class="ws-container">
+
+        <div class="ws-section-header ws-section-header--center">
+          <h2 class="ws-section-title" id="principles-heading">Core principles</h2>
+          <p class="ws-section-subtitle">
+            The ideas that define how Roundrush approaches software execution.
+          </p>
+        </div>
+
+        <div class="ws-grid-3" role="list">
+
+          <article class="ws-card" role="listitem">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="14" height="14" rx="2"/>
+                <path d="M3 8h14M8 3v5"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Hierarchy before tasks</h3>
+            <p class="ws-card-body">
+              Requirements define outcomes. Epics define scope. Modules define
+              deliverables. Tasks define action. This hierarchy is non-negotiable.
+            </p>
+          </article>
+
+          <article class="ws-card" role="listitem">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 4v12M4 10h12"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Explicit over implicit</h3>
+            <p class="ws-card-body">
+              Ownership, criteria, dependencies, and decisions must be explicit
+              in the system — not assumed from memory or context.
+            </p>
+          </article>
+
+          <article class="ws-card" role="listitem">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="10" cy="10" r="7"/>
+                <path d="M10 6v4l3 3"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Progress is always visible</h3>
+            <p class="ws-card-body">
+              No item exists in isolation. Progress rolls up from tasks to modules
+              to epics. Blockers surface. Done means verifiably complete.
+            </p>
+          </article>
+
+          <article class="ws-card" role="listitem">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="7" cy="10" r="3"/>
+                <circle cx="15" cy="10" r="3"/>
+                <path d="M10 10h2"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Agents are collaborators</h3>
+            <p class="ws-card-body">
+              AI agents participate in the same system as humans. They are
+              not tools bolted on — they are team members with context.
+            </p>
+          </article>
+
+          <article class="ws-card" role="listitem">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6l3 3-3 3M11 12h5"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Reviews close the loop</h3>
+            <p class="ws-card-body">
+              Every piece of work that ships goes through a structured review
+              tied to its original criteria. Execution is traceable end-to-end.
+            </p>
+          </article>
+
+          <article class="ws-card" role="listitem">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 14l3-3 3 3 6-6"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Simple by design</h3>
+            <p class="ws-card-body">
+              The framework is intentionally lean. No ceremony for its own sake.
+              Structure exists to reduce friction, not to add it.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Closing statement ──────────────────────────────────── -->
+    <section class="ws-section ws-section--bordered-top" aria-label="Framework closing statement">
+      <div class="ws-container ws-container--narrow">
+        <blockquote style="
+          font-size: var(--ws-font-size-2xl);
+          font-weight: var(--ws-font-weight-medium);
+          line-height: var(--ws-line-height-snug);
+          color: var(--ws-color-text);
+          letter-spacing: -0.015em;
+          border-left: 3px solid var(--ws-color-primary);
+          padding-left: var(--ws-space-8);
+          margin: 0;
+        ">
+          Roundrush is designed for the next generation of software teams —
+          where humans and AI agents build together, with shared context
+          and a structured system that keeps everything aligned.
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ── CTA ───────────────────────────────────────────────── -->
+    <section class="ws-section ws-section--dark" aria-labelledby="framework-cta-heading">
+      <div class="ws-container">
+        <div class="ws-cta">
+          <h2 class="ws-cta-title ws-cta-title--dark" id="framework-cta-heading">
+            Start building with the<br>Roundrush framework.
+          </h2>
+          <div class="ws-cluster ws-cluster--center">
+            <a href="/auth/signup/team" class="ws-btn ws-btn--white ws-btn--lg">Sign up</a>
+            <a href="/auth/login/default" class="ws-btn ws-btn--white-outline ws-btn--lg">Login</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Scripts -->
+<script src="/website/js/components.js"></script>
+<script src="/website/js/navigation.js"></script>
+
+</body>
+</html>

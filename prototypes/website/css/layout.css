@@ -1,0 +1,434 @@
+/* ─────────────────────────────────────────────────────────────
+   layout.css — Roundrush Marketing Website
+   Container, section, grid, and structural layout utilities
+   ───────────────────────────────────────────────────────────── */
+
+/* Container ─────────────────────────────────────────────────── */
+.ws-container {
+  width: 100%;
+  max-width: var(--ws-max-width);
+  margin-inline: auto;
+  padding-inline: var(--ws-space-8);
+}
+
+.ws-container--narrow {
+  max-width: 900px;
+}
+
+.ws-container--text {
+  max-width: var(--ws-max-width-text);
+}
+
+/* Page wrapper ──────────────────────────────────────────────── */
+.ws-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.ws-page-content {
+  flex: 1;
+  padding-top: var(--ws-header-height);
+}
+
+/* Sections ──────────────────────────────────────────────────── */
+.ws-section {
+  padding-block: var(--ws-space-24);
+}
+
+.ws-section--sm {
+  padding-block: var(--ws-space-16);
+}
+
+.ws-section--lg {
+  padding-block: var(--ws-space-32);
+}
+
+.ws-section--hero {
+  padding-top: var(--ws-space-32);
+  padding-bottom: 0;
+}
+
+.ws-section--alt {
+  background-color: var(--ws-color-bg-subtle);
+}
+
+.ws-section--bordered-top {
+  border-top: 1px solid var(--ws-color-border);
+}
+
+.ws-section--bordered-bottom {
+  border-bottom: 1px solid var(--ws-color-border);
+}
+
+/* Section header ────────────────────────────────────────────── */
+.ws-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ws-space-2);
+  font-size: var(--ws-font-size-xs);
+  font-weight: var(--ws-font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ws-color-primary);
+  margin-bottom: var(--ws-space-4);
+}
+
+.ws-section-title {
+  font-size: var(--ws-font-size-4xl);
+  font-weight: var(--ws-font-weight-semibold);
+  letter-spacing: -0.03em;
+  line-height: var(--ws-line-height-tight);
+  color: var(--ws-color-text);
+  margin-bottom: var(--ws-space-5);
+}
+
+.ws-section-subtitle {
+  font-size: var(--ws-font-size-lg);
+  line-height: 1.65;
+  color: var(--ws-color-text-muted);
+}
+
+/* Center variant */
+.ws-section-center {
+  text-align: center;
+}
+
+.ws-section-center .ws-section-label {
+  justify-content: center;
+}
+
+.ws-section-center .ws-section-subtitle {
+  margin-inline: auto;
+  max-width: 540px;
+}
+
+/* Grid ──────────────────────────────────────────────────────── */
+.ws-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ws-space-5);
+}
+
+.ws-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ws-space-5);
+}
+
+.ws-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ws-space-5);
+}
+
+/* Split (50/50 or 45/55) ─────────────────────────────────────── */
+.ws-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ws-space-20);
+  align-items: center;
+}
+
+.ws-split--55 {
+  grid-template-columns: 1fr 1.1fr;
+}
+
+.ws-split--reverse > *:first-child { order: 2; }
+.ws-split--reverse > *:last-child  { order: 1; }
+
+/* Stack ─────────────────────────────────────────────────────── */
+.ws-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ws-space-4);
+}
+
+.ws-stack--sm { gap: var(--ws-space-2); }
+.ws-stack--lg { gap: var(--ws-space-8); }
+
+/* Cluster ───────────────────────────────────────────────────── */
+.ws-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ws-space-3);
+}
+
+.ws-cluster--center { justify-content: center; }
+
+/* Divider ───────────────────────────────────────────────────── */
+.ws-divider {
+  border: none;
+  border-top: 1px solid var(--ws-color-border);
+}
+
+/* Responsive ────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .ws-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ws-container {
+    padding-inline: var(--ws-space-5);
+  }
+
+  .ws-section {
+    padding-block: var(--ws-space-16);
+  }
+
+  .ws-section--hero {
+    padding-top: var(--ws-space-20);
+  }
+
+  .ws-section-title {
+    font-size: var(--ws-font-size-3xl);
+  }
+
+  .ws-grid-2,
+  .ws-grid-3,
+  .ws-split {
+    grid-template-columns: 1fr;
+    gap: var(--ws-space-8);
+  }
+
+  .ws-split--reverse > *:first-child { order: unset; }
+  .ws-split--reverse > *:last-child  { order: unset; }
+}
+
+@media (max-width: 480px) {
+  .ws-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .ws-section-title {
+    font-size: var(--ws-font-size-2xl);
+  }
+}
+
+/* Container ─────────────────────────────────────────────────── */
+.ws-container {
+  width: 100%;
+  max-width: var(--ws-max-width);
+  margin-inline: auto;
+  padding-inline: var(--ws-space-6);
+}
+
+.ws-container--narrow {
+  max-width: 880px;
+}
+
+.ws-container--prose {
+  max-width: var(--ws-max-width-prose);
+}
+
+/* Page wrapper ──────────────────────────────────────────────── */
+.ws-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.ws-page-content {
+  flex: 1;
+  padding-top: var(--ws-header-height);
+}
+
+/* Sections ──────────────────────────────────────────────────── */
+.ws-section {
+  padding-block: var(--ws-space-24);
+}
+
+.ws-section--sm {
+  padding-block: var(--ws-space-16);
+}
+
+.ws-section--lg {
+  padding-block: var(--ws-space-32);
+}
+
+.ws-section--hero {
+  padding-block: var(--ws-space-32);
+  padding-bottom: var(--ws-space-28);
+}
+
+.ws-section--alt {
+  background-color: var(--ws-color-bg-subtle);
+}
+
+.ws-section--dark {
+  background-color: var(--ws-color-text);
+  color: var(--ws-color-text-inverse);
+}
+
+.ws-section--dark h1,
+.ws-section--dark h2,
+.ws-section--dark h3,
+.ws-section--dark h4 {
+  color: var(--ws-color-text-inverse);
+}
+
+.ws-section--dark p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.ws-section--bordered-top {
+  border-top: 1px solid var(--ws-color-border);
+}
+
+/* Section header ────────────────────────────────────────────── */
+.ws-section-header {
+  max-width: var(--ws-max-width-prose);
+  margin-bottom: var(--ws-space-12);
+}
+
+.ws-section-header--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ws-section-label {
+  display: inline-block;
+  font-size: var(--ws-font-size-sm);
+  font-weight: var(--ws-font-weight-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ws-color-primary);
+  margin-bottom: var(--ws-space-3);
+}
+
+.ws-section-title {
+  font-size: var(--ws-font-size-4xl);
+  font-weight: var(--ws-font-weight-semibold);
+  letter-spacing: -0.025em;
+  line-height: var(--ws-line-height-tight);
+  color: var(--ws-color-text);
+  margin-bottom: var(--ws-space-4);
+}
+
+.ws-section-subtitle {
+  font-size: var(--ws-font-size-lg);
+  line-height: var(--ws-line-height-relaxed);
+  color: var(--ws-color-text-muted);
+  max-width: 560px;
+}
+
+.ws-section-header--center .ws-section-subtitle {
+  margin-inline: auto;
+}
+
+/* Grid Systems ──────────────────────────────────────────────── */
+.ws-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ws-space-6);
+}
+
+.ws-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ws-space-6);
+}
+
+.ws-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ws-space-5);
+}
+
+.ws-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ws-space-16);
+  align-items: center;
+}
+
+.ws-split--reverse > *:first-child {
+  order: 2;
+}
+
+.ws-split--reverse > *:last-child {
+  order: 1;
+}
+
+/* Stack (vertical flex) ─────────────────────────────────────── */
+.ws-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ws-space-4);
+}
+
+.ws-stack--sm  { gap: var(--ws-space-2); }
+.ws-stack--md  { gap: var(--ws-space-6); }
+.ws-stack--lg  { gap: var(--ws-space-8); }
+
+/* Horizontal cluster ─────────────────────────────────────────── */
+.ws-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ws-space-3);
+}
+
+.ws-cluster--center {
+  justify-content: center;
+}
+
+/* Divider ───────────────────────────────────────────────────── */
+.ws-divider {
+  border: none;
+  border-top: 1px solid var(--ws-color-border);
+}
+
+/* Responsive ────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .ws-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --ws-space-24: 80px;
+    --ws-space-32: 96px;
+    --ws-space-28: 80px;
+  }
+
+  h1 { font-size: var(--ws-font-size-4xl); }
+  h2 { font-size: var(--ws-font-size-3xl); }
+
+  .ws-section-title {
+    font-size: var(--ws-font-size-3xl);
+  }
+
+  .ws-grid-2,
+  .ws-grid-3,
+  .ws-split {
+    grid-template-columns: 1fr;
+  }
+
+  .ws-grid-3 {
+    gap: var(--ws-space-4);
+  }
+
+  .ws-split {
+    gap: var(--ws-space-10);
+  }
+
+  .ws-split--reverse > *:first-child { order: unset; }
+  .ws-split--reverse > *:last-child  { order: unset; }
+
+  .ws-container {
+    padding-inline: var(--ws-space-5);
+  }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: var(--ws-font-size-3xl); }
+
+  .ws-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}

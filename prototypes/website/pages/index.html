@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Roundrush is a structured execution system for software teams and AI agents — plan, build, review, and ship with clarity." />
+  <title>Roundrush — Build software with humans and AI agents working in sync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/website/css/main.css" />
+  <link rel="stylesheet" href="/website/css/layout.css" />
+  <link rel="stylesheet" href="/website/css/components.css" />
+</head>
+<body>
+
+<div class="ws-page">
+  <main id="main-content" class="ws-page-content">
+
+    <!-- ════════════════════════════════════════════════════════
+         HERO
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--hero ws-hero" aria-labelledby="hero-heading">
+      <div class="ws-container">
+        <div class="ws-hero-inner">
+
+          <div class="ws-hero-badge" aria-label="Product status">
+            <span class="ws-hero-badge-dot" aria-hidden="true"></span>
+            Now in development
+          </div>
+
+          <h1 class="ws-hero-title" id="hero-heading">
+            Build software with humans<br>and AI agents in sync
+          </h1>
+
+          <p class="ws-hero-subtitle">
+            Roundrush is a structured execution system. It gives teams and agents
+            shared context, clear ownership, and traceable workflows — from
+            requirement to release.
+          </p>
+
+          <div class="ws-hero-actions">
+            <a href="/auth/signup/team" class="ws-btn ws-btn--primary ws-btn--lg">
+              Get started free
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </a>
+            <a href="/auth/login/default" class="ws-btn ws-btn--outline ws-btn--lg">Login</a>
+          </div>
+
+          <p class="ws-hero-hint">No credit card required &nbsp;·&nbsp; Free during development</p>
+
+          <!-- Browser chrome frame -->
+          <div class="ws-product-frame" role="img" aria-label="Roundrush product interface preview">
+            <div class="ws-product-frame-bar" aria-hidden="true">
+              <span class="ws-product-frame-dot"></span>
+              <span class="ws-product-frame-dot"></span>
+              <span class="ws-product-frame-dot"></span>
+              <span class="ws-product-frame-url">app.roundrush.com</span>
+            </div>
+            <div class="ws-product-frame-body">
+              <div class="ws-product-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <path d="M3 9h18M9 21V9"/>
+                </svg>
+                <span>Product screenshot</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         LOGO STRIP
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-logo-strip" aria-label="Built for teams using">
+      <div class="ws-container">
+        <p class="ws-logo-strip-label">Built for teams using</p>
+        <ul class="ws-logo-strip-row" role="list">
+          <li class="ws-logo-strip-item" aria-label="GitHub">GitHub</li>
+          <li class="ws-logo-strip-item" aria-label="Linear">Linear</li>
+          <li class="ws-logo-strip-item" aria-label="Notion">Notion</li>
+          <li class="ws-logo-strip-item" aria-label="Cursor">Cursor</li>
+          <li class="ws-logo-strip-item" aria-label="Slack">Slack</li>
+          <li class="ws-logo-strip-item" aria-label="Figma">Figma</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PROBLEM  (what breaks without a system)
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--bordered-top" aria-labelledby="problem-heading">
+      <div class="ws-container">
+        <div class="ws-split">
+
+          <header>
+            <span class="ws-section-label">The problem</span>
+            <h2 class="ws-section-title" id="problem-heading">
+              Execution breaks when context is fragmented
+            </h2>
+            <p class="ws-section-subtitle">
+              Modern teams juggle scattered tools, unclear workflows, and AI agents
+              that lack the structure to act reliably. The result: slower delivery,
+              higher overhead, and work that silently drifts.
+            </p>
+          </header>
+
+          <ul class="ws-stack ws-stack--lg" role="list">
+
+            <li class="ws-card ws-card--subtle">
+              <div class="ws-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 5h14M3 10h10M3 15h6"/>
+                </svg>
+              </div>
+              <h3 class="ws-card-title">Work scattered across tools</h3>
+              <p class="ws-card-body">No single source of truth. Requirements live in Notion, tasks in Linear, context in Slack — nothing connects.</p>
+            </li>
+
+            <li class="ws-card ws-card--subtle">
+              <div class="ws-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="5" cy="10" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="15" cy="15" r="2"/>
+                  <path d="M7 9.5L13 5.8M7 10.5L13 14.2"/>
+                </svg>
+              </div>
+              <h3 class="ws-card-title">Invisible dependencies</h3>
+              <p class="ws-card-body">Blockers surface at the worst moment. Nobody sees the dependency graph until it's already delaying the sprint.</p>
+            </li>
+
+            <li class="ws-card ws-card--subtle">
+              <div class="ws-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="8" height="10" rx="1"/>
+                  <path d="M12 6h4M12 10h3"/>
+                  <circle cx="14.5" cy="3.5" r="1.5"/>
+                </svg>
+              </div>
+              <h3 class="ws-card-title">AI agents without context</h3>
+              <p class="ws-card-body">Copilot and agents work in a vacuum. Without shared structure, they produce output that doesn't fit the bigger picture.</p>
+            </li>
+
+          </ul>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         SOLUTION CARDS
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--alt ws-section--bordered-top" aria-labelledby="solution-heading">
+      <div class="ws-container">
+
+        <header class="ws-section-center" style="margin-bottom: var(--ws-space-12);">
+          <span class="ws-section-label">The solution</span>
+          <h2 class="ws-section-title" id="solution-heading">
+            One structured layer for everything
+          </h2>
+          <p class="ws-section-subtitle">
+            Roundrush connects requirements, tasks, people, and agents inside
+            a single execution framework with clear hierarchy and traceable progress.
+          </p>
+        </header>
+
+        <ul class="ws-grid-4" role="list">
+
+          <li class="ws-card ws-card--subtle">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 5h14M3 10h10M3 15h7"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Structured hierarchy</h3>
+            <p class="ws-card-body">Epics → modules → tasks. Every piece of work has a place and a clear owner.</p>
+          </li>
+
+          <li class="ws-card ws-card--subtle">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="10" cy="10" r="7"/>
+                <path d="M10 7v3l2.5 1.5"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Clear ownership</h3>
+            <p class="ws-card-body">Every task has one explicit owner — human or agent — with visible accountability.</p>
+          </li>
+
+          <li class="ws-card ws-card--subtle">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="5" cy="10" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="15" cy="15" r="2"/>
+                <path d="M7 9.5L13 5.8M7 10.5L13 14.2"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Agent collaboration</h3>
+            <p class="ws-card-body">AI agents operate in the same workflows as humans, with shared context and structured outputs.</p>
+          </li>
+
+          <li class="ws-card ws-card--subtle">
+            <div class="ws-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 14l4-4 3 3 5-6"/>
+              </svg>
+            </div>
+            <h3 class="ws-card-title">Visible dependencies</h3>
+            <p class="ws-card-body">Dependency graphs map how work connects. Blockers are surfaced before they become delays.</p>
+          </li>
+
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         FEATURE SPLIT 1 — Requirements
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--bordered-top" aria-labelledby="feat-req-heading">
+      <div class="ws-container">
+        <div class="ws-split ws-split--55">
+
+          <div class="ws-feature-block" style="border-top: none; padding: 0;">
+            <span class="ws-feature-label">Requirements</span>
+            <h2 class="ws-feature-title" id="feat-req-heading">
+              From idea to executable spec in one place
+            </h2>
+            <p class="ws-feature-desc">
+              Write epics, modules, and acceptance criteria in a structured format
+              that both humans and agents can read and execute against.
+            </p>
+            <ul class="ws-feature-list" role="list">
+              <li class="ws-feature-list-item">Hierarchical requirement documents</li>
+              <li class="ws-feature-list-item">Linked acceptance criteria per module</li>
+              <li class="ws-feature-list-item">AI-readable spec format out of the box</li>
+            </ul>
+          </div>
+
+          <!-- UI mock -->
+          <div class="ws-feature-visual" aria-hidden="true">
+            <div class="ws-feature-visual-bar">
+              <span class="ws-feature-visual-bar-dot"></span>
+              <span class="ws-feature-visual-bar-dot"></span>
+              <span class="ws-feature-visual-bar-dot"></span>
+            </div>
+            <div class="ws-feature-visual-body">
+              <div class="ws-mock-row ws-mock-row--header">
+                <span class="ws-mock-bar ws-mock-bar--sm" style="background: var(--ws-color-border-strong); opacity: 0.4;"></span>
+                <span class="ws-mock-bar ws-mock-bar--md" style="flex:1"></span>
+              </div>
+              <div class="ws-mock-row">
+                <span class="ws-mock-dot ws-mock-dot--blue"></span>
+                <span class="ws-mock-bar ws-mock-bar--lg"></span>
+                <span class="ws-mock-tag ws-mock-tag--blue">Epic</span>
+              </div>
+              <div class="ws-mock-row" style="margin-left: 20px;">
+                <span class="ws-mock-dot ws-mock-dot--gray"></span>
+                <span class="ws-mock-bar ws-mock-bar--md"></span>
+                <span class="ws-mock-tag ws-mock-tag--green">Done</span>
+              </div>
+              <div class="ws-mock-row" style="margin-left: 20px;">
+                <span class="ws-mock-dot ws-mock-dot--yellow"></span>
+                <span class="ws-mock-bar ws-mock-bar--lg"></span>
+                <span class="ws-mock-tag ws-mock-tag--yellow">In review</span>
+              </div>
+              <div class="ws-mock-row" style="margin-left: 20px;">
+                <span class="ws-mock-dot ws-mock-dot--gray"></span>
+                <span class="ws-mock-bar ws-mock-bar--md"></span>
+                <span class="ws-mock-tag ws-mock-tag--gray">Planned</span>
+              </div>
+              <div class="ws-mock-row">
+                <span class="ws-mock-dot ws-mock-dot--blue"></span>
+                <span class="ws-mock-bar ws-mock-bar--md"></span>
+                <span class="ws-mock-tag ws-mock-tag--blue">Epic</span>
+              </div>
+              <div class="ws-mock-row" style="margin-left: 20px;">
+                <span class="ws-mock-dot ws-mock-dot--green"></span>
+                <span class="ws-mock-bar ws-mock-bar--lg"></span>
+                <span class="ws-mock-tag ws-mock-tag--green">Done</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         FEATURE SPLIT 2 — Kanban & sprints (reversed)
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--alt ws-section--bordered-top" aria-labelledby="feat-kanban-heading">
+      <div class="ws-container">
+        <div class="ws-split ws-split--55 ws-split--reverse">
+
+          <div class="ws-feature-block" style="border-top: none; padding: 0;">
+            <span class="ws-feature-label">Planning</span>
+            <h2 class="ws-feature-title" id="feat-kanban-heading">
+              Sprint boards that reflect actual structure
+            </h2>
+            <p class="ws-feature-desc">
+              Plan and track work in sprint boards that stay in sync with the
+              underlying requirement hierarchy — no manual alignment needed.
+            </p>
+            <ul class="ws-feature-list" role="list">
+              <li class="ws-feature-list-item">Sprint boards tied to epics and modules</li>
+              <li class="ws-feature-list-item">Progress visible at every level</li>
+              <li class="ws-feature-list-item">Closed sprint history and release notes</li>
+            </ul>
+          </div>
+
+          <!-- UI mock -->
+          <div class="ws-feature-visual" aria-hidden="true">
+            <div class="ws-feature-visual-bar">
+              <span class="ws-feature-visual-bar-dot"></span>
+              <span class="ws-feature-visual-bar-dot"></span>
+              <span class="ws-feature-visual-bar-dot"></span>
+            </div>
+            <div class="ws-feature-visual-body" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ws-space-3); align-items: start;">
+              <div class="ws-stack ws-stack--sm">
+                <div class="ws-mock-row ws-mock-row--header"><span class="ws-mock-bar ws-mock-bar--sm" style="background: var(--ws-color-border-strong); height: 6px;"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--gray"></span><span class="ws-mock-bar"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--gray"></span><span class="ws-mock-bar"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--gray"></span><span class="ws-mock-bar ws-mock-bar--md"></span></div>
+              </div>
+              <div class="ws-stack ws-stack--sm">
+                <div class="ws-mock-row ws-mock-row--header"><span class="ws-mock-bar ws-mock-bar--sm" style="background: #f59e0b; opacity: 0.5; height: 6px;"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--yellow"></span><span class="ws-mock-bar"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--yellow"></span><span class="ws-mock-bar ws-mock-bar--lg"></span></div>
+              </div>
+              <div class="ws-stack ws-stack--sm">
+                <div class="ws-mock-row ws-mock-row--header"><span class="ws-mock-bar ws-mock-bar--sm" style="background: #22c55e; opacity: 0.5; height: 6px;"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--green"></span><span class="ws-mock-bar"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--green"></span><span class="ws-mock-bar ws-mock-bar--md"></span></div>
+                <div class="ws-mock-row"><span class="ws-mock-dot ws-mock-dot--green"></span><span class="ws-mock-bar"></span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         FEATURE SPLIT 3 — Dependencies
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--bordered-top" aria-labelledby="feat-dep-heading">
+      <div class="ws-container">
+        <div class="ws-split ws-split--55">
+
+          <div class="ws-feature-block" style="border-top: none; padding: 0;">
+            <span class="ws-feature-label">Dependencies</span>
+            <h2 class="ws-feature-title" id="feat-dep-heading">
+              See how work connects before it blocks
+            </h2>
+            <p class="ws-feature-desc">
+              Visualize the full dependency graph across your project. Identify
+              circular dependencies and critical path bottlenecks before they
+              become emergencies.
+            </p>
+            <ul class="ws-feature-list" role="list">
+              <li class="ws-feature-list-item">Visual dependency graph per module</li>
+              <li class="ws-feature-list-item">Automatic blocker detection</li>
+              <li class="ws-feature-list-item">Critical path visibility</li>
+            </ul>
+          </div>
+
+          <!-- UI mock — dependency graph sketch -->
+          <div class="ws-feature-visual" aria-hidden="true">
+            <div class="ws-feature-visual-bar">
+              <span class="ws-feature-visual-bar-dot"></span>
+              <span class="ws-feature-visual-bar-dot"></span>
+              <span class="ws-feature-visual-bar-dot"></span>
+            </div>
+            <div class="ws-feature-visual-body" style="justify-content: center; align-items: center; min-height: 260px; position: relative;">
+              <svg width="260" height="180" viewBox="0 0 260 180" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1;">
+                <!-- edges -->
+                <line x1="50" y1="40" x2="130" y2="90" stroke="#e5e7eb" stroke-width="1.5"/>
+                <line x1="50" y1="140" x2="130" y2="90" stroke="#e5e7eb" stroke-width="1.5"/>
+                <line x1="130" y1="90" x2="210" y2="40" stroke="#0079ff" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <line x1="130" y1="90" x2="210" y2="140" stroke="#e5e7eb" stroke-width="1.5"/>
+                <!-- nodes -->
+                <circle cx="50" cy="40" r="14" fill="white" stroke="#e5e7eb" stroke-width="1.5"/>
+                <circle cx="50" cy="40" r="5" fill="#22c55e"/>
+                <circle cx="50" cy="140" r="14" fill="white" stroke="#e5e7eb" stroke-width="1.5"/>
+                <circle cx="50" cy="140" r="5" fill="#22c55e"/>
+                <circle cx="130" cy="90" r="16" fill="white" stroke="#0079ff" stroke-width="1.5"/>
+                <circle cx="130" cy="90" r="5" fill="#0079ff"/>
+                <circle cx="210" cy="40" r="14" fill="white" stroke="#f59e0b" stroke-width="1.5"/>
+                <circle cx="210" cy="40" r="5" fill="#f59e0b"/>
+                <circle cx="210" cy="140" r="14" fill="white" stroke="#e5e7eb" stroke-width="1.5"/>
+                <circle cx="210" cy="140" r="5" fill="#9ca3af"/>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         STATS
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-section ws-section--alt ws-section--bordered-top ws-section--bordered-bottom" aria-label="Key metrics">
+      <div class="ws-container ws-container--narrow">
+        <dl class="ws-stats">
+          <div class="ws-stat">
+            <dt class="ws-stat-label">Requirement levels</dt>
+            <dd class="ws-stat-value">3</dd>
+          </div>
+          <div class="ws-stat">
+            <dt class="ws-stat-label">Modules in development</dt>
+            <dd class="ws-stat-value">18</dd>
+          </div>
+          <div class="ws-stat">
+            <dt class="ws-stat-label">Works with AI agents</dt>
+            <dd class="ws-stat-value">Yes</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         CTA
+         ════════════════════════════════════════════════════════ -->
+    <section class="ws-cta-section" aria-labelledby="cta-heading">
+      <div class="ws-container">
+        <div class="ws-cta-inner">
+          <h2 class="ws-cta-title" id="cta-heading">
+            Start building with a<br>structured execution system
+          </h2>
+          <p class="ws-cta-subtitle">
+            Join the teams building more clearly — with requirements, sprints,
+            and AI agents working inside the same framework.
+          </p>
+          <div class="ws-cluster ws-cluster--center">
+            <a href="/auth/signup/team" class="ws-btn ws-btn--white ws-btn--lg">
+              Get started free
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </a>
+            <a href="/auth/login/default" class="ws-btn ws-btn--white-outline ws-btn--lg">Login</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/website/js/components.js"></script>
+<script src="/website/js/navigation.js"></script>
+</body>
+</html>
+
