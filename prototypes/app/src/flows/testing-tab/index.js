@@ -952,6 +952,25 @@ const STAKEHOLDERS_DONE_ROWS = [
   { issue: "Data export includes archived records incorrectly.", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "done" },
 ]
 
+// Choose 5 random stakeholder issues to show the icon for (stable for session)
+function pickRandomN(arr, n) {
+  const unique = Array.from(new Set(arr))
+  const src = unique.slice()
+  const out = []
+  while (out.length < n && src.length > 0) {
+    const i = Math.floor(Math.random() * src.length)
+    out.push(src.splice(i, 1)[0])
+  }
+  return out
+}
+
+const STAKEHOLDERS_ICON_ISSUES = new Set(
+  pickRandomN(
+    [...STAKEHOLDERS_ROWS.map(r => r.issue || ""), ...STAKEHOLDERS_DONE_ROWS.map(r => r.issue || "")],
+    5
+  )
+)
+
 /* ── Regressions Render Helpers ──────────────────────────────── */
 const REG_PRIORITY_ICONS = {
   urgent: `<svg width="18" height="18" viewBox="0 0 256 256" fill="none"><polyline points="48,192 128,112 208,192" stroke="#e14040" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/><polyline points="48,128 128,48 208,128" stroke="#e14040" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -1023,7 +1042,7 @@ function renderRegRow(row) {
     <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
       <div class="rr-reg-cell rr-reg-cell--icon">
         ${row._regression ? `
-        <span class="rr-reg-icon">
+        <span class="rr-reg-icon" title="Regression" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
         </span>
         ` : ""}
@@ -1048,7 +1067,7 @@ function renderRegDoneRow(row) {
     <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
       <div class="rr-reg-cell rr-reg-cell--icon">
         ${row._regression ? `
-        <span class="rr-reg-icon">
+        <span class="rr-reg-icon" title="Regression" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
         </span>
         ` : ""}
@@ -1122,6 +1141,7 @@ function renderStakeholdersTableHeader() {
   const sortIcon = `<svg width="12" height="12" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="24" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   return `
     <div class="rr-reg-row rr-reg-row--header rr-reg-row--stakeholders">
+      <div class="rr-reg-cell rr-reg-cell--icon" aria-hidden="true"></div>
       <div class="rr-reg-cell rr-reg-cell--issue">Issue</div>
       <div class="rr-reg-cell rr-reg-cell--priority">Priority ${sortIcon}</div>
       <div class="rr-reg-cell">Date</div>
@@ -1135,7 +1155,14 @@ function renderStakeholdersTableHeader() {
 
 function renderStakeholdersRow(row) {
   return `
-    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
+    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
+      <div class="rr-reg-cell rr-reg-cell--icon">
+        ${STAKEHOLDERS_ICON_ISSUES.has(row.issue) ? `
+          <span class="rr-reg-icon" title="Change Request" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM96,128a32,32,0,0,0,57.6,19.2,8,8,0,0,1,12.8,9.61,48,48,0,1,1,0-57.62,8,8,0,0,1-12.8,9.61A32,32,0,0,0,96,128Z"></path></svg>
+          </span>
+        ` : ``}
+      </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
@@ -1153,7 +1180,14 @@ function renderStakeholdersRow(row) {
 
 function renderStakeholdersDoneRow(row) {
   return `
-    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
+    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
+      <div class="rr-reg-cell rr-reg-cell--icon">
+        ${STAKEHOLDERS_ICON_ISSUES.has(row.issue) ? `
+          <span class="rr-reg-icon" title="Change Request" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM96,128a32,32,0,0,0,57.6,19.2,8,8,0,0,1,12.8,9.61,48,48,0,1,1,0-57.62,8,8,0,0,1-12.8,9.61A32,32,0,0,0,96,128Z"></path></svg>
+          </span>
+        ` : ``}
+      </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
