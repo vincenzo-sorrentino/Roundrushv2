@@ -91,9 +91,9 @@ export function renderLoginPage() {
       <div class="rr-auth-right">
 
         <!-- Official Roundrush full wordmark -->
-        <div class="rr-auth-wordmark">
+        <a href="/prototypes" class="rr-auth-wordmark" aria-label="Roundrush home">
           ${RR_FULL_LOGO}
-        </div>
+        </a>
 
         <!-- ════════════════════════════════
              SCREEN: Login

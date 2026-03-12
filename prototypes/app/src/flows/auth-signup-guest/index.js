@@ -57,9 +57,9 @@ export function renderAuthSignupGuestFlow() {
       <!-- ── Right: content panel ── -->
       <div class="rr-auth-right">
 
-        <div class="rr-auth-wordmark">
+        <a href="/prototypes" class="rr-auth-wordmark" aria-label="Roundrush home">
           ${RR_FULL_LOGO}
-        </div>
+        </a>
 
         <!-- ════════════════════════════════
              SCREEN: Registration form

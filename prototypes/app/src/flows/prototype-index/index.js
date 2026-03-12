@@ -31,6 +31,40 @@ const PROTOTYPE_GROUPS = [
     ]
   },
   {
+    id: "marketing-website",
+    label: "Marketing Website",
+    description: "Public-facing MVP website pages. Open in a new tab — these are standalone HTML files served directly by Vite.",
+    items: [
+      {
+        id: "website-home",
+        title: "Home",
+        subtitle: "Hero, problem/solution sections, differentiators, and primary CTA.",
+        route: "/website/pages/index.html",
+        status: "draft",
+        epic: null,
+        module: null
+      },
+      {
+        id: "website-features",
+        title: "Features",
+        subtitle: "Four capability sections: planning, coordination, visibility, and delivery.",
+        route: "/website/pages/features.html",
+        status: "draft",
+        epic: null,
+        module: null
+      },
+      {
+        id: "website-framework",
+        title: "Framework",
+        subtitle: "Philosophy page — structure, agent collaboration, and execution principles.",
+        route: "/website/pages/framework.html",
+        status: "draft",
+        epic: null,
+        module: null
+      }
+    ]
+  },
+  {
     id: "module-prototypes",
     label: "Module Prototypes",
     description: "Interactive flows for each requirement module.",
@@ -164,8 +198,11 @@ function renderCard(item) {
     ? `<span class="rr-proto-card-meta">${escapeHtml(item.epic)} &nbsp;/&nbsp; ${escapeHtml(item.module)}</span>`
     : ""
 
+  const isExternal = item.route.endsWith(".html")
+  const targetAttr = isExternal ? ' target="_blank" rel="noopener noreferrer"' : ""
+
   return `
-    <a href="${escapeHtml(item.route)}" class="rr-proto-card">
+    <a href="${escapeHtml(item.route)}"${targetAttr} class="rr-proto-card">
       <div class="rr-proto-card-header">
         <span class="rr-proto-card-title">${escapeHtml(item.title)}</span>
         ${renderStatusBadge(item.status)}
@@ -199,6 +236,11 @@ export async function renderPrototypeIndexFlow() {
         padding: var(--rr-spacing-xl) var(--rr-spacing-xl);
         display: grid;
         gap: var(--rr-spacing-2xl);
+      }
+
+      .rr-proto-scroll-container {
+        overflow-y: auto;
+        min-height: 0;
       }
 
       .rr-proto-index-header h1 {
@@ -317,6 +359,7 @@ export async function renderPrototypeIndexFlow() {
       }
     </style>
 
+    <div class="rr-proto-scroll-container">
     <main class="rr-proto-index">
       <div class="rr-proto-index-header">
         <h1>Prototype Directory</h1>
@@ -327,5 +370,6 @@ export async function renderPrototypeIndexFlow() {
 
       ${PROTOTYPE_GROUPS.map(renderGroup).join('<hr class="rr-proto-divider" />')}
     </main>
+    </div>
   `
 }

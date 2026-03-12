@@ -1,28 +1,34 @@
 ---
 id: RMP
 title_short: Roadmap
-title: Roadmap planning and timeline management
-design_state: discovery
+title: Roadmap timeline and snapshot planning
+design_state: draft
 modules:
   - RMP-M001
+  - RMP-M002
 ---
 
 ## Objective
 
-Give leadership and product managers a timeline-oriented view of epic and module delivery so that they can coordinate releases, set milestones, and communicate the product direction clearly to stakeholders.
+Give product managers and leadership a dynamically generated timeline canvas that visualises every module across all epics over the full project lifespan — from inception to present — without any manual maintenance. The roadmap is driven entirely by repository truth: sprint metadata, requirement identifiers, and pipeline state are parsed automatically to produce a live Gantt chart. A companion snapshot mode lets managers create named, editable copies of the roadmap for planning sessions and stakeholder meetings.
 
 ## In scope
 
-- Timeline / Gantt-style visualisation for epics and modules
-- Milestone tracking with expected completion dates
-- Release planning and grouping of work into releases
-- Epic and module scheduling with date ranges
+- Automatically generated two-track Gantt timeline (Development and Design)
+- Module items identified by epic-module ID and short title (e.g. `AUT-001 · Login form`)
+- Sprint-based columns with status-colour coding and current-sprint highlighting
+- Project settings (start/end dates, sprint duration, team members)
+- Snapshot mode: named, editable copies of the live roadmap
+- Drag-and-drop and resize interactions within a snapshot
+- Export of a snapshot as image or PDF
 
 ## Out of scope
 
+- Manual editing of the live roadmap (all data comes from repository and pipeline state)
 - Resource allocation and capacity planning per team member
 - Financial budgeting and cost tracking
 - External stakeholder portal or public roadmap sharing
+- Milestone markers or release groupings (handled by the Kanban epic)
 
 ---
 
