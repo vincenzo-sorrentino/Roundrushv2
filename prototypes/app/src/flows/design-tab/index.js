@@ -72,7 +72,7 @@ const PRIORITY_CONFIG = {
 const MAIN_ITEMS = [
   { id: "LOG005", title: "User password recovery",       priority: "high",   lastUpdate: "07/02/26", assignees: ["u1", "u2"], status: "in-progress",      hasLink: true  },
   { id: "ONB004", title: "Merchant onboarding",          priority: "high",   lastUpdate: "08/02/26", assignees: ["u6"],        status: "in-progress",      hasLink: false },
-  { id: "TRA003", title: "Transaction side panel",       priority: "high",   lastUpdate: "07/02/26", assignees: ["u4"],        status: "to-do",            hasLink: false },
+  { id: "TRA003", title: "Transaction side panel",       priority: "high",   lastUpdate: "07/02/26", assignees: [],            status: "to-do",            hasLink: false },
   { id: "TRA004", title: "Transaction details view",     priority: "medium", lastUpdate: "12/02/26", assignees: ["u3"],        status: "to-do",            hasLink: false },
   { id: "DSH001", title: "Dashboard overview",           priority: "urgent", lastUpdate: "14/02/26", assignees: ["u5", "u7"],  status: "in-progress",      hasLink: true  },
   { id: "PAY002", title: "Payment confirmation screen",  priority: "high",   lastUpdate: "10/02/26", assignees: ["u2", "u8"],  status: "in-progress",      hasLink: false },
@@ -90,11 +90,11 @@ const MAIN_ITEMS = [
 // Separate items in the backlog, all "ready-for-sprint" status.
 // These are requirements whose design is complete and ready for sprint selection.
 const SPRINT_BACKLOG_ITEMS = [
-  { id: "WLT001", title: "Wallet overview screen",       priority: "high",   lastUpdate: "20/02/26", assignees: ["u1", "u4"],  status: "ready-for-sprint", hasLink: true },
-  { id: "ONB005", title: "Business onboarding v2",       priority: "urgent", lastUpdate: "19/02/26", assignees: ["u6", "u2"],  status: "ready-for-sprint", hasLink: true },
-  { id: "TRA006", title: "Transaction receipt detail",   priority: "low",    lastUpdate: "21/02/26", assignees: ["u5"],        status: "ready-for-sprint", hasLink: true },
-  { id: "DSH002", title: "Dashboard widget library",     priority: "medium", lastUpdate: "18/02/26", assignees: ["u3"],        status: "ready-for-sprint", hasLink: true },
-  { id: "CAR001", title: "Card management screen",       priority: "high",   lastUpdate: "22/02/26", assignees: ["u8", "u7"],  status: "ready-for-sprint", hasLink: true },
+  { id: "WLT001", title: "Wallet overview screen",       priority: "high",   lastUpdate: "20/02/26", assignees: [],            status: "ready-for-sprint", hasLink: true },
+  { id: "ONB005", title: "Business onboarding v2",       priority: "urgent", lastUpdate: "19/02/26", assignees: [],            status: "ready-for-sprint", hasLink: true },
+  { id: "TRA006", title: "Transaction receipt detail",   priority: "low",    lastUpdate: "21/02/26", assignees: [],            status: "ready-for-sprint", hasLink: true },
+  { id: "DSH002", title: "Dashboard widget library",     priority: "medium", lastUpdate: "18/02/26", assignees: [],            status: "ready-for-sprint", hasLink: true },
+  { id: "CAR001", title: "Card management screen",       priority: "high",   lastUpdate: "22/02/26", assignees: [],            status: "ready-for-sprint", hasLink: true },
 ]
 
 /* ── Prototype metadata — for viewer info panel ────────────── */
@@ -213,16 +213,17 @@ function applyFilters(items, state) {
   const query = String(state.searchQuery || "").trim().toLowerCase()
 
   return items.filter(item => {
+    const assigneeIds = resolveAssigneeIds(item, state)
     const moduleCode = getModuleCode(item.id)
 
     if (state.filters.modules.length && !state.filters.modules.includes(moduleCode)) return false
     if (state.filters.priority.length && !state.filters.priority.includes(item.priority)) return false
     if (state.filters.statuses.length && !state.filters.statuses.includes(item.status)) return false
-    if (state.filters.assignees.length && !item.assignees.some(uid => state.filters.assignees.includes(uid))) return false
+    if (state.filters.assignees.length && !assigneeIds.some(uid => state.filters.assignees.includes(uid))) return false
 
     if (!query) return true
 
-    const assigneeNames = item.assignees
+    const assigneeNames = assigneeIds
       .map(uid => TEAM.find(member => member.id === uid)?.name || "")
       .join(" ")
       .toLowerCase()
@@ -255,6 +256,59 @@ function renderAvatar(userId) {
 function renderAvatarGroup(assigneeIds) {
   const visible = assigneeIds.slice(0, 3)
   return `<span class="rr-dt-avatar-group">${visible.map(renderAvatar).join("")}</span>`
+}
+
+function renderAssigneePicker(itemId, selectedAssigneeIds) {
+  const selectedSet = new Set(selectedAssigneeIds)
+  return `
+    <div class="rr-roadmap-member-picker rr-dt-assignee-picker" role="listbox" aria-label="Select assignee">
+      ${TEAM.map(member => {
+        const selected = selectedSet.has(member.id)
+        return `
+          <button type="button"
+                  class="rr-roadmap-member-picker-item"
+                  data-action="select-assignee"
+                  data-item-id="${escapeHtml(itemId)}"
+                  data-user-id="${escapeHtml(member.id)}"
+                  aria-selected="${selected ? "true" : "false"}">
+            ${renderAvatar(member.id)}
+            <span class="rr-roadmap-member-picker-name">${escapeHtml(member.name)}</span>
+          </button>
+        `
+      }).join("")}
+    </div>
+  `
+}
+
+function resolveAssigneeIds(item, state) {
+  return state.assigneeOverrides[item.id] ?? item.assignees
+}
+
+function renderAssigneeCell(item, state) {
+  if (item.status === "ready-for-sprint") {
+    return `<span class="rr-dt-assignee-empty" aria-label="No assignee"></span>`
+  }
+
+  const assigneeIds = resolveAssigneeIds(item, state)
+  if (assigneeIds.length > 0) {
+    return renderAvatarGroup(assigneeIds)
+  }
+
+  const pickerOpen = state.openAssigneePickerId === item.id
+  return `
+    <span class="rr-dt-assignee-wrap">
+      <button type="button"
+              class="rr-roadmap-avatar-add rr-dt-assignee-add"
+              data-action="toggle-assignee-picker"
+              data-item-id="${escapeHtml(item.id)}"
+              aria-label="Add assignee"
+              aria-expanded="${pickerOpen ? "true" : "false"}"
+              aria-haspopup="listbox">
+        <span>+</span>
+      </button>
+      ${pickerOpen ? renderAssigneePicker(item.id, assigneeIds) : ""}
+    </span>
+  `
 }
 
 function renderPriority(priority) {
@@ -292,7 +346,7 @@ function renderLinkCell(item) {
   `
 }
 
-function renderRow(item) {
+function renderRow(item, state) {
   return `
     <div class="rr-dt-row">
       <span class="rr-dt-cell rr-dt-cell--req">
@@ -300,7 +354,7 @@ function renderRow(item) {
       </span>
       <span class="rr-dt-cell rr-dt-cell--priority">${renderPriority(item.priority)}</span>
       <span class="rr-dt-cell rr-dt-cell--date">${escapeHtml(item.lastUpdate)}</span>
-      <span class="rr-dt-cell rr-dt-cell--assignee">${renderAvatarGroup(item.assignees)}</span>
+      <span class="rr-dt-cell rr-dt-cell--assignee">${renderAssigneeCell(item, state)}</span>
       <span class="rr-dt-cell rr-dt-cell--proto">${renderLinkCell(item)}</span>
       <span class="rr-dt-cell rr-dt-cell--status">${renderStatusBadge(item.status)}</span>
     </div>
@@ -485,11 +539,11 @@ function buildView(state) {
     : "No requirements match the current filters."
 
   const mainRows = sortedMain.length
-    ? sortedMain.map(renderRow).join("")
+    ? sortedMain.map(item => renderRow(item, state)).join("")
     : `<p class="rr-kb-empty">${emptyMsg}</p>`
 
   const sprintRows = sortedSprint.length
-    ? sortedSprint.map(renderRow).join("")
+    ? sortedSprint.map(item => renderRow(item, state)).join("")
     : `<p class="rr-kb-empty">${emptyMsg}</p>`
 
   const sprintExpanded = !state.sprintCollapsed
@@ -545,6 +599,8 @@ export function mountDesignTabFlow() {
     sortDir: "asc",
     searchQuery: "",
     openFilter: null,
+    openAssigneePickerId: null,
+    assigneeOverrides: {},
     filters: {
       modules: [],
       priority: [],
@@ -562,14 +618,23 @@ export function mountDesignTabFlow() {
   function handleClick(event) {
     const target = event.target.closest("[data-action]")
     if (!target) {
-      if (state.openFilter) {
+      if (state.openFilter || state.openAssigneePickerId) {
         state.openFilter = null
+        state.openAssigneePickerId = null
         render()
       }
       return
     }
 
     const action = target.dataset.action
+
+    if (
+      state.openAssigneePickerId &&
+      action !== "toggle-assignee-picker" &&
+      action !== "select-assignee"
+    ) {
+      state.openAssigneePickerId = null
+    }
 
     if (action === "toggle-filter") {
       event.stopPropagation()
@@ -596,6 +661,27 @@ export function mountDesignTabFlow() {
       const filterId = target.dataset.filter
       state.filters[filterId] = []
       state.openFilter = null
+      render()
+      return
+    }
+
+    if (action === "toggle-assignee-picker") {
+      event.stopPropagation()
+      const itemId = target.dataset.itemId
+      state.openAssigneePickerId = state.openAssigneePickerId === itemId ? null : itemId
+      state.openFilter = null
+      render()
+      return
+    }
+
+    if (action === "select-assignee") {
+      event.stopPropagation()
+      const itemId = target.dataset.itemId
+      const userId = target.dataset.userId
+      const item = findItem(itemId)
+      if (!item || item.status === "ready-for-sprint") return
+      state.assigneeOverrides[itemId] = userId ? [userId] : []
+      state.openAssigneePickerId = null
       render()
       return
     }
@@ -670,8 +756,9 @@ export function mountDesignTabFlow() {
   }
 
   function handleKeyDown(event) {
-    if (event.key === "Escape" && state.openFilter) {
+    if (event.key === "Escape" && (state.openFilter || state.openAssigneePickerId)) {
       state.openFilter = null
+      state.openAssigneePickerId = null
       render()
       return
     }
