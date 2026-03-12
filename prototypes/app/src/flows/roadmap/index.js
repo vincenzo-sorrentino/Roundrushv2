@@ -67,18 +67,6 @@ function getInitials(name) {
   return initials || "NN"
 }
 
-function getSubtleSolidColor(hexColor) {
-  const hex = String(hexColor || "").trim()
-  const normalized = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : "#d1d5db"
-  const r = Number.parseInt(normalized.slice(1, 3), 16)
-  const g = Number.parseInt(normalized.slice(3, 5), 16)
-  const b = Number.parseInt(normalized.slice(5, 7), 16)
-  const mixWithWhite = 0.72
-  const toHex = value => Math.round(value).toString(16).padStart(2, "0")
-
-  return `#${toHex(r + (255 - r) * mixWithWhite)}${toHex(g + (255 - g) * mixWithWhite)}${toHex(b + (255 - b) * mixWithWhite)}`
-}
-
 function deepCloneSettings(settings) {
   return {
     ...settings,
@@ -163,7 +151,7 @@ function renderRoadmapSnapshotDropdown() {
       <button type="button" class="rr-roadmap-snapshot-item rr-roadmap-snapshot-item--new" data-action="create-roadmap-snapshot" role="menuitem">
         <span class="rr-roadmap-snapshot-plus" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <path d="${ROADMAP_PLUS_ICON_PATH}" fill="#14161B"/>
+            <path d="${ROADMAP_PLUS_ICON_PATH}" fill="currentColor"/>
           </svg>
         </span>
         <span class="rr-roadmap-snapshot-text">New snapshot</span>
@@ -186,14 +174,14 @@ function renderRoadmapHeaderActions(isSnapshotDropdownOpen) {
     <div class="rr-roadmap-snapshot-anchor">
       <button type="button" class="rr-kb-sprint-history-btn rr-roadmap-secondary-btn" data-action="toggle-roadmap-snapshot-dropdown" aria-label="Roadmap snapshots" aria-expanded="${isSnapshotDropdownOpen ? "true" : "false"}" title="Roadmap snapshots">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <path d="${ROADMAP_SECONDARY_ICON_PATH}" fill="#14161B"/>
+          <path d="${ROADMAP_SECONDARY_ICON_PATH}" fill="currentColor"/>
         </svg>
       </button>
       ${isSnapshotDropdownOpen ? renderRoadmapSnapshotDropdown() : ""}
     </div>
     <button type="button" class="rr-kb-sprint-history-btn rr-roadmap-settings-btn" data-action="open-roadmap-settings" aria-label="Roadmap settings" title="Roadmap settings">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-        <path d="${SETTINGS_ICON_PATH}" fill="#14161B"/>
+        <path d="${SETTINGS_ICON_PATH}" fill="currentColor"/>
       </svg>
     </button>
   `
@@ -400,7 +388,6 @@ function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns
   const resizeHandlesHtml = (isSnapshotView && isResizable)
     ? '<div class="rr-roadmap-module-resize-handle rr-roadmap-module-resize-handle--left" data-action="resize-roadmap-module-left" aria-hidden="true"></div><div class="rr-roadmap-module-resize-handle rr-roadmap-module-resize-handle--right" data-action="resize-roadmap-module-right" aria-hidden="true"></div>'
     : ""
-  const subtleBackground = getSubtleSolidColor(color)
   const mappedColumns = mapModuleToColumns(module, sprintLayout, currentSprintIndex)
   
   // Apply drag overrides first (they take precedence)
@@ -426,7 +413,7 @@ function renderModule(module, sprintLayout, currentSprintIndex, totalWeekColumns
   const gridRowStyle = Number.isFinite(Number(gridRow)) ? `grid-row:${Number(gridRow)};` : ""
 
   return `
-    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" data-module-track="${escapeHtml(trackName)}" ${draggableAttr} style="grid-column:${startColumn} / span ${colSpan}; ${gridRowStyle} --rr-roadmap-module-color:${color}; background-color:${subtleBackground};">
+    <div class="rr-roadmap-module rr-roadmap-module--${escapeHtml(module.status)}" data-module-key="${escapeHtml(moduleKey)}" data-module-start="${startColumn}" data-module-span="${colSpan}" data-module-total-cols="${totalWeekColumns}" data-module-track="${escapeHtml(trackName)}" ${draggableAttr} style="grid-column:${startColumn} / span ${colSpan}; ${gridRowStyle} --rr-roadmap-module-color:${color};">
       ${resizeHandlesHtml}
       <span class="rr-roadmap-module-text">${escapeHtml(module.id)} · ${escapeHtml(module.title)}</span>
     </div>
@@ -594,19 +581,19 @@ function renderRoadmapSnapshotModal(contentHtml) {
 
           <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Export snapshot image" title="Export snapshot image">
             <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <path d="${ROADMAP_SNAPSHOT_IMAGE_ICON_PATH}" fill="#14161B"/>
+              <path d="${ROADMAP_SNAPSHOT_IMAGE_ICON_PATH}" fill="currentColor"/>
             </svg>
           </button>
 
           <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Export snapshot PDF" title="Export snapshot PDF">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <path d="${ROADMAP_SNAPSHOT_PDF_ICON_PATH}" fill="#14161B"/>
+              <path d="${ROADMAP_SNAPSHOT_PDF_ICON_PATH}" fill="currentColor"/>
             </svg>
           </button>
 
           <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Save snapshot" title="Save snapshot">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <path d="${ROADMAP_SNAPSHOT_SAVE_ICON_PATH}" fill="#14161B"/>
+              <path d="${ROADMAP_SNAPSHOT_SAVE_ICON_PATH}" fill="currentColor"/>
             </svg>
           </button>
 
