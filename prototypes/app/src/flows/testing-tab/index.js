@@ -1657,6 +1657,13 @@ function renderModule(module) {
   const isExpanded = EXPANDED_MODULES.has(module.id)
   const hasTestCases = module.testCases && module.testCases.length > 0
   
+  // Calculate test case progress
+  let total = 0, passing = 0;
+  if (hasTestCases) {
+    total = module.testCases.length;
+    passing = module.testCases.filter(tc => tc.result === "pass").length;
+  }
+
   return `
     <div class="rr-sprint-module" data-module-id="${escapeHtml(module.id)}">
       <div class="rr-sprint-module-header">
@@ -1664,7 +1671,10 @@ function renderModule(module) {
           ${isExpanded ? ICON.caretDown : ICON.caretRight}
         </button>
         <span class="rr-sprint-icon">${ICON.folderSimple}</span>
-        <h3 class="rr-sprint-module-title">${escapeHtml(module.title)}</h3>
+        <h3 class="rr-sprint-module-title">
+          ${escapeHtml(module.title)}
+          ${hasTestCases ? `<span class="rr-sprint-module-progress">(${passing}/${total})</span>` : ""}
+        </h3>
       </div>
       ${isExpanded && hasTestCases ? `
         <div class="rr-sprint-module-content">

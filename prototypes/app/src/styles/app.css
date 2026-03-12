@@ -41,8 +41,15 @@ body {
   font-weight: var(--rr-typography-fontWeightMedium);
 }
 
+
 .rr-nav a[data-active="true"] {
   color: var(--rr-sem-actionPrimary);
+}
+
+.rr-sprint-module-progress {
+  font-size: 14px;
+  margin-left: 6px;
+  color: var(--rr-sem-textSecondary);
 }
 
 .rr-main {
