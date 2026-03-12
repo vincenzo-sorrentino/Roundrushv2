@@ -77,8 +77,8 @@ let ADD_ISSUE_PRIORITY = ""
 let ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
 const BUTTONS = [
   { id: "overview", label: "Overview" },
-  { id: "sprint", label: "Sprint" },
-  { id: "regressions", label: "Regressions" },
+  { id: "sprint", label: "Test Cases" },
+  { id: "regressions", label: "UAT Issues" },
   { id: "production", label: "Production Issues" },
   { id: "stakeholders", label: "Stakeholders’ Issues" },
 ]
@@ -267,65 +267,8 @@ const STATUS_CONFIG = {
 
 const TABLES = [
   {
-    id: "prod",
-    title: "PROD 10/02/26",
-    totalProgress: "40.99%",
-    rows: [
-      {
-        section: "DAS - Dashboard",
-        passRate: "100.00%",
-        totalTests: "17",
-        passed: "17",
-        failed: "0",
-        blocked: "0",
-        progress: "100.00%",
-        status: "completed",
-      },
-      {
-        section: "AUT - Login",
-        passRate: "47.37%",
-        totalTests: "42",
-        passed: "28",
-        failed: "0",
-        blocked: "0",
-        progress: "59.48%",
-        status: "attention",
-      },
-      {
-        section: "ONB - Onboarding",
-        passRate: "40.09%",
-        totalTests: "38",
-        passed: "17",
-        failed: "0",
-        blocked: "0",
-        progress: "47.37%",
-        status: "attention",
-      },
-      {
-        section: "TEM - Team management",
-        passRate: "12.74%",
-        totalTests: "53",
-        passed: "2",
-        failed: "3",
-        blocked: "1",
-        progress: "12.74%",
-        status: "failing",
-      },
-      {
-        section: "TRA - Transactions",
-        passRate: "58.36%",
-        totalTests: "45",
-        passed: "32",
-        failed: "0",
-        blocked: "10",
-        progress: "61.98%",
-        status: "attention",
-      },
-    ],
-  },
-  {
     id: "stg",
-    title: "STG 13/02/26",
+    title: "Staging 13/02/26",
     totalProgress: "97.45%",
     rows: [
       {
@@ -376,6 +319,63 @@ const TABLES = [
         failed: "0",
         blocked: "10",
         progress: "98.14%",
+        status: "attention",
+      },
+    ],
+  },
+  {
+    id: "prod",
+    title: "Production 10/02/26",
+    totalProgress: "40.99%",
+    rows: [
+      {
+        section: "DAS - Dashboard",
+        passRate: "100.00%",
+        totalTests: "17",
+        passed: "17",
+        failed: "0",
+        blocked: "0",
+        progress: "100.00%",
+        status: "completed",
+      },
+      {
+        section: "AUT - Login",
+        passRate: "47.37%",
+        totalTests: "42",
+        passed: "28",
+        failed: "0",
+        blocked: "0",
+        progress: "59.48%",
+        status: "attention",
+      },
+      {
+        section: "ONB - Onboarding",
+        passRate: "40.09%",
+        totalTests: "38",
+        passed: "17",
+        failed: "0",
+        blocked: "0",
+        progress: "47.37%",
+        status: "attention",
+      },
+      {
+        section: "TEM - Team management",
+        passRate: "12.74%",
+        totalTests: "53",
+        passed: "2",
+        failed: "3",
+        blocked: "1",
+        progress: "12.74%",
+        status: "failing",
+      },
+      {
+        section: "TRA - Transactions",
+        passRate: "58.36%",
+        totalTests: "45",
+        passed: "32",
+        failed: "0",
+        blocked: "10",
+        progress: "61.98%",
         status: "attention",
       },
     ],
@@ -1713,12 +1713,14 @@ export function renderTestingTabFlow() {
           <div class="rr-testing-button-group" role="tablist">
             ${renderButtons()}
           </div>
-          <div class="rr-testing-search">
-            <span class="rr-testing-search-icon" aria-hidden="true">
-              ${ICON.search}
-            </span>
-            <input class="rr-testing-search-input" type="text" placeholder="Search" />
-          </div>
+          ${ACTIVE_TAB !== "overview" ? `
+            <div class="rr-testing-search">
+              <span class="rr-testing-search-icon" aria-hidden="true">
+                ${ICON.search}
+              </span>
+              <input class="rr-testing-search-input" type="text" placeholder="Search" />
+            </div>
+          ` : ""}
         </div>
         ${tabContent}
       </section>

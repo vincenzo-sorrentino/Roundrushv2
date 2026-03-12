@@ -8681,6 +8681,10 @@ rr-alert.rr-req-info-callout {
 
 .rr-testing-wrapper {
   position: relative;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .rr-modal-overlay {
