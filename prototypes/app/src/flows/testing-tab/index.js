@@ -982,10 +982,6 @@ const REG_SCOPE_CFG = {
 
 function renderRegScope(scope) {
   const cfg = REG_SCOPE_CFG[scope.label || scope] || REG_SCOPE_CFG["FE"];
-  const regressionIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256" style="vertical-align:middle;margin-left:4px;"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>`;
-  if (scope && scope._regression) {
-    return `<span class="rr-reg-scope" style="background:${cfg.bg};color:${cfg.color}">${escapeHtml(scope.label)}${regressionIcon}</span>`;
-  }
   return `<span class="rr-reg-scope" style="background:${cfg.bg};color:${cfg.color}">${escapeHtml(scope.label || scope)}</span>`;
 }
 
