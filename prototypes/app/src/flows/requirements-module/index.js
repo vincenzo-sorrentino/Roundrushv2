@@ -461,6 +461,173 @@ const MODULES = [
     },
     prototypes: [],
     functionalities: []
+  },
+
+  // ── DEP ───────────────────────────────────────────────────────
+  {
+    id: "DEP-M001", code: "DEP-M001", title: "Dependency Map — Graph View", epic: "DEP",
+    prototypeRoute: "/dependencies/uml",
+    overview: "Render the full global dependency map as an interactive UML component diagram so that developers and QA teams can visually trace how modules connect, understand the blast radius of any proposed change, and spot high-risk coupling at a glance.",
+    scope: "Interactive UML component diagram of all inter-module dependencies.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Dependencies UML — v1", version: "v1", path: "/dependencies/uml", status: "in-progress", flow: "Global dependency map as interactive UML component diagram" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "DEP-M002", code: "DEP-M002", title: "Dependency Map — List View", epic: "DEP",
+    prototypeRoute: "/dependencies/list",
+    overview: "Render the same global dependency map as a flat, readable table. Every edge in the DAG becomes one row, with its natural-language why explanation front and centre alongside the risk level, confidence score, and interface string.",
+    scope: "Flat tabular list view of all dependency edges.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Dependencies List — v1", version: "v1", path: "/dependencies/list", status: "in-progress", flow: "Global dependency map as sortable, filterable flat table" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "DEP-M003", code: "DEP-M003", title: "Module-Level Dependency Panel", epic: "DEP",
+    prototypeRoute: null,
+    overview: "Surface a scoped, read-only subset of the global dependency map in contextual panels: the Dependencies sub-view inside the requirements module detail page and the Dependencies tab inside the sprint board bottom-sheet.",
+    scope: "Scoped dependency panel component used in /requirements/module and /planning/kanban.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [], dependencies: [], functionalities: []
+  },
+
+  // ── DOC ───────────────────────────────────────────────────────
+  {
+    id: "DOC-M001", code: "DOC-M001", title: "Documentation Hub", epic: "DOC",
+    prototypeRoute: "/docs/hub",
+    overview: "A dedicated tab in every Roundrush project that renders the contents of the repository's requirements/documentation/ folder as a browsable, searchable knowledge base. Contributors edit .md files directly in the repo and the hub displays them without any additional publishing step.",
+    scope: "Browsable markdown knowledge base rendered from the repo's requirements/documentation/ folder.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Docs Hub — v1", version: "v1", path: "/docs/hub", status: "in-progress", flow: "Browse and search documentation sections" }],
+    dependencies: [], functionalities: []
+  },
+
+  // ── KAN ───────────────────────────────────────────────────────
+  {
+    id: "KAN-M001", code: "KAN-M001", title: "Current Sprint Board", epic: "KAN",
+    prototypeRoute: "/planning/kanban",
+    overview: "Show all modules assigned to the active sprint in a reactive, read-only planning board. Modules are grouped by feature area and each row reflects the real-time delivery state driven entirely by CI/CD pipeline events — no manual status editing.",
+    scope: "Reactive CI/CD-driven sprint board with sort/filter and close sprint flow.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Kanban Board — v1", version: "v1", path: "/planning/kanban", status: "in-progress", flow: "Sprint board → module detail overlay" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "KAN-M002", code: "KAN-M002", title: "Module Detail Panel", epic: "KAN",
+    prototypeRoute: "/planning/kanban",
+    overview: "Allow team members to open a sliding detail panel for any module from the sprint board. The panel is organised into six tabs: Overview, Acceptance Laws, Dependencies, Tasks, Test Cases, and UAT Issues.",
+    scope: "Six-tab module detail overlay open from the sprint board.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Kanban Module Detail — v1", version: "v1", path: "/planning/kanban", status: "in-progress", flow: "Open detail overlay → navigate 6 tabs" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "KAN-M003", code: "KAN-M003", title: "Closed Sprint", epic: "KAN",
+    prototypeRoute: "/planning/old-sprint",
+    overview: "Provide a read-only record of every closed sprint, structured as a tabbed report card covering: delivery summary, stakeholder/UAT/production issue logs, finalized design items, and the automated test coverage snapshot.",
+    scope: "Read-only six-tab closed sprint report card with PDF/XLS export.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Old Sprint View — v1", version: "v1", path: "/planning/old-sprint", status: "in-progress", flow: "Closed sprint tabbed report → sprint selector" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "KAN-M004", code: "KAN-M004", title: "Release Notes", epic: "KAN",
+    prototypeRoute: "/planning/release-notes",
+    overview: "Provide an approval-gated release notes view that extends the closed sprint report with a formal stakeholder sign-off workflow. The sprint is considered fully approved when every listed stakeholder has recorded their individual approval.",
+    scope: "Stakeholder approval flow layered on top of the closed sprint report.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Release Notes — v1", version: "v1", path: "/planning/release-notes", status: "in-progress", flow: "Release notes card + stakeholder sign-off approval section" }],
+    dependencies: [], functionalities: []
+  },
+
+  // ── REQ ───────────────────────────────────────────────────────
+  {
+    id: "REQ-M001", code: "REQ-M001", title: "Epic Level View", epic: "REQ",
+    prototypeRoute: "/requirements/module",
+    overview: "Show the epic-level detail view so stakeholders can understand the overall epic and drill into its components. The view includes an explorer sidebar for navigating the full requirement hierarchy, a summary metrics grid, and four tabs: Description, Acceptance Laws, Dependencies, and Modules.",
+    scope: "Epic-level requirements detail view with four tabs.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Requirements Module — v1", version: "v1", path: "/requirements/module", status: "in-progress", flow: "Epic node selected → description, AL, dependencies, modules tabs" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "REQ-M002", code: "REQ-M002", title: "Module Level View", epic: "REQ",
+    prototypeRoute: "/requirements/module",
+    overview: "Show the module-level detail view so stakeholders can inspect a module's scope and drill into its functionalities. The view has five tabs: Description, Acceptance Laws, Dependencies, Functionalities, and Prototypes.",
+    scope: "Module-level requirements detail view with five tabs.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Requirements Module — v1", version: "v1", path: "/requirements/module", status: "in-progress", flow: "Module node selected → description, AL, deps, functionalities, prototypes" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "REQ-M003", code: "REQ-M003", title: "Functionality Level View", epic: "REQ",
+    prototypeRoute: "/requirements/module",
+    overview: "Show the functionality-level detail view so developers and testers can read the complete specification for a single functionality. Unlike the epic and module levels, the functionality view has no tab bar — all information is rendered in a single content card that the user reads top to bottom.",
+    scope: "Functionality-level requirements detail view with a single content card.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Requirements Module — v1", version: "v1", path: "/requirements/module", status: "in-progress", flow: "Functionality node selected → single content card" }],
+    dependencies: [], functionalities: []
+  },
+
+  // ── RMP ───────────────────────────────────────────────────────
+  {
+    id: "RMP-M001", code: "RMP-M001", title: "Roadmap Planning", epic: "RMP",
+    prototypeRoute: null,
+    overview: "Provide a timeline-oriented view where product managers can schedule epics and modules across time, assign milestones, and plan releases — giving everyone a shared, visual picture of when things are expected to be delivered.",
+    scope: "Timeline-based roadmap planning view. No prototype available yet.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [], dependencies: [], functionalities: []
+  },
+
+  // ── TST ───────────────────────────────────────────────────────
+  {
+    id: "TST-M001", code: "TST-M001", title: "Test Planning & Traceability", epic: "TST",
+    prototypeRoute: "/testing/overview",
+    overview: "Expose the full test planning matrix for every sprint through three integrated views — an execution overview per environment, a sprint-level test case matrix, and a regression tracking list — so QA engineers have one place to define test cases, read execution results, and confirm all requirements are covered.",
+    scope: "Test planning matrix and traceability views across environments.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [{ name: "Testing Tab — v1", version: "v1", path: "/testing/overview", status: "in-progress", flow: "Test planning overview → matrix → regression list" }],
+    dependencies: [], functionalities: []
+  },
+  {
+    id: "TST-M002", code: "TST-M002", title: "Automated Execution & CI Integration", epic: "TST",
+    prototypeRoute: null,
+    overview: "Handle the end-to-end pipeline from test execution in CI to visual state synchronisation on the dashboard. The module operates on a Git-as-Truth principle — no test status is ever updated manually; all state changes arrive as structured API payloads triggered by repository events and CI/CD pipelines.",
+    scope: "CI/CD-driven test execution and dashboard state sync.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [], dependencies: [], functionalities: []
+  },
+  {
+    id: "TST-M003", code: "TST-M003", title: "Coverage & Regression Intelligence", epic: "TST",
+    prototypeRoute: null,
+    overview: "The intelligence layer that analyses dependency graphs, generates regression scenarios, tracks coverage evolution, and surfaces recurring failure patterns across sprints. This module is primarily driven by AI agent actions with QA engineers serving as the validation and approval layer.",
+    scope: "AI-driven coverage analysis and regression intelligence engine.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [], dependencies: [], functionalities: []
+  },
+  {
+    id: "TST-M004", code: "TST-M004", title: "Manual UAT & Bug Linking", epic: "TST",
+    prototypeRoute: null,
+    overview: "Govern the workflow for tests that cannot be fully automated or require human visual validation — covering UAT library definition, executed UAT session instances, non-functional testing sessions, CLI/IDE-driven manual status submission, and bug ticket linking with evidence attachment.",
+    scope: "Manual UAT session management, non-functional testing, and bug linking.",
+    status: "draft",
+    laws: { "AL-01":{status:"unknown"}, "AL-02":{status:"unknown"}, "AL-03":{status:"unknown"}, "AL-04":{status:"unknown"}, "AL-05":{status:"unknown"}, "AL-06":{status:"unknown"}, "AL-07":{status:"unknown"} },
+    prototypes: [], dependencies: [], functionalities: []
   }
 ]
 
@@ -564,11 +731,120 @@ const EPIC_DEPENDENCIES = [
   }
 ]
 
-const SIDE_PROJECTS = [
-  "ONB - Onboarding",
-  "TEM - Team management",
-  "TRA - Transactions"
-]
+const EPIC_INFO = {
+  "AUT": {
+    id: "AUT", title_short: "Authentication", title: "Authentication and team access",
+    owner: "GivePayments", designState: "drafting", status: "released",
+    objective: "Provide secure, invitation-based authentication so that only authorised team members can access the workspace. Users can log in with email and password, recover a forgotten password, and join a team through a time-limited invitation link.",
+    inScope: [
+      "Email and password login with rate-limiting on failed attempts",
+      "Password recovery via a time-limited reset link",
+      "Invitation-based signup (admin sends invite → user creates account → user joins team)",
+      "Automatic team membership upon completing the invitation flow"
+    ],
+    outOfScope: [
+      "Advanced organisation management",
+      "Single Sign-On (SSO) and Multi-Factor Authentication (MFA)",
+      "Role and permission management beyond member/admin distinction"
+    ]
+  },
+  "DEP": {
+    id: "DEP", title_short: "Dependencies", title: "Dependency tracking and intelligent impact mapping",
+    owner: "GivePayments", designState: "drafting", status: "draft",
+    objective: "Track and visualise all inter-module dependencies so that developers, QA and architects can immediately understand the blast radius of any change, maintain accurate coupling diagrams, and surface scoped dependency context directly inside the modules that need it.",
+    inScope: [
+      "Global UML dependency graph view with component diagram layout",
+      "Flat tabular dependency list view with sort and filter",
+      "Scoped module-level dependency panel used inside requirements module and sprint board"
+    ],
+    outOfScope: [
+      "Automatic dependency discovery from source-code AST analysis",
+      "Real-time live dependency change diffing",
+      "Cross-repository dependency tracking"
+    ]
+  },
+  "DOC": {
+    id: "DOC", title_short: "Documentation", title: "Documentation hub and knowledge base",
+    owner: "GivePayments", designState: "drafting", status: "draft",
+    objective: "Render the contents of the repository's requirements/documentation/ folder as a browsable, searchable knowledge base within the Roundrush UI, with no additional publishing step required.",
+    inScope: [
+      "Browsable section list rendered from the documentation/ folder",
+      "Full-text search across all documentation markdown files",
+      "Inline markdown rendering with syntax highlighting",
+      "Back-navigation between search results and section views"
+    ],
+    outOfScope: [
+      "Inline editing of documentation from the UI",
+      "Version history or diff view for documentation files",
+      "External documentation sources outside the repository"
+    ]
+  },
+  "KAN": {
+    id: "KAN", title_short: "Kanban / Planning", title: "Sprint planning board and module detail",
+    owner: "GivePayments", designState: "drafting", status: "draft",
+    objective: "Give the team a fully reactive, CI/CD-driven sprint planning board where module and task statuses are maintained automatically by the pipeline. Closed sprints produce tabbed report cards and a stakeholder-approval release notes view.",
+    inScope: [
+      "Reactive sprint board: modules grouped by feature area, 7-column layout, no manual status editing",
+      "Column sorting, multi-criteria filtering, and free-text search",
+      "Sprint selector with status dots, history navigation, and Copilot-assisted close sprint flow",
+      "CI/CD-driven task lifecycle: TODO → IN PROGRESS → RFR → MERGED → QA → DONE",
+      "Module detail overlay with six tabs: Overview, Acceptance Laws, Dependencies, Tasks, Test Cases, UAT Issues",
+      "Closed sprint tabbed report card and stakeholder sign-off release notes view"
+    ],
+    outOfScope: [
+      "Drag-and-drop reordering of modules or tasks",
+      "Manual creation, deletion, or reassignment of tasks",
+      "Sprint creation, deletion, and capacity planning"
+    ]
+  },
+  "REQ": {
+    id: "REQ", title_short: "Requirements", title: "Requirements module",
+    owner: "GivePayments", designState: "drafting", status: "draft",
+    objective: "Provide a hierarchical requirements browser with epic, module, and functionality level views so that all stakeholders can navigate, read, and verify the full specification without leaving the Roundrush UI.",
+    inScope: [
+      "Epic-level view with description, acceptance laws, dependencies, and modules tabs",
+      "Module-level view with description, acceptance laws, dependencies, functionalities, and prototypes tabs",
+      "Functionality-level view rendered as a single content card",
+      "Explorer sidebar with tree navigation and search"
+    ],
+    outOfScope: [
+      "Inline editing of requirement specifications from the UI",
+      "Real-time collaborative editing",
+      "Automated requirement traceability matrix generation"
+    ]
+  },
+  "RMP": {
+    id: "RMP", title_short: "Roadmap", title: "Roadmap planning and timeline management",
+    owner: "GivePayments", designState: "discovery", status: "draft",
+    objective: "Provide a timeline-oriented view where product managers can schedule epics and modules across time, assign milestones, and plan releases.",
+    inScope: [
+      "Timeline view with epics and modules plotted across date ranges",
+      "Milestone creation and assignment",
+      "Release planning and grouping"
+    ],
+    outOfScope: [
+      "Resource capacity planning",
+      "Integration with external project management tools",
+      "Gantt chart export"
+    ]
+  },
+  "TST": {
+    id: "TST", title_short: "Testing", title: "Test management and execution tracking",
+    owner: "GivePayments", designState: "drafting", status: "draft",
+    objective: "Track the full lifecycle of test planning, automated CI execution, coverage analysis, and manual UAT sessions in a single integrated surface — so QA engineers and developers always know the current state of quality for every sprint.",
+    inScope: [
+      "Test planning matrix and traceability views",
+      "CI/CD-driven automated test execution and dashboard sync",
+      "AI-driven coverage analysis and regression intelligence",
+      "Manual UAT session management and bug linking"
+    ],
+    outOfScope: [
+      "Test case authoring IDE",
+      "Load and performance testing orchestration",
+      "Third-party test management tool integration"
+    ]
+  }
+}
 
 const MODULE_BY_ID = new Map(MODULES.map((module) => [module.id, module]))
 const FUNCTIONALITY_BY_ID = new Map(
@@ -618,8 +894,8 @@ function toStatusLabel(status) {
 }
 
 function getNodeById(id) {
-  if (id === EPIC.id) {
-    return { type: "epic", ...EPIC }
+  if (EPIC_INFO[id]) {
+    return { type: "epic", ...EPIC_INFO[id] }
   }
 
   if (MODULE_BY_ID.has(id)) {
@@ -630,7 +906,7 @@ function getNodeById(id) {
     return { type: "functionality", ...FUNCTIONALITY_BY_ID.get(id) }
   }
 
-  return { type: "epic", ...EPIC }
+  return { type: "epic", ...EPIC_INFO["AUT"] }
 }
 
 function getTabsForNode(node) {
@@ -735,41 +1011,48 @@ function renderAcceptanceLawsTable() {
   `
 }
 
-function renderEpicDescription() {
-  const moduleLines = MODULES.map(
-    (m) => `  - ${escapeHtml(m.code)} - ${escapeHtml(m.title)}`
-  ).join("\n")
+function renderEpicDescription(epicNode) {
+  const info = epicNode || EPIC_INFO["AUT"]
+  const epicModules = MODULES.filter((m) => m.epic === info.id)
+  const moduleLines = epicModules.length > 0
+    ? epicModules.map((m) => `  - ${escapeHtml(m.code)} - ${escapeHtml(m.title)}`).join("\n")
+    : "  # No modules defined yet"
 
   return `
     <section class="rr-rm2-content-card">
       <h3>Description</h3>
       <div class="rr-rm2-divider"></div>
-      <pre class="rr-rm2-pre">id: AUT
-title_short: Authentication
-title: Authentication and team access
-design_state: drafting  # discovery | drafting | review | approved | ready_for_delivery
+      <pre class="rr-rm2-pre">id: ${escapeHtml(info.id)}
+title_short: ${escapeHtml(info.title_short || info.title)}
+title: ${escapeHtml(info.title)}
+design_state: ${escapeHtml(info.designState || "drafting")}  # discovery | drafting | review | approved | ready_for_delivery
 modules:
 ${moduleLines}</pre>
       <div class="rr-rm2-divider"></div>
       <h4>Objective</h4>
-      <p>${escapeHtml(EPIC.objective)}</p>
+      <p>${escapeHtml(info.objective || "")}</p>
       <h4>In scope</h4>
       <ul>
-        ${EPIC.inScope.map((entry) => `<li>${escapeHtml(entry)}</li>`).join("")}
+        ${(info.inScope || []).map((entry) => `<li>${escapeHtml(entry)}</li>`).join("")}
       </ul>
       <h4>Out of scope (for this EP)</h4>
       <ul>
-        ${EPIC.outOfScope.map((entry) => `<li>${escapeHtml(entry)}</li>`).join("")}
+        ${(info.outOfScope || []).map((entry) => `<li>${escapeHtml(entry)}</li>`).join("")}
       </ul>
     </section>
   `
 }
 
-function renderModulesTable() {
+function renderModulesTable(epicNode) {
   const ARROW_DOWN_ICON = `<svg width="16" height="16" viewBox="0 0 256 256" fill="none" aria-hidden="true"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   const LINK_ICON = `<svg width="18" height="18" viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M144 80h32a40 40 0 010 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 010-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`
 
-  const rows = MODULES.map((module) => {
+  const epicModules = epicNode ? MODULES.filter((m) => m.epic === epicNode.id) : MODULES.filter((m) => m.epic === "AUT")
+  if (epicModules.length === 0) {
+    return `<p class="rr-rm2-empty">No modules defined for this epic yet.</p>`
+  }
+
+  const rows = epicModules.map((module) => {
     const firstProto = Array.isArray(module.prototypes) && module.prototypes.length > 0 ? module.prototypes[0] : null
     const protoStatus = firstProto ? firstProto.status : "draft"
     const protoPath = firstProto ? firstProto.path : null
@@ -1179,13 +1462,13 @@ function renderPanel(node, activeTab, state) {
 
   if (node.type === "epic") {
     if (activeTab === "description") {
-      return renderEpicDescription()
+      return renderEpicDescription(node)
     }
     if (activeTab === "dependencies") {
       return renderDependenciesTable()
     }
     if (activeTab === "modules") {
-      return renderModulesTable()
+      return renderModulesTable(node)
     }
   }
 
@@ -1228,7 +1511,7 @@ function renderPanel(node, activeTab, state) {
 
 function getNodeTitle(node) {
   if (node.type === "epic") {
-    return `AUT - ${node.title}`
+    return `${node.id} - ${node.title_short || node.title}`
   }
   if (node.type === "module") {
     return `${node.code} - ${node.title}`
@@ -1237,7 +1520,9 @@ function getNodeTitle(node) {
 }
 
 function getBreadcrumbSegments(node) {
-  const base = [EPIC.owner, `AUT - ${EPIC.title}`]
+  const epicId = node.type === "epic" ? node.id : (node.epic || (node.moduleCode ? node.moduleCode.split("-")[0] : "AUT"))
+  const epicInfo = EPIC_INFO[epicId] || EPIC_INFO["AUT"]
+  const base = [epicInfo.owner || "GivePayments", `${epicId} - ${epicInfo.title_short}`]
   if (node.type === "module") {
     return [...base, `${node.code} - ${node.title}`]
   }
@@ -1283,31 +1568,24 @@ function renderTabs(node, activeTab) {
 }
 
 function buildExplorerData() {
-  return [
-    {
-      id: "DAS",
-      label: "DAS - Dashboard",
-      icon: "folder"
-    },
-    {
-      id: "AUT",
-      label: "AUT - Login",
+  const epicIds = ["AUT", "DEP", "DOC", "KAN", "REQ", "RMP", "TST"]
+  return epicIds.map((epicId) => {
+    const info = EPIC_INFO[epicId]
+    const epicModules = MODULES.filter((m) => m.epic === epicId)
+    return {
+      id: epicId,
+      label: `${epicId} - ${info.title_short}`,
       icon: "folder",
-      targetNodeId: "AUT",
-      children: MODULES.map((module) => ({
+      targetNodeId: epicId,
+      children: epicModules.map((module) => ({
         id: `tree-${module.id}`,
-        label: `${module.code.replace(/-M(\d)/, "-$1")} - ${module.title}`,
+        label: `${module.code} - ${module.title}`,
         icon: "dot",
         dotColor: ["released", "validated"].includes(module.status) ? "green" : "gray",
         targetNodeId: module.id
       }))
-    },
-    ...SIDE_PROJECTS.map((project) => ({
-      id: project,
-      label: project,
-      icon: "folder"
-    }))
-  ]
+    }
+  })
 }
 
 function filterExplorerData(items, search) {
@@ -1409,8 +1687,9 @@ function renderExplorer(state) {
 
 function renderSummary(node) {
   if (node.type === "epic") {
+    const epicModules = MODULES.filter((m) => m.epic === node.id)
     const passedLaws = ACCEPTANCE_LAWS.filter((law) => law.status === "pass").length
-    const compliantModules = MODULES.filter((module) => module.status !== "planned").length
+    const compliantModules = epicModules.filter((m) => m.status === "released" || m.status === "validated").length
 
     return `
       <div class="rr-rm2-summary-grid">
@@ -1420,7 +1699,7 @@ function renderSummary(node) {
         </article>
         <article>
           <strong>Compliant modules</strong>
-          <span>${compliantModules} / ${MODULES.length}</span>
+          <span>${compliantModules} / ${epicModules.length}</span>
         </article>
       </div>
     `
@@ -1619,7 +1898,7 @@ export function mountRequirementsModuleFlow() {
     activeTab: "description",
     isExplorerOpen: true,
     treeSearch: "",
-    expandedTreeIds: new Set(["AUT", "tree-AUT-M001"]),
+    expandedTreeIds: new Set(["AUT"]),
     expandedModuleIds: new Set(),
     expandedPrototypeGroupIds: new Set()
   }
@@ -1637,21 +1916,22 @@ export function mountRequirementsModuleFlow() {
   }
 
   function expandAncestors(nodeId) {
-    if (nodeId === "AUT") {
-      state.expandedTreeIds.add("AUT")
+    if (EPIC_INFO[nodeId]) {
+      state.expandedTreeIds.add(nodeId)
       return
     }
 
     const module = MODULE_BY_ID.get(nodeId)
     if (module) {
-      state.expandedTreeIds.add("AUT")
+      state.expandedTreeIds.add(module.epic || "AUT")
       state.expandedTreeIds.add(`tree-${module.id}`)
       return
     }
 
     const functionality = FUNCTIONALITY_BY_ID.get(nodeId)
     if (functionality) {
-      state.expandedTreeIds.add("AUT")
+      const parentModule = MODULE_BY_ID.get(functionality.moduleId)
+      state.expandedTreeIds.add(parentModule?.epic || "AUT")
       state.expandedTreeIds.add(`tree-${functionality.moduleId}`)
     }
   }

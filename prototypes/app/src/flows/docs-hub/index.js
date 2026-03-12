@@ -181,6 +181,34 @@ const DOC_HISTORY = {
       { action: "Changed", detail: "Secret scanning extended — pre-commit hooks now required in addition to CI-level scanning", user: "Drew Cano", initials: "DC", color: "#abd4c4" },
     ]},
   ],
+  "definition-of-done": [
+    { date: "11/03/26", entries: [
+      { action: "Added", detail: "Initial document: module, flow, and component DoD checklists plus CI validation checks", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
+    ]},
+  ],
+  "naming-conventions": [
+    { date: "11/03/26", entries: [
+      { action: "Added", detail: "Initial document: requirement IDs, file naming, code symbols, CSS classes, design tokens, and prototype routes", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
+    ]},
+  ],
+  "review-checklists": [
+    { date: "11/03/26", entries: [
+      { action: "Added", detail: "Initial document: spec PR, design system PR, prototype PR, and documentation PR checklists", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
+    ]},
+  ],
+  "architecture-decisions": [
+    { date: "11/03/26", entries: [
+      { action: "Added", detail: "ADR-0003: centralised acceptance laws — requirements/documentation/ replaces _governance/ as the governance home", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
+    ]},
+    { date: "05/03/26", entries: [
+      { action: "Added", detail: "ADR-0001 and ADR-0002 migrated from _governance/decisions/ — monorepo structure and flat requirements structure", user: "Lana Steiner", initials: "LS", color: "#c9b0b0" },
+    ]},
+  ],
+  "workflows": [
+    { date: "11/03/26", entries: [
+      { action: "Added", detail: "Initial document: spec lifecycle, Figma-to-code sync, component scaffold, and full build chain reference", user: "Vincenzo Sorrentino", initials: "VS", color: "#a9c0d4" },
+    ]},
+  ],
   "release-policies": [
     { date: "05/03/26", entries: [
       { action: "Added", detail: "Pre-production promotion gate made mandatory between staging and production for all release candidates", user: "Orlando Diggs", initials: "OD", color: "#c8b89a" },
@@ -217,10 +245,10 @@ const DOC_SECTIONS = [
         ],
       },
       {
-        anchor: "al-01", heading: "AL-01 — Production code implemented",
+        anchor: "al-01", heading: "AL-01 — All production code implemented",
         blocks: [
           { type: "label", text: "Requirement" },
-          { type: "p", text: "All module production code must be implemented, peer-reviewed, and merged into the integration branch before the module is evaluated for compliance." },
+          { type: "p", text: "All production code for the module has been implemented, peer-reviewed, and merged into the integration branch before the module is evaluated for compliance." },
           { type: "label", text: "Standards" },
           { type: "ul", items: ["No feature flags masking incomplete work at evaluation time.", "Code must pass the CI lint and build pipeline with no errors.", "Breaking changes to shared interfaces require a migration path documented in the PR."] },
           { type: "label", text: "Evidence Required" },
@@ -230,7 +258,7 @@ const DOC_SECTIONS = [
         ],
       },
       {
-        anchor: "al-02", heading: "AL-02 — Unit & integration tests pass",
+        anchor: "al-02", heading: "AL-02 — All automated unit & integration tests pass with 100% coverage",
         blocks: [
           { type: "label", text: "Requirement" },
           { type: "p", text: "All unit and integration tests must pass with no failures, and overall coverage must meet or exceed the project threshold currently set at 80% statement coverage." },
@@ -243,18 +271,18 @@ const DOC_SECTIONS = [
         ],
       },
       {
-        anchor: "al-03", heading: "AL-03 — Documentation updated",
+        anchor: "al-03", heading: "AL-03 — All documentation updated",
         blocks: [
           { type: "label", text: "Requirement" },
-          { type: "p", text: "All documentation affected by the module changes must be updated prior to compliance review. This includes requirements files, inline code comments, component docs, and any technical decision records." },
+          { type: "p", text: "All documentation affected by the module changes has been updated. This includes requirements files (if necessary), tests, code comments, component documentation, and UML diagrams — covering both architecture diagrams and use case diagrams where applicable." },
           { type: "label", text: "Standards" },
-          { type: "ul", items: ["Requirements files must reflect the final implemented scope — no gaps between spec and code.", "Public APIs and exported functions must have updated JSDoc or equivalent.", "ADRs must be filed for any architectural decision made during delivery."] },
+          { type: "ul", items: ["Requirements files must reflect the final implemented scope — no gaps between spec and code.", "Public APIs and exported functions must have updated JSDoc or equivalent.", "Architecture and use case UML diagrams must be updated when structure or behaviour changes.", "ADRs must be filed for any architectural decision made during delivery."] },
           { type: "label", text: "Evidence Required" },
           { type: "ul", items: ["Updated requirement .md file(s) linked in the PR.", "Confirmation commit touching docs in the same PR or a follow-up within the same sprint."] },
         ],
       },
       {
-        anchor: "al-04", heading: "AL-04 — End-to-end tests implemented and passed",
+        anchor: "al-04", heading: "AL-04 — All end-to-end tests implemented and passed",
         blocks: [
           { type: "label", text: "Requirement" },
           { type: "p", text: "E2E tests covering all user-facing flows defined in the module's acceptance criteria must be implemented and pass in CI before the module is marked compliant." },
@@ -265,7 +293,7 @@ const DOC_SECTIONS = [
         ],
       },
       {
-        anchor: "al-05", heading: "AL-05 — Dependency map updated",
+        anchor: "al-05", heading: "AL-05 — Dependency map between modules updated",
         blocks: [
           { type: "label", text: "Requirement" },
           { type: "p", text: "The module dependency map must be reviewed and updated whenever the module introduces, removes, or modifies dependencies on other modules." },
@@ -276,7 +304,7 @@ const DOC_SECTIONS = [
         ],
       },
       {
-        anchor: "al-06", heading: "AL-06 — Dependency-based regression tests pass",
+        anchor: "al-06", heading: "AL-06 — AI-generated regression tests based on dependency analysis pass 100%",
         blocks: [
           { type: "label", text: "Requirement" },
           { type: "p", text: "All regression tests derived from modules that depend on (or are depended upon by) the changed module must pass with 100% success before compliance is granted." },
@@ -287,7 +315,7 @@ const DOC_SECTIONS = [
         ],
       },
       {
-        anchor: "al-07", heading: "AL-07 — Required manual suites completed",
+        anchor: "al-07", heading: "AL-07 — All manual test suites (including smoke tests) completed",
         blocks: [
           { type: "label", text: "Requirement" },
           { type: "p", text: "All required manual validation sessions (smoke tests, exploratory testing, accessibility review where applicable) must be completed and documented before the module is released." },
@@ -301,7 +329,51 @@ const DOC_SECTIONS = [
         anchor: "compliance", heading: "8. Compliance verification",
         blocks: [
           { type: "p", text: "A module is considered compliant only when all seven laws are in Pass status simultaneously. Partial compliance does not qualify the module for release." },
-          { type: "p", text: "The Acceptance Laws table in each module's requirements file reflects the live status and is the single source of truth for compliance state." },
+          { type: "p", text: "This document is the canonical and sole authoritative source for the Acceptance Laws. The table in each module and epic requirements file reflects the live compliance status. Any change to a law's definition must be made here first." },
+        ],
+      },
+    ],
+  },
+
+  /* ── 1b. Definition of done ────────────────────────────── */
+  {
+    id: "definition-of-done",
+    title: "Definition of Done",
+    icon: "scales",
+    category: "Governance",
+    shortDescription: "The minimum conditions that must be satisfied before any module, prototype flow, or component is considered complete.",
+    tags: ["done", "checklist", "module", "prototype", "component"],
+    article: [
+      {
+        anchor: "purpose", heading: "1. Purpose",
+        blocks: [
+          { type: "p", text: "The Definition of Done specifies the minimum set of conditions that must be satisfied before any unit of work can be considered complete. Meeting the Definition of Done is a prerequisite for marking any item as Done in the project tracking system." },
+        ],
+      },
+      {
+        anchor: "module-level", heading: "2. Module level",
+        blocks: [
+          { type: "p", text: "A module is done when all of the following conditions are met:" },
+          { type: "ul", items: ["All seven Acceptance Laws are in Pass status.", "The spec file includes all required frontmatter fields and sections (Overview, Acceptance Laws, Functionalities).", "The status field in frontmatter is set to done.", "A non-null prototype_route is declared and the route is registered in the router.", "All functionality sections within the module file are complete and match the implemented scope.", "The dependency map has been updated and committed."] },
+        ],
+      },
+      {
+        anchor: "flow-level", heading: "3. Prototype flow level",
+        blocks: [
+          { type: "p", text: "A prototype flow is done when all of the following conditions are met:" },
+          { type: "ul", items: ["The flow route exists and is accessible from the app navigation.", "The core happy path and at least one failure path are represented and interactive.", "The flow uses only @roundrush/components and semantic design tokens — no hardcoded style values.", "The flow renders without runtime errors in CI prototype smoke tests.", "The spec validator (validate-spec-links.mjs) passes with no errors for this flow."] },
+        ],
+      },
+      {
+        anchor: "component-level", heading: "4. Design system component level",
+        blocks: [
+          { type: "ul", items: ["Component API uses kebab-case attributes and rr-* event names.", "No hardcoded style values are used where token variables exist.", "Storybook stories exist for all variants.", "Token and theme artifacts have been regenerated if raw sources changed.", "Component tests pass and coverage meets the project threshold."] },
+        ],
+      },
+      {
+        anchor: "ci-checks", heading: "5. CI validation checks",
+        blocks: [
+          { type: "ul", items: ["npm run validate:specs exits with code 0.", "All prototype routes render without runtime errors.", "npm run build:tokens completes without errors.", "npm run test passes across all workspaces."] },
         ],
       },
     ],
@@ -668,7 +740,215 @@ const DOC_SECTIONS = [
     ],
   },
 
-  /* ── 9. Release policies ────────────────────────────────── */
+  /* ── 8b. Naming conventions ────────────────────────────── */
+  {
+    id: "naming-conventions",
+    title: "Naming conventions",
+    icon: "fileText",
+    category: "Governance",
+    shortDescription: "Naming rules for requirement IDs, files, code symbols, CSS classes, and design tokens across the entire monorepo.",
+    tags: ["naming", "ids", "conventions", "css", "tokens", "files"],
+    article: [
+      {
+        anchor: "purpose", heading: "1. Purpose",
+        blocks: [
+          { type: "p", text: "This document defines the naming rules for all artefacts in the Roundrush monorepo. Consistent naming reduces ambiguity, enables tooling, and makes the codebase navigable by anyone on the team." },
+        ],
+      },
+      {
+        anchor: "requirement-ids", heading: "2. Requirement IDs",
+        blocks: [
+          { type: "p", text: "Every requirement artefact uses a 3-letter uppercase short-code derived from the epic's domain name. The code is assigned once and never changes." },
+          { type: "label", text: "Epic short-code registry" },
+          { type: "ul", items: ["AUT — Authentication", "REQ — Requirements", "DEP — Dependencies", "RMP — Roadmap", "KAN — Kanban / Planning", "DOC — Documentation", "TST — Testing Suite"] },
+          { type: "label", text: "ID patterns" },
+          { type: "ul", items: ["Epic: <CODE> e.g. AUT", "Module: <CODE>-M00N e.g. AUT-M001", "Functionality: <CODE>-M00N-F00N e.g. AUT-M001-F001"] },
+        ],
+      },
+      {
+        anchor: "file-naming", heading: "3. File naming",
+        blocks: [
+          { type: "p", text: "The requirements/epics/ folder is flat: each epic folder contains only its epic .md and one .md per module. No modules/ or functionalities/ subdirectories exist." },
+          { type: "ul", items: ["Epic: <CODE>-<kebab-domain>.md e.g. AUT-authentication.md", "Module: <CODE>-M00N-<kebab-slug>.md e.g. AUT-M001-login.md", "Functionality: ### section inside the module .md file"] },
+        ],
+      },
+      {
+        anchor: "code-symbols", heading: "4. Code symbols",
+        blocks: [
+          { type: "ul", items: ["Files & folders: kebab-case.", "Variables & functions: camelCase.", "Classes & types: PascalCase.", "Module-level constants: SCREAMING_SNAKE_CASE.", "Function-scoped constants: camelCase."] },
+        ],
+      },
+      {
+        anchor: "css-tokens", heading: "5. CSS classes & design tokens",
+        blocks: [
+          { type: "label", text: "CSS classes — BEM-inspired with rr- prefix" },
+          { type: "ul", items: ["Block: rr-sidebar", "Block + element: rr-sidebar__item", "Modifier: rr-sidebar__item--active", "State (JS-applied): is-open, is-error, is-met"] },
+          { type: "label", text: "Design tokens" },
+          { type: "ul", items: ["Base token: --rr-<category>-<token> e.g. --rr-color-blue-500", "Semantic token: --rr-sem-<name> e.g. --rr-sem-textPrimary", "Component token: --rr-<component>-<property> e.g. --rr-button-paddingX"] },
+        ],
+      },
+      {
+        anchor: "prototype-routes", heading: "6. Prototype routes",
+        blocks: [
+          { type: "ul", items: ["Flow implementation folder: kebab-case e.g. auth-login", "Route format: /<domain>/<feature>/<variant> e.g. /auth/login/default"] },
+        ],
+      },
+    ],
+  },
+
+  /* ── 8c. Review checklists ───────────────────────────────── */
+  {
+    id: "review-checklists",
+    title: "Review checklists",
+    icon: "scales",
+    category: "Governance",
+    shortDescription: "Per-PR-type checklists that reviewers must verify before approving any pull request.",
+    tags: ["review", "pr", "checklist", "spec", "design-system", "prototype"],
+    article: [
+      {
+        anchor: "purpose", heading: "1. Purpose",
+        blocks: [
+          { type: "p", text: "Reviewers must verify every item on the relevant checklist before approving. Items are not optional — if an item cannot be confirmed, the PR must be updated before approval is granted." },
+        ],
+      },
+      {
+        anchor: "spec-pr", heading: "2. Spec PR checklist",
+        blocks: [
+          { type: "p", text: "Applies to any PR that creates or modifies a file in requirements/." },
+          { type: "ul", items: ["All frontmatter fields are present and have valid values.", "All required sections are present: Overview, Acceptance Laws, at least one Functionality section.", "Acceptance Laws table uses the current canonical law labels from requirements/documentation/acceptance-laws.md.", "Canonical source annotation is present above the Acceptance Laws table.", "Status transition is valid (draft → ready → in_dev → done).", "If status is approved or done, a non-null prototype_route is declared.", "Any prototype_route declared is registered in routes.js.", "npm run validate:specs passes with no errors."] },
+        ],
+      },
+      {
+        anchor: "design-system-pr", heading: "3. Design system PR checklist",
+        blocks: [
+          { type: "ul", items: ["No hardcoded style values used where a design token variable exists.", "Component API uses kebab-case attributes and rr-* event names.", "Storybook stories exist for all new or modified variants.", "Token and theme build artifacts regenerated when raw sources changed.", "Component contract tests pass.", "No new @ts-ignore or ESLint disable comments without justification."] },
+        ],
+      },
+      {
+        anchor: "prototype-pr", heading: "4. Prototype PR checklist",
+        blocks: [
+          { type: "ul", items: ["Flow route exists in routes.js and maps to the matching spec_id.", "Core happy path and at least one failure path are represented.", "Prototype route is accessible from the prototype index navigation.", "No hardcoded hex colours or pixel values — all styles use semantic tokens.", "Flow renders without runtime JavaScript errors.", "Prototype route smoke test passes in CI."] },
+        ],
+      },
+      {
+        anchor: "documentation-pr", heading: "5. Documentation PR checklist",
+        blocks: [
+          { type: "ul", items: ["Any change to an acceptance law definition is reflected in all epic and module files within the same PR.", "Section headings use ## or ### matching the subsection structure expected by the docs tab.", "Frontmatter is valid: id, title, category, version, last_updated are all present.", "All internal links to other documentation files are valid paths."] },
+        ],
+      },
+    ],
+  },
+
+  /* ── 8d. Architecture decisions ─────────────────────────── */
+  {
+    id: "architecture-decisions",
+    title: "Architecture decisions",
+    icon: "gitBranch",
+    category: "Governance",
+    shortDescription: "ADR log: foundational structural decisions that govern how the monorepo is organised and evolved.",
+    tags: ["adr", "architecture", "monorepo", "structure", "decisions"],
+    article: [
+      {
+        anchor: "purpose", heading: "1. Purpose",
+        blocks: [
+          { type: "p", text: "This document records the foundational architecture decisions that govern the Roundrush monorepo. Once an ADR is accepted it is immutable — superseding decisions require a new ADR rather than editing an existing one. All team members may propose an ADR; acceptance requires two senior engineer approvals." },
+        ],
+      },
+      {
+        anchor: "adr-process", heading: "2. ADR process",
+        blocks: [
+          { type: "p", text: "An ADR is required for any decision that: changes a module or domain boundary; introduces or removes an external package dependency; adopts, deprecates, or fundamentally changes a pattern; or deviates from these principles." },
+          { type: "ul", items: ["Format: ADR-NNNN identifier, Status, Context, Decision, Consequences.", "Once accepted, ADRs are immutable — superseding decisions require a new ADR.", "Acceptance requires two senior engineer approvals."] },
+        ],
+      },
+      {
+        anchor: "adr-0001", heading: "ADR-0001 — Monorepo structure",
+        blocks: [
+          { type: "label", text: "Status: Accepted" },
+          { type: "p", text: "Context: Roundrush needs a scalable operating model where requirements, UI library, and prototypes remain aligned over time." },
+          { type: "p", text: "Decision: Adopt a single monorepo with top-level boundaries: requirements/, prototypes/design-system/, prototypes/app/. npm workspaces for package management." },
+          { type: "ul", items: ["Positive: strong spec-to-prototype linkage; easier cross-review; faster iteration.", "Negative: requires governance to avoid folder drift; CI matrix grows with workspaces."] },
+        ],
+      },
+      {
+        anchor: "adr-0002", heading: "ADR-0002 — Flat requirements structure",
+        blocks: [
+          { type: "label", text: "Status: Accepted" },
+          { type: "p", text: "Context: Deep nesting (epic → modules → functionalities as separate files) created friction; links.json drifted out of sync; validator had to walk deeply nested trees." },
+          { type: "p", text: "Decision: Flat two-level structure — one .md per module with functionalities as ### sections. prototype_route replaces links.json. Module statuses: draft → ready → in_dev → done → archived." },
+          { type: "ul", items: ["Positive: single-file per module; linkage co-located with spec; simpler validator.", "Negative: very large modules become long files — mitigated by keeping descriptions concise."] },
+        ],
+      },
+      {
+        anchor: "adr-0003", heading: "ADR-0003 — Centralised acceptance laws",
+        blocks: [
+          { type: "label", text: "Status: Accepted" },
+          { type: "p", text: "Context: Seven Acceptance Laws were duplicated verbatim in all 20+ epic and module files, creating a maintenance risk and risk of silent divergence." },
+          { type: "p", text: "Decision: Establish requirements/documentation/acceptance-laws.md as the single canonical source. Epic/module files retain compliance-status tables but add a read-only annotation linking to the canonical source. requirements/documentation/ replaces _governance/." },
+          { type: "ul", items: ["Positive: law definitions authored in one place; divergence eliminated; documentation surfaced as first-class content.", "Negative: contributors must follow a link to read the full definition rather than seeing it inline."] },
+        ],
+      },
+    ],
+  },
+
+  /* ── 8e. Workflows ───────────────────────────────────────── */
+  {
+    id: "workflows",
+    title: "Workflows",
+    icon: "gitFork",
+    category: "Workflow",
+    shortDescription: "Operational workflows: spec lifecycle, Figma-to-code token sync, component scaffold, and prototype build chain.",
+    tags: ["workflow", "spec", "figma", "tokens", "build", "lifecycle"],
+    article: [
+      {
+        anchor: "purpose", heading: "1. Purpose",
+        blocks: [
+          { type: "p", text: "This document describes the key operational workflows used by the Roundrush team: spec authoring lifecycle, Figma-to-code token and component sync, and the full prototype build chain." },
+        ],
+      },
+      {
+        anchor: "spec-lifecycle", heading: "2. Spec lifecycle",
+        blocks: [
+          { type: "ul", items: ["1. Create the epic .md file with frontmatter, objective, scope, and module list.", "2. Create one module .md file per module with frontmatter, overview, acceptance laws table, and functionality sections.", "3. Write each functionality as a ### F-ID section inside the module .md.", "4. Set status: draft in frontmatter during initial authoring.", "5. After review, move module status to ready, then in_dev when work begins.", "6. Build the prototype flow and register its route in routes.js.", "7. Add prototype_route to the module frontmatter.", "8. Move module status to done once all seven Acceptance Laws are in Pass status and prototype QA is complete."] },
+          { type: "label", text: "Status rules" },
+          { type: "ul", items: ["draft: actively being written — not yet reviewed. No prototype_route required.", "ready: review complete — approved for development.", "in_dev: development in progress.", "done: all Acceptance Laws passing, prototype QA complete. prototype_route must be non-null.", "archived: no longer active — not visible in navigation."] },
+        ],
+      },
+      {
+        anchor: "token-sync", heading: "3. Token and theme sync (Figma)",
+        blocks: [
+          { type: "ul", items: ["1. Export tokens.raw.json, themes.raw.json, components.raw.json from the Figma pipeline.", "2. Run npm run sync:figma -- <export-dir> to copy exports into the design system source folder.", "3. Run npm run build:tokens to compile raw files into CSS custom properties and theme files."] },
+        ],
+      },
+      {
+        anchor: "component-sync", heading: "4. Component scaffold",
+        blocks: [
+          { type: "ul", items: ["1. Run npm run scaffold:components to generate missing component skeletons.", "2. Complete interactive behaviour and accessibility implementation manually.", "3. Add or update Storybook stories for all new or changed variants.", "4. Validate with npm run test:components."] },
+        ],
+      },
+      {
+        anchor: "build-chain", heading: "5. Full build chain",
+        blocks: [
+          { type: "code", label: "Common build commands", lines: [
+            "# Install dependencies and build everything from scratch",
+            "npm run setup",
+            "",
+            "# Build only tokens (e.g. after a Figma sync)",
+            "npm run build:tokens",
+            "",
+            "# Run the prototype dev server (rebuilds tokens first)",
+            "npm run dev",
+            "",
+            "# Run all tests",
+            "npm run test",
+          ]},
+          { type: "p", text: "Build flows use only design system components and semantic tokens (--rr-sem-*). Never introduce hardcoded hex colours or pixel values in prototype flows." },
+        ],
+      },
+    ],
+  },
+
+  /* ── 9. Release policies ─────────────────────────────────── */
   {
     id: "release-policies",
     title: "Release policies",
