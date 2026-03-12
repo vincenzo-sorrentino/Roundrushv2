@@ -12,6 +12,8 @@ This document is the **canonical and sole authoritative source** for the Roundru
 
 The seven Acceptance Laws are strict, non-negotiable quality gates. A module is considered compliant only when all seven laws are in Pass status simultaneously. Partial compliance does not qualify a module or epic for release.
 
+**Validation authority:** The authority that validates acceptance law compliance is the AI Copilot agent operating locally in the development environment. Validation is a joint responsibility between the developer and the QA engineer, but the enforcement logic is automated and deterministic — Copilot evaluates each law against objective evidence (merged PRs, CI reports, coverage reports, test execution logs, dependency map snapshots, regression test reports, and QA sign-off entries) and determines pass or fail without subjective override. A human developer or QA engineer may flag a discrepancy for re-evaluation, but compliance cannot be self-certified by hand.
+
 ---
 
 ## AL-01 — All production code implemented

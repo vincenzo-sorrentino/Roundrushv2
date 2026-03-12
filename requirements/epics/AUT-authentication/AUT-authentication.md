@@ -6,6 +6,7 @@ design_state: drafting
 modules:
   - AUT-M001
   - AUT-M002
+  - AUT-M003
 ---
 
 ## Objective

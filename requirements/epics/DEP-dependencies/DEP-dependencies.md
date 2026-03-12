@@ -2,7 +2,7 @@
 id: DEP
 title_short: Dependencies
 title: Dependency tracking and intelligent impact mapping
-design_state: draft
+design_state: drafting
 modules:
   - DEP-M001
   - DEP-M002

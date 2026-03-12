@@ -9,20 +9,23 @@ modules:
 
 ## Objective
 
-Provide a centralised documentation area where team members and stakeholders can browse, search, and read documentation that is directly linked to requirement artefacts, keeping knowledge and specs in sync.
+Provide a documentation tab in every Roundrush project that reads `.md` files from the repository's `requirements/documentation/` folder and renders them as a browsable, searchable knowledge base. Contributors maintain the documentation in the repo; the tab surfaces it without any additional publishing step.
 
 ## In scope
 
-- Document viewer with markdown rendering
-- Search across documentation content
-- Linking documents back to requirements epics and modules
-- Navigation structure consistent with the rest of the app
+- Hub landing: card grid of all documentation sections with live search and results dropdown
+- Section detail view: two-panel layout with persistent left-nav and structured article rendering
+- Per-section history drawer showing change log entries with user attribution
+- MD file ingestion from `requirements/documentation/` using YAML frontmatter for section metadata
+- Category and tag system for search matching and colour coding in results
+- Code block rendering with copy-to-clipboard
 
 ## Out of scope
 
-- Real-time collaborative editing
-- Document versioning and change history
+- Real-time collaborative editing of documentation in the UI
+- Document versioning (diff view or rollback within the app)
 - External wiki or Confluence integration
+- Automatic derivation of history from git log (history entries are maintained as structured data)
 
 ---
 
