@@ -11015,11 +11015,13 @@ rr-alert.rr-req-info-callout {
 /* ── Row grid (8 columns matching Figma widths) ── */
 .rr-reg-row {
   display: grid;
-  grid-template-columns: 56px 1fr 90px 120px 100px 84px 74px 162px 162px;
-  align-items: stretch;
+  /* First column matches icon cell fixed width (44px) */
+  grid-template-columns: 44px 1fr 90px 120px 100px 84px 74px 162px 162px;
+  align-items: center;
   border-bottom: 1px solid var(--rr-sem-borderDefault, #e0e2e7);
   background: var(--rr-sem-background-table, #ffffff);
-  min-width: 940px;
+  /* Adjust min-width to reflect reduced icon column */
+  min-width: 928px;
 }
 
 .rr-reg-row:last-child {
@@ -11086,12 +11088,16 @@ rr-alert.rr-req-info-callout {
 /* Icon cell */
 .rr-reg-cell--icon {
   justify-content: center;
-  padding: 8px 12px;
+  /* Fixed column width including padding (box-sizing: border-box on .rr-reg-cell) */
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  padding: 0;
 }
 
 .rr-reg-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: block;
 }
 

@@ -1010,7 +1010,7 @@ function renderRegTableHeader() {
   const sortIcon = `<svg width="12" height="12" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="24" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   return `
     <div class="rr-reg-row rr-reg-row--header">
-      <div class="rr-reg-cell rr-reg-cell--icon">Icon</div>
+      <div class="rr-reg-cell rr-reg-cell--icon" aria-hidden="true"></div>
       <div class="rr-reg-cell rr-reg-cell--issue">Issue</div>
       <div class="rr-reg-cell rr-reg-cell--scope">Scope</div>
       <div class="rr-reg-cell rr-reg-cell--priority">Priority ${sortIcon}</div>
@@ -1024,11 +1024,13 @@ function renderRegTableHeader() {
 
 function renderRegRow(row) {
   return `
-    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
+    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
       <div class="rr-reg-cell rr-reg-cell--icon">
+        ${row._regression ? `
         <span class="rr-reg-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
         </span>
+        ` : ""}
       </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
@@ -1047,11 +1049,13 @@ function renderRegRow(row) {
 
 function renderRegDoneRow(row) {
   return `
-    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
+    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
       <div class="rr-reg-cell rr-reg-cell--icon">
+        ${row._regression ? `
         <span class="rr-reg-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
         </span>
+        ` : ""}
       </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
