@@ -845,7 +845,7 @@ const DETAIL_STATUS_CONFIG = {
 
 /* ── Detail panel tab definitions ──────────────────────────── */
 const DETAIL_TABS = [
-  { id: "overview",          label: "Overview" },
+  { id: "overview",          label: "Description" },
   { id: "acceptance-laws",   label: "Acceptance Laws" },
   { id: "dependencies",      label: "Dependencies" },
   { id: "tasks",             label: "Tasks" },
@@ -1140,7 +1140,7 @@ function renderDetailTasksTab(moduleData, detailState) {
           Priority ${ICON.arrowDown}
         </button>
       </span>
-      <span class="rr-detail-th rr-detail-th--due">Due Date</span>
+      <span class="rr-detail-th rr-detail-th--due">Date</span>
       <span class="rr-detail-th rr-detail-th--assignee">Assignee</span>
       <span class="rr-detail-th rr-detail-th--pr">PR Link</span>
       <span class="rr-detail-th rr-detail-th--status">Status</span>
@@ -1798,8 +1798,73 @@ function getModuleUATIssues(moduleId) {
 }
 
 /* ── Detail panel: UAT Issues tab ──────────────────────────── */
-function renderUATIssuesTab(mod) {
+function getUATFilterOptions(issues) {
+  const priorities = []
+  const statuses = []
+  for (const issue of issues || []) {
+    if (!priorities.find(p => p.value === issue.priority)) {
+      const cfg = PRIORITY_CONFIG[issue.priority]
+      priorities.push({ value: issue.priority, label: cfg ? cfg.label : issue.priority, dot: cfg ? cfg.color : undefined })
+    }
+    if (!statuses.find(s => s.value === issue.status)) {
+      const cfg = UAT_STATUS_CONFIG[issue.status] || UAT_STATUS_CONFIG["to-do"]
+      statuses.push({ value: issue.status, label: cfg.label, dot: cfg.bg })
+    }
+  }
+  return { priorities, statuses }
+}
+
+function renderUATFilterBar(detailState, issues) {
+  const opts = getUATFilterOptions(issues)
+  const defs = [
+    { id: "priority", label: "Priority", options: opts.priorities, selected: detailState.filters.priority },
+    { id: "statuses", label: "Status",   options: opts.statuses,   selected: detailState.filters.statuses },
+  ]
+
+  const buttons = defs.map(f => {
+    const activeCount = f.selected.length
+    const displayLabel = activeCount > 0 ? `${f.label} (${activeCount})` : f.label
+    const isOpen = detailState.openFilter === f.id
+    return `
+      <span class="rr-kb-filter-anchor">
+        <button type="button" class="rr-kb-filter-btn ${isOpen ? "is-open" : ""} ${activeCount > 0 ? "has-active" : ""}"
+          data-action="toggle-filter" data-filter="${f.id}">
+          ${escapeHtml(displayLabel)} ${ICON.caretDown}
+        </button>
+        ${renderDetailFilterDropdown(f.id, f.options, f.selected, isOpen)}
+      </span>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-kb-filters rr-detail-filters">
+      <div class="rr-kb-filter-buttons">${buttons}</div>
+      <div class="rr-kb-search-wrap">
+        <div class="rr-kb-search">
+          ${ICON.search}
+          <input type="search" class="rr-kb-search-input" id="rr-detail-search" placeholder="Search issues" />
+        </div>
+      </div>
+    </div>
+  `
+}
+
+function renderUATIssuesTab(mod, detailState) {
   const issues = getModuleUATIssues(mod.id)
+
+  // Apply detail-level filters and search
+  const q = (detailState.searchQuery || "").toLowerCase().trim()
+  let filtered = (issues || []).filter(issue => {
+    if (detailState.filters.priority.length && !detailState.filters.priority.includes(issue.priority)) return false
+    if (detailState.filters.statuses.length && !detailState.filters.statuses.includes(issue.status)) return false
+    if (q) {
+      const hay = `${issue.title} ${issue.id} ${issue.scope}`.toLowerCase()
+      if (!hay.includes(q)) return false
+    }
+    return true
+  })
+
+  const filterBarHtml = renderUATFilterBar(detailState, issues)
 
   const ths = `
     <div class="rr-uat-thead">
@@ -1828,7 +1893,7 @@ function renderUATIssuesTab(mod) {
     `
   }
 
-  const rows = issues.map(issue => {
+  const rows = filtered.map(issue => {
     const scopeCfg  = UAT_SCOPE_CONFIG[issue.scope] ?? UAT_SCOPE_CONFIG["FE"]
     const statusCfg = UAT_STATUS_CONFIG[issue.status] ?? UAT_STATUS_CONFIG["to-do"]
     const priCfg    = PRIORITY_CONFIG[issue.priority]
@@ -1854,6 +1919,7 @@ function renderUATIssuesTab(mod) {
   }).join("")
 
   return `
+    ${filterBarHtml}
     <div class="rr-uat-table">
       ${ths}
       <div class="rr-uat-tbody">${rows}</div>
@@ -1936,7 +2002,7 @@ function renderDetailTabContent(tabId, mod, moduleData, detailState) {
   if (tabId === "tasks") return renderDetailTasksTab(moduleData, detailState)
   if (tabId === "dependencies") return renderDependenciesTab(mod)
   if (tabId === "test-cases") return renderTestCasesTab(mod)
-  if (tabId === "uat-issues") return renderUATIssuesTab(mod)
+  if (tabId === "uat-issues") return renderUATIssuesTab(mod, detailState)
 
   const placeholders = {
     "test-cases": {
@@ -2075,9 +2141,9 @@ export function mountKanbanModuleFlow() {
     },
     /* Detail panel state */
     detail: {
-        open: false,
-        moduleId: null,
-        activeTab: "tasks",
+      open: false,
+      moduleId: null,
+      activeTab: "overview",
         collapsedFeatures: new Set(),
         // Detail-level filters/search (for Tasks tab)
         filters: {
@@ -2233,7 +2299,7 @@ export function mountKanbanModuleFlow() {
     }
     state.detail.open = true
     state.detail.moduleId = moduleId
-    state.detail.activeTab = "acceptance-laws"
+    state.detail.activeTab = "overview"
     state.detail.collapsedFeatures = new Set()
     renderDetail()
   }

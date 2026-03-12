@@ -5089,7 +5089,6 @@ rr-alert.rr-req-info-callout {
   gap: 8px;
 }
 .rr-detail-filters {
-  padding: 8px 24px 8px 12px; /* top right bottom left */
 }
 .rr-kb-filter-buttons {
   display: flex;
@@ -5842,7 +5841,7 @@ rr-alert.rr-req-info-callout {
   flex: 1 0 0;
   min-height: 0;
   overflow-y: auto;
-  padding: 0;
+  padding: 16px 24px 0px 24px; /* left/right 24px for table content inside detail modal */
 }
 
 /* ── Detail table (Tasks tab) ─────────────────────────────── */
@@ -5957,6 +5956,7 @@ rr-alert.rr-req-info-callout {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin: 0 auto;
 }
 
 .rr-overview-title-row {
@@ -8816,7 +8816,7 @@ rr-alert.rr-req-info-callout {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 20px;
+  padding: 20px 24px; /* keep top/bottom 20px, set left/right 24px */
   min-height: 0;
   overflow-y: auto;
 }
