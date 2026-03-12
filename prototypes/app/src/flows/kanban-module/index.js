@@ -466,6 +466,82 @@ function renderFilterBar(state, sprint) {
   `
 }
 
+/* ── Detail (module) Tasks filter helpers & bar ───────────── */
+function getDetailFilterOptions(moduleData) {
+  const priorities = []
+  const statuses = []
+  for (const feature of moduleData.features || []) {
+    for (const t of feature.tasks || []) {
+      if (!priorities.find(p => p.value === t.priority)) {
+        const cfg = PRIORITY_CONFIG[t.priority]
+        priorities.push({ value: t.priority, label: cfg ? cfg.label : t.priority, dot: cfg ? cfg.color : undefined })
+      }
+      if (!statuses.find(s => s.value === t.status)) {
+        const cfg = DETAIL_STATUS_CONFIG[t.status] || DETAIL_STATUS_CONFIG["to-do"]
+        statuses.push({ value: t.status, label: cfg.label, dot: cfg.bg })
+      }
+    }
+  }
+  return { priorities, statuses }
+}
+
+function renderDetailFilterDropdown(filterId, options, selectedValues, isOpen) {
+  if (!isOpen) return ""
+  return `
+    <div class="rr-kb-filter-dropdown" data-dropdown="${escapeHtml(filterId)}">
+      ${options.map(opt => {
+        const isSelected = selectedValues.includes(opt.value)
+        return `
+          <button type="button" class="rr-kb-filter-option ${isSelected ? "is-selected" : ""}"
+                  data-action="toggle-filter-option" data-filter="${escapeHtml(filterId)}" data-value="${escapeHtml(opt.value)}">
+            <span class="rr-kb-filter-check">${isSelected ? ICON.check : ""}</span>
+            ${opt.dot ? `<span class="rr-kb-filter-dot" style="background:${opt.dot}"></span>` : ""}
+            <span>${escapeHtml(opt.label)}</span>
+          </button>
+        `
+      }).join("")}
+      <div class="rr-kb-filter-actions">
+        <button type="button" class="rr-kb-filter-clear" data-action="clear-filter" data-filter="${escapeHtml(filterId)}">Clear</button>
+      </div>
+    </div>
+  `
+}
+
+function renderDetailFilterBar(detailState, moduleData) {
+  const opts = getDetailFilterOptions(moduleData)
+  const defs = [
+    { id: "priority", label: "Priority", options: opts.priorities, selected: detailState.filters.priority },
+    { id: "statuses", label: "Status",  options: opts.statuses,   selected: detailState.filters.statuses },
+  ]
+
+  const buttons = defs.map(f => {
+    const activeCount = f.selected.length
+    const displayLabel = activeCount > 0 ? `${f.label} (${activeCount})` : f.label
+    const isOpen = detailState.openFilter === f.id
+    return `
+      <span class="rr-kb-filter-anchor">
+        <button type="button" class="rr-kb-filter-btn ${isOpen ? "is-open" : ""} ${activeCount > 0 ? "has-active" : ""}"
+          data-action="toggle-filter" data-filter="${f.id}">
+          ${escapeHtml(displayLabel)} ${ICON.caretDown}
+        </button>
+        ${renderDetailFilterDropdown(f.id, f.options, f.selected, isOpen)}
+      </span>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-kb-filters rr-detail-filters">
+      <div class="rr-kb-filter-buttons">${buttons}</div>
+      <div class="rr-kb-search-wrap">
+        <div class="rr-kb-search">
+          ${ICON.search}
+          <input type="search" class="rr-kb-search-input" id="rr-detail-search" placeholder="Search tasks" />
+        </div>
+      </div>
+    </div>
+  `
+}
+
 /* ── Sprint selector (rendered inside tab-header-actions) ── */
 function renderSprintSelector(activeSprint) {
   const dotColor = activeSprint.status === "active" ? "#0e9255"
@@ -1037,7 +1113,25 @@ function renderAcceptanceLawsTab(mod) {
 }
 
 /* ── Detail panel: Tasks tab content ───────────────────────── */
-function renderDetailTasksTab(moduleData, collapsedFeatures) {
+function renderDetailTasksTab(moduleData, detailState) {
+  const collapsedFeatures = detailState.collapsedFeatures || new Set()
+  const q = (detailState.searchQuery || "").toLowerCase().trim()
+
+  const filteredFeatures = (moduleData.features || []).map(feature => {
+    const tasks = feature.tasks.filter(task => {
+      if (detailState.filters.priority.length && !detailState.filters.priority.includes(task.priority)) return false
+      if (detailState.filters.statuses.length && !detailState.filters.statuses.includes(task.status)) return false
+      if (q) {
+        const hay = `${task.title} ${task.id} ${feature.title}`.toLowerCase()
+        if (!hay.includes(q)) return false
+      }
+      return true
+    })
+    return { ...feature, tasks }
+  }).filter(f => f.tasks.length > 0)
+
+  const filterBarHtml = renderDetailFilterBar(detailState, moduleData)
+
   const ths = `
     <div class="rr-detail-thead">
       <span class="rr-detail-th rr-detail-th--task">Task</span>
@@ -1053,7 +1147,7 @@ function renderDetailTasksTab(moduleData, collapsedFeatures) {
     </div>
   `
 
-  const rows = moduleData.features.map(feature => {
+  const rows = filteredFeatures.map(feature => {
     const isCollapsed = collapsedFeatures.has(feature.id)
     const caretIcon = isCollapsed ? ICON.caretRight : ICON.caretDown
     const featureRow = `
@@ -1090,6 +1184,7 @@ function renderDetailTasksTab(moduleData, collapsedFeatures) {
   }).join("")
 
   return `
+    ${filterBarHtml}
     <div class="rr-detail-table">
       ${ths}
       <div class="rr-detail-tbody">${rows}</div>
@@ -1835,10 +1930,10 @@ function renderOverviewTab(mod, moduleData) {
 }
 
 /* ── Detail panel: placeholder tab content ─────────────────── */
-function renderDetailTabContent(tabId, mod, moduleData, collapsedFeatures) {
+function renderDetailTabContent(tabId, mod, moduleData, detailState) {
   if (tabId === "overview") return renderOverviewTab(mod, moduleData)
   if (tabId === "acceptance-laws") return renderAcceptanceLawsTab(mod)
-  if (tabId === "tasks") return renderDetailTasksTab(moduleData, collapsedFeatures)
+  if (tabId === "tasks") return renderDetailTasksTab(moduleData, detailState)
   if (tabId === "dependencies") return renderDependenciesTab(mod)
   if (tabId === "test-cases") return renderTestCasesTab(mod)
   if (tabId === "uat-issues") return renderUATIssuesTab(mod)
@@ -1905,7 +2000,7 @@ function renderDetailPanel(mod, detailState) {
       ${renderDetailHeader(mod)}
       ${renderDetailNav(detailState.activeTab, progressInfo.percent, progressInfo.label)}
       <div class="rr-detail-content">
-        ${renderDetailTabContent(detailState.activeTab, mod, moduleData, detailState.collapsedFeatures)}
+        ${renderDetailTabContent(detailState.activeTab, mod, moduleData, detailState)}
       </div>
     </div>
   `
@@ -1980,10 +2075,17 @@ export function mountKanbanModuleFlow() {
     },
     /* Detail panel state */
     detail: {
-      open: false,
-      moduleId: null,
-      activeTab: "tasks",
-      collapsedFeatures: new Set(),
+        open: false,
+        moduleId: null,
+        activeTab: "tasks",
+        collapsedFeatures: new Set(),
+        // Detail-level filters/search (for Tasks tab)
+        filters: {
+          priority: [],
+          statuses: [],
+        },
+        openFilter: null,
+        searchQuery: "",
     },
   }
 
@@ -2080,14 +2182,23 @@ export function mountKanbanModuleFlow() {
               ${renderDetailHeader(mod)}
               ${renderDetailNav(state.detail.activeTab, progressInfo.percent, progressInfo.label)}
               <div class="rr-detail-content">
-                ${renderDetailTabContent(state.detail.activeTab, mod, moduleData, state.detail.collapsedFeatures)}
+                ${renderDetailTabContent(state.detail.activeTab, mod, moduleData, state.detail)}
               </div>
             `
+            // Restore detail search input value if present
+            const dSearch = panelEl.querySelector('#rr-detail-search')
+            if (dSearch && state.detail.searchQuery) dSearch.value = state.detail.searchQuery
           }
         } else {
           /* First open — full render + animate in */
           els.detailOverlay.innerHTML = renderDetailPanel(mod, state.detail)
           els.detailOverlay.classList.add("is-open")
+          // Restore detail search input value after initial render
+          const newPanel = els.detailOverlay.querySelector('.rr-detail-panel')
+          if (newPanel) {
+            const dSearch = newPanel.querySelector('#rr-detail-search')
+            if (dSearch && state.detail.searchQuery) dSearch.value = state.detail.searchQuery
+          }
           requestAnimationFrame(() => {
             const panel = els.detailOverlay.querySelector(".rr-detail-panel")
             const backdrop = els.detailOverlay.querySelector(".rr-detail-backdrop")
@@ -2151,6 +2262,7 @@ export function mountKanbanModuleFlow() {
     let changed = false
     if (state.sprintDropdownOpen) { state.sprintDropdownOpen = false; changed = true }
     if (state.openFilter) { state.openFilter = null; changed = true }
+    if (state.detail && state.detail.openFilter) { state.detail.openFilter = null; changed = true }
     return changed
   }
 
@@ -2214,8 +2326,14 @@ export function mountKanbanModuleFlow() {
       event.stopPropagation()
       const filterId = target.dataset.filter
       state.sprintDropdownOpen = false
-      state.openFilter = state.openFilter === filterId ? null : filterId
-      render()
+      const inDetail = !!target.closest('.rr-detail-panel')
+      if (inDetail) {
+        state.detail.openFilter = state.detail.openFilter === filterId ? null : filterId
+        renderDetail()
+      } else {
+        state.openFilter = state.openFilter === filterId ? null : filterId
+        render()
+      }
       return
     }
 
@@ -2223,22 +2341,33 @@ export function mountKanbanModuleFlow() {
       event.stopPropagation()
       const filterId = target.dataset.filter
       const value = target.dataset.value
-      const arr = state.filters[filterId]
+      const inDetail = !!target.closest('.rr-detail-panel')
+      const arr = inDetail ? (state.detail.filters[filterId] ||= []) : (state.filters[filterId] ||= [])
       const idx = arr.indexOf(value)
       if (idx >= 0) arr.splice(idx, 1)
       else arr.push(value)
-      render()
+      if (inDetail) renderDetail()
+      else render()
       return
     }
 
     if (action === "clear-filter") {
       event.stopPropagation()
       const filterId = target.dataset.filter
-      state.filters[filterId] = []
-      state.openFilter = null
-      render()
+      const inDetail = !!target.closest('.rr-detail-panel')
+      if (inDetail) {
+        state.detail.filters[filterId] = []
+        state.detail.openFilter = null
+        renderDetail()
+      } else {
+        state.filters[filterId] = []
+        state.openFilter = null
+        render()
+      }
       return
     }
+
+    // (detail filters handled by the generic filter handlers above)
 
     if (action === "close-sprint") {
       const sprint = getActiveSprint()
@@ -2320,6 +2449,11 @@ export function mountKanbanModuleFlow() {
       // Re-render table only (not the filter bar) to keep search input focused
       const sprint = getActiveSprint()
       els.table.innerHTML = renderSprintTable(sprint, state)
+    }
+    if (event.target.id === "rr-detail-search") {
+      state.detail.searchQuery = event.target.value || ""
+      // Update detail panel content only
+      renderDetail()
     }
   }
 
