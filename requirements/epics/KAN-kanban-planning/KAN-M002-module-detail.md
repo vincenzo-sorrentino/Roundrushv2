@@ -69,7 +69,7 @@ The Dependencies tab shows all declared inter-module dependencies for the open m
 
 ### KAN-M002-F006 — Tasks tab
 
-The Tasks tab lists all implementation tasks for the module, auto-generated from the module's Acceptance Laws. Tasks cannot be created, edited, or deleted manually. Rows are grouped under named feature areas using collapsible group headers. Each task row shows: task title, Priority (icon and label), Due Date, Assignee (avatar), PR Link (a GitHub icon button that opens the associated pull request in a new tab), and a Status badge reflecting the current CI/CD-driven state (TODO, IN PROGRESS, RFR, MERGED, QA, or DONE). All status transitions are driven by pipeline events as defined in KAN-M001-F005. The progress bar in the panel header reflects tasks-complete divided by tasks-total for this module.
+The Tasks tab lists all implementation tasks for the module, auto-generated from the module's Acceptance Laws. Tasks cannot be created, edited, or deleted manually. Rows are grouped under named feature areas using collapsible group headers. Each task row shows: task title, Priority (icon and label), Date, Assignee (avatar), PR Link (a GitHub icon button that opens the associated pull request in a new tab), and a Status badge reflecting the current CI/CD-driven state (TODO, IN PROGRESS, RFR, MERGED, QA, or DONE). All status transitions are driven by pipeline events as defined in KAN-M001-F005. The progress bar in the panel header reflects tasks-complete divided by tasks-total for this module.
 
 ---
 
@@ -82,3 +82,4 @@ The Test Cases tab shows the full list of test cases registered against the modu
 ### KAN-M002-F008 — UAT Issues tab
 
 The UAT Issues tab shows user acceptance testing issues scoped to this module. Each row contains: a Scope badge indicating whether the issue is front-end (FE), back-end (BE), full-stack (BE&FE), or infrastructure (Devops), the issue title, Priority (icon and label), Date, Assignee (avatar), PR Link (a GitHub icon button that opens the remediation pull request), and a Status/Stg-Dev badge reflecting the current issue state (to-do, in-progress, fixed, open, merged, or closed). If no UAT issues exist for the module, an empty-state message is shown. The table is read-only.
+

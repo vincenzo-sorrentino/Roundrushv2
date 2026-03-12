@@ -229,6 +229,13 @@ let state = {
   sortCol:            "priority",
   sortDir:            "desc",
   searchQuery:        "",
+  // Issues tab filters/search (used for UAT Issues)
+  issuesFilters: {
+    priority: [],
+    statuses: [],
+  },
+  issuesOpenFilter: null,
+  issuesSearch: "",
 }
 
 function getSprint() {
@@ -363,8 +370,25 @@ function renderIssuesLogTab(issues, heading) {
   if (!issues.length) {
     return `<p class="rr-rn-empty">${ICON.checkCircle} No ${escapeHtml(heading)} issues reported for this sprint.</p>`
   }
+  // If this is the UAT tab, build filter bar and apply filters/search
+  let filtered = issues
+  let filterBarHtml = ""
+  if (heading === "UAT") {
+    const opts = getIssueFilterOptions(issues)
+    filterBarHtml = renderIssueFilterBar(state, opts)
+    const q = (state.issuesSearch || "").toLowerCase().trim()
+    filtered = issues.filter(issue => {
+      if (state.issuesFilters.priority.length && !state.issuesFilters.priority.includes(issue.priority)) return false
+      if (state.issuesFilters.statuses.length && !state.issuesFilters.statuses.includes(issue.status)) return false
+      if (q) {
+        const hay = `${issue.id} ${issue.title} ${issue.reporter}`.toLowerCase()
+        if (!hay.includes(q)) return false
+      }
+      return true
+    })
+  }
 
-  const rows = issues.map(issue => {
+  const rows = filtered.map(issue => {
     const st = ISSUE_STATUS_CONFIG[issue.status] || ISSUE_STATUS_CONFIG["open"]
     const u  = TEAM.find(t => t.id === issue.reporter)
     return `
@@ -380,6 +404,7 @@ function renderIssuesLogTab(issues, heading) {
   }).join("")
 
   return `
+    ${filterBarHtml}
     <div class="rr-rn-issues-table">
       <div class="rr-rn-issues-thead">
         <span class="rr-rn-issues-th rr-rn-issues-th--id">ID</span>
@@ -390,6 +415,79 @@ function renderIssuesLogTab(issues, heading) {
         <span class="rr-rn-issues-th rr-rn-issues-th--date">Date</span>
       </div>
       <div class="rr-rn-issues-tbody">${rows}</div>
+    </div>
+  `
+}
+
+
+/* ── Issue filter helpers for UAT tab */
+function getIssueFilterOptions(issues) {
+  const priorities = []
+  const statuses = []
+  for (const it of issues) {
+    if (!priorities.find(p => p.value === it.priority)) {
+      const cfg = PRIORITY_CONFIG[it.priority]
+      priorities.push({ value: it.priority, label: cfg ? cfg.label : it.priority, dot: cfg ? cfg.color : undefined })
+    }
+    if (!statuses.find(s => s.value === it.status)) {
+      const cfg = ISSUE_STATUS_CONFIG[it.status] || ISSUE_STATUS_CONFIG["open"]
+      statuses.push({ value: it.status, label: cfg.label, dot: cfg.bg })
+    }
+  }
+  return { priorities, statuses }
+}
+
+function renderIssueFilterDropdown(filterId, options, selectedValues, isOpen) {
+  if (!isOpen) return ""
+  return `
+    <div class="rr-kb-filter-dropdown" data-dropdown="${escapeHtml(filterId)}">
+      ${options.map(opt => {
+        const isSelected = selectedValues.includes(opt.value)
+        return `
+          <button type="button" class="rr-kb-filter-option ${isSelected ? "is-selected" : ""}"
+                  data-action="toggle-filter-option" data-filter="${escapeHtml(filterId)}" data-value="${escapeHtml(opt.value)}">
+            <span class="rr-kb-filter-check">${isSelected ? ICON.check : ""}</span>
+            ${opt.dot ? `<span class="rr-kb-filter-dot" style="background:${opt.dot}"></span>` : ""}
+            <span>${escapeHtml(opt.label)}</span>
+          </button>
+        `
+      }).join("")}
+      <div class="rr-kb-filter-actions">
+        <button type="button" class="rr-kb-filter-clear" data-action="clear-filter" data-filter="${escapeHtml(filterId)}">Clear</button>
+      </div>
+    </div>
+  `
+}
+
+function renderIssueFilterBar(stateObj, opts) {
+  const defs = [
+    { id: "priority", label: "Priority", options: opts.priorities, selected: state.issuesFilters.priority },
+    { id: "statuses", label: "Status", options: opts.statuses, selected: state.issuesFilters.statuses },
+  ]
+  const buttons = defs.map(f => {
+    const activeCount = f.selected.length
+    const displayLabel = activeCount > 0 ? `${f.label} (${activeCount})` : f.label
+    const isOpen = state.issuesOpenFilter === f.id
+    return `
+      <span class="rr-kb-filter-anchor">
+        <button type="button" class="rr-kb-filter-btn ${isOpen ? "is-open" : ""} ${activeCount > 0 ? "has-active" : ""}"
+                data-action="toggle-filter" data-filter="${f.id}">
+          ${escapeHtml(displayLabel)} ${ICON.caretDown}
+        </button>
+        ${renderIssueFilterDropdown(f.id, f.options, f.selected, isOpen)}
+      </span>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-kb-filters rr-detail-filters">
+      <div class="rr-kb-filter-buttons">${buttons}</div>
+      <div class="rr-kb-search-wrap">
+        <div class="rr-kb-search">
+          ${ICON.search}
+          <input type="search" class="rr-kb-search-input" id="rr-rn-issues-search" placeholder="Search issues" />
+        </div>
+      </div>
     </div>
   `
 }
@@ -579,10 +677,12 @@ export function mountOldSprintFlow() {
   render()
 
   root.addEventListener("click", handleClick)
+  root.addEventListener("input", handleInput)
   document.addEventListener("keydown", handleKeydown)
 
   return () => {
     root.removeEventListener("click", handleClick)
+    root.removeEventListener("input", handleInput)
     document.removeEventListener("keydown", handleKeydown)
     const sprintHeaderEl = document.getElementById("rr-tab-sprint-header")
     if (sprintHeaderEl) sprintHeaderEl.innerHTML = ""
@@ -637,6 +737,47 @@ function handleClick(e) {
     // Prototype: just show a toast-style message
     showDownloadToast(`${ext} export for Sprint ${sprint.number} would download here.`)
     return
+  }
+
+  // Generic filter controls for the issues tab (UAT)
+  if (action === "toggle-filter") {
+    const filterId = btn.dataset.filter
+    if (state.activeTab === "uat-log") {
+      state.issuesOpenFilter = state.issuesOpenFilter === filterId ? null : filterId
+      render()
+      return
+    }
+  }
+
+  if (action === "toggle-filter-option") {
+    const filterId = btn.dataset.filter
+    const value = btn.dataset.value
+    if (state.activeTab === "uat-log") {
+      const arr = state.issuesFilters[filterId] || []
+      const idx = arr.indexOf(value)
+      if (idx >= 0) arr.splice(idx, 1)
+      else arr.push(value)
+      state.issuesFilters[filterId] = arr
+      render()
+      return
+    }
+  }
+
+  if (action === "clear-filter") {
+    const filterId = btn.dataset.filter
+    if (state.activeTab === "uat-log") {
+      state.issuesFilters[filterId] = []
+      state.issuesOpenFilter = null
+      render()
+      return
+    }
+  }
+}
+
+function handleInput(e) {
+  if (e.target && e.target.id === "rr-rn-issues-search") {
+    state.issuesSearch = e.target.value || ""
+    render()
   }
 }
 

@@ -77,8 +77,8 @@ let ADD_ISSUE_PRIORITY = ""
 let ADD_ISSUE_PRIORITY_DROPDOWN_OPEN = false
 const BUTTONS = [
   { id: "overview", label: "Overview" },
-  { id: "sprint", label: "Sprint" },
-  { id: "regressions", label: "Regressions" },
+  { id: "sprint", label: "Test Cases" },
+  { id: "regressions", label: "UAT Issues" },
   { id: "production", label: "Production Issues" },
   { id: "stakeholders", label: "Stakeholders’ Issues" },
 ]
@@ -267,65 +267,8 @@ const STATUS_CONFIG = {
 
 const TABLES = [
   {
-    id: "prod",
-    title: "PROD 10/02/26",
-    totalProgress: "40.99%",
-    rows: [
-      {
-        section: "DAS - Dashboard",
-        passRate: "100.00%",
-        totalTests: "17",
-        passed: "17",
-        failed: "0",
-        blocked: "0",
-        progress: "100.00%",
-        status: "completed",
-      },
-      {
-        section: "AUT - Login",
-        passRate: "47.37%",
-        totalTests: "42",
-        passed: "28",
-        failed: "0",
-        blocked: "0",
-        progress: "59.48%",
-        status: "attention",
-      },
-      {
-        section: "ONB - Onboarding",
-        passRate: "40.09%",
-        totalTests: "38",
-        passed: "17",
-        failed: "0",
-        blocked: "0",
-        progress: "47.37%",
-        status: "attention",
-      },
-      {
-        section: "TEM - Team management",
-        passRate: "12.74%",
-        totalTests: "53",
-        passed: "2",
-        failed: "3",
-        blocked: "1",
-        progress: "12.74%",
-        status: "failing",
-      },
-      {
-        section: "TRA - Transactions",
-        passRate: "58.36%",
-        totalTests: "45",
-        passed: "32",
-        failed: "0",
-        blocked: "10",
-        progress: "61.98%",
-        status: "attention",
-      },
-    ],
-  },
-  {
     id: "stg",
-    title: "STG 13/02/26",
+    title: "Staging 13/02/26",
     totalProgress: "97.45%",
     rows: [
       {
@@ -376,6 +319,63 @@ const TABLES = [
         failed: "0",
         blocked: "10",
         progress: "98.14%",
+        status: "attention",
+      },
+    ],
+  },
+  {
+    id: "prod",
+    title: "Production 10/02/26",
+    totalProgress: "40.99%",
+    rows: [
+      {
+        section: "DAS - Dashboard",
+        passRate: "100.00%",
+        totalTests: "17",
+        passed: "17",
+        failed: "0",
+        blocked: "0",
+        progress: "100.00%",
+        status: "completed",
+      },
+      {
+        section: "AUT - Login",
+        passRate: "47.37%",
+        totalTests: "42",
+        passed: "28",
+        failed: "0",
+        blocked: "0",
+        progress: "59.48%",
+        status: "attention",
+      },
+      {
+        section: "ONB - Onboarding",
+        passRate: "40.09%",
+        totalTests: "38",
+        passed: "17",
+        failed: "0",
+        blocked: "0",
+        progress: "47.37%",
+        status: "attention",
+      },
+      {
+        section: "TEM - Team management",
+        passRate: "12.74%",
+        totalTests: "53",
+        passed: "2",
+        failed: "3",
+        blocked: "1",
+        progress: "12.74%",
+        status: "failing",
+      },
+      {
+        section: "TRA - Transactions",
+        passRate: "58.36%",
+        totalTests: "45",
+        passed: "32",
+        failed: "0",
+        blocked: "10",
+        progress: "61.98%",
         status: "attention",
       },
     ],
@@ -900,11 +900,11 @@ const ISSUE_DETAILS_MAP = {
 
 const REGRESSION_ROWS = [
   { scope: "FE",    issue: "Document version mismatch.",               issueSub: "DEV | 200 KB file validation error.",         priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.kate2],                                    statusStaging: "merged",     statusProd: "todo"   },
-  { scope: "FE",    issue: "Document access denied.",                  issueSub: "DEV | 200 KB file format not supported.",     priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.orlando],                                  statusStaging: "review",     statusProd: "todo"   },
+  { scope: "FE",    issue: "Document access denied.",                  issueSub: "DEV | 200 KB file format not supported.",     priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.orlando],                                  statusStaging: "review",     statusProd: "todo",   _regression: true },
   { scope: "BE",    issue: "Document upload failed.",                  issueSub: "PROD | 200 KB file exceeds allowed size.",    priority: "high",   date: "08/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "review",     statusProd: "todo"   },
   { scope: "BE",    issue: "Document missing metadata.",               issueSub: "PROD | 200 KB file upload timeout.",          priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "inprogress", statusProd: "todo"   },
   { scope: "FE",    issue: "Document format error.",                   issueSub: "STG | 200 KB file not processing correctly.", priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "inprogress", statusProd: "todo"   },
-  { scope: "BE",    issue: "Document corrupted.",                      issueSub: "",                                            priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.kate2, REG_AVATAR.orlando],                statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "BE",    issue: "Document corrupted.",                      issueSub: "",                                            priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.kate2, REG_AVATAR.orlando],                statusStaging: "merged",     statusProd: "todo",   _regression: true },
   { scope: "FE",    issue: "Document missing.",                        issueSub: "",                                            priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "merged",     statusProd: "todo"   },
   { scope: "FE",    issue: "Document upload issue.",                   issueSub: "",                                            priority: "medium", date: "08/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "error",      statusProd: "todo"   },
   { scope: "BE&FE", issue: "Document not accessible.",                 issueSub: "",                                            priority: "low",    date: "13/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "todo",       statusProd: "todo"   },
@@ -913,17 +913,17 @@ const REGRESSION_ROWS = [
 
 const REGRESSION_DONE_ROWS = [
   { scope: "Devops", issue: "Payment Processing Failure", issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
-  { scope: "FE",     issue: "Delayed Payment Processing", issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew],  statusStaging: "done", statusProd: "done" },
+  { scope: "FE",     issue: "Delayed Payment Processing", issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew],  statusStaging: "done", statusProd: "done", _regression: true },
 ]
 
 const PRODUCTION_ROWS = [
   { scope: "FE",    issue: "Authentication token expired on refresh.",    issueSub: "", priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.kate2],                                    statusStaging: "merged",     statusProd: "todo"   },
   { scope: "FE",    issue: "User session ends unexpectedly mid-flow.",    issueSub: "", priority: "urgent", date: "07/02/26", assignees: [REG_AVATAR.orlando],                                  statusStaging: "review",     statusProd: "todo"   },
-  { scope: "BE",    issue: "API rate limiter blocking valid requests.",   issueSub: "", priority: "high",   date: "08/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "review",     statusProd: "todo"   },
+  { scope: "BE",    issue: "API rate limiter blocking valid requests.",   issueSub: "", priority: "high",   date: "08/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "review",     statusProd: "todo",   _regression: true },
   { scope: "BE",    issue: "Payment gateway timeout on high load.",       issueSub: "", priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "inprogress", statusProd: "todo"   },
   { scope: "FE",    issue: "Dashboard widget fails to render on Safari.", issueSub: "", priority: "high",   date: "12/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "inprogress", statusProd: "todo"   },
-  { scope: "BE",    issue: "Push notifications not delivered to iOS.",    issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.kate2, REG_AVATAR.orlando],                statusStaging: "merged",     statusProd: "todo"   },
-  { scope: "FE",    issue: "Export report hangs on large datasets.",      issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "merged",     statusProd: "todo"   },
+  { scope: "BE",    issue: "Push notifications not delivered to iOS.",    issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.kate2, REG_AVATAR.orlando],                statusStaging: "merged",     statusProd: "todo",   _regression: true },
+  { scope: "FE",    issue: "Export report hangs on large datasets.",      issueSub: "", priority: "medium", date: "12/02/26", assignees: [REG_AVATAR.lana],                                     statusStaging: "merged",     statusProd: "todo",   _regression: true },
   { scope: "FE",    issue: "Search index out of sync after data import.", issueSub: "", priority: "medium", date: "08/02/26", assignees: [REG_AVATAR.phoenix],                                  statusStaging: "error",      statusProd: "todo"   },
   { scope: "BE&FE", issue: "Role permissions not enforced on API level.", issueSub: "", priority: "low",    date: "13/02/26", assignees: [REG_AVATAR.candice],                                  statusStaging: "todo",       statusProd: "todo"   },
   { scope: "BE&FE", issue: "Data sync delay between staging and prod.",   issueSub: "", priority: "low",    date: "08/02/26", assignees: [REG_AVATAR.candice, REG_AVATAR.demi, REG_AVATAR.drew], statusStaging: "todo",       statusProd: "todo"   },
@@ -951,6 +951,25 @@ const STAKEHOLDERS_DONE_ROWS = [
   { issue: "SSO login fails for external stakeholder accounts.", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "todo" },
   { issue: "Data export includes archived records incorrectly.", priority: "medium", date: "12/02/26", reporter: REG_AVATAR.alisa, assignees: [REG_AVATAR.lana, REG_AVATAR.demi, REG_AVATAR.candice], statusStaging: "done", statusProd: "done" },
 ]
+
+// Choose 5 random stakeholder issues to show the icon for (stable for session)
+function pickRandomN(arr, n) {
+  const unique = Array.from(new Set(arr))
+  const src = unique.slice()
+  const out = []
+  while (out.length < n && src.length > 0) {
+    const i = Math.floor(Math.random() * src.length)
+    out.push(src.splice(i, 1)[0])
+  }
+  return out
+}
+
+const STAKEHOLDERS_ICON_ISSUES = new Set(
+  pickRandomN(
+    [...STAKEHOLDERS_ROWS.map(r => r.issue || ""), ...STAKEHOLDERS_DONE_ROWS.map(r => r.issue || "")],
+    5
+  )
+)
 
 /* ── Regressions Render Helpers ──────────────────────────────── */
 const REG_PRIORITY_ICONS = {
@@ -981,8 +1000,8 @@ const REG_SCOPE_CFG = {
 }
 
 function renderRegScope(scope) {
-  const cfg = REG_SCOPE_CFG[scope] || REG_SCOPE_CFG["FE"]
-  return `<span class="rr-reg-scope" style="background:${cfg.bg};color:${cfg.color}">${escapeHtml(scope)}</span>`
+  const cfg = REG_SCOPE_CFG[scope.label || scope] || REG_SCOPE_CFG["FE"];
+  return `<span class="rr-reg-scope" style="background:${cfg.bg};color:${cfg.color}">${escapeHtml(scope.label || scope)}</span>`;
 }
 
 function renderRegStatus(key) {
@@ -1006,50 +1025,65 @@ function renderRegTableHeader() {
   const sortIcon = `<svg width="12" height="12" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="24" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   return `
     <div class="rr-reg-row rr-reg-row--header">
-      <div class="rr-reg-cell rr-reg-cell--scope">Scope</div>
+      <div class="rr-reg-cell rr-reg-cell--icon" aria-hidden="true"></div>
       <div class="rr-reg-cell rr-reg-cell--issue">Issue</div>
+      <div class="rr-reg-cell rr-reg-cell--scope">Scope</div>
       <div class="rr-reg-cell rr-reg-cell--priority">Priority ${sortIcon}</div>
       <div class="rr-reg-cell rr-reg-cell--date">Date</div>
       <div class="rr-reg-cell rr-reg-cell--assignee">Assignee</div>
       <div class="rr-reg-cell rr-reg-cell--pr">PR Link</div>
-      <div class="rr-reg-cell rr-reg-cell--status">Status Staging</div>
-      <div class="rr-reg-cell rr-reg-cell--status">Status Production</div>
+      <div class="rr-reg-cell rr-reg-cell--status rr-reg-cell--status-stg">Status Staging</div>
+      <div class="rr-reg-cell rr-reg-cell--status rr-reg-cell--status-prod">Status Production</div>
     </div>`
 }
 
 function renderRegRow(row) {
   return `
-    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
-      <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope(row.scope)}</div>
+    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
+      <div class="rr-reg-cell rr-reg-cell--icon">
+        ${row._regression ? `
+        <span class="rr-reg-icon" title="Regression" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
+        </span>
+        ` : ""}
+      </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
+      <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope({ label: row.scope, _regression: row._regression || false })}</div>
       <div class="rr-reg-cell rr-reg-cell--priority">${renderRegPriority(row.priority)}</div>
       <div class="rr-reg-cell rr-reg-cell--date">${escapeHtml(row.date)}</div>
       <div class="rr-reg-cell rr-reg-cell--assignee">${renderRegAvatarGroup(row.assignees)}</div>
       <div class="rr-reg-cell rr-reg-cell--pr">
         <button class="rr-reg-github-btn" type="button" title="View PR">${REG_GITHUB_ICON}</button>
       </div>
-      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusStaging)}</div>
-      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusProd)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status rr-reg-cell--status-stg">${renderRegStatus(row.statusStaging)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status rr-reg-cell--status-prod">${renderRegStatus(row.statusProd)}</div>
     </div>`
 }
 
 function renderRegDoneRow(row) {
   return `
-    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
-      <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope(row.scope)}</div>
+    <div class="rr-reg-row" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
+      <div class="rr-reg-cell rr-reg-cell--icon">
+        ${row._regression ? `
+        <span class="rr-reg-icon" title="Regression" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
+        </span>
+        ` : ""}
+      </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
+      <div class="rr-reg-cell rr-reg-cell--scope">${renderRegScope({ label: row.scope, _regression: row._regression || false })}</div>
       <div class="rr-reg-cell rr-reg-cell--priority">${renderRegPriority(row.priority)}</div>
       <div class="rr-reg-cell rr-reg-cell--date">${escapeHtml(row.date)}</div>
       <div class="rr-reg-cell rr-reg-cell--assignee"></div>
       <div class="rr-reg-cell rr-reg-cell--pr">
         <button class="rr-reg-github-btn" type="button" title="View PR">${REG_GITHUB_ICON}</button>
       </div>
-      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusStaging)}</div>
-      <div class="rr-reg-cell rr-reg-cell--status">${renderRegStatus(row.statusProd)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status rr-reg-cell--status-stg">${renderRegStatus(row.statusStaging)}</div>
+      <div class="rr-reg-cell rr-reg-cell--status rr-reg-cell--status-prod">${renderRegStatus(row.statusProd)}</div>
     </div>`
 }
 
@@ -1107,6 +1141,7 @@ function renderStakeholdersTableHeader() {
   const sortIcon = `<svg width="12" height="12" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="24" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   return `
     <div class="rr-reg-row rr-reg-row--header rr-reg-row--stakeholders">
+      <div class="rr-reg-cell rr-reg-cell--icon" aria-hidden="true"></div>
       <div class="rr-reg-cell rr-reg-cell--issue">Issue</div>
       <div class="rr-reg-cell rr-reg-cell--priority">Priority ${sortIcon}</div>
       <div class="rr-reg-cell">Date</div>
@@ -1120,7 +1155,14 @@ function renderStakeholdersTableHeader() {
 
 function renderStakeholdersRow(row) {
   return `
-    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
+    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
+      <div class="rr-reg-cell rr-reg-cell--icon">
+        ${STAKEHOLDERS_ICON_ISSUES.has(row.issue) ? `
+          <span class="rr-reg-icon" title="Change Request" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM96,128a32,32,0,0,0,57.6,19.2,8,8,0,0,1,12.8,9.61,48,48,0,1,1,0-57.62,8,8,0,0,1-12.8,9.61A32,32,0,0,0,96,128Z"></path></svg>
+          </span>
+        ` : ``}
+      </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
@@ -1138,7 +1180,14 @@ function renderStakeholdersRow(row) {
 
 function renderStakeholdersDoneRow(row) {
   return `
-    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'")}'>
+    <div class="rr-reg-row rr-reg-row--stakeholders" data-action="open-issue-modal" data-issue='${JSON.stringify(row).replace(/'/g, "\\'") }'>
+      <div class="rr-reg-cell rr-reg-cell--icon">
+        ${STAKEHOLDERS_ICON_ISSUES.has(row.issue) ? `
+          <span class="rr-reg-icon" title="Change Request" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM96,128a32,32,0,0,0,57.6,19.2,8,8,0,0,1,12.8,9.61,48,48,0,1,1,0-57.62,8,8,0,0,1-12.8,9.61A32,32,0,0,0,96,128Z"></path></svg>
+          </span>
+        ` : ``}
+      </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
       </div>
@@ -1657,6 +1706,13 @@ function renderModule(module) {
   const isExpanded = EXPANDED_MODULES.has(module.id)
   const hasTestCases = module.testCases && module.testCases.length > 0
   
+  // Calculate test case progress
+  let total = 0, passing = 0;
+  if (hasTestCases) {
+    total = module.testCases.length;
+    passing = module.testCases.filter(tc => tc.result === "pass").length;
+  }
+
   return `
     <div class="rr-sprint-module" data-module-id="${escapeHtml(module.id)}">
       <div class="rr-sprint-module-header">
@@ -1664,7 +1720,10 @@ function renderModule(module) {
           ${isExpanded ? ICON.caretDown : ICON.caretRight}
         </button>
         <span class="rr-sprint-icon">${ICON.folderSimple}</span>
-        <h3 class="rr-sprint-module-title">${escapeHtml(module.title)}</h3>
+        <h3 class="rr-sprint-module-title">
+          ${escapeHtml(module.title)}
+          ${hasTestCases ? `<span class="rr-sprint-module-progress">(${passing}/${total})</span>` : ""}
+        </h3>
       </div>
       ${isExpanded && hasTestCases ? `
         <div class="rr-sprint-module-content">
@@ -1713,12 +1772,14 @@ export function renderTestingTabFlow() {
           <div class="rr-testing-button-group" role="tablist">
             ${renderButtons()}
           </div>
-          <div class="rr-testing-search">
-            <span class="rr-testing-search-icon" aria-hidden="true">
-              ${ICON.search}
-            </span>
-            <input class="rr-testing-search-input" type="text" placeholder="Search" />
-          </div>
+          ${ACTIVE_TAB !== "overview" ? `
+            <div class="rr-testing-search">
+              <span class="rr-testing-search-icon" aria-hidden="true">
+                ${ICON.search}
+              </span>
+              <input class="rr-testing-search-input" type="text" placeholder="Search" />
+            </div>
+          ` : ""}
         </div>
         ${tabContent}
       </section>
