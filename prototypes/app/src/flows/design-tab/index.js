@@ -21,9 +21,11 @@ const ICON = {
   caretRight: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="96,48 176,128 96,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   caretDoubleUp: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,160 128,80 208,160" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><polyline points="48,208 128,128 208,208" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   caretUp: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><polyline points="48,160 128,80 208,160" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  search: `<svg width="20" height="20" viewBox="0 0 256 256" fill="none"><circle cx="116" cy="116" r="72" stroke="currentColor" stroke-width="16"/><line x1="168" y1="168" x2="224" y2="224" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   equals: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="40" y1="96" x2="216" y2="96" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="40" y1="160" x2="216" y2="160" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   arrowDown: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   link: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><path d="M144 80h32a40 40 0 0 1 0 80h-32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 176H80a40 40 0 0 1 0-80h32" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="96" y1="128" x2="160" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  check: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><polyline points="40,128 96,184 216,64" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   sun: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="56" stroke="currentColor" stroke-width="16"/><line x1="128" y1="24" x2="128" y2="56" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="128" y1="200" x2="128" y2="232" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="24" y1="128" x2="56" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="200" y1="128" x2="232" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="68" y1="68" x2="91" y2="91" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="165" y1="165" x2="188" y2="188" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="188" y1="68" x2="165" y2="91" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="68" y1="188" x2="91" y2="165" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   moon: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><path d="M108 40C74 54 52 90 52 128c0 53 43 96 96 96 33 0 62-17 79-43-23 9-49 12-73 4C104 171 74 119 86 67c3-11 11-21 22-27z" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   monitor: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><rect x="32" y="48" width="192" height="144" rx="16" stroke="currentColor" stroke-width="16"/><line x1="80" y1="232" x2="176" y2="232" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="128" y1="192" x2="128" y2="232" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
@@ -115,6 +117,126 @@ const PROTO_META = {
 
 function findItem(id) {
   return [...MAIN_ITEMS, ...SPRINT_BACKLOG_ITEMS].find(i => i.id === id)
+}
+
+function getModuleCode(itemId) {
+  return String(itemId || "").replace(/[0-9-].*$/, "") || "UNKNOWN"
+}
+
+function getAllItems() {
+  return [...MAIN_ITEMS, ...SPRINT_BACKLOG_ITEMS]
+}
+
+function renderFilterDropdown(filterId, options, selectedValues, isOpen) {
+  if (!isOpen) return ""
+
+  return `
+    <div class="rr-kb-filter-dropdown" data-dropdown="${escapeHtml(filterId)}">
+      ${options.map(opt => {
+        const isSelected = selectedValues.includes(opt.value)
+        return `
+          <button type="button" class="rr-kb-filter-option ${isSelected ? "is-selected" : ""}"
+                  data-action="toggle-filter-option" data-filter="${escapeHtml(filterId)}" data-value="${escapeHtml(opt.value)}">
+            <span class="rr-kb-filter-check">${isSelected ? ICON.check : ""}</span>
+            ${opt.dot ? `<span class="rr-kb-filter-dot" style="background:${opt.dot}"></span>` : ""}
+            <span>${escapeHtml(opt.label)}</span>
+          </button>
+        `
+      }).join("")}
+      <div class="rr-kb-filter-actions">
+        <button type="button" class="rr-kb-filter-clear" data-action="clear-filter" data-filter="${escapeHtml(filterId)}">Clear</button>
+      </div>
+    </div>
+  `
+}
+
+function getFilterOptions() {
+  const all = getAllItems()
+
+  const modules = [...new Set(all.map(item => getModuleCode(item.id)))].sort()
+    .map(code => ({ value: code, label: code }))
+
+  const priorities = [...new Set(all.map(item => item.priority))]
+    .map(value => ({ value, label: PRIORITY_CONFIG[value]?.label || value, dot: PRIORITY_CONFIG[value]?.color }))
+
+  const assigneeIds = [...new Set(all.flatMap(item => item.assignees))]
+  const assignees = assigneeIds
+    .map(uid => TEAM.find(member => member.id === uid))
+    .filter(Boolean)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(member => ({ value: member.id, label: member.name }))
+
+  const statuses = [...new Set(all.map(item => item.status))]
+    .map(value => ({ value, label: STATUS_CONFIG[value]?.label || value, dot: STATUS_CONFIG[value]?.bg }))
+
+  return { modules, priorities, assignees, statuses }
+}
+
+function renderFilterBar(state) {
+  const opts = getFilterOptions()
+  const filterDefs = [
+    { id: "modules", label: "All modules", options: opts.modules, selected: state.filters.modules },
+    { id: "priority", label: "All priority", options: opts.priorities, selected: state.filters.priority },
+    { id: "assignees", label: "All assignees", options: opts.assignees, selected: state.filters.assignees },
+    { id: "statuses", label: "All statuses", options: opts.statuses, selected: state.filters.statuses },
+  ]
+
+  const buttons = filterDefs.map(filter => {
+    const activeCount = filter.selected.length
+    const displayLabel = activeCount > 0 ? `${filter.label.replace("All ", "")} (${activeCount})` : filter.label
+    const isOpen = state.openFilter === filter.id
+    return `
+      <span class="rr-kb-filter-anchor">
+        <button type="button" class="rr-kb-filter-btn ${isOpen ? "is-open" : ""} ${activeCount > 0 ? "has-active" : ""}"
+                data-action="toggle-filter" data-filter="${escapeHtml(filter.id)}">
+          ${escapeHtml(displayLabel)} ${ICON.caretDown}
+        </button>
+        ${renderFilterDropdown(filter.id, filter.options, filter.selected, isOpen)}
+      </span>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-kb-filters">
+      <div class="rr-kb-filter-buttons">${buttons}</div>
+      <div class="rr-kb-search-wrap">
+        <div class="rr-kb-search">
+          ${ICON.search}
+          <input type="search" class="rr-kb-search-input" id="rr-dt-search" value="${escapeHtml(state.searchQuery)}" placeholder="Search" />
+        </div>
+      </div>
+    </div>
+  `
+}
+
+function applyFilters(items, state) {
+  const query = String(state.searchQuery || "").trim().toLowerCase()
+
+  return items.filter(item => {
+    const moduleCode = getModuleCode(item.id)
+
+    if (state.filters.modules.length && !state.filters.modules.includes(moduleCode)) return false
+    if (state.filters.priority.length && !state.filters.priority.includes(item.priority)) return false
+    if (state.filters.statuses.length && !state.filters.statuses.includes(item.status)) return false
+    if (state.filters.assignees.length && !item.assignees.some(uid => state.filters.assignees.includes(uid))) return false
+
+    if (!query) return true
+
+    const assigneeNames = item.assignees
+      .map(uid => TEAM.find(member => member.id === uid)?.name || "")
+      .join(" ")
+      .toLowerCase()
+
+    const statusLabel = (STATUS_CONFIG[item.status]?.label || item.status).toLowerCase()
+
+    return (
+      item.id.toLowerCase().includes(query) ||
+      item.title.toLowerCase().includes(query) ||
+      moduleCode.toLowerCase().includes(query) ||
+      assigneeNames.includes(query) ||
+      statusLabel.includes(query)
+    )
+  })
 }
 
 /* ── Render helpers ────────────────────────────────────────── */
@@ -355,11 +477,20 @@ function renderViewerOverlay(viewer) {
 
 /* ── Main render ───────────────────────────────────────────── */
 function buildView(state) {
-  const sortedMain = sortItems(MAIN_ITEMS, state.sortCol, state.sortDir)
-  const sortedSprint = sortItems(SPRINT_BACKLOG_ITEMS, state.sortCol, state.sortDir)
+  const sortedMain = sortItems(applyFilters(MAIN_ITEMS, state), state.sortCol, state.sortDir)
+  const sortedSprint = sortItems(applyFilters(SPRINT_BACKLOG_ITEMS, state), state.sortCol, state.sortDir)
 
-  const mainRows = sortedMain.map(renderRow).join("")
-  const sprintRows = sortedSprint.map(renderRow).join("")
+  const emptyMsg = state.searchQuery
+    ? `No results matching "${escapeHtml(state.searchQuery)}".`
+    : "No requirements match the current filters."
+
+  const mainRows = sortedMain.length
+    ? sortedMain.map(renderRow).join("")
+    : `<p class="rr-kb-empty">${emptyMsg}</p>`
+
+  const sprintRows = sortedSprint.length
+    ? sortedSprint.map(renderRow).join("")
+    : `<p class="rr-kb-empty">${emptyMsg}</p>`
 
   const sprintExpanded = !state.sprintCollapsed
   const sprintCount = SPRINT_BACKLOG_ITEMS.length
@@ -387,6 +518,7 @@ function buildView(state) {
 
   return `
     <div class="rr-dt-body">
+      ${renderFilterBar(state)}
       <div class="rr-dt-table">
         ${renderTableHeader(state.sortCol, state.sortDir)}
         <div class="rr-dt-tbody" id="rr-dt-main-rows">${mainRows}</div>
@@ -411,6 +543,14 @@ export function mountDesignTabFlow() {
   const state = {
     sortCol: "req",
     sortDir: "asc",
+    searchQuery: "",
+    openFilter: null,
+    filters: {
+      modules: [],
+      priority: [],
+      assignees: [],
+      statuses: [],
+    },
     sprintCollapsed: false,
     viewer: null, // { id, theme: "light"|"dark", device: "desktop"|"mobile", infoOpen: boolean }
   }
@@ -421,9 +561,44 @@ export function mountDesignTabFlow() {
 
   function handleClick(event) {
     const target = event.target.closest("[data-action]")
-    if (!target) return
+    if (!target) {
+      if (state.openFilter) {
+        state.openFilter = null
+        render()
+      }
+      return
+    }
 
     const action = target.dataset.action
+
+    if (action === "toggle-filter") {
+      event.stopPropagation()
+      const filterId = target.dataset.filter
+      state.openFilter = state.openFilter === filterId ? null : filterId
+      render()
+      return
+    }
+
+    if (action === "toggle-filter-option") {
+      event.stopPropagation()
+      const filterId = target.dataset.filter
+      const value = target.dataset.value
+      const values = state.filters[filterId]
+      const idx = values.indexOf(value)
+      if (idx >= 0) values.splice(idx, 1)
+      else values.push(value)
+      render()
+      return
+    }
+
+    if (action === "clear-filter") {
+      event.stopPropagation()
+      const filterId = target.dataset.filter
+      state.filters[filterId] = []
+      state.openFilter = null
+      render()
+      return
+    }
 
     if (action === "sort") {
       const col = target.dataset.sort
@@ -495,9 +670,27 @@ export function mountDesignTabFlow() {
   }
 
   function handleKeyDown(event) {
+    if (event.key === "Escape" && state.openFilter) {
+      state.openFilter = null
+      render()
+      return
+    }
+
     if (event.key === "Escape" && state.viewer) {
       state.viewer = null
       render()
+    }
+  }
+
+  function handleInput(event) {
+    if (event.target.id === "rr-dt-search") {
+      state.searchQuery = event.target.value || ""
+      render()
+      const searchInput = root.querySelector("#rr-dt-search")
+      if (searchInput) {
+        searchInput.focus()
+        searchInput.setSelectionRange(state.searchQuery.length, state.searchQuery.length)
+      }
     }
   }
 
@@ -506,6 +699,7 @@ export function mountDesignTabFlow() {
 
   root.addEventListener("click", handleClick)
   root.addEventListener("click", handleOverlayClick)
+  root.addEventListener("input", handleInput)
   root.addEventListener("keydown", handleKeyDown)
 
   render()
@@ -513,6 +707,7 @@ export function mountDesignTabFlow() {
   return function unmount() {
     root.removeEventListener("click", handleClick)
     root.removeEventListener("click", handleOverlayClick)
+    root.removeEventListener("input", handleInput)
     root.removeEventListener("keydown", handleKeyDown)
   }
 }
