@@ -25,8 +25,9 @@ const TAB_HEADER_ITEMS = [
 ]
 
 function renderTabHeader(currentPath) {
-  // Find all tabs that match the current path
-  const matches = TAB_HEADER_ITEMS.filter(tab => {
+  // Exclude the `dependencies` tab from the header and find matches
+  const headerItems = TAB_HEADER_ITEMS.filter(tab => tab.id !== "dependencies")
+  const matches = headerItems.filter(tab => {
     const activePath = tab.activePrefix || tab.path
     return activePath && currentPath.startsWith(activePath)
   })
@@ -41,7 +42,7 @@ function renderTabHeader(currentPath) {
     })
   }
   
-  const tabs = TAB_HEADER_ITEMS.map(tab => {
+  const tabs = headerItems.map(tab => {
     const isActive = mostSpecificTab === tab
     const tabState = tab.path ? (isActive ? "selected" : "default") : "disabled"
     const tabMarkup = `<rr-tabs type="horizontal" state="${tabState}" label="${tab.label}"></rr-tabs>`
