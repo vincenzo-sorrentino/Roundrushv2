@@ -80,7 +80,7 @@ const BUTTONS = [
   { id: "sprint", label: "Test Cases" },
   { id: "regressions", label: "UAT Issues" },
   { id: "production", label: "Production Issues" },
-  { id: "stakeholders", label: "Stakeholders’ Issues" },
+  // Stakeholders tab removed per design — button intentionally omitted
 ]
 
 const TESTING_HEADER_ACTIONS_ID = "rr-tab-testing-header"

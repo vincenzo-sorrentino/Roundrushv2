@@ -139,7 +139,6 @@ const TEST_COVERAGE = {
 
 const TABS = [
   { id: "overview",          label: "Overview" },
-  { id: "stakeholders-log",  label: "Stakeholders Issues Log" },
   { id: "uat-log",           label: "UAT Issues Log" },
   { id: "prod-log",          label: "PROD Issues Log" },
   { id: "finalized-design",  label: "Finalized Design" },
