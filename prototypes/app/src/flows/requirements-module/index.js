@@ -1877,8 +1877,18 @@ export async function renderRequirementsModuleFlow() {
           </div>
 
           <div class="rr-rm2-title-row">
-            <h1 id="rr-rm2-title"></h1>
-            <span id="rr-rm2-title-status"></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:row;align-items:center;gap:12px">
+              <h1 id="rr-rm2-title"></h1>
+              <span id="rr-rm2-title-status"></span>
+            </div>
+            <rr-button-icon data-action="download-module" type="neutral" size="md" label="Download module">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                <rect width="256" height="256" fill="none"/>
+                <line x1="128" y1="144" x2="128" y2="32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                <polyline points="216 144 216 208 40 208 40 144" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                <polyline points="168 104 128 144 88 104" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+              </svg>
+            </rr-button-icon>
           </div>
           <div id="rr-rm2-summary"></div>
 
@@ -1992,6 +2002,61 @@ export function mountRequirementsModuleFlow() {
     }
   }
 
+  function slugify(text) {
+    return String(text || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  }
+
+  async function downloadModuleFile(moduleId) {
+    const module = MODULE_BY_ID.get(moduleId)
+    if (!module) return
+
+    // Build plausible repo path: requirements/epics/<EPIC>-<epic-slug>/<MODULE>-<module-slug>.md
+    const epicId = module.epic || "AUT"
+    const epicInfo = EPIC_INFO[epicId] || {}
+    const epicSlug = slugify(epicInfo.title_short || epicId)
+    const moduleSlug = slugify(module.title || module.id)
+    const fileName = `${module.id}-${moduleSlug}.md`
+    const path = `/requirements/epics/${epicId}-${epicSlug}/${fileName}`
+
+    try {
+      const res = await fetch(path)
+      if (!res.ok) throw new Error('Not found')
+      const text = await res.text()
+      const blob = new Blob([text], { type: 'text/markdown' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      // fallback: try direct module file with lowercased epic folder only
+      try {
+        const fallbackPath = `/requirements/epics/${epicId.toLowerCase()}/${module.id}-${moduleSlug}.md`
+        const res2 = await fetch(fallbackPath)
+        if (!res2.ok) throw err
+        const text2 = await res2.text()
+        const blob2 = new Blob([text2], { type: 'text/markdown' })
+        const url2 = URL.createObjectURL(blob2)
+        const a2 = document.createElement('a')
+        a2.href = url2
+        a2.download = fileName
+        document.body.appendChild(a2)
+        a2.click()
+        a2.remove()
+        URL.revokeObjectURL(url2)
+      } catch (err2) {
+        // silently ignore in prototype
+        console.warn('Download failed for', path, err2)
+      }
+    }
+  }
+
   function render() {
     const node = getNodeById(state.selectedNodeId)
     ensureActiveTabForNode(node)
@@ -2032,6 +2097,14 @@ export function mountRequirementsModuleFlow() {
     }
 
     const action = actionElement.getAttribute("data-action")
+
+    if (action === "download-module") {
+      const nodeId = state.selectedNodeId
+      if (nodeId) {
+        downloadModuleFile(nodeId)
+      }
+      return
+    }
 
     if (action === "set-tab") {
       // Don't process clicks on disabled tabs
