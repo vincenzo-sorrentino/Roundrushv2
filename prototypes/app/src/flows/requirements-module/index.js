@@ -1423,7 +1423,6 @@ function renderModuleDependenciesTable(module) {
     const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
     return `
       <div class="rr-dep-row">
-        <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
         <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
         <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
         <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
@@ -1440,8 +1439,7 @@ function renderModuleDependenciesTable(module) {
     <div class="rr-dep-table">
       <div class="rr-dep-thead-wrap">
         <div class="rr-dep-thead">
-          <div class="rr-dep-th rr-dep-th--from">From ${ARROW_DOWN_ICON}</div>
-          <div class="rr-dep-th rr-dep-th--to">To</div>
+          <div class="rr-dep-th rr-dep-th--to">To ${ARROW_DOWN_ICON}</div>
           <div class="rr-dep-th rr-dep-th--relation">Relation</div>
           <div class="rr-dep-th rr-dep-th--iface">Interface</div>
           <div class="rr-dep-th rr-dep-th--risk">Risk</div>
