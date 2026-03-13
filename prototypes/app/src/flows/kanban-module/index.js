@@ -1336,7 +1336,6 @@ function renderDependenciesTab(mod) {
       <span class="rr-dep-th rr-dep-th--relation">Relation</span>
       <span class="rr-dep-th rr-dep-th--iface">Interface</span>
       <span class="rr-dep-th rr-dep-th--risk">Risk</span>
-      <span class="rr-dep-th rr-dep-th--conf">Conf</span>
       <span class="rr-dep-th rr-dep-th--why">Why</span>
     </div>
   `
@@ -1352,7 +1351,6 @@ function renderDependenciesTab(mod) {
         <span class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</span>
         <span class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</span>
         <span class="rr-dep-cell rr-dep-cell--risk">${riskBadge}</span>
-        <span class="rr-dep-cell rr-dep-cell--conf">${dep.conf.toFixed(2)}</span>
         <span class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</span>
       </div>
     `

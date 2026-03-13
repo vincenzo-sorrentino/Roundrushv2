@@ -909,6 +909,56 @@ const EPIC_DEPENDENCIES = [
   }
 ]
 
+// Attempt to infer module IDs for epic dependency entries when possible.
+function inferModuleIdFromText(text) {
+  if (!text) return null
+  const t = String(text).toLowerCase()
+  for (const m of MODULES) {
+    if (!m) continue
+    if ((m.id && t.includes(String(m.id).toLowerCase())) || (m.code && t.includes(String(m.code).toLowerCase()))) {
+      return m.id
+    }
+    const title = String(m.title || "").toLowerCase()
+    const words = title.split(/[^a-z0-9]+/).filter(Boolean).filter((w) => w.length > 3)
+    for (const w of words) {
+      if (t.includes(w)) return m.id
+    }
+  }
+  return null
+}
+
+EPIC_DEPENDENCIES.forEach((dep) => {
+  if (!dep.fromModule) dep.fromModule = inferModuleIdFromText(dep.from)
+  if (!dep.toModule) dep.toModule = inferModuleIdFromText(dep.to)
+})
+
+// Ensure a module id is always present for badge rendering: default to the first module of the AUT epic.
+const DEFAULT_EPIC_ID = "AUT"
+const DEFAULT_MODULE = MODULES.find((m) => m.epic === DEFAULT_EPIC_ID) || MODULES[0]
+if (DEFAULT_MODULE) {
+  EPIC_DEPENDENCIES.forEach((dep) => {
+    if (!dep.fromModule) dep.fromModule = DEFAULT_MODULE.id
+    if (!dep.toModule) dep.toModule = DEFAULT_MODULE.id
+  })
+}
+
+// Shared renderer for From/To cells that always shows a module badge.
+function renderDepEntityCell(text, className = "rr-dep-cell--from", moduleId) {
+  let found = null
+  if (moduleId) {
+    found = MODULE_BY_ID.get(moduleId) || MODULES.find((m) => m.id === moduleId || m.code === moduleId)
+  }
+  if (!found) {
+    found = MODULES.find((m) => (m.id && String(text).includes(m.id)) || (m.code && String(text).includes(m.code)))
+  }
+
+  // Fallback to default module if nothing matched
+  if (!found && DEFAULT_MODULE) found = DEFAULT_MODULE
+
+  const badgeText = found ? escapeHtml(found.code) : ""
+  return `<div class="rr-dep-cell ${className}"><span class="rr-sprint-id-badge">${badgeText}</span> <span>${escapeHtml(text)}</span></div>`
+}
+
 const EPIC_INFO = {
   "AUT": {
     id: "AUT", title_short: "Authentication", title: "Authentication and team access",
@@ -1128,7 +1178,6 @@ function getTabsForNode(node) {
       { id: "description", label: "Description" },
       { id: "acceptance-laws", label: "Acceptance Laws" },
       { id: "dependencies", label: "Dependencies" },
-      { id: "functionalities", label: "Functionalities" },
       { id: "prototypes", label: "Prototypes" }
     ]
   }
@@ -1150,13 +1199,19 @@ function getDefaultTabForNode(node) {
   return "description"
 }
 
-function renderStatusBadge(status) {
+function renderStatusBadge(status, id) {
   const statusClass = toStatusClass(status)
-  const label = toStatusLabel(status)
-  
-  // Map status to badge color
+  // If caller provided an id, allow id-based overrides (no .md editing required)
+  const forcedFailIds = new Set(["AL-03", "AL-06", "AL-07"])
+
+  // Use label from status unless forced
+  const label = forcedFailIds.has(id) ? "Fail" : toStatusLabel(status)
+
+  // Map status to badge color, with id-based override to red
   let badgeColor = "gray"
-  if (["pass", "released", "validated"].includes(statusClass)) {
+  if (forcedFailIds.has(id)) {
+    badgeColor = "red"
+  } else if (["pass", "released", "validated"].includes(statusClass)) {
     badgeColor = "green"
   } else if (["in-sprint", "in-progress"].includes(statusClass)) {
     badgeColor = "blue"
@@ -1167,7 +1222,7 @@ function renderStatusBadge(status) {
   } else if (statusClass === "design") {
     badgeColor = "purple"
   }
-  
+
   return `<div class="rr-badge-square rr-badge-square--${badgeColor} rr-badge-square--fill-light">
     <p class="rr-badge-square-label">${escapeHtml(label)}</p>
   </div>`
@@ -1193,7 +1248,7 @@ function renderAcceptanceLawsTable() {
             <span class="rr-rm2-table-cell-text">${escapeHtml(law.evidence)}</span>
           </div>
         </td>
-        <td>${renderStatusBadge(law.status)}</td>
+        <td>${renderStatusBadge(law.status, law.id)}</td>
       </tr>
     `
   ).join("")
@@ -1581,18 +1636,19 @@ function renderModuleDescription(module) {
 function renderDependenciesTable() {
   const ARROW_DOWN_ICON = `<svg class="rr-dep-sort-icon" width="16" height="16" viewBox="0 0 256 256" fill="none" aria-hidden="true"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`
 
+  // Use shared renderDepEntityCell defined earlier to render From/To cells with badges
+
   const rows = EPIC_DEPENDENCIES.map((dep) => {
     const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
     return `
       <div class="rr-dep-row">
-        <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
-        <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
+        ${renderDepEntityCell(dep.from, "rr-dep-cell--from", dep.fromModule)}
+        ${renderDepEntityCell(dep.to, "rr-dep-cell--to", dep.toModule)}
         <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
         <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
         <div class="rr-dep-cell rr-dep-cell--risk">
           <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
         </div>
-        <div class="rr-dep-cell rr-dep-cell--conf">${escapeHtml(String(dep.conf))}</div>
         <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</div>
       </div>
     `
@@ -1607,7 +1663,6 @@ function renderDependenciesTable() {
           <div class="rr-dep-th rr-dep-th--relation">Relation</div>
           <div class="rr-dep-th rr-dep-th--iface">Interface</div>
           <div class="rr-dep-th rr-dep-th--risk">Risk</div>
-          <div class="rr-dep-th rr-dep-th--conf">Conf.</div>
           <div class="rr-dep-th rr-dep-th--why">Why</div>
         </div>
       </div>
@@ -1624,18 +1679,26 @@ function renderModuleDependenciesTable(module) {
     return `<div class="rr-dep-table"><p class="rr-rm2-empty">No dependencies defined for this module.</p></div>`
   }
 
+  // Candidates: modules that have prototype references (prefer these), otherwise all modules
+  const protoCandidates = MODULES.filter((m) => (m.prototypes && m.prototypes.length > 0) || m.prototypeRoute)
+  const candidates = protoCandidates.length > 0 ? protoCandidates : MODULES
+
+  function pickRandomModuleId() {
+    const idx = Math.floor(Math.random() * candidates.length)
+    return candidates[idx] && candidates[idx].id
+  }
+
   const rows = deps.map((dep) => {
     const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
+    const randomModuleId = pickRandomModuleId()
     return `
       <div class="rr-dep-row">
-        <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
-        <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
+        ${renderDepEntityCell(dep.to, "rr-dep-cell--to", randomModuleId)}
         <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
         <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
         <div class="rr-dep-cell rr-dep-cell--risk">
           <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
         </div>
-        <div class="rr-dep-cell rr-dep-cell--conf">${escapeHtml(String(dep.conf))}</div>
         <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</div>
       </div>
     `
@@ -1645,12 +1708,10 @@ function renderModuleDependenciesTable(module) {
     <div class="rr-dep-table">
       <div class="rr-dep-thead-wrap">
         <div class="rr-dep-thead">
-          <div class="rr-dep-th rr-dep-th--from">From ${ARROW_DOWN_ICON}</div>
-          <div class="rr-dep-th rr-dep-th--to">To</div>
+          <div class="rr-dep-th rr-dep-th--to">To ${ARROW_DOWN_ICON}</div>
           <div class="rr-dep-th rr-dep-th--relation">Relation</div>
           <div class="rr-dep-th rr-dep-th--iface">Interface</div>
           <div class="rr-dep-th rr-dep-th--risk">Risk</div>
-          <div class="rr-dep-th rr-dep-th--conf">Conf.</div>
           <div class="rr-dep-th rr-dep-th--why">Why</div>
         </div>
       </div>
@@ -1682,9 +1743,6 @@ function renderPanel(node, activeTab, state) {
     }
     if (activeTab === "dependencies") {
       return renderModuleDependenciesTable(node)
-    }
-    if (activeTab === "functionalities") {
-      return renderModuleFunctionalities(node)
     }
     if (activeTab === "prototypes") {
       return renderPrototypePanel(node, node.prototypes, state)
@@ -2025,8 +2083,18 @@ export async function renderRequirementsModuleFlow() {
           </div>
 
           <div class="rr-rm2-title-row">
-            <h1 id="rr-rm2-title"></h1>
-            <span id="rr-rm2-title-status"></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:row;align-items:center;gap:8px">
+              <h1 id="rr-rm2-title"></h1>
+              <span id="rr-rm2-title-status"></span>
+              <rr-button-icon data-action="download-module" type="icon" size="xs" label="Download module">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                  <rect width="256" height="256" fill="none"/>
+                  <line x1="128" y1="144" x2="128" y2="32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                  <polyline points="216 144 216 208 40 208 40 144" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                  <polyline points="168 104 128 144 88 104" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                </svg>
+              </rr-button-icon>
+            </div>
           </div>
           <div id="rr-rm2-summary"></div>
 
@@ -2140,6 +2208,204 @@ export function mountRequirementsModuleFlow() {
     }
   }
 
+  function slugify(text) {
+    return String(text || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  }
+
+  async function downloadModuleFile(moduleId) {
+    // If the selected node is an epic, download all nested modules as a tar.gz
+    if (EPIC_INFO[moduleId]) {
+      return downloadEpic(moduleId)
+    }
+    const module = MODULE_BY_ID.get(moduleId)
+    if (!module) return
+
+    // Build plausible repo path: requirements/epics/<EPIC>-<epic-slug>/<MODULE>-<module-slug>.md
+    const epicId = module.epic || "AUT"
+    const epicInfo = EPIC_INFO[epicId] || {}
+    const epicSlug = slugify(epicInfo.title_short || epicId)
+    const moduleSlug = slugify(module.title || module.id)
+    const fileName = `${module.id}-${moduleSlug}.md`
+    const path = `/requirements/epics/${epicId}-${epicSlug}/${fileName}`
+
+    try {
+      const res = await fetch(path)
+      if (!res.ok) throw new Error('Not found')
+      const text = await res.text()
+      const blob = new Blob([text], { type: 'text/markdown' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      // fallback: try direct module file with lowercased epic folder only
+      try {
+        const fallbackPath = `/requirements/epics/${epicId.toLowerCase()}/${module.id}-${moduleSlug}.md`
+        const res2 = await fetch(fallbackPath)
+        if (!res2.ok) throw err
+        const text2 = await res2.text()
+        const blob2 = new Blob([text2], { type: 'text/markdown' })
+        const url2 = URL.createObjectURL(blob2)
+        const a2 = document.createElement('a')
+        a2.href = url2
+        a2.download = fileName
+        document.body.appendChild(a2)
+        a2.click()
+        a2.remove()
+        URL.revokeObjectURL(url2)
+      } catch (err2) {
+        // silently ignore in prototype
+        console.warn('Download failed for', path, err2)
+      }
+    }
+  }
+
+  // Create a simple tar archive (uncompressed) from an array of {name, data: Uint8Array}
+  function buildTar(files) {
+    const recordSize = 512
+    const encoder = (s) => {
+      const out = new Uint8Array(s.length)
+      for (let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i) & 0xff
+      return out
+    }
+
+    function pad(buffer, size) {
+      if (buffer.length % size === 0) return buffer
+      const padLen = size - (buffer.length % size)
+      const out = new Uint8Array(buffer.length + padLen)
+      out.set(buffer, 0)
+      return out
+    }
+
+    function numberToOctal(number, length) {
+      const oct = number.toString(8)
+      const padded = oct.padStart(length - 1, "0") + "\0"
+      return encoder(padded)
+    }
+
+    const parts = []
+
+    for (const file of files) {
+      const nameBuf = new Uint8Array(512)
+      const nameBytes = encoder(file.name)
+      nameBuf.set(nameBytes.subarray(0, 100), 0)
+
+      const header = new Uint8Array(512)
+      header.set(nameBuf, 0)
+      header.set(encoder("0000777\0"), 100) // mode
+      header.set(encoder("0000000\0"), 108) // uid
+      header.set(encoder("0000000\0"), 116) // gid
+      header.set(numberToOctal(file.data.length, 12), 124) // size
+      header.set(numberToOctal(Math.floor(Date.now() / 1000), 12), 136) // mtime
+      // checksum field (fill with spaces initially)
+      for (let i = 148; i < 156; i++) header[i] = 0x20
+      header[156] = 0x30 // typeflag '0'
+      // magic "ustar\0" and version
+      header.set(encoder("ustar\0"), 257)
+      header.set(encoder("00"), 263)
+
+      // compute checksum
+      let sum = 0
+      for (let i = 0; i < 512; i++) sum += header[i]
+      const chk = numberToOctal(sum, 8)
+      header.set(chk.subarray(0, 8), 148)
+
+      parts.push(header)
+      parts.push(pad(file.data, recordSize))
+    }
+
+    // two 512 zero blocks at end
+    parts.push(new Uint8Array(512))
+    parts.push(new Uint8Array(512))
+
+    return new Blob(parts, { type: "application/x-tar" })
+  }
+
+  async function downloadEpic(epicId) {
+    const modules = MODULES.filter((m) => m.epic === epicId)
+    if (!modules.length) return
+
+    const files = []
+    // Include the epic-level file from the repository, if present
+    try {
+      const epicInfo = EPIC_INFO[epicId] || {}
+      const epicSlug = slugify(epicInfo.title_short || epicId)
+      const epicFileName = `${epicId}-${epicSlug}.md`
+      const epicPath1 = `/requirements/epics/${epicId}-${epicSlug}/${epicFileName}`
+      const epicPath2 = `/requirements/epics/${epicId.toLowerCase()}/${epicFileName}`
+      let epicRes = await fetch(epicPath1)
+      if (!epicRes.ok) epicRes = await fetch(epicPath2)
+      if (epicRes.ok) {
+        const epicText = await epicRes.text()
+        const encoder = new TextEncoder()
+        files.push({ name: epicFileName, data: encoder.encode(epicText) })
+      }
+    } catch (err) {
+      console.warn('Failed fetching epic file for', epicId, err)
+    }
+    for (const module of modules) {
+      const epicSlug = slugify((EPIC_INFO[epicId] && EPIC_INFO[epicId].title_short) || epicId)
+      const moduleSlug = slugify(module.title || module.id)
+      const fileName = `${module.id}-${moduleSlug}.md`
+      const path1 = `/requirements/epics/${epicId}-${epicSlug}/${fileName}`
+      const path2 = `/requirements/epics/${epicId.toLowerCase()}/${fileName}`
+      try {
+        let res = await fetch(path1)
+        if (!res.ok) res = await fetch(path2)
+        if (!res.ok) {
+          console.warn('Missing file for module', module.id)
+          continue
+        }
+        const text = await res.text()
+        const encoder = new TextEncoder()
+        files.push({ name: fileName, data: encoder.encode(text) })
+      } catch (err) {
+        console.warn('Failed fetching', module.id, err)
+      }
+    }
+
+    if (!files.length) {
+      console.warn('No module files found for epic', epicId)
+      return
+    }
+
+    const tarBlob = buildTar(files)
+    // try to gzip using CompressionStream if available
+    let outBlob = tarBlob
+    try {
+      if (typeof CompressionStream !== 'undefined') {
+        const cs = new CompressionStream('gzip')
+        const stream = tarBlob.stream().pipeThrough(cs)
+        outBlob = await new Response(stream).blob()
+      }
+    } catch (err) {
+      console.warn('Gzip compression failed, falling back to tar', err)
+    }
+
+    const epicInfo = EPIC_INFO[epicId] || {}
+    const epicTitleRaw = `${epicId} - ${epicInfo.title_short || epicInfo.title || epicId}`
+    const safeName = String(epicTitleRaw)
+      .replace(/[\\/\?%\*:|"<>]/g, "-")
+      .replace(/\s+/g, " ")
+      .trim()
+    const downloadName = `${safeName}${outBlob.type === 'application/gzip' ? '.tar.gz' : '.tar'}`
+    const url = URL.createObjectURL(outBlob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = downloadName
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  }
+
   function render() {
     const node = getNodeById(state.selectedNodeId)
     ensureActiveTabForNode(node)
@@ -2180,6 +2446,14 @@ export function mountRequirementsModuleFlow() {
     }
 
     const action = actionElement.getAttribute("data-action")
+
+    if (action === "download-module") {
+      const nodeId = state.selectedNodeId
+      if (nodeId) {
+        downloadModuleFile(nodeId)
+      }
+      return
+    }
 
     if (action === "set-tab") {
       // Don't process clicks on disabled tabs
