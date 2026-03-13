@@ -1,8 +1,13 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
-const rawPath = path.resolve("prototypes/design-system/source/figma/components.raw.json")
-const outRoot = path.resolve("prototypes/design-system/packages/components/src")
+const scriptDir = path.dirname(fileURLToPath(import.meta.url))
+const repoRoot = path.resolve(scriptDir, "../../..")
+const fromRepoRoot = (...segments) => path.resolve(repoRoot, ...segments)
+
+const rawPath = fromRepoRoot("prototypes/design-system/source/figma/components.raw.json")
+const outRoot = fromRepoRoot("prototypes/design-system/packages/components/src")
 
 const payload = JSON.parse(readFileSync(rawPath, "utf8"))
 const components = payload.components || []

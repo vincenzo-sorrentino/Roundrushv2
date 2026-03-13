@@ -28,7 +28,7 @@
 
 .ws-page-content {
   flex: 1;
-  padding-top: var(--ws-header-height);
+  padding-top: calc(var(--ws-header-height) + env(safe-area-inset-top, 0px));
 }
 
 /* Sections ──────────────────────────────────────────────────── */
@@ -233,7 +233,7 @@
 
 .ws-page-content {
   flex: 1;
-  padding-top: var(--ws-header-height);
+  padding-top: calc(var(--ws-header-height) + env(safe-area-inset-top, 0px));
 }
 
 /* Sections ──────────────────────────────────────────────────── */
@@ -405,6 +405,7 @@
 
   .ws-grid-2,
   .ws-grid-3,
+  .ws-grid-4,
   .ws-split {
     grid-template-columns: 1fr;
   }

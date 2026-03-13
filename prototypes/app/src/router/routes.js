@@ -13,6 +13,8 @@ import { renderOldSprintFlow, mountOldSprintFlow } from "../flows/old-sprint/ind
 import { renderReleaseNotesFlow, mountReleaseNotesFlow } from "../flows/release-notes/index.js"
 import { renderTestingTabFlow, initTestingTab } from "../flows/testing-tab/index.js"
 import { renderRoadmapFlow, mountRoadmapFlow } from "../flows/roadmap/index.js"
+import { renderNotificationsInboxFlow, mountNotificationsInboxFlow } from "../flows/notifications-inbox/index.js"
+import { renderSprintsDraftFlow, mountSprintsDraftFlow } from "../flows/sprints-draft/index.js"
 
 const routes = [
   {
@@ -68,10 +70,31 @@ const routes = [
     status: "approved"
   },
   {
-    id: "kanban-module",
+    id: "sprints-current",
     path: "/planning/kanban",
     render: renderKanbanModuleFlow,
     mount: mountKanbanModuleFlow,
+    status: "approved"
+  },
+  {
+    id: "sprints-current-legacy",
+    path: "/sprints/current",
+    render: renderKanbanModuleFlow,
+    mount: mountKanbanModuleFlow,
+    status: "approved"
+  },
+  {
+    id: "sprints-draft",
+    path: "/planning/draft",
+    render: renderSprintsDraftFlow,
+    mount: mountSprintsDraftFlow,
+    status: "approved"
+  },
+  {
+    id: "sprints-draft-legacy",
+    path: "/sprints/draft",
+    render: renderSprintsDraftFlow,
+    mount: mountSprintsDraftFlow,
     status: "approved"
   },
   {
@@ -110,15 +133,29 @@ const routes = [
     status: "approved"
   },
   {
-    id: "old-sprint",
+    id: "sprints-old",
     path: "/planning/old-sprint",
     render: renderOldSprintFlow,
     mount: mountOldSprintFlow,
     status: "approved"
   },
   {
-    id: "release-notes",
+    id: "sprints-old-legacy",
+    path: "/sprints/old",
+    render: renderOldSprintFlow,
+    mount: mountOldSprintFlow,
+    status: "approved"
+  },
+  {
+    id: "sprints-approve",
     path: "/planning/release-notes",
+    render: renderReleaseNotesFlow,
+    mount: mountReleaseNotesFlow,
+    status: "approved"
+  },
+  {
+    id: "sprints-approve-legacy",
+    path: "/sprints/approve",
     render: renderReleaseNotesFlow,
     mount: mountReleaseNotesFlow,
     status: "approved"
@@ -128,6 +165,20 @@ const routes = [
     path: "/planning/roadmap",
     render: renderRoadmapFlow,
     mount: mountRoadmapFlow,
+    status: "approved"
+  },
+  {
+    id: "roadmap-legacy",
+    path: "/sprints/roadmap",
+    render: renderRoadmapFlow,
+    mount: mountRoadmapFlow,
+    status: "approved"
+  },
+  {
+    id: "notifications-inbox",
+    path: "/notifications/inbox",
+    render: renderNotificationsInboxFlow,
+    mount: mountNotificationsInboxFlow,
     status: "approved"
   }
 ]

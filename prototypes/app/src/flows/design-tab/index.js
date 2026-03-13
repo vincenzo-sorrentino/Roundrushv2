@@ -32,6 +32,9 @@ const ICON = {
   phone: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><rect x="64" y="16" width="128" height="224" rx="16" stroke="currentColor" stroke-width="16"/><line x1="108" y1="188" x2="148" y2="188" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
   info: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><circle cx="128" cy="128" r="96" stroke="currentColor" stroke-width="16"/><line x1="128" y1="120" x2="128" y2="176" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><circle cx="128" cy="88" r="10" fill="currentColor"/></svg>`,
   close: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="200" y1="56" x2="56" y2="200" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><line x1="56" y1="56" x2="200" y2="200" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  download: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><line x1="128" y1="40" x2="128" y2="184" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,112 128,184 200,112" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="40" y1="216" x2="216" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
+  chat: `<svg width="16" height="16" viewBox="0 0 256 256" fill="none"><path d="M216 48H40a8 8 0 0 0-8 8v160l48-40h136a8 8 0 0 0 8-8V56a8 8 0 0 0-8-8z" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  send: `<svg width="14" height="14" viewBox="0 0 256 256" fill="none"><path d="M222 128L42 42l46 86-46 86Z" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><line x1="88" y1="128" x2="222" y2="128" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>`,
 }
 
 /* ── Team members ──────────────────────────────────────────── */
@@ -61,6 +64,25 @@ const PRIORITY_CONFIG = {
   high:   { icon: "caretUp",       label: "High",   color: "#d13245" },
   medium: { icon: "equals",        label: "Medium", color: "#e7a600" },
   low:    { icon: "caretDown",     label: "Low",    color: "#0067da" },
+}
+
+/* ── Module names ──────────────────────────────────────────── */
+const MODULE_NAMES = {
+  LOG: "Login & Auth",
+  ONB: "Onboarding",
+  TRA: "Transactions",
+  DSH: "Dashboard",
+  PAY: "Payment",
+  SET: "Account Settings",
+  KYC: "Verification",
+  REP: "Reports",
+  NTF: "Notifications",
+  NAV: "Navigation",
+  AUT: "Authentication",
+  NOT: "Notification Centre",
+  USR: "User Profile",
+  WLT: "Wallet",
+  CAR: "Card Management",
 }
 
 /* ── Main list — requirements with design statuses ─────────── */
@@ -154,7 +176,7 @@ function getFilterOptions() {
   const all = getAllItems()
 
   const modules = [...new Set(all.map(item => getModuleCode(item.id)))].sort()
-    .map(code => ({ value: code, label: code }))
+    .map(code => ({ value: code, label: MODULE_NAMES[code] ? `${code} — ${MODULE_NAMES[code]}` : code }))
 
   const priorities = [...new Set(all.map(item => item.priority))]
     .map(value => ({ value, label: PRIORITY_CONFIG[value]?.label || value, dot: PRIORITY_CONFIG[value]?.color }))
@@ -200,6 +222,9 @@ function renderFilterBar(state) {
     <div class="rr-kb-filters">
       <div class="rr-kb-filter-buttons">${buttons}</div>
       <div class="rr-kb-search-wrap">
+        <button type="button" class="rr-dt-download-btn" data-action="download-design" title="Download all designs">
+          ${ICON.download}
+        </button>
         <div class="rr-kb-search">
           ${ICON.search}
           <input type="search" class="rr-kb-search-input" id="rr-dt-search" value="${escapeHtml(state.searchQuery)}" placeholder="Search" />
@@ -491,6 +516,44 @@ function renderInfoPanel(item, infoOpen) {
   `
 }
 
+function renderCommentItem(comment) {
+  return `
+    <div class="rr-pv-comment">
+      <div class="rr-pv-comment-avatar">${escapeHtml(String(comment.author || "?")[0].toUpperCase())}</div>
+      <div class="rr-pv-comment-content">
+        <div class="rr-pv-comment-meta">
+          <span class="rr-pv-comment-author">${escapeHtml(comment.author)}</span>
+          <span class="rr-pv-comment-time">${escapeHtml(comment.time)}</span>
+        </div>
+        <p class="rr-pv-comment-text">${escapeHtml(comment.text)}</p>
+      </div>
+    </div>
+  `
+}
+
+function renderCommentsList(comments) {
+  if (!comments.length) return `<p class="rr-pv-comments-empty">No comments yet.</p>`
+  return comments.map(renderCommentItem).join("")
+}
+
+function renderCommentsPanel(viewer) {
+  return `
+    <aside class="rr-pv-comments${viewer.commentsOpen ? "" : " rr-pv-comments--closed"}">
+      <div class="rr-pv-info-header">
+        <span class="rr-pv-info-source">Comments (${viewer.comments.length})</span>
+        <button type="button" class="rr-pv-icon-btn" data-action="toggle-viewer-comments" title="Close comments">${ICON.close}</button>
+      </div>
+      <div class="rr-pv-comments-list">
+        ${renderCommentsList(viewer.comments)}
+      </div>
+      <div class="rr-pv-comments-footer">
+        <textarea class="rr-pv-comments-input" placeholder="Leave a comment…" rows="2"></textarea>
+        <button type="button" class="rr-pv-comments-send" data-action="submit-comment" title="Send">${ICON.send}</button>
+      </div>
+    </aside>
+  `
+}
+
 function renderViewerOverlay(viewer) {
   const item = findItem(viewer.id)
   if (!item) return ""
@@ -516,6 +579,8 @@ function renderViewerOverlay(viewer) {
           </div>
           <button type="button" class="rr-pv-icon-btn${viewer.infoOpen ? " is-active" : ""}"
                   data-action="toggle-viewer-info" title="Info &amp; details">${ICON.info}</button>
+          <button type="button" class="rr-pv-icon-btn${viewer.commentsOpen ? " is-active" : ""}"
+                  data-action="toggle-viewer-comments" title="Comments">${ICON.chat}</button>
           <button type="button" class="rr-pv-icon-btn" data-action="close-viewer" title="Close">${ICON.close}</button>
         </div>
       </header>
@@ -524,9 +589,14 @@ function renderViewerOverlay(viewer) {
           ${renderWireframe(viewer.device, viewer.theme)}
         </div>
         ${renderInfoPanel(item, viewer.infoOpen)}
+        ${renderCommentsPanel(viewer)}
       </div>
     </div>
   `
+}
+
+function renderToast(message) {
+  return `<div class="rr-dt-toast" role="status" aria-live="polite">${escapeHtml(message)}</div>`
 }
 
 /* ── Main render ───────────────────────────────────────────── */
@@ -569,6 +639,7 @@ function buildView(state) {
   `
 
   const viewerOverlay = state.viewer ? renderViewerOverlay(state.viewer) : ""
+  const toast = state.showDownloadToast ? renderToast("Designs downloaded successfully") : ""
 
   return `
     <div class="rr-dt-body">
@@ -580,6 +651,7 @@ function buildView(state) {
       ${sprintSection}
     </div>
     ${viewerOverlay}
+    ${toast}
   `
 }
 
@@ -608,7 +680,8 @@ export function mountDesignTabFlow() {
       statuses: [],
     },
     sprintCollapsed: false,
-    viewer: null, // { id, theme: "light"|"dark", device: "desktop"|"mobile", infoOpen: boolean }
+    showDownloadToast: false,
+    viewer: null, // { id, theme, device, infoOpen, commentsOpen, comments }
   }
 
   function render() {
@@ -706,7 +779,17 @@ export function mountDesignTabFlow() {
 
     if (action === "open-prototype") {
       const itemId = target.dataset.itemId
-      state.viewer = { id: itemId, theme: "light", device: "desktop", infoOpen: false }
+      state.viewer = {
+        id: itemId,
+        theme: "light",
+        device: "desktop",
+        infoOpen: false,
+        commentsOpen: false,
+        comments: [
+          { author: "Candice Wu",    text: "Header spacing needs more top padding on mobile.", time: "09:12" },
+          { author: "Orlando Diggs", text: "LGTM from my side. Minor note on the CTA button colour.", time: "11:30" },
+        ],
+      }
       render()
       return
     }
@@ -751,6 +834,40 @@ export function mountDesignTabFlow() {
         container.querySelector("[data-action='toggle-viewer-info'][title='Info & details']")
           ?.classList.toggle("is-active", state.viewer.infoOpen)
       }
+      return
+    }
+
+    if (action === "download-design") {
+      if (state.showDownloadToast) return
+      state.showDownloadToast = true
+      render()
+      setTimeout(() => { state.showDownloadToast = false; render() }, 3000)
+      return
+    }
+
+    if (action === "toggle-viewer-comments") {
+      if (!state.viewer) return
+      state.viewer.commentsOpen = !state.viewer.commentsOpen
+      const commentsEl = container.querySelector(".rr-pv-comments")
+      if (commentsEl) {
+        commentsEl.classList.toggle("rr-pv-comments--closed", !state.viewer.commentsOpen)
+        container.querySelector(".rr-pv-controls [data-action='toggle-viewer-comments']")
+          ?.classList.toggle("is-active", state.viewer.commentsOpen)
+      }
+      return
+    }
+
+    if (action === "submit-comment") {
+      if (!state.viewer) return
+      const textarea = container.querySelector(".rr-pv-comments-input")
+      const text = (textarea?.value || "").trim()
+      if (!text) return
+      state.viewer.comments.push({ author: "You", text, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) })
+      const listEl = container.querySelector(".rr-pv-comments-list")
+      if (listEl) listEl.innerHTML = renderCommentsList(state.viewer.comments)
+      const countEl = container.querySelector(".rr-pv-comments .rr-pv-info-source")
+      if (countEl) countEl.textContent = `Comments (${state.viewer.comments.length})`
+      if (textarea) { textarea.value = ""; textarea.focus() }
       return
     }
   }

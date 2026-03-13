@@ -1,13 +1,18 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
-const figmaExportPath = path.resolve("prototypes/design-tokens.tokens.json")
-const tokensRawPath = path.resolve("prototypes/design-system/source/figma/tokens.raw.json")
-const themesRawPath = path.resolve("prototypes/design-system/source/figma/themes.raw.json")
+const scriptDir = path.dirname(fileURLToPath(import.meta.url))
+const repoRoot = path.resolve(scriptDir, "../../..")
+const fromRepoRoot = (...segments) => path.resolve(repoRoot, ...segments)
 
-const tokensDistDir = path.resolve("prototypes/design-system/packages/tokens/dist")
-const themesSrcDir = path.resolve("prototypes/design-system/packages/themes/src")
-const themesDistDir = path.resolve("prototypes/design-system/packages/themes/dist")
+const figmaExportPath = fromRepoRoot("prototypes/design-tokens.tokens.json")
+const tokensRawPath = fromRepoRoot("prototypes/design-system/source/figma/tokens.raw.json")
+const themesRawPath = fromRepoRoot("prototypes/design-system/source/figma/themes.raw.json")
+
+const tokensDistDir = fromRepoRoot("prototypes/design-system/packages/tokens/dist")
+const themesSrcDir = fromRepoRoot("prototypes/design-system/packages/themes/src")
+const themesDistDir = fromRepoRoot("prototypes/design-system/packages/themes/dist")
 
 const REFERENCE_PATTERN = /^\{(.+)\}$/
 
