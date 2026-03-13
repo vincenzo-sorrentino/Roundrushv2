@@ -731,6 +731,56 @@ const EPIC_DEPENDENCIES = [
   }
 ]
 
+// Attempt to infer module IDs for epic dependency entries when possible.
+function inferModuleIdFromText(text) {
+  if (!text) return null
+  const t = String(text).toLowerCase()
+  for (const m of MODULES) {
+    if (!m) continue
+    if ((m.id && t.includes(String(m.id).toLowerCase())) || (m.code && t.includes(String(m.code).toLowerCase()))) {
+      return m.id
+    }
+    const title = String(m.title || "").toLowerCase()
+    const words = title.split(/[^a-z0-9]+/).filter(Boolean).filter((w) => w.length > 3)
+    for (const w of words) {
+      if (t.includes(w)) return m.id
+    }
+  }
+  return null
+}
+
+EPIC_DEPENDENCIES.forEach((dep) => {
+  if (!dep.fromModule) dep.fromModule = inferModuleIdFromText(dep.from)
+  if (!dep.toModule) dep.toModule = inferModuleIdFromText(dep.to)
+})
+
+// Ensure a module id is always present for badge rendering: default to the first module of the AUT epic.
+const DEFAULT_EPIC_ID = "AUT"
+const DEFAULT_MODULE = MODULES.find((m) => m.epic === DEFAULT_EPIC_ID) || MODULES[0]
+if (DEFAULT_MODULE) {
+  EPIC_DEPENDENCIES.forEach((dep) => {
+    if (!dep.fromModule) dep.fromModule = DEFAULT_MODULE.id
+    if (!dep.toModule) dep.toModule = DEFAULT_MODULE.id
+  })
+}
+
+// Shared renderer for From/To cells that always shows a module badge.
+function renderDepEntityCell(text, className = "rr-dep-cell--from", moduleId) {
+  let found = null
+  if (moduleId) {
+    found = MODULE_BY_ID.get(moduleId) || MODULES.find((m) => m.id === moduleId || m.code === moduleId)
+  }
+  if (!found) {
+    found = MODULES.find((m) => (m.id && String(text).includes(m.id)) || (m.code && String(text).includes(m.code)))
+  }
+
+  // Fallback to default module if nothing matched
+  if (!found && DEFAULT_MODULE) found = DEFAULT_MODULE
+
+  const badgeText = found ? escapeHtml(found.code) : ""
+  return `<div class="rr-dep-cell ${className}"><span class="rr-sprint-id-badge">${badgeText}</span> <span>${escapeHtml(text)}</span></div>`
+}
+
 const EPIC_INFO = {
   "AUT": {
     id: "AUT", title_short: "Authentication", title: "Authentication and team access",
@@ -1376,12 +1426,14 @@ function renderModuleDescription(module) {
 function renderDependenciesTable() {
   const ARROW_DOWN_ICON = `<svg class="rr-dep-sort-icon" width="16" height="16" viewBox="0 0 256 256" fill="none" aria-hidden="true"><line x1="128" y1="40" x2="128" y2="216" stroke="currentColor" stroke-width="16" stroke-linecap="round"/><polyline points="56,144 128,216 200,144" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`
 
+  // Use shared renderDepEntityCell defined earlier to render From/To cells with badges
+
   const rows = EPIC_DEPENDENCIES.map((dep) => {
     const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
     return `
       <div class="rr-dep-row">
-        <div class="rr-dep-cell rr-dep-cell--from">${escapeHtml(dep.from)}</div>
-        <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
+        ${renderDepEntityCell(dep.from, "rr-dep-cell--from", dep.fromModule)}
+        ${renderDepEntityCell(dep.to, "rr-dep-cell--to", dep.toModule)}
         <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
         <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
         <div class="rr-dep-cell rr-dep-cell--risk">
@@ -1419,11 +1471,21 @@ function renderModuleDependenciesTable(module) {
     return `<div class="rr-dep-table"><p class="rr-rm2-empty">No dependencies defined for this module.</p></div>`
   }
 
+  // Candidates: modules that have prototype references (prefer these), otherwise all modules
+  const protoCandidates = MODULES.filter((m) => (m.prototypes && m.prototypes.length > 0) || m.prototypeRoute)
+  const candidates = protoCandidates.length > 0 ? protoCandidates : MODULES
+
+  function pickRandomModuleId() {
+    const idx = Math.floor(Math.random() * candidates.length)
+    return candidates[idx] && candidates[idx].id
+  }
+
   const rows = deps.map((dep) => {
     const riskLabel = { high: "High", medium: "Medium", low: "Low" }[dep.risk] || dep.risk
+    const randomModuleId = pickRandomModuleId()
     return `
       <div class="rr-dep-row">
-        <div class="rr-dep-cell rr-dep-cell--to">${escapeHtml(dep.to)}</div>
+        ${renderDepEntityCell(dep.to, "rr-dep-cell--to", randomModuleId)}
         <div class="rr-dep-cell rr-dep-cell--relation">${escapeHtml(dep.relation)}</div>
         <div class="rr-dep-cell rr-dep-cell--iface">${escapeHtml(dep.iface)}</div>
         <div class="rr-dep-cell rr-dep-cell--risk">
