@@ -6294,7 +6294,6 @@ rr-alert.rr-req-info-callout {
 .rr-dep-th--relation { width: 160px; flex-shrink: 0; }
 .rr-dep-th--iface    { width: 180px; flex-shrink: 0; }
 .rr-dep-th--risk     { width: 100px; flex-shrink: 0; }
-.rr-dep-th--conf     { width: 67px; flex-shrink: 0; }
 .rr-dep-th--why      { width: 170px; flex-shrink: 0; }
 
 .rr-dep-tbody {
@@ -6330,7 +6329,6 @@ rr-alert.rr-req-info-callout {
 .rr-dep-cell--relation { width: 160px; flex-shrink: 0; color: var(--rr-sem-text-primary, #14161b); }
 .rr-dep-cell--iface    { width: 180px; flex-shrink: 0; color: var(--rr-sem-text-primary, #14161b); word-break: break-word; }
 .rr-dep-cell--risk     { width: 100px; flex-shrink: 0; align-items: flex-start; }
-.rr-dep-cell--conf     { width: 67px; flex-shrink: 0; color: var(--rr-sem-text-primary, #14161b); }
 .rr-dep-cell--why      { width: 170px; flex-shrink: 0; color: var(--rr-sem-text-secondary, #3d4350); }
 
 .rr-dep-risk-badge {

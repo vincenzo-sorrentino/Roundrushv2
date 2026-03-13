@@ -417,7 +417,6 @@ function renderListRow(row) {
       <div class="rr-dep-cell rr-dep-cell--risk">
         <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(row.risk)}">${escapeHtml(riskLabel)}</span>
       </div>
-      <div class="rr-dep-cell rr-dep-cell--conf">${row.conf.toFixed(2)}</div>
       <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(row.why)}</div>
     </div>
   `
@@ -438,7 +437,6 @@ function renderListView(rows) {
             <div class="rr-dep-th rr-dep-th--relation" role="columnheader">Relation</div>
             <div class="rr-dep-th rr-dep-th--iface" role="columnheader">Interface</div>
             <div class="rr-dep-th rr-dep-th--risk" role="columnheader">Risk</div>
-            <div class="rr-dep-th rr-dep-th--conf" role="columnheader">Conf</div>
             <div class="rr-dep-th rr-dep-th--why" role="columnheader">Why</div>
           </div>
         </div>

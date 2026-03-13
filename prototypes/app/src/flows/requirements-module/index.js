@@ -1439,7 +1439,6 @@ function renderDependenciesTable() {
         <div class="rr-dep-cell rr-dep-cell--risk">
           <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
         </div>
-        <div class="rr-dep-cell rr-dep-cell--conf">${escapeHtml(String(dep.conf))}</div>
         <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</div>
       </div>
     `
@@ -1454,7 +1453,6 @@ function renderDependenciesTable() {
           <div class="rr-dep-th rr-dep-th--relation">Relation</div>
           <div class="rr-dep-th rr-dep-th--iface">Interface</div>
           <div class="rr-dep-th rr-dep-th--risk">Risk</div>
-          <div class="rr-dep-th rr-dep-th--conf">Conf.</div>
           <div class="rr-dep-th rr-dep-th--why">Why</div>
         </div>
       </div>
@@ -1491,7 +1489,6 @@ function renderModuleDependenciesTable(module) {
         <div class="rr-dep-cell rr-dep-cell--risk">
           <span class="rr-dep-risk-badge rr-dep-risk-badge--${escapeHtml(dep.risk)}">${escapeHtml(riskLabel)}</span>
         </div>
-        <div class="rr-dep-cell rr-dep-cell--conf">${escapeHtml(String(dep.conf))}</div>
         <div class="rr-dep-cell rr-dep-cell--why">${escapeHtml(dep.why)}</div>
       </div>
     `
@@ -1505,7 +1502,6 @@ function renderModuleDependenciesTable(module) {
           <div class="rr-dep-th rr-dep-th--relation">Relation</div>
           <div class="rr-dep-th rr-dep-th--iface">Interface</div>
           <div class="rr-dep-th rr-dep-th--risk">Risk</div>
-          <div class="rr-dep-th rr-dep-th--conf">Conf.</div>
           <div class="rr-dep-th rr-dep-th--why">Why</div>
         </div>
       </div>
