@@ -889,8 +889,8 @@ body {
 }
 
 .rr-badge-square--orange.rr-badge-square--fill-light {
-  background: var(--rr-sem-action-warningSelection, #fef4e6);
-  color: var(--rr-sem-text-warning, #f79009);
+  background: var(--rr-sem-action-secondarySelection, #fbc6cd);
+  color: var(--rr-sem-action-secondary, #d13245);
 }
 
 .rr-badge-square--orange.rr-badge-square--fill-dark {
@@ -6338,8 +6338,7 @@ rr-alert.rr-req-info-callout {
 .rr-dep-th--relation { width: 160px; flex-shrink: 0; }
 .rr-dep-th--iface    { width: 180px; flex-shrink: 0; }
 .rr-dep-th--risk     { width: 100px; flex-shrink: 0; }
-.rr-dep-th--conf     { width: 67px; flex-shrink: 0; }
-.rr-dep-th--why      { width: 170px; flex-shrink: 0; }
+.rr-dep-th--why      { flex: 1 1 0; min-width: 120px; }
 
 .rr-dep-tbody {
   width: 100%;
@@ -6369,13 +6368,12 @@ rr-alert.rr-req-info-callout {
   line-height: 18px;
   word-break: break-word;
 }
-.rr-dep-cell--from     { flex: 1 1 0; min-width: 120px; }
-.rr-dep-cell--to       { flex: 1 1 0; min-width: 120px; }
+.rr-dep-cell--from     { flex: 1 1 0; min-width: 120px; flex-direction: column; align-items: flex-start; gap: 6px; }
+.rr-dep-cell--to       { flex: 1 1 0; min-width: 120px; flex-direction: column; align-items: flex-start; gap: 6px; }
 .rr-dep-cell--relation { width: 160px; flex-shrink: 0; color: var(--rr-sem-text-primary, #14161b); }
 .rr-dep-cell--iface    { width: 180px; flex-shrink: 0; color: var(--rr-sem-text-primary, #14161b); word-break: break-word; }
 .rr-dep-cell--risk     { width: 100px; flex-shrink: 0; align-items: flex-start; }
-.rr-dep-cell--conf     { width: 67px; flex-shrink: 0; color: var(--rr-sem-text-primary, #14161b); }
-.rr-dep-cell--why      { width: 170px; flex-shrink: 0; color: var(--rr-sem-text-secondary, #3d4350); }
+.rr-dep-cell--why      { flex: 1 1 0; min-width: 120px; color: var(--rr-sem-text-secondary, #3d4350); }
 
 .rr-dep-risk-badge {
   display: flex;
@@ -11535,10 +11533,16 @@ rr-alert.rr-req-info-callout {
   border-radius: 4px;
   background: #e0e2e7;
   color: var(--rr-sem-textSecondary, #3d4350);
-  font-size: 14px;
+  font-size: 12px;
   line-height: 18px;
   white-space: nowrap;
   width: fit-content;
+}
+
+.rr-sprint-id-badge--empty {
+  /* Keep space but hide visual content for non-module cells */
+  background: transparent;
+  color: transparent;
 }
 
 .rr-sprint-tc-text {

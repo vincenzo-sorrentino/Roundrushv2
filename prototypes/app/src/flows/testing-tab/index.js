@@ -80,7 +80,7 @@ const BUTTONS = [
   { id: "sprint", label: "Test Cases" },
   { id: "regressions", label: "UAT Issues" },
   { id: "production", label: "Production Issues" },
-  { id: "stakeholders", label: "Stakeholders’ Issues" },
+  // Stakeholders tab removed per design — button intentionally omitted
 ]
 
 const TESTING_HEADER_ACTIONS_ID = "rr-tab-testing-header"
@@ -970,6 +970,9 @@ const STAKEHOLDERS_ICON_ISSUES = new Set(
     5
   )
 )
+// Always show the stakeholders change-request icon for these important issues
+STAKEHOLDERS_ICON_ISSUES.add("Authentication token expired on refresh.")
+STAKEHOLDERS_ICON_ISSUES.add("Document upload failed.")
 
 /* ── Regressions Render Helpers ──────────────────────────────── */
 const REG_PRIORITY_ICONS = {
@@ -1046,6 +1049,11 @@ function renderRegRow(row) {
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
         </span>
         ` : ""}
+        ${STAKEHOLDERS_ICON_ISSUES.has(row.issue) ? `
+          <span class="rr-reg-icon" title="Change Request" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM96,128a32,32,0,0,0,57.6,19.2,8,8,0,0,1,12.8,9.61,48,48,0,1,1,0-57.62,8,8,0,0,1-12.8,9.61A32,32,0,0,0,96,128Z"></path></svg>
+          </span>
+        ` : ""}
       </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
         <span class="rr-reg-issue-title">${escapeHtml(row.issue)}</span>
@@ -1070,6 +1078,11 @@ function renderRegDoneRow(row) {
         <span class="rr-reg-icon" title="Regression" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm23.09-75.79A32,32,0,0,0,136,80H104a8,8,0,0,0-8,8v80a8,8,0,0,0,16,0V144h22.39l19,28.44a8,8,0,0,0,13.32-8.88ZM112,96h24a16,16,0,0,1,0,32H112Z"></path></svg>
         </span>
+        ` : ""}
+        ${STAKEHOLDERS_ICON_ISSUES.has(row.issue) ? `
+          <span class="rr-reg-icon" title="Change Request" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM96,128a32,32,0,0,0,57.6,19.2,8,8,0,0,1,12.8,9.61,48,48,0,1,1,0-57.62,8,8,0,0,1-12.8,9.61A32,32,0,0,0,96,128Z"></path></svg>
+          </span>
         ` : ""}
       </div>
       <div class="rr-reg-cell rr-reg-cell--issue">
