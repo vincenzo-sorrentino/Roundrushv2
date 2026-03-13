@@ -889,8 +889,8 @@ body {
 }
 
 .rr-badge-square--orange.rr-badge-square--fill-light {
-  background: var(--rr-sem-action-warningSelection, #fef4e6);
-  color: var(--rr-sem-text-warning, #f79009);
+  background: var(--rr-sem-action-secondarySelection, #fbc6cd);
+  color: var(--rr-sem-action-secondary, #d13245);
 }
 
 .rr-badge-square--orange.rr-badge-square--fill-dark {

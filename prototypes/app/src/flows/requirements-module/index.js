@@ -995,13 +995,19 @@ function getDefaultTabForNode(node) {
   return "description"
 }
 
-function renderStatusBadge(status) {
+function renderStatusBadge(status, id) {
   const statusClass = toStatusClass(status)
-  const label = toStatusLabel(status)
-  
-  // Map status to badge color
+  // If caller provided an id, allow id-based overrides (no .md editing required)
+  const forcedFailIds = new Set(["AL-03", "AL-06", "AL-07"])
+
+  // Use label from status unless forced
+  const label = forcedFailIds.has(id) ? "Fail" : toStatusLabel(status)
+
+  // Map status to badge color, with id-based override to red
   let badgeColor = "gray"
-  if (["pass", "released", "validated"].includes(statusClass)) {
+  if (forcedFailIds.has(id)) {
+    badgeColor = "red"
+  } else if (["pass", "released", "validated"].includes(statusClass)) {
     badgeColor = "green"
   } else if (["in-sprint", "in-progress"].includes(statusClass)) {
     badgeColor = "blue"
@@ -1012,7 +1018,7 @@ function renderStatusBadge(status) {
   } else if (statusClass === "design") {
     badgeColor = "purple"
   }
-  
+
   return `<div class="rr-badge-square rr-badge-square--${badgeColor} rr-badge-square--fill-light">
     <p class="rr-badge-square-label">${escapeHtml(label)}</p>
   </div>`
@@ -1038,7 +1044,7 @@ function renderAcceptanceLawsTable() {
             <span class="rr-rm2-table-cell-text">${escapeHtml(law.evidence)}</span>
           </div>
         </td>
-        <td>${renderStatusBadge(law.status)}</td>
+        <td>${renderStatusBadge(law.status, law.id)}</td>
       </tr>
     `
   ).join("")
