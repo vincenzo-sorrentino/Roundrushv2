@@ -1877,18 +1877,18 @@ export async function renderRequirementsModuleFlow() {
           </div>
 
           <div class="rr-rm2-title-row">
-            <div style="flex:1;min-width:0;display:flex;flex-direction:row;align-items:center;gap:12px">
+            <div style="flex:1;min-width:0;display:flex;flex-direction:row;align-items:center;gap:8px">
               <h1 id="rr-rm2-title"></h1>
               <span id="rr-rm2-title-status"></span>
+              <rr-button-icon data-action="download-module" type="icon" size="xs" label="Download module">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+                  <rect width="256" height="256" fill="none"/>
+                  <line x1="128" y1="144" x2="128" y2="32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                  <polyline points="216 144 216 208 40 208 40 144" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                  <polyline points="168 104 128 144 88 104" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+                </svg>
+              </rr-button-icon>
             </div>
-            <rr-button-icon data-action="download-module" type="neutral" size="md" label="Download module">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
-                <rect width="256" height="256" fill="none"/>
-                <line x1="128" y1="144" x2="128" y2="32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
-                <polyline points="216 144 216 208 40 208 40 144" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
-                <polyline points="168 104 128 144 88 104" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
-              </svg>
-            </rr-button-icon>
           </div>
           <div id="rr-rm2-summary"></div>
 
@@ -2010,6 +2010,10 @@ export function mountRequirementsModuleFlow() {
   }
 
   async function downloadModuleFile(moduleId) {
+    // If the selected node is an epic, download all nested modules as a tar.gz
+    if (EPIC_INFO[moduleId]) {
+      return downloadEpic(moduleId)
+    }
     const module = MODULE_BY_ID.get(moduleId)
     if (!module) return
 
@@ -2055,6 +2059,128 @@ export function mountRequirementsModuleFlow() {
         console.warn('Download failed for', path, err2)
       }
     }
+  }
+
+  // Create a simple tar archive (uncompressed) from an array of {name, data: Uint8Array}
+  function buildTar(files) {
+    const recordSize = 512
+    const encoder = (s) => {
+      const out = new Uint8Array(s.length)
+      for (let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i) & 0xff
+      return out
+    }
+
+    function pad(buffer, size) {
+      if (buffer.length % size === 0) return buffer
+      const padLen = size - (buffer.length % size)
+      const out = new Uint8Array(buffer.length + padLen)
+      out.set(buffer, 0)
+      return out
+    }
+
+    function numberToOctal(number, length) {
+      const oct = number.toString(8)
+      const padded = oct.padStart(length - 1, "0") + "\0"
+      return encoder(padded)
+    }
+
+    const parts = []
+
+    for (const file of files) {
+      const nameBuf = new Uint8Array(512)
+      const nameBytes = encoder(file.name)
+      nameBuf.set(nameBytes.subarray(0, 100), 0)
+
+      const header = new Uint8Array(512)
+      header.set(nameBuf, 0)
+      header.set(encoder("0000777\0"), 100) // mode
+      header.set(encoder("0000000\0"), 108) // uid
+      header.set(encoder("0000000\0"), 116) // gid
+      header.set(numberToOctal(file.data.length, 12), 124) // size
+      header.set(numberToOctal(Math.floor(Date.now() / 1000), 12), 136) // mtime
+      // checksum field (fill with spaces initially)
+      for (let i = 148; i < 156; i++) header[i] = 0x20
+      header[156] = 0x30 // typeflag '0'
+      // magic "ustar\0" and version
+      header.set(encoder("ustar\0"), 257)
+      header.set(encoder("00"), 263)
+
+      // compute checksum
+      let sum = 0
+      for (let i = 0; i < 512; i++) sum += header[i]
+      const chk = numberToOctal(sum, 8)
+      header.set(chk.subarray(0, 8), 148)
+
+      parts.push(header)
+      parts.push(pad(file.data, recordSize))
+    }
+
+    // two 512 zero blocks at end
+    parts.push(new Uint8Array(512))
+    parts.push(new Uint8Array(512))
+
+    return new Blob(parts, { type: "application/x-tar" })
+  }
+
+  async function downloadEpic(epicId) {
+    const modules = MODULES.filter((m) => m.epic === epicId)
+    if (!modules.length) return
+
+    const files = []
+    for (const module of modules) {
+      const epicSlug = slugify((EPIC_INFO[epicId] && EPIC_INFO[epicId].title_short) || epicId)
+      const moduleSlug = slugify(module.title || module.id)
+      const fileName = `${module.id}-${moduleSlug}.md`
+      const path1 = `/requirements/epics/${epicId}-${epicSlug}/${fileName}`
+      const path2 = `/requirements/epics/${epicId.toLowerCase()}/${fileName}`
+      try {
+        let res = await fetch(path1)
+        if (!res.ok) res = await fetch(path2)
+        if (!res.ok) {
+          console.warn('Missing file for module', module.id)
+          continue
+        }
+        const text = await res.text()
+        const encoder = new TextEncoder()
+        files.push({ name: fileName, data: encoder.encode(text) })
+      } catch (err) {
+        console.warn('Failed fetching', module.id, err)
+      }
+    }
+
+    if (!files.length) {
+      console.warn('No module files found for epic', epicId)
+      return
+    }
+
+    const tarBlob = buildTar(files)
+    // try to gzip using CompressionStream if available
+    let outBlob = tarBlob
+    try {
+      if (typeof CompressionStream !== 'undefined') {
+        const cs = new CompressionStream('gzip')
+        const stream = tarBlob.stream().pipeThrough(cs)
+        outBlob = await new Response(stream).blob()
+      }
+    } catch (err) {
+      console.warn('Gzip compression failed, falling back to tar', err)
+    }
+
+    const epicInfo = EPIC_INFO[epicId] || {}
+    const epicTitleRaw = `${epicId} - ${epicInfo.title_short || epicInfo.title || epicId}`
+    const safeName = String(epicTitleRaw)
+      .replace(/[\\/\?%\*:|"<>]/g, "-")
+      .replace(/\s+/g, " ")
+      .trim()
+    const downloadName = `${safeName}${outBlob.type === 'application/gzip' ? '.tar.gz' : '.tar'}`
+    const url = URL.createObjectURL(outBlob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = downloadName
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
   }
 
   function render() {
