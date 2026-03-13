@@ -924,7 +924,6 @@ function getTabsForNode(node) {
       { id: "description", label: "Description" },
       { id: "acceptance-laws", label: "Acceptance Laws" },
       { id: "dependencies", label: "Dependencies" },
-      { id: "functionalities", label: "Functionalities" },
       { id: "prototypes", label: "Prototypes" }
     ]
   }
@@ -1478,9 +1477,6 @@ function renderPanel(node, activeTab, state) {
     }
     if (activeTab === "dependencies") {
       return renderModuleDependenciesTable(node)
-    }
-    if (activeTab === "functionalities") {
-      return renderModuleFunctionalities(node)
     }
     if (activeTab === "prototypes") {
       return renderPrototypePanel(node, node.prototypes, state)
