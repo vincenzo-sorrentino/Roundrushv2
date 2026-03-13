@@ -15,6 +15,699 @@
   <link rel="stylesheet" href="/website/css/main.css" />
   <link rel="stylesheet" href="/website/css/layout.css" />
   <link rel="stylesheet" href="/website/css/components.css" />
+
+  <style>
+    /* ─────────────────────────────────────────────────────────
+       HERO
+       ───────────────────────────────────────────────────────── */
+    .fw-hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--ws-color-bg);
+      padding-top: calc(var(--ws-header-height) + var(--ws-space-20));
+      padding-bottom: var(--ws-space-20);
+      text-align: center;
+    }
+
+    /* Soft radial at top */
+    .fw-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 600px;
+      background: radial-gradient(ellipse 55% 50% at 50% 0%,
+        rgba(0, 121, 255, 0.09) 0%,
+        rgba(0, 121, 255, 0.02) 55%,
+        transparent 80%
+      );
+      pointer-events: none;
+    }
+
+    /* Dot grid */
+    .fw-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--ws-color-border) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .fw-hero-inner { position: relative; z-index: 1; }
+
+    /* Pills */
+    .fw-caps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--ws-space-2);
+      margin-bottom: var(--ws-space-8);
+    }
+
+    .fw-cap-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--ws-radius-full);
+      font-size: 12px;
+      font-weight: var(--ws-font-weight-medium);
+      border: 1px solid var(--ws-color-border);
+      background: var(--ws-color-bg);
+      color: var(--ws-color-text-muted);
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fw-pill-in 0.5s ease forwards;
+      box-shadow: var(--ws-shadow-xs);
+    }
+
+    .fw-cap-pill:nth-child(1) { animation-delay: 0.05s; }
+    .fw-cap-pill:nth-child(2) { animation-delay: 0.15s; }
+    .fw-cap-pill:nth-child(3) { animation-delay: 0.25s; }
+    .fw-cap-pill:nth-child(4) { animation-delay: 0.35s; }
+
+    .fw-cap-pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ws-color-primary);
+      flex-shrink: 0;
+    }
+
+    @keyframes fw-pill-in { to { opacity: 1; transform: translateY(0); } }
+
+    .fw-hero-title {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: var(--ws-font-weight-semibold);
+      letter-spacing: -0.04em;
+      line-height: 1.09;
+      color: var(--ws-color-text);
+      max-width: 820px;
+      margin-inline: auto;
+      margin-bottom: var(--ws-space-6);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fw-hero-in 0.65s 0.2s ease forwards;
+    }
+
+    .fw-hero-title em {
+      font-style: normal;
+      background: linear-gradient(90deg, #0079ff, #3dabff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .fw-hero-sub {
+      font-size: var(--ws-font-size-lg);
+      line-height: 1.65;
+      color: var(--ws-color-text-muted);
+      max-width: 520px;
+      margin-inline: auto;
+      margin-bottom: var(--ws-space-10);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fw-hero-in 0.65s 0.38s ease forwards;
+    }
+
+    .fw-hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--ws-space-3);
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fw-hero-in 0.55s 0.52s ease forwards;
+    }
+
+    @keyframes fw-hero-in { to { opacity: 1; transform: translateY(0); } }
+
+    /* Three concept cards below hero */
+    .fw-hero-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--ws-space-5);
+      max-width: 960px;
+      margin: var(--ws-space-12) auto 0;
+      padding-inline: var(--ws-space-4);
+      opacity: 0;
+      transform: translateY(22px);
+      animation: fw-hero-in 0.7s 0.68s ease forwards;
+    }
+
+    .fw-hero-card {
+      text-align: left;
+      padding: var(--ws-space-6);
+      border-radius: var(--ws-radius-xl);
+      border: 1px solid var(--ws-color-border);
+      background: var(--ws-color-bg);
+      box-shadow: var(--ws-shadow-sm);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .fw-hero-card:hover {
+      box-shadow: var(--ws-shadow-md);
+      border-color: var(--ws-color-border-strong);
+      transform: translateY(-2px);
+    }
+
+    .fw-hero-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--ws-radius-md);
+      background: var(--ws-color-primary-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--ws-space-4);
+      flex-shrink: 0;
+    }
+
+    .fw-hero-card-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--ws-color-primary);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .fw-hero-card-title {
+      font-size: var(--ws-font-size-md);
+      font-weight: var(--ws-font-weight-semibold);
+      letter-spacing: -0.01em;
+      color: var(--ws-color-text);
+      margin-bottom: var(--ws-space-2);
+    }
+
+    .fw-hero-card-body {
+      font-size: var(--ws-font-size-sm);
+      line-height: 1.65;
+      color: var(--ws-color-text-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       RADIAL ORBITAL — Core Principles
+       ───────────────────────────────────────────────────────── */
+    .fw-orbital-section {
+      padding-block: var(--ws-space-24);
+      background: var(--ws-color-bg-subtle);
+      border-top: 1px solid var(--ws-color-border);
+      overflow: hidden;
+    }
+
+    .fw-orbital-header {
+      text-align: center;
+      margin-bottom: var(--ws-space-12);
+    }
+
+    /* Center the stage horizontally */
+    .fw-orbital-stage-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Stage: the orbital canvas */
+    .fw-orbital-stage {
+      --orbit-size: min(520px, 88vw);
+      --orbit-r:    calc(var(--orbit-size) * 0.38);
+      --node-size:  54px;
+      position: relative;
+      width: var(--orbit-size);
+      height: var(--orbit-size);
+      flex-shrink: 0;
+    }
+
+    /* Rotating dashed orbit ring */
+    .fw-orbital-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(var(--orbit-r) * 2);
+      height: calc(var(--orbit-r) * 2);
+      border-radius: 50%;
+      border: 1.5px dashed rgba(0, 121, 255, 0.2);
+      pointer-events: none;
+      animation: fw-ring-spin 36s linear infinite;
+    }
+
+    /* Faint outer ring */
+    .fw-orbital-ring-outer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(var(--orbit-r) * 2 + 52px);
+      height: calc(var(--orbit-r) * 2 + 52px);
+      border-radius: 50%;
+      border: 1px solid rgba(0, 121, 255, 0.07);
+      pointer-events: none;
+    }
+
+    /* Inner glow ring */
+    .fw-orbital-ring-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(var(--orbit-r) * 2 - 56px);
+      height: calc(var(--orbit-r) * 2 - 56px);
+      border-radius: 50%;
+      border: 1px solid rgba(0, 121, 255, 0.06);
+      pointer-events: none;
+    }
+
+    @keyframes fw-ring-spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fw-orbital-ring { animation: none; }
+    }
+
+    /* SVG line overlay */
+    .fw-orbital-line-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Center idle state */
+    .fw-orbital-center-idle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 8;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .fw-orbital-center-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--ws-color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 121, 255, 0.3);
+    }
+
+    .fw-orbital-center-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--ws-color-text-muted);
+    }
+
+    /* Info card centered in the stage */
+    .fw-orbital-info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.94);
+      width: 230px;
+      background: var(--ws-color-bg);
+      border: 1.5px solid var(--ws-color-primary);
+      border-radius: var(--ws-radius-xl);
+      box-shadow: 0 8px 32px rgba(0, 121, 255, 0.13), var(--ws-shadow-md);
+      padding: var(--ws-space-5);
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      text-align: center;
+    }
+
+    .fw-orbital-info.is-visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+
+    .fw-orbital-info-title {
+      font-size: 13px;
+      font-weight: var(--ws-font-weight-semibold);
+      color: var(--ws-color-text);
+      margin-bottom: var(--ws-space-2);
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .fw-orbital-info-desc {
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--ws-color-text-muted);
+      margin-bottom: var(--ws-space-3);
+    }
+
+    .fw-orbital-info-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .fw-orbital-info-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--ws-radius-full);
+      background: var(--ws-color-primary-subtle);
+      color: var(--ws-color-primary);
+      border: 1px solid rgba(0, 121, 255, 0.14);
+    }
+
+    /* Principle nodes */
+    .fw-orbital-node {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /*
+        Orbit positioning:
+        1. translate(-50%,-50%) — place element center at stage center
+        2. rotate(angle)        — rotate around stage center
+        3. translateX(r)        — push out along rotated axis
+        4. rotate(-angle)       — un-rotate so content stays upright
+      */
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--angle))
+        translateX(var(--orbit-r))
+        rotate(calc(-1 * var(--angle)));
+      width: var(--node-size);
+      height: var(--node-size);
+      border-radius: 50%;
+      background: var(--ws-color-bg);
+      border: 1.5px solid var(--ws-color-border);
+      box-shadow: var(--ws-shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 6;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .fw-orbital-node:hover,
+    .fw-orbital-node.is-active {
+      border-color: var(--ws-color-primary);
+      background: var(--ws-color-primary-subtle);
+      box-shadow: 0 0 0 5px rgba(0, 121, 255, 0.1), var(--ws-shadow-md);
+    }
+
+    .fw-orbital-node svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--ws-color-text-muted);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.25s ease;
+    }
+
+    .fw-orbital-node:hover svg,
+    .fw-orbital-node.is-active svg {
+      stroke: var(--ws-color-primary);
+    }
+
+    /* Short label below each node */
+    .fw-orbital-node-label {
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--ws-color-text-faint);
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      transition: color 0.25s ease;
+    }
+
+    .fw-orbital-node:hover .fw-orbital-node-label,
+    .fw-orbital-node.is-active .fw-orbital-node-label {
+      color: var(--ws-color-primary);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       ANIMATED BORDER CTA
+       ───────────────────────────────────────────────────────── */
+    .fw-cta-section {
+      padding-block: var(--ws-space-24);
+      background: var(--ws-color-bg-subtle);
+      border-top: 1px solid var(--ws-color-border);
+    }
+
+    .fw-cta-outer {
+      max-width: 720px;
+      margin-inline: auto;
+      padding-inline: var(--ws-space-8);
+      text-align: center;
+    }
+
+    .fw-cta-border-wrap {
+      position: relative;
+      border-radius: var(--ws-radius-2xl);
+      padding: 1.5px;
+      overflow: hidden;
+      background: var(--ws-color-border);
+    }
+
+    .fw-cta-border-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -100%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(0, 121, 255, 0)    70deg,
+        rgba(0, 121, 255, 0.85) 110deg,
+        rgba(96, 168, 255, 1)   130deg,
+        rgba(0, 121, 255, 0.85) 150deg,
+        rgba(0, 121, 255, 0)    220deg,
+        transparent 360deg
+      );
+      animation: fw-cta-border-spin 3.5s linear infinite;
+      transform-origin: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fw-cta-border-wrap::before { animation: none; }
+    }
+
+    @keyframes fw-cta-border-spin { to { transform: rotate(360deg); } }
+
+    .fw-cta-box {
+      position: relative;
+      z-index: 1;
+      background: #ffffff;
+      border-radius: calc(var(--ws-radius-2xl) - 1.5px);
+      padding: var(--ws-space-16) var(--ws-space-12);
+      overflow: hidden;
+    }
+
+    .fw-cta-box::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 560px;
+      height: 280px;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%,
+        rgba(0, 121, 255, 0.06) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .fw-cta-box-inner { position: relative; z-index: 1; }
+
+    .fw-cta-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--ws-radius-full);
+      background: var(--ws-color-primary-subtle);
+      border: 1px solid rgba(0, 121, 255, 0.15);
+      font-size: 12px;
+      font-weight: var(--ws-font-weight-semibold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ws-color-primary);
+      margin-bottom: var(--ws-space-6);
+    }
+
+    .fw-cta-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: var(--ws-font-weight-semibold);
+      letter-spacing: -0.04em;
+      line-height: 1.15;
+      color: var(--ws-color-text);
+      margin-bottom: var(--ws-space-4);
+    }
+
+    .fw-cta-sub {
+      font-size: var(--ws-font-size-md);
+      line-height: 1.65;
+      color: var(--ws-color-text-muted);
+      max-width: 420px;
+      margin-inline: auto;
+      margin-bottom: var(--ws-space-10);
+    }
+
+    .fw-cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--ws-space-3);
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .fw-cta-box { padding: var(--ws-space-10) var(--ws-space-6); }
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       FAQ — Numbered accordion, center-aligned header
+       ───────────────────────────────────────────────────────── */
+    .fw-faq-section {
+      padding-block: var(--ws-space-24);
+      background: var(--ws-color-bg);
+      border-top: 1px solid var(--ws-color-border);
+    }
+
+    .fw-faq-header {
+      text-align: center;
+      margin-bottom: var(--ws-space-16);
+    }
+
+    .fw-faq-list {
+      max-width: 720px;
+      margin-inline: auto;
+    }
+
+    .fw-faq-item {
+      border-bottom: 1px solid var(--ws-color-border);
+    }
+
+    .fw-faq-item:first-child {
+      border-top: 1px solid var(--ws-color-border);
+    }
+
+    .fw-faq-trigger {
+      display: grid;
+      grid-template-columns: 40px 1fr 24px;
+      align-items: start;
+      gap: var(--ws-space-4);
+      padding: var(--ws-space-6) 0;
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-align: left;
+      width: 100%;
+      font-family: var(--ws-font-base);
+    }
+
+    .fw-faq-num {
+      font-size: var(--ws-font-size-sm);
+      font-weight: var(--ws-font-weight-semibold);
+      color: var(--ws-color-primary);
+      padding-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fw-faq-question {
+      font-size: var(--ws-font-size-md);
+      font-weight: var(--ws-font-weight-semibold);
+      letter-spacing: -0.01em;
+      color: var(--ws-color-text);
+      line-height: var(--ws-line-height-snug);
+    }
+
+    .fw-faq-chevron {
+      width: 20px;
+      height: 20px;
+      stroke: var(--ws-color-text-muted);
+      fill: none;
+      flex-shrink: 0;
+      transition: transform 0.3s ease, stroke 0.2s ease;
+      margin-top: 2px;
+    }
+
+    .fw-faq-item.is-open .fw-faq-chevron {
+      transform: rotate(180deg);
+      stroke: var(--ws-color-primary);
+    }
+
+    .fw-faq-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s ease;
+    }
+
+    .fw-faq-item.is-open .fw-faq-body {
+      grid-template-rows: 1fr;
+    }
+
+    .fw-faq-body-inner { overflow: hidden; }
+
+    .fw-faq-answer {
+      padding: 0 0 var(--ws-space-6) calc(40px + var(--ws-space-4));
+      font-size: var(--ws-font-size-md);
+      line-height: 1.7;
+      color: var(--ws-color-text-muted);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       RESPONSIVE
+       ───────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .fw-hero-cards {
+        grid-template-columns: 1fr;
+        gap: var(--ws-space-3);
+      }
+
+      .fw-orbital-stage {
+        --orbit-size: min(360px, 90vw);
+        --node-size: 46px;
+      }
+
+      .fw-orbital-info { width: 190px; }
+      .fw-orbital-info-desc { display: none; }
+
+      .fw-faq-trigger {
+        grid-template-columns: 32px 1fr 20px;
+        gap: var(--ws-space-3);
+      }
+
+      .fw-faq-answer {
+        padding-left: calc(32px + var(--ws-space-3));
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -23,22 +716,75 @@
 <div class="ws-page">
   <main class="ws-page-content" id="main-content">
 
-    <!-- ── Page Intro ────────────────────────────────────────── -->
-    <section class="ws-page-intro" aria-labelledby="framework-heading">
+    <!-- ── HERO ──────────────────────────────────────────────── -->
+    <section class="fw-hero" aria-labelledby="framework-heading">
       <div class="ws-container">
-        <h1 class="ws-page-intro-title" id="framework-heading">
-          The Roundrush framework
-        </h1>
-        <p class="ws-page-intro-subtitle">
-          Roundrush is more than a tool. It defines how humans and AI agents
-          collaborate to execute software — with clarity, accountability,
-          and a shared understanding of what needs to happen.
-        </p>
+        <div class="fw-hero-inner">
+
+          <div class="fw-caps" role="list" aria-label="Framework highlights">
+            <span class="fw-cap-pill" role="listitem"><span class="fw-cap-pill-dot"></span>Framework</span>
+            <span class="fw-cap-pill" role="listitem"><span class="fw-cap-pill-dot"></span>Structure first</span>
+            <span class="fw-cap-pill" role="listitem"><span class="fw-cap-pill-dot"></span>Human + AI</span>
+            <span class="fw-cap-pill" role="listitem"><span class="fw-cap-pill-dot"></span>Accountability</span>
+          </div>
+
+          <h1 class="fw-hero-title" id="framework-heading">
+            A philosophy for <em>structured</em><br>software execution
+          </h1>
+          <p class="fw-hero-sub">
+            Roundrush defines how humans and AI agents collaborate — with clarity,
+            accountability, and shared context at every level of execution.
+          </p>
+
+          <div class="fw-hero-actions">
+            <a href="/auth/signup/team" class="ws-btn ws-btn--primary ws-btn--lg">Get started</a>
+            <a href="/website/pages/features.html" class="ws-btn ws-btn--outline ws-btn--lg">Explore features</a>
+          </div>
+
+          <!-- Three concept cards -->
+          <div class="fw-hero-cards" role="list" aria-label="Core framework concepts">
+
+            <article class="fw-hero-card" role="listitem">
+              <div class="fw-hero-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M3 8h14M8 3v5"/></svg>
+              </div>
+              <h2 class="fw-hero-card-title">Structure over chaos</h2>
+              <p class="fw-hero-card-body">
+                Work isn't a flat list. Roundrush defines a non-negotiable hierarchy —
+                requirements, epics, modules, and tasks — so execution always has context.
+              </p>
+            </article>
+
+            <article class="fw-hero-card" role="listitem">
+              <div class="fw-hero-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20"><circle cx="7" cy="10" r="3"/><circle cx="15" cy="10" r="3"/><path d="M10 10h2"/></svg>
+              </div>
+              <h2 class="fw-hero-card-title">Humans and agents, unified</h2>
+              <p class="fw-hero-card-body">
+                AI agents aren't a bolt-on. They're first-class participants in the
+                same system — reading requirements, executing tasks, and reporting
+                progress alongside your team.
+              </p>
+            </article>
+
+            <article class="fw-hero-card" role="listitem">
+              <div class="fw-hero-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20"><path d="M4 6l3 3-3 3M11 12h5"/></svg>
+              </div>
+              <h2 class="fw-hero-card-title">Execution with accountability</h2>
+              <p class="fw-hero-card-body">
+                Every work item has an owner. Every task has criteria. Reviews are
+                traceable end-to-end. Accountability is built in, not bolted on.
+              </p>
+            </article>
+
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ── Philosophy sections ───────────────────────────────── -->
-    <section class="ws-section" aria-label="Framework principles">
+    <section class="ws-section ws-section--bordered-top" aria-label="Framework philosophy">
       <div class="ws-container ws-container--narrow">
 
         <!-- 01 — Structure over chaos -->
@@ -111,105 +857,209 @@
       </div>
     </section>
 
-    <!-- ── Core principles grid ──────────────────────────────── -->
-    <section class="ws-section ws-section--alt ws-section--bordered-top" aria-labelledby="principles-heading">
+    <!-- ── Core Principles: Radial Orbital ───────────────────── -->
+    <section class="fw-orbital-section" aria-labelledby="principles-heading">
       <div class="ws-container">
 
-        <div class="ws-section-header ws-section-header--center">
-          <h2 class="ws-section-title" id="principles-heading">Core principles</h2>
-          <p class="ws-section-subtitle">
-            The ideas that define how Roundrush approaches software execution.
+        <div class="fw-orbital-header">
+          <span class="ws-section-label">Core principles</span>
+          <h2 class="ws-section-title" id="principles-heading">The ideas behind Roundrush</h2>
+          <p class="ws-section-subtitle" style="max-width:480px;margin-inline:auto;">
+            Six principles that define how Roundrush approaches software execution.
+            Select any to explore.
           </p>
         </div>
 
-        <div class="ws-grid-3" role="list">
+        <!-- Orbital stage -->
+        <div class="fw-orbital-stage-wrap">
+        <div class="fw-orbital-stage" id="fw-orbital-stage" aria-label="Interactive core principles — select a node to learn more">
 
-          <article class="ws-card" role="listitem">
-            <div class="ws-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="14" height="14" rx="2"/>
-                <path d="M3 8h14M8 3v5"/>
+          <!-- SVG overlay for connecting line -->
+          <svg class="fw-orbital-line-svg" id="fw-orbital-line-svg" aria-hidden="true">
+            <line id="fw-orbital-active-line"
+              x1="50%" y1="50%" x2="50%" y2="50%"
+              stroke="rgba(0,121,255,0.22)"
+              stroke-width="1.5"
+              stroke-dasharray="5 4"
+              opacity="0"
+            />
+          </svg>
+
+          <!-- Decorative rings -->
+          <div class="fw-orbital-ring"       aria-hidden="true"></div>
+          <div class="fw-orbital-ring-outer" aria-hidden="true"></div>
+          <div class="fw-orbital-ring-inner" aria-hidden="true"></div>
+
+          <!-- Center: idle state (RR mark) -->
+          <div class="fw-orbital-center-idle" id="fw-orbital-center-idle" aria-hidden="true">
+            <div class="fw-orbital-center-mark">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <rect x="2" y="2" width="7" height="7" rx="1.5" fill="white"/>
+                <rect x="11" y="2" width="7" height="7" rx="1.5" fill="rgba(255,255,255,0.45)"/>
+                <rect x="2" y="11" width="7" height="7" rx="1.5" fill="rgba(255,255,255,0.45)"/>
+                <rect x="11" y="11" width="7" height="7" rx="1.5" fill="white"/>
               </svg>
             </div>
-            <h3 class="ws-card-title">Hierarchy before tasks</h3>
-            <p class="ws-card-body">
-              Requirements define outcomes. Epics define scope. Modules define
-              deliverables. Tasks define action. This hierarchy is non-negotiable.
-            </p>
-          </article>
+            <span class="fw-orbital-center-label">Roundrush</span>
+          </div>
 
-          <article class="ws-card" role="listitem">
-            <div class="ws-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10 4v12M4 10h12"/>
-              </svg>
-            </div>
-            <h3 class="ws-card-title">Explicit over implicit</h3>
-            <p class="ws-card-body">
-              Ownership, criteria, dependencies, and decisions must be explicit
-              in the system — not assumed from memory or context.
-            </p>
-          </article>
+          <!-- Info card (appears in center on node click) -->
+          <div class="fw-orbital-info" id="fw-orbital-info" role="region" aria-live="polite" aria-label="Principle details">
+            <div class="fw-orbital-info-title" id="fw-orbital-info-title"></div>
+            <div class="fw-orbital-info-desc"  id="fw-orbital-info-desc"></div>
+            <div class="fw-orbital-info-tags"  id="fw-orbital-info-tags"></div>
+          </div>
 
-          <article class="ws-card" role="listitem">
-            <div class="ws-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="10" cy="10" r="7"/>
-                <path d="M10 6v4l3 3"/>
-              </svg>
-            </div>
-            <h3 class="ws-card-title">Progress is always visible</h3>
-            <p class="ws-card-body">
-              No item exists in isolation. Progress rolls up from tasks to modules
-              to epics. Blockers surface. Done means verifiably complete.
-            </p>
-          </article>
+          <!-- Node 0 — top: Hierarchy before tasks (90°) -->
+          <button class="fw-orbital-node" data-principle="0" aria-label="Hierarchy before tasks" style="--angle: 90deg">
+            <svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M3 8h14M8 3v5"/></svg>
+            <span class="fw-orbital-node-label">Hierarchy</span>
+          </button>
 
-          <article class="ws-card" role="listitem">
-            <div class="ws-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="7" cy="10" r="3"/>
-                <circle cx="15" cy="10" r="3"/>
-                <path d="M10 10h2"/>
-              </svg>
-            </div>
-            <h3 class="ws-card-title">Agents are collaborators</h3>
-            <p class="ws-card-body">
-              AI agents participate in the same system as humans. They are
-              not tools bolted on — they are team members with context.
-            </p>
-          </article>
+          <!-- Node 1 — top-right: Explicit over implicit (30°) -->
+          <button class="fw-orbital-node" data-principle="1" aria-label="Explicit over implicit" style="--angle: 30deg">
+            <svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12"/></svg>
+            <span class="fw-orbital-node-label">Explicit</span>
+          </button>
 
-          <article class="ws-card" role="listitem">
-            <div class="ws-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 6l3 3-3 3M11 12h5"/>
-              </svg>
-            </div>
-            <h3 class="ws-card-title">Reviews close the loop</h3>
-            <p class="ws-card-body">
-              Every piece of work that ships goes through a structured review
-              tied to its original criteria. Execution is traceable end-to-end.
-            </p>
-          </article>
+          <!-- Node 2 — bottom-right: Progress is visible (−30°) -->
+          <button class="fw-orbital-node" data-principle="2" aria-label="Progress is always visible" style="--angle: -30deg">
+            <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg>
+            <span class="fw-orbital-node-label">Visibility</span>
+          </button>
 
-          <article class="ws-card" role="listitem">
-            <div class="ws-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 14l3-3 3 3 6-6"/>
-              </svg>
-            </div>
-            <h3 class="ws-card-title">Simple by design</h3>
-            <p class="ws-card-body">
-              The framework is intentionally lean. No ceremony for its own sake.
-              Structure exists to reduce friction, not to add it.
-            </p>
-          </article>
+          <!-- Node 3 — bottom: Agents are collaborators (−90°) -->
+          <button class="fw-orbital-node" data-principle="3" aria-label="Agents are collaborators" style="--angle: -90deg">
+            <svg viewBox="0 0 20 20"><circle cx="7" cy="10" r="3"/><circle cx="15" cy="10" r="3"/><path d="M10 10h2"/></svg>
+            <span class="fw-orbital-node-label">Agents</span>
+          </button>
 
-        </div>
+          <!-- Node 4 — bottom-left: Reviews close the loop (−150°) -->
+          <button class="fw-orbital-node" data-principle="4" aria-label="Reviews close the loop" style="--angle: -150deg">
+            <svg viewBox="0 0 20 20"><path d="M4 6l3 3-3 3M11 12h5"/></svg>
+            <span class="fw-orbital-node-label">Reviews</span>
+          </button>
+
+          <!-- Node 5 — top-left: Simple by design (150°) -->
+          <button class="fw-orbital-node" data-principle="5" aria-label="Simple by design" style="--angle: 150deg">
+            <svg viewBox="0 0 20 20"><path d="M4 14l3-3 3 3 6-6"/></svg>
+            <span class="fw-orbital-node-label">Simplicity</span>
+          </button>
+
+        </div><!-- /fw-orbital-stage -->
+        </div><!-- /fw-orbital-stage-wrap -->
 
       </div>
     </section>
+
+    <!-- ── FAQ ───────────────────────────────────────────────── -->
+    <section class="fw-faq-section" aria-labelledby="faq-heading">
+      <div class="ws-container">
+
+        <div class="fw-faq-header">
+          <span class="ws-section-label">FAQ</span>
+          <h2 class="ws-section-title" id="faq-heading">Common Questions &amp; Answers</h2>
+          <p class="ws-section-subtitle" style="max-width:520px;margin-inline:auto;">
+            Everything you need to know about the Roundrush framework and how it works.
+          </p>
+        </div>
+
+        <div class="fw-faq-list">
+
+          <div class="fw-faq-item">
+            <button class="fw-faq-trigger" aria-expanded="false" aria-controls="faq-body-1">
+              <span class="fw-faq-num">01</span>
+              <span class="fw-faq-question">What exactly is the Roundrush framework?</span>
+              <svg class="fw-faq-chevron" viewBox="0 0 20 20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="fw-faq-body" id="faq-body-1" role="region">
+              <div class="fw-faq-body-inner">
+                <p class="fw-faq-answer">
+                  The Roundrush framework is a structured philosophy for software execution. It defines how teams — human and AI alike — organise, plan, coordinate, and deliver software through a clear hierarchy of requirements, epics, modules, and tasks. It's not just a set of opinions; it's an opinionated system embedded into how the tool works.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="fw-faq-item">
+            <button class="fw-faq-trigger" aria-expanded="false" aria-controls="faq-body-2">
+              <span class="fw-faq-num">02</span>
+              <span class="fw-faq-question">How is Roundrush different from other project management tools?</span>
+              <svg class="fw-faq-chevron" viewBox="0 0 20 20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="fw-faq-body" id="faq-body-2" role="region">
+              <div class="fw-faq-body-inner">
+                <p class="fw-faq-answer">
+                  Most tools track tasks. Roundrush is built around a structured execution framework where requirements flow into epics, modules, and tasks — and every item has explicit ownership, criteria, and traceability. The key difference is that structure isn't optional or configurable: it's the foundation. This enables humans and AI agents to operate from the same shared context, reliably.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="fw-faq-item">
+            <button class="fw-faq-trigger" aria-expanded="false" aria-controls="faq-body-3">
+              <span class="fw-faq-num">03</span>
+              <span class="fw-faq-question">How do AI agents participate in the framework?</span>
+              <svg class="fw-faq-chevron" viewBox="0 0 20 20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="fw-faq-body" id="faq-body-3" role="region">
+              <div class="fw-faq-body-inner">
+                <p class="fw-faq-answer">
+                  AI agents in Roundrush are treated as first-class collaborators. They read the same structured requirements humans do, they're assigned to tasks using the same ownership model, and their actions — code changes, documentation, reviews — are visible to the rest of the team. They don't operate in isolation; they operate within the shared execution system.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="fw-faq-item">
+            <button class="fw-faq-trigger" aria-expanded="false" aria-controls="faq-body-4">
+              <span class="fw-faq-num">04</span>
+              <span class="fw-faq-question">Does adopting Roundrush mean changing how our team works?</span>
+              <svg class="fw-faq-chevron" viewBox="0 0 20 20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="fw-faq-body" id="faq-body-4" role="region">
+              <div class="fw-faq-body-inner">
+                <p class="fw-faq-answer">
+                  It introduces a consistent structure — but most teams find they were already operating with an informal version of this hierarchy. Roundrush makes that structure explicit and shared. The adjustment is usually less about changing how you work and more about capturing what you're already doing in a system where it becomes visible and useful to everyone, including AI agents.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="fw-faq-item">
+            <button class="fw-faq-trigger" aria-expanded="false" aria-controls="faq-body-5">
+              <span class="fw-faq-num">05</span>
+              <span class="fw-faq-question">Can small or solo teams use Roundrush effectively?</span>
+              <svg class="fw-faq-chevron" viewBox="0 0 20 20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="fw-faq-body" id="faq-body-5" role="region">
+              <div class="fw-faq-body-inner">
+                <p class="fw-faq-answer">
+                  Yes. The framework scales down as naturally as it scales up. A solo developer working with AI agents benefits from the same structure — clear requirements, defined criteria, traceable decisions — as a large team does. In fact, for solo teams with AI, the structure becomes even more important: it's the shared ground that makes agent collaboration reliable.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="fw-faq-item">
+            <button class="fw-faq-trigger" aria-expanded="false" aria-controls="faq-body-6">
+              <span class="fw-faq-num">06</span>
+              <span class="fw-faq-question">What does "definition of done" mean in Roundrush?</span>
+              <svg class="fw-faq-chevron" viewBox="0 0 20 20" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+            </button>
+            <div class="fw-faq-body" id="faq-body-6" role="region">
+              <div class="fw-faq-body-inner">
+                <p class="fw-faq-answer">
+                  Every task has explicit acceptance criteria defined before work begins. "Done" means those criteria have been verifiably met — confirmed through a structured review process tied to the original requirement. This removes ambiguity and ensures that completing work means the same thing to every person and agent on the team.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
 
     <!-- ── Closing statement ──────────────────────────────────── -->
     <section class="ws-section ws-section--bordered-top" aria-label="Framework closing statement">
@@ -232,15 +1082,24 @@
     </section>
 
     <!-- ── CTA ───────────────────────────────────────────────── -->
-    <section class="ws-section ws-section--dark" aria-labelledby="framework-cta-heading">
-      <div class="ws-container">
-        <div class="ws-cta">
-          <h2 class="ws-cta-title ws-cta-title--dark" id="framework-cta-heading">
-            Start building with the<br>Roundrush framework.
-          </h2>
-          <div class="ws-cluster ws-cluster--center">
-            <a href="/auth/signup/team" class="ws-btn ws-btn--white ws-btn--lg">Sign up</a>
-            <a href="/auth/login/default" class="ws-btn ws-btn--white-outline ws-btn--lg">Login</a>
+    <section class="fw-cta-section" aria-labelledby="framework-cta-heading">
+      <div class="fw-cta-outer ws-container">
+        <div class="fw-cta-border-wrap">
+          <div class="fw-cta-box">
+            <div class="fw-cta-box-inner">
+              <div><span class="fw-cta-label">Get started</span></div>
+              <h2 class="fw-cta-title" id="framework-cta-heading">
+                Start building with the<br>Roundrush framework.
+              </h2>
+              <p class="fw-cta-sub">
+                A structured execution system for teams that want clarity,
+                traceability, and humans and AI working in sync.
+              </p>
+              <div class="fw-cta-actions">
+                <a href="/auth/signup/team" class="ws-btn ws-btn--primary ws-btn--lg">Sign up free</a>
+                <a href="/auth/login/default" class="ws-btn ws-btn--outline ws-btn--lg">Login</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -252,6 +1111,152 @@
 <!-- Scripts -->
 <script src="/website/js/components.js"></script>
 <script src="/website/js/navigation.js"></script>
+
+<script>
+  /* ─────────────────────────────────────────────────────────
+     FAQ accordion
+     ───────────────────────────────────────────────────────── */
+  (function () {
+    document.querySelectorAll('.fw-faq-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item   = btn.closest('.fw-faq-item');
+        var isOpen = item.classList.contains('is-open');
+
+        /* Close all */
+        document.querySelectorAll('.fw-faq-item').forEach(function (i) {
+          i.classList.remove('is-open');
+          i.querySelector('.fw-faq-trigger').setAttribute('aria-expanded', 'false');
+        });
+
+        /* Toggle current */
+        if (!isOpen) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  })();
+
+  /* ─────────────────────────────────────────────────────────
+     Radial orbital: click a node → show principle card in center
+     ───────────────────────────────────────────────────────── */
+  (function () {
+    var principles = [
+      {
+        title: 'Hierarchy before tasks',
+        desc: 'Work isn\'t a flat list — it\'s a structured hierarchy. Requirements define outcomes. Epics define scope. Modules define deliverables. Tasks define action.',
+        tags: ['Requirements', 'Epics', 'Modules', 'Tasks'],
+        icon: '<rect x="3" y="3" width="14" height="14" rx="2"/><path d="M3 8h14M8 3v5"/>'
+      },
+      {
+        title: 'Explicit over implicit',
+        desc: 'Nothing meaningful should live in someone\'s head. Ownership, criteria, dependencies, and decisions must be explicitly captured — not assumed from context.',
+        tags: ['Ownership', 'Criteria', 'Dependencies', 'Decisions'],
+        icon: '<path d="M10 4v12M4 10h12"/>'
+      },
+      {
+        title: 'Progress is always visible',
+        desc: 'Progress rolls up from tasks to modules to epics. Blockers surface before they cause delays. "Done" means verifiably complete — visible to every collaborator.',
+        tags: ['Rollup', 'Blockers', 'Done', 'Metrics'],
+        icon: '<circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/>'
+      },
+      {
+        title: 'Agents are collaborators',
+        desc: 'AI agents are first-class participants. They read the same requirements, operate within the same task hierarchy, and their actions are visible to the whole team.',
+        tags: ['Context', 'Shared system', 'Transparency', 'AI'],
+        icon: '<circle cx="7" cy="10" r="3"/><circle cx="15" cy="10" r="3"/><path d="M10 10h2"/>'
+      },
+      {
+        title: 'Reviews close the loop',
+        desc: 'Every piece of work that ships passes through a structured review tied to its original acceptance criteria. The full history is preserved and traceable.',
+        tags: ['Criteria', 'Traceability', 'History', 'Approval'],
+        icon: '<path d="M4 6l3 3-3 3M11 12h5"/>'
+      },
+      {
+        title: 'Simple by design',
+        desc: 'The framework is intentionally lean. Structure exists to reduce friction and clarify execution — not to add overhead. Complexity enters only when it earns its place.',
+        tags: ['Lean', 'No ceremony', 'Purposeful', 'Clarity'],
+        icon: '<path d="M4 14l3-3 3 3 6-6"/>'
+      }
+    ];
+
+    var stage      = document.getElementById('fw-orbital-stage');
+    var nodes      = Array.from(document.querySelectorAll('.fw-orbital-node'));
+    var info       = document.getElementById('fw-orbital-info');
+    var infoTitle  = document.getElementById('fw-orbital-info-title');
+    var infoDesc   = document.getElementById('fw-orbital-info-desc');
+    var infoTags   = document.getElementById('fw-orbital-info-tags');
+    var centerIdle = document.getElementById('fw-orbital-center-idle');
+    var activeLine = document.getElementById('fw-orbital-active-line');
+
+    if (!stage || !nodes.length || !info) return;
+
+    function activatePrinciple(idx) {
+      var p = principles[idx];
+      if (!p) return;
+
+      /* Highlight the clicked node */
+      nodes.forEach(function (n) { n.classList.remove('is-active'); });
+      nodes[idx].classList.add('is-active');
+
+      /* Populate card */
+      infoTitle.textContent = p.title;
+      infoDesc.textContent  = p.desc;
+      infoTags.innerHTML    = p.tags.map(function (t) {
+        return '<span class="fw-orbital-info-tag">' + t + '</span>';
+      }).join('');
+
+      /* Show card, fade out idle mark */
+      centerIdle.style.opacity = '0';
+      info.classList.add('is-visible');
+
+      /* Draw connector line */
+      drawLine(idx);
+    }
+
+    function drawLine(idx) {
+      var node      = nodes[idx];
+      var stageRect = stage.getBoundingClientRect();
+      var nodeRect  = node.getBoundingClientRect();
+
+      var cx = stageRect.width  / 2;
+      var cy = stageRect.height / 2;
+      var nx = nodeRect.left - stageRect.left + nodeRect.width  / 2;
+      var ny = nodeRect.top  - stageRect.top  + nodeRect.height / 2;
+
+      activeLine.setAttribute('x1', cx);
+      activeLine.setAttribute('y1', cy);
+      activeLine.setAttribute('x2', nx);
+      activeLine.setAttribute('y2', ny);
+      activeLine.setAttribute('opacity', '1');
+    }
+
+    function deactivate() {
+      nodes.forEach(function (n) { n.classList.remove('is-active'); });
+      info.classList.remove('is-visible');
+      centerIdle.style.opacity = '1';
+      activeLine.setAttribute('opacity', '0');
+    }
+
+    /* Wire up node clicks — clicking active node dismisses the card */
+    nodes.forEach(function (node) {
+      node.addEventListener('click', function () {
+        var idx = parseInt(node.getAttribute('data-principle'), 10);
+        if (node.classList.contains('is-active')) {
+          deactivate();
+        } else {
+          activatePrinciple(idx);
+        }
+      });
+    });
+
+    /* Redraw line on resize */
+    window.addEventListener('resize', function () {
+      var active = document.querySelector('.fw-orbital-node.is-active');
+      if (active) drawLine(parseInt(active.getAttribute('data-principle'), 10));
+    }, { passive: true });
+  })();
+</script>
 
 </body>
 </html>

@@ -92,23 +92,23 @@ function normalizeSettings(input) {
 /* ── Status colors ─────────────────────────────────────────– */
 const STATUS_COLORS = {
   "completed": "#10b981",
-  "in-dev": "#3b82f6",
-  "designing": "#8b5cf6",
+  "in-dev": "#f59e0b",
+  "designing": "#f59e0b",
   "to-do": "#bfc6d0",
 }
 
 /* ── Team members with avatar images ──────────────────────– */
 const TEAM = [
-  { id: "u1", name: "Olivia Rhye", image: "http://localhost:3845/assets/67da9fddd372b1b5b44ffef41eed6ceb810ddf8a.png" },
-  { id: "u2", name: "Candice Wu", image: "http://localhost:3845/assets/261d783da4147da7fea569d1940840845897657f.png" },
-  { id: "u3", name: "Orlando Diggs", image: "http://localhost:3845/assets/30d4a462ea7b6e1428ffcb7ed5d646ca522e5a23.png" },
-  { id: "u4", name: "Demi Wilkinson", image: "http://localhost:3845/assets/4e18492d9e016d792d3dfe93dd80d52dd96046ee.png" },
-  { id: "u5", name: "Drew Cano", image: "http://localhost:3845/assets/0728c923a00edf130deb71506d0756fc0d57a8b8.png" },
-  { id: "u6", name: "Phoenix Baker", image: "http://localhost:3845/assets/d9ddce204792163ce745396135bdc5f320b012d7.png" },
-  { id: "u7", name: "Nat Craig", image: "http://localhost:3845/assets/3bbe168eab287460eef89ff5351e750f87e0634b.png" },
-  { id: "u8", name: "Lana Steiner", image: "http://localhost:3845/assets/05be041b58b5e1fe37be4a6bb5a74f76d7c0f06d.png" },
-  { id: "u9", name: "Andi Lane", image: "http://localhost:3845/assets/264ae50c597aef89a0c4eff3aa6d5fa1503db174.png" },
-  { id: "u10", name: "Kate Morrison", image: "http://localhost:3845/assets/d62f72d9c8052940bb7983e7caefb57013f80477.png" },
+  { id: "u1", name: "Olivia Rhye", image: "https://i.pravatar.cc/48?img=1" },
+  { id: "u2", name: "Candice Wu", image: "https://i.pravatar.cc/48?img=5" },
+  { id: "u3", name: "Orlando Diggs", image: "https://i.pravatar.cc/48?img=12" },
+  { id: "u4", name: "Demi Wilkinson", image: "https://i.pravatar.cc/48?img=9" },
+  { id: "u5", name: "Drew Cano", image: "https://i.pravatar.cc/48?img=8" },
+  { id: "u6", name: "Phoenix Baker", image: "https://i.pravatar.cc/48?img=3" },
+  { id: "u7", name: "Nat Craig", image: "https://i.pravatar.cc/48?img=16" },
+  { id: "u8", name: "Lana Steiner", image: "https://i.pravatar.cc/48?img=25" },
+  { id: "u9", name: "Andi Lane", image: "https://i.pravatar.cc/48?img=47" },
+  { id: "u10", name: "Kate Morrison", image: "https://i.pravatar.cc/48?img=44" },
 ]
 
 /* ── Module definitions: Development track ────────────────– */
@@ -456,19 +456,11 @@ function renderTeamAvatars(team, options = {}) {
   const { avatarClass = "rr-roadmap-avatar", groupClass = "rr-roadmap-avatars" } = options
   const avatarHtml = team.map(user => {
     const image = String(user.image || "").trim()
-    if (image) {
-      return `
-        <div class="${avatarClass}" title="${escapeHtml(user.name)}">
-          <img alt="${escapeHtml(user.name)}" src="${image}" />
-        </div>
-      `
-    }
-
-    return `
-      <div class="${avatarClass}" title="${escapeHtml(user.name)}">
-        <span class="rr-roadmap-avatar-fallback">${escapeHtml(getInitials(user.name))}</span>
-      </div>
-    `
+    const initials = escapeHtml(getInitials(user.name))
+    const inner = image
+      ? `<img alt="${escapeHtml(user.name)}" src="${image}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><span class="rr-roadmap-avatar-fallback" style="display:none">${initials}</span>`
+      : `<span class="rr-roadmap-avatar-fallback">${initials}</span>`
+    return `<div class="${avatarClass}" title="${escapeHtml(user.name)}">${inner}</div>`
   }).join("")
 
   return `<div class="${groupClass}">${avatarHtml}</div>`
@@ -491,7 +483,7 @@ function renderRoadmapMemberPicker(draftSettings) {
       ${availableMembers.map(member => {
         const image = String(member.image || "").trim()
         const avatar = image
-          ? `<img alt="" src="${image}" />`
+          ? `<img alt="" src="${image}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><span class="rr-roadmap-avatar-fallback" style="display:none">${escapeHtml(getInitials(member.name))}</span>`
           : `<span class="rr-roadmap-avatar-fallback">${escapeHtml(getInitials(member.name))}</span>`
 
         return `
@@ -505,9 +497,87 @@ function renderRoadmapMemberPicker(draftSettings) {
   `
 }
 
-function renderRoadmapSettingsModal(draftSettings, memberPickerOpen = false) {
+function formatDateDisplay(value) {
+  if (!value) return ""
+  const date = value instanceof Date ? value : toDateUtc(value)
+  if (!date) return ""
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+  return `${date.getUTCDate()} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()}`
+}
+
+function renderDatePicker(settingKey, value, activePicker, dpNav) {
+  const isOpen = activePicker === settingKey
+  const calKey = `${settingKey}_cal`
+  const currentYear = dpNav[calKey]?.year ?? (toDateUtc(value)?.getUTCFullYear() ?? new Date().getFullYear())
+  const currentMonth = dpNav[calKey]?.month ?? (toDateUtc(value)?.getUTCMonth() ?? new Date().getMonth())
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+  const DAYS  = ["Mo","Tu","We","Th","Fr","Sa","Su"]
+  const today = new Date()
+  const todayStr = toIsoDate(new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())))
+
+  // Build calendar grid
+  const firstDay = new Date(Date.UTC(currentYear, currentMonth, 1))
+  const startDow = (firstDay.getUTCDay() + 6) % 7 // Monday=0
+  const daysInMonth = new Date(Date.UTC(currentYear, currentMonth + 1, 0)).getUTCDate()
+  const daysInPrev  = new Date(Date.UTC(currentYear, currentMonth, 0)).getUTCDate()
+
+  const cells = []
+  for (let i = startDow - 1; i >= 0; i--) {
+    cells.push({ day: daysInPrev - i, other: true })
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = toIsoDate(new Date(Date.UTC(currentYear, currentMonth, d)))
+    cells.push({ day: d, dateStr, isSelected: dateStr === value, isToday: dateStr === todayStr })
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push({ day: cells.length - daysInMonth - startDow + 1, other: true })
+  }
+
+  const gridHtml = `
+    ${DAYS.map(d => `<span class="rr-datepicker-dh">${d}</span>`).join("")}
+    ${cells.map(c => c.other
+      ? `<button type="button" class="rr-datepicker-day is-other-month" disabled>${c.day}</button>`
+      : `<button type="button" class="rr-datepicker-day${c.isSelected ? " is-selected" : ""}${c.isToday && !c.isSelected ? " is-today" : ""}"
+           data-action="pick-date"
+           data-setting="${settingKey}"
+           data-date="${c.dateStr}"
+         >${c.day}</button>`
+    ).join("")}
+  `
+
+  const popupHtml = isOpen ? `
+    <div class="rr-datepicker-popup">
+      <div class="rr-datepicker-header">
+        <button type="button" class="rr-datepicker-nav" data-action="datepicker-prev" data-setting="${settingKey}" aria-label="Previous month">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="rr-datepicker-month-label">${MONTHS[currentMonth]} ${currentYear}</span>
+        <button type="button" class="rr-datepicker-nav" data-action="datepicker-next" data-setting="${settingKey}" aria-label="Next month">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="rr-datepicker-grid">${gridHtml}</div>
+      <div class="rr-datepicker-footer">
+        <button type="button" class="rr-datepicker-footer-btn" data-action="datepicker-clear" data-setting="${settingKey}">Clear</button>
+        <button type="button" class="rr-datepicker-footer-btn rr-datepicker-footer-btn--today" data-action="datepicker-today" data-setting="${settingKey}">Today</button>
+      </div>
+    </div>
+  ` : ""
+
+  return `
+    <div class="rr-datepicker-wrap${isOpen ? " is-open" : ""}" data-datepicker="${settingKey}">
+      <button type="button" class="rr-datepicker-trigger" data-action="toggle-datepicker" data-setting="${settingKey}" aria-haspopup="true" aria-expanded="${isOpen}">
+        <svg class="rr-datepicker-trigger-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 1v3M11 1v3M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span class="rr-datepicker-trigger-text">${escapeHtml(formatDateDisplay(value) || "Select date")}</span>
+        <svg class="rr-datepicker-trigger-caret" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      ${popupHtml}
+    </div>
+  `
+}
+
+function renderRoadmapSettingsModal(draftSettings, memberPickerOpen = false, activePicker = "", dpNav = {}) {
   if (!draftSettings) return ""
-  const sprintLabel = `${draftSettings.sprintDurationWeeks} week${draftSettings.sprintDurationWeeks > 1 ? "s" : ""}`
 
   return `
     <div class="rr-roadmap-settings-overlay" data-action="close-roadmap-settings">
@@ -522,34 +592,15 @@ function renderRoadmapSettingsModal(draftSettings, memberPickerOpen = false) {
         </div>
 
         <div class="rr-roadmap-settings-body">
-          <label class="rr-roadmap-settings-field">
+          <div class="rr-roadmap-settings-field">
             <span class="rr-roadmap-settings-label">Project start date</span>
-            <span class="rr-roadmap-settings-input-wrap">
-              <input type="date" class="rr-roadmap-settings-input" data-setting="projectStartDate" value="${escapeHtml(draftSettings.projectStartDate)}" />
-            </span>
-          </label>
+            ${renderDatePicker("projectStartDate", draftSettings.projectStartDate, activePicker, dpNav)}
+          </div>
 
-          <label class="rr-roadmap-settings-field">
+          <div class="rr-roadmap-settings-field">
             <span class="rr-roadmap-settings-label">Project end date</span>
-            <span class="rr-roadmap-settings-input-wrap">
-              <input type="date" class="rr-roadmap-settings-input" data-setting="projectEndDate" value="${escapeHtml(draftSettings.projectEndDate)}" />
-            </span>
-          </label>
-
-          <label class="rr-roadmap-settings-field">
-            <span class="rr-roadmap-settings-label">Sprint duration</span>
-            <span class="rr-roadmap-settings-input-wrap rr-roadmap-settings-input-wrap--select">
-              <select class="rr-roadmap-settings-select" data-setting="sprintDurationWeeks" aria-label="Sprint duration">
-                <option value="1"${draftSettings.sprintDurationWeeks === 1 ? " selected" : ""}>1 week</option>
-                <option value="2"${draftSettings.sprintDurationWeeks === 2 ? " selected" : ""}>2 weeks</option>
-                <option value="3"${draftSettings.sprintDurationWeeks === 3 ? " selected" : ""}>3 weeks</option>
-              </select>
-              <span class="rr-roadmap-settings-select-text" aria-hidden="true">${escapeHtml(sprintLabel)}</span>
-              <svg viewBox="0 0 20 20" width="20" height="20" class="rr-roadmap-settings-select-caret" aria-hidden="true" focusable="false">
-                <path d="M4.375 7.5L10 13.125L15.625 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </label>
+            ${renderDatePicker("projectEndDate", draftSettings.projectEndDate, activePicker, dpNav)}
+          </div>
 
           <div class="rr-roadmap-settings-field">
             <span class="rr-roadmap-settings-label">Team members</span>
@@ -572,12 +623,83 @@ function renderRoadmapSettingsModal(draftSettings, memberPickerOpen = false) {
   `
 }
 
-function renderRoadmapSnapshotModal(contentHtml) {
+const ALL_MODULES = [
+  ...DEV_MODULES.map(m => ({ ...m, track: "Development" })),
+  ...DESIGN_MODULES.map(m => ({ ...m, track: "Design & Specs" })),
+]
+
+function renderAddModulePopover(state) {
+  const draft = state.addModuleDraft
+  const showCustom = state.addModuleCustomExpanded
+  const searchVal = escapeHtml(draft.search || "")
+  const filtered = ALL_MODULES.filter(m => {
+    const q = (draft.search || "").toLowerCase()
+    return !q || m.id.toLowerCase().includes(q) || m.title.toLowerCase().includes(q)
+  })
+
+  const moduleListHtml = filtered.length > 0
+    ? filtered.map(m => `
+        <button type="button"
+          class="rr-amp-option${draft.selectedId === m.id && draft.selectedTrack === m.track ? " is-selected" : ""}"
+          data-action="pick-module-option"
+          data-module-id="${escapeHtml(m.id)}"
+          data-module-title="${escapeHtml(m.title)}"
+          data-module-track="${escapeHtml(m.track)}"
+          data-module-sprint="${escapeHtml(String(m.sprintStartNo))}"
+        >
+          <span class="rr-amp-option-id">${escapeHtml(m.id)}</span>
+          <span class="rr-amp-option-title">${escapeHtml(m.title)}</span>
+          <span class="rr-amp-option-track">${escapeHtml(m.track)}</span>
+        </button>
+      `).join("")
+    : (draft.search ? `<p class="rr-amp-empty">No modules match your search.</p>` : "")
+
+  const customFieldsHtml = showCustom ? `
+    <div class="rr-amp-custom-fields">
+      <input type="text" class="rr-amp-field" data-setting="addModuleId" placeholder="Module ID (e.g. TST-001)" value="${escapeHtml(draft.id)}" autocomplete="off" />
+      <input type="text" class="rr-amp-field" data-setting="addModuleTitle" placeholder="Title" value="${escapeHtml(draft.title)}" autocomplete="off" />
+    </div>
+  ` : ""
+
+  const canAdd = showCustom
+    ? Boolean(draft.id.trim() && draft.title.trim())
+    : Boolean(draft.selectedId)
+
+  return `
+    <div class="rr-amp" data-popover="add-module">
+      <div class="rr-amp-search-wrap">
+        <svg class="rr-amp-search-icon" width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M15.75 15.75L11.25 11.25M12.75 7.5C12.75 10.3995 10.3995 12.75 7.5 12.75C4.6005 12.75 2.25 10.3995 2.25 7.5C2.25 4.6005 4.6005 2.25 7.5 2.25C10.3995 2.25 12.75 4.6005 12.75 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input type="text" class="rr-amp-search" data-setting="addModuleSearch" placeholder="Search modules…" value="${searchVal}" autocomplete="off" />
+      </div>
+      <div class="rr-amp-list">
+        <button type="button" class="rr-amp-custom-trigger${showCustom ? " is-expanded" : ""}" data-action="toggle-custom-block">
+          <svg class="rr-amp-custom-plus" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Custom block</span>
+          <svg class="rr-amp-custom-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        ${customFieldsHtml}
+        ${moduleListHtml}
+      </div>
+      <div class="rr-amp-footer">
+        <rr-button variant="neutral" size="sm" data-action="cancel-add-module">Cancel</rr-button>
+        <rr-button variant="primary" size="sm" data-action="submit-add-module" ${canAdd ? "" : "disabled"}>Add to roadmap</rr-button>
+      </div>
+    </div>
+  `
+}
+
+function renderRoadmapSnapshotModal(contentHtml, state) {
   return `
     <div class="rr-roadmap-snapshot-overlay" data-action="close-roadmap-snapshot-modal">
       <div class="rr-roadmap-snapshot-modal" role="dialog" aria-modal="true" aria-label="Roadmap snapshot">
         <div class="rr-roadmap-snapshot-header">
           <p class="rr-roadmap-snapshot-title">Roadmap Snapshot</p>
+
+          <button type="button" class="rr-roadmap-snapshot-icon-btn${state.isAddModuleFormOpen ? " is-active" : ""}" data-action="toggle-add-module-form" aria-label="Add module to roadmap" title="Add module to roadmap" aria-expanded="${state.isAddModuleFormOpen ? "true" : "false"}">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <path d="${ROADMAP_PLUS_ICON_PATH}" fill="currentColor"/>
+            </svg>
+          </button>
 
           <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Export snapshot image" title="Export snapshot image">
             <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -591,7 +713,7 @@ function renderRoadmapSnapshotModal(contentHtml) {
             </svg>
           </button>
 
-          <button type="button" class="rr-roadmap-snapshot-icon-btn" aria-label="Save snapshot" title="Save snapshot">
+          <button type="button" class="rr-roadmap-snapshot-icon-btn" data-action="save-roadmap-snapshot" aria-label="Save snapshot" title="Save snapshot">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="${ROADMAP_SNAPSHOT_SAVE_ICON_PATH}" fill="currentColor"/>
             </svg>
@@ -605,6 +727,7 @@ function renderRoadmapSnapshotModal(contentHtml) {
         </div>
         ${contentHtml}
       </div>
+      ${state.isAddModuleFormOpen ? renderAddModulePopover(state) : ""}
     </div>
   `
 }
@@ -618,6 +741,7 @@ function renderRoadmapMainContent(state, sprintData, options = {}) {
   let developmentModules = [
     ...buildPlaceholderModules("DEV", placeholderStartNo, placeholderEndNo),
     ...DEV_MODULES,
+    ...(isSnapshotView ? state.snapshotCustomModules : []),
   ]
   let designModules = [
     ...buildPlaceholderModules("DSN", placeholderStartNo, placeholderEndNo),
@@ -684,7 +808,7 @@ function renderRoadmapMainContent(state, sprintData, options = {}) {
       <div class="rr-roadmap-container" data-roadmap-view="${viewKey}" data-current-col-start="${currentSprintStart}" data-current-col-span="${currentSprintSpan}">
         ${renderTimelineHeader(layout, totalWeekColumns)}
         ${renderTrack("Development", developmentModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides, moduleDragOverrides: state.moduleDragOverrides })}
-        ${renderTrack("Design", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides, moduleDragOverrides: state.moduleDragOverrides })}
+        ${renderTrack("Design & Specs", designModules, layout, totalWeekColumns, currentSprintStart, currentSprintSpan, currentSprintIndex, { isSnapshotView, moduleResizeOverrides: state.moduleResizeOverrides, moduleDragOverrides: state.moduleDragOverrides })}
       </div>
     </section>
   `
@@ -693,14 +817,17 @@ function renderRoadmapMainContent(state, sprintData, options = {}) {
 function buildView(state) {
   const sprintData = buildSprintLayout(state.settings)
   const mainContent = renderRoadmapMainContent(state, sprintData, { viewKey: "main" })
-  const snapshotModal = state.isSnapshotModalOpen
-    ? renderRoadmapSnapshotModal(renderRoadmapMainContent(state, sprintData, { viewKey: "snapshot", isSnapshotView: true }))
+  const snapshotContent = state.isSnapshotModalOpen
+    ? renderRoadmapSnapshotModal(renderRoadmapMainContent(state, sprintData, { viewKey: "snapshot", isSnapshotView: true }), state)
+    : ""
+  const settingsContent = state.isModalOpen
+    ? renderRoadmapSettingsModal(state.draftSettings, state.memberPickerOpen, state.activePicker, state.dpNav)
     : ""
 
   return `
     ${mainContent}
-    ${state.isModalOpen ? renderRoadmapSettingsModal(state.draftSettings, state.memberPickerOpen) : ""}
-    ${snapshotModal}
+    ${settingsContent}
+    ${snapshotContent}
   `
 }
 
@@ -715,12 +842,32 @@ function createInitialState() {
     draftSettings: null,
     isModalOpen: false,
     memberPickerOpen: false,
+    activePicker: "",
+    dpNav: {},
     isSnapshotDropdownOpen: false,
     isSnapshotModalOpen: false,
     snapshotModalScrollLeft: 0,
     moduleResizeOverrides: {},
     moduleDragOverrides: {},
+    snapshotCustomModules: [],
+    isAddModuleFormOpen: false,
+    addModuleCustomExpanded: false,
+    addModuleDraft: { id: "", title: "", search: "", selectedId: "", selectedTitle: "", selectedTrack: "", selectedSprint: 0 },
   }
+}
+
+function showRoadmapToast(message) {
+  let toast = document.getElementById("rr-roadmap-toast")
+  if (!toast) {
+    toast = document.createElement("div")
+    toast.id = "rr-roadmap-toast"
+    toast.className = "rr-rn-toast"
+    document.body.appendChild(toast)
+  }
+  toast.textContent = message
+  toast.classList.add("is-visible")
+  clearTimeout(toast._timer)
+  toast._timer = setTimeout(() => toast.classList.remove("is-visible"), 2800)
 }
 
 export async function renderRoadmapFlow() {
@@ -740,10 +887,28 @@ export function mountRoadmapFlow() {
     tabHeaderActions.innerHTML = renderRoadmapHeaderActions(state.isSnapshotDropdownOpen)
   }
 
-  function render() {
+  function render(preserveOverlayClass) {
     const previousMainContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="main"]')
     const previousMainScrollLeft = previousMainContainer ? previousMainContainer.scrollLeft : 0
+
+    // Snapshot modal lives outside the main roadmap container — update it in-place
+    // to avoid re-triggering entry animations on every interaction.
+    const existingSnapshot = root.querySelector(".rr-roadmap-snapshot-overlay")
+    const existingSettings = root.querySelector(".rr-roadmap-settings-overlay")
+    const snapshotIsEntering = existingSnapshot?.classList.contains("is-entering")
+    const settingsIsEntering = existingSettings?.classList.contains("is-entering")
+
     root.innerHTML = buildView(state)
+
+    // Re-apply entering class so animations don't re-fire on subsequent renders
+    if (snapshotIsEntering && !preserveOverlayClass) {
+      const next = root.querySelector(".rr-roadmap-snapshot-overlay")
+      if (next) next.classList.add("is-entering")
+    }
+    if (settingsIsEntering && !preserveOverlayClass) {
+      const next = root.querySelector(".rr-roadmap-settings-overlay")
+      if (next) next.classList.add("is-entering")
+    }
 
     const nextMainContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="main"]')
     const snapshotContainer = root.querySelector('.rr-roadmap-container[data-roadmap-view="snapshot"]')
@@ -787,7 +952,13 @@ export function mountRoadmapFlow() {
     state.draftSettings = deepCloneSettings(state.settings)
     state.isModalOpen = true
     state.memberPickerOpen = false
-    render()
+    state.activePicker = ""
+    state.dpNav = {}
+    render(true)
+    requestAnimationFrame(() => {
+      const overlay = root.querySelector(".rr-roadmap-settings-overlay")
+      if (overlay) overlay.classList.add("is-entering")
+    })
   }
 
   function openSnapshotModal() {
@@ -797,16 +968,35 @@ export function mountRoadmapFlow() {
     state.isSnapshotModalOpen = true
     state.moduleResizeOverrides = {}
     state.moduleDragOverrides = {}
+    state.snapshotCustomModules = []
+    state.isAddModuleFormOpen = false
+    state.addModuleCustomExpanded = false
+    state.addModuleDraft = { id: "", title: "", search: "", selectedId: "", selectedTitle: "", selectedTrack: "", selectedSprint: 0 }
     renderHeaderActions()
-    render()
+    render(true)
+    // Trigger enter animation on next frame
+    requestAnimationFrame(() => {
+      const overlay = root.querySelector(".rr-roadmap-snapshot-overlay")
+      if (overlay) overlay.classList.add("is-entering")
+    })
   }
 
   function closeSnapshotModal() {
     if (!state.isSnapshotModalOpen) return
-    stopModuleResize()
-    stopModuleDrag()
-    state.isSnapshotModalOpen = false
-    render()
+    const overlay = root.querySelector(".rr-roadmap-snapshot-overlay")
+    const doClose = () => {
+      stopModuleResize()
+      stopModuleDrag()
+      state.isSnapshotModalOpen = false
+      render(true)
+    }
+    if (overlay) {
+      overlay.classList.remove("is-entering")
+      overlay.classList.add("is-closing")
+      setTimeout(doClose, 240)
+    } else {
+      doClose()
+    }
   }
 
   let moduleResizeState = null
@@ -981,35 +1171,44 @@ export function mountRoadmapFlow() {
 
   function findFirstAvailableRow(trackName, nextStartColumn, nextColSpan) {
     const grid = getTrackGridByName(trackName)
-    if (!grid) return null
+    if (!grid) return 1
 
-    const gridStyle = getComputedStyle(grid)
-    const rowGap = Number.parseFloat(gridStyle.rowGap) || 0
-    const paddingTop = Number.parseFloat(gridStyle.paddingTop) || 0
-    const paddingBottom = Number.parseFloat(gridStyle.paddingBottom) || 0
     const tileHeight = Math.max(1, moduleDragState.tileHeight || 48)
-    const availableHeight = Math.max(0, grid.clientHeight - paddingTop - paddingBottom)
-    const maxRowsBySpace = Math.max(1, Math.floor((availableHeight + rowGap) / (tileHeight + rowGap)))
+    const gridStyle = getComputedStyle(grid)
+    const rowGap = Number.parseFloat(gridStyle.rowGap) || 4
+    const paddingTop = Number.parseFloat(gridStyle.paddingTop) || 0
+    const rowSlotHeight = tileHeight + rowGap
+    const gridRect = grid.getBoundingClientRect()
 
     const modules = Array.from(grid.querySelectorAll('.rr-roadmap-module'))
-      .filter(el => el !== moduleDragState.moduleEl)
+      .filter(el => el !== moduleDragState.moduleEl && el.style.visibility !== "hidden")
 
     const occupiedByRow = new Map()
     for (const el of modules) {
-      const row = Number.parseInt(getComputedStyle(el).gridRowStart, 10) || 1
+      // Prefer explicit numeric grid row from computed style (set by previous drags)
+      const computedRow = Number.parseInt(getComputedStyle(el).gridRowStart, 10)
+      let row
+      if (Number.isFinite(computedRow) && computedRow > 0) {
+        row = computedRow
+      } else {
+        // Fall back to visual position relative to the grid
+        const elRect = el.getBoundingClientRect()
+        const relTop = elRect.top - gridRect.top - paddingTop
+        row = Math.max(1, Math.round(relTop / rowSlotHeight) + 1)
+      }
       const start = Number(el.dataset.moduleStart || "1")
       const span = Number(el.dataset.moduleSpan || "1")
       if (!occupiedByRow.has(row)) occupiedByRow.set(row, [])
       occupiedByRow.get(row).push({ start, span })
     }
 
-    for (let row = 1; row <= maxRowsBySpace; row += 1) {
+    for (let row = 1; row <= 20; row += 1) {
       const rowItems = occupiedByRow.get(row) || []
       const collides = rowItems.some(item => columnsOverlap(nextStartColumn, nextColSpan, item.start, item.span))
       if (!collides) return row
     }
 
-    return null
+    return 1
   }
 
   function handleModuleDragMove(event) {
@@ -1198,11 +1397,22 @@ export function mountRoadmapFlow() {
     if (saveChanges) {
       commitDraftSettings()
     }
-
-    state.draftSettings = null
-    state.isModalOpen = false
-    state.memberPickerOpen = false
-    render()
+    const doClose = () => {
+      state.draftSettings = null
+      state.isModalOpen = false
+      state.memberPickerOpen = false
+      state.activePicker = ""
+      state.dpNav = {}
+      render(true)
+    }
+    const overlay = root.querySelector(".rr-roadmap-settings-overlay")
+    if (overlay) {
+      overlay.classList.remove("is-entering")
+      overlay.classList.add("is-closing")
+      setTimeout(doClose, 220)
+    } else {
+      doClose()
+    }
   }
 
   function handleHeaderClick(event) {
@@ -1250,6 +1460,76 @@ export function mountRoadmapFlow() {
       return
     }
 
+    if (action === "toggle-datepicker") {
+      if (!state.draftSettings) return
+      const key = actionEl.dataset.setting
+      state.activePicker = state.activePicker === key ? "" : key
+      if (!state.dpNav[`${key}_cal`]) {
+        const d = toDateUtc(key === "projectStartDate" ? state.draftSettings.projectStartDate : state.draftSettings.projectEndDate) || new Date()
+        state.dpNav[`${key}_cal`] = { year: d.getUTCFullYear(), month: d.getUTCMonth() }
+      }
+      render()
+      return
+    }
+
+    if (action === "datepicker-prev") {
+      if (!state.draftSettings) return
+      const key = actionEl.dataset.setting
+      const calKey = `${key}_cal`
+      const cal = state.dpNav[calKey] || { year: new Date().getFullYear(), month: new Date().getMonth() }
+      let { year, month } = cal
+      month -= 1
+      if (month < 0) { month = 11; year -= 1 }
+      state.dpNav[calKey] = { year, month }
+      render()
+      return
+    }
+
+    if (action === "datepicker-next") {
+      if (!state.draftSettings) return
+      const key = actionEl.dataset.setting
+      const calKey = `${key}_cal`
+      const cal = state.dpNav[calKey] || { year: new Date().getFullYear(), month: new Date().getMonth() }
+      let { year, month } = cal
+      month += 1
+      if (month > 11) { month = 0; year += 1 }
+      state.dpNav[calKey] = { year, month }
+      render()
+      return
+    }
+
+    if (action === "pick-date") {
+      if (!state.draftSettings) return
+      const key = actionEl.dataset.setting
+      const date = actionEl.dataset.date
+      if (key === "projectStartDate") state.draftSettings.projectStartDate = date
+      if (key === "projectEndDate")   state.draftSettings.projectEndDate   = date
+      state.activePicker = ""
+      render()
+      return
+    }
+
+    if (action === "datepicker-clear") {
+      if (!state.draftSettings) return
+      const key = actionEl.dataset.setting
+      if (key === "projectStartDate") state.draftSettings.projectStartDate = ""
+      if (key === "projectEndDate")   state.draftSettings.projectEndDate   = ""
+      state.activePicker = ""
+      render()
+      return
+    }
+
+    if (action === "datepicker-today") {
+      if (!state.draftSettings) return
+      const key = actionEl.dataset.setting
+      const todayStr = toIsoDate(new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())))
+      if (key === "projectStartDate") state.draftSettings.projectStartDate = todayStr
+      if (key === "projectEndDate")   state.draftSettings.projectEndDate   = todayStr
+      state.activePicker = ""
+      render()
+      return
+    }
+
     if (action === "toggle-team-member-picker" && state.draftSettings) {
       state.memberPickerOpen = !state.memberPickerOpen
       render()
@@ -1281,6 +1561,80 @@ export function mountRoadmapFlow() {
       if (actionEl.classList.contains("rr-roadmap-snapshot-modal")) return
       if (actionEl.classList.contains("rr-roadmap-snapshot-overlay") && event.target !== actionEl) return
       closeSnapshotModal()
+      return
+    }
+
+    if (action === "save-roadmap-snapshot") {
+      showRoadmapToast("Roadmap snapshot saved")
+      return
+    }
+
+    if (action === "toggle-add-module-form") {
+      state.isAddModuleFormOpen = !state.isAddModuleFormOpen
+      if (!state.isAddModuleFormOpen) {
+        state.addModuleCustomExpanded = false
+        state.addModuleDraft = { id: "", title: "", search: "", selectedId: "", selectedTitle: "", selectedTrack: "", selectedSprint: 0 }
+      }
+      render()
+      return
+    }
+
+    if (action === "toggle-custom-block") {
+      state.addModuleCustomExpanded = !state.addModuleCustomExpanded
+      render()
+      return
+    }
+
+    if (action === "pick-module-option") {
+      state.addModuleDraft.selectedId = actionEl.dataset.moduleId || ""
+      state.addModuleDraft.selectedTitle = actionEl.dataset.moduleTitle || ""
+      state.addModuleDraft.selectedTrack = actionEl.dataset.moduleTrack || ""
+      state.addModuleDraft.selectedSprint = Number(actionEl.dataset.moduleSprint) || ROADMAP_CURRENT_SPRINT_NO
+      render()
+      return
+    }
+
+    if (action === "cancel-add-module") {
+      state.isAddModuleFormOpen = false
+      state.addModuleCustomExpanded = false
+      state.addModuleDraft = { id: "", title: "", search: "", selectedId: "", selectedTitle: "", selectedTrack: "", selectedSprint: 0 }
+      render()
+      return
+    }
+
+    if (action === "submit-add-module") {
+      if (!state.addModuleCustomExpanded) {
+        const { selectedId, selectedTitle, selectedSprint } = state.addModuleDraft
+        if (selectedId && selectedTitle) {
+          state.snapshotCustomModules.push({
+            id: selectedId,
+            title: selectedTitle,
+            status: "to-do",
+            sprintStartNo: selectedSprint || ROADMAP_CURRENT_SPRINT_NO,
+            sprintEndNo: selectedSprint || ROADMAP_CURRENT_SPRINT_NO,
+          })
+          state.isAddModuleFormOpen = false
+          state.addModuleCustomExpanded = false
+          state.addModuleDraft = { id: "", title: "", search: "", selectedId: "", selectedTitle: "", selectedTrack: "", selectedSprint: 0 }
+          render()
+        }
+      } else {
+        const id = state.addModuleDraft.id.trim()
+        const title = state.addModuleDraft.title.trim()
+        if (id && title) {
+          state.snapshotCustomModules.push({
+            id,
+            title,
+            status: "to-do",
+            sprintStartNo: ROADMAP_CURRENT_SPRINT_NO,
+            sprintEndNo: ROADMAP_CURRENT_SPRINT_NO,
+          })
+          state.isAddModuleFormOpen = false
+          state.addModuleCustomExpanded = false
+          state.addModuleDraft = { id: "", title: "", search: "", selectedId: "", selectedTitle: "", selectedTrack: "", selectedSprint: 0 }
+          render()
+        }
+      }
       return
     }
 
@@ -1317,25 +1671,35 @@ export function mountRoadmapFlow() {
   }
 
   function handleRootChange(event) {
-    if (!state.draftSettings) return
     const target = event.target
     if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return
     const setting = target.dataset.setting
 
-    if (setting === "projectStartDate") {
-      state.draftSettings.projectStartDate = target.value
+    if (setting === "addModuleId") {
+      state.addModuleDraft.id = target.value
       return
     }
 
-    if (setting === "projectEndDate") {
-      state.draftSettings.projectEndDate = target.value
+    if (setting === "addModuleTitle") {
+      state.addModuleDraft.title = target.value
       return
     }
 
-    if (setting === "sprintDurationWeeks") {
-      state.draftSettings.sprintDurationWeeks = Number(target.value)
+    if (setting === "addModuleSearch") {
+      state.addModuleDraft.search = target.value
       render()
+      requestAnimationFrame(() => {
+        const next = root.querySelector('[data-setting="addModuleSearch"]')
+        if (next) {
+          next.focus()
+          const len = next.value.length
+          next.setSelectionRange(len, len)
+        }
+      })
+      return
     }
+
+    if (!state.draftSettings) return
   }
 
   function handleKeyDown(event) {

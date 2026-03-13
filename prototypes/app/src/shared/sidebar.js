@@ -69,10 +69,10 @@ export function renderSidebar(collapsed = true) {
           </button>
         </div>
         <div class="rr-sidebar-collapsed-nav">
-          <div class="rr-sidebar-collapsed-bell">
+          <a href="/notifications/inbox" class="rr-sidebar-collapsed-bell" aria-label="Notifications">
             ${ICON.bell}
             <span class="rr-sidebar-notification-dot"></span>
-          </div>
+          </a>
           <div class="rr-sidebar-divider"></div>
           <div class="rr-sidebar-collapsed-badges">
             ${COLLAPSED_PROJECT_BADGES.map(b => `
@@ -117,10 +117,10 @@ export function renderSidebar(collapsed = true) {
           </button>
         </div>
         <nav class="rr-sidebar-nav">
-          <a href="#" class="rr-sidebar-link">
+          <a href="/notifications/inbox" class="rr-sidebar-link">
             ${ICON.bell}
             <span>Inbox</span>
-            <span class="rr-sidebar-inbox-badge">12</span>
+            <span class="rr-sidebar-inbox-badge">4</span>
           </a>
           <div class="rr-sidebar-divider"></div>
           <div class="rr-sidebar-section-header">

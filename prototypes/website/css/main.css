@@ -88,7 +88,7 @@
   /* Layout */
   --ws-max-width:       1200px;
   --ws-max-width-text:  720px;
-  --ws-header-height:   60px;
+  --ws-header-height:   72px;
 }
 
 /* Reset ─────────────────────────────────────────────────────── */
@@ -113,6 +113,8 @@ body {
   background-color: var(--ws-color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-width: 320px;
 }
 
 img, svg {

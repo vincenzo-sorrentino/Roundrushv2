@@ -65,7 +65,58 @@ const PROTOTYPE_GROUPS = [
     ]
   },
   {
-    id: "module-prototypes",
+    id: "sprints",
+    label: "Sprints",
+    description: "Sprint lifecycle flows — plan, execute, review and approve each sprint.",
+    items: [
+      {
+        id: "sprints-current",
+        title: "Current Sprint",
+        subtitle: "Active sprint table with module detail, filters, sorting, and close-sprint workflow.",
+        route: "/planning/kanban",
+        status: "approved",
+        epic: "KAN",
+        module: "KAN-M001 · KAN-M002"
+      },
+      {
+        id: "sprints-draft",
+        title: "Draft Sprint",
+        subtitle: "Sprint planning tool — set dates, scope modules from backlog, assign team members, and submit for approval.",
+        route: "/planning/draft",
+        status: "approved",
+        epic: "KAN",
+        module: "KAN-M005"
+      },
+      {
+        id: "sprints-roadmap",
+        title: "Roadmap",
+        subtitle: "Visual sprint roadmap with module timeline, team assignments, and snapshot export.",
+        route: "/planning/roadmap",
+        status: "approved",
+        epic: "RMP",
+        module: "RMP-M001"
+      },
+      {
+        id: "sprints-old",
+        title: "Old Sprint — Release Notes",
+        subtitle: "Closed sprint as a tabbed release document — Overview, Bug fixing, Implemented tasks, Finalized Design, and Test Coverage.",
+        route: "/planning/old-sprint",
+        status: "approved",
+        epic: "KAN",
+        module: "KAN-M003"
+      },
+      {
+        id: "sprints-approve",
+        title: "Approve Sprint (Stakeholders)",
+        subtitle: "Stakeholder-facing release notes with sign & approve workflow. Shows sprint fully approved once all stakeholders sign.",
+        route: "/planning/release-notes",
+        status: "approved",
+        epic: "KAN",
+        module: "KAN-M004"
+      }
+    ]
+  },
+  {
     label: "Module Prototypes",
     description: "Interactive flows for each requirement module.",
     items: [
@@ -106,15 +157,6 @@ const PROTOTYPE_GROUPS = [
         module: "REQ-M001 · REQ-M002 · REQ-M003"
       },
       {
-        id: "kanban-module",
-        title: "Kanban / Sprint Board",
-        subtitle: "Sprint planning board with module detail overlay.",
-        route: "/planning/kanban",
-        status: "approved",
-        epic: "KAN",
-        module: "KAN-M001 · KAN-M002"
-      },
-      {
         id: "dependencies-uml",
         title: "Dependencies Graph",
         subtitle: "UML dependency diagram — Bézier graph view with pan & node selection.",
@@ -142,22 +184,22 @@ const PROTOTYPE_GROUPS = [
         module: "DOC-M001"
       },
       {
-        id: "old-sprint",
-        title: "Old Sprint · Release Notes",
-        subtitle: "Closed sprint as a tabbed release document — Overview, Issues logs, Finalized Design, and Test Coverage.",
-        route: "/planning/old-sprint",
+        id: "design-tab",
+        title: "Design Tab",
+        subtitle: "Prototype tracking per requirement — design statuses, assignees, and prototype viewer.",
+        route: "/design/tab",
         status: "approved",
-        epic: "KAN",
-        module: "KAN-M003"
+        epic: "DES",
+        module: "DES-M001 · DES-M002"
       },
       {
-        id: "release-notes",
-        title: "Release Notes (Stakeholder Approval)",
-        subtitle: "Stakeholder-facing release notes with sign & approve workflow.",
-        route: "/planning/release-notes",
+        id: "notifications-inbox",
+        title: "Notifications Inbox",
+        subtitle: "Bell-triggered notification panel — comments, notes, and attachments with mark-as-read and tab filtering.",
+        route: "/notifications/inbox",
         status: "approved",
-        epic: "KAN",
-        module: "KAN-M004"
+        epic: "NTF",
+        module: "NTF-M001"
       }
     ]
   }

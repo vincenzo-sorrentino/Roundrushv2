@@ -1,7 +1,7 @@
 /* ──────────────────────────────────────────────────────────────
    Release Notes (Stakeholder Approval Flow) — prototype
    Path: /planning/release-notes
-   Same 6-tab release notes view as old-sprint, plus a
+   Release notes view with stakeholder approval, plus a
    stakeholder approval section: sign & approve per person.
    When all stakeholders have approved → "Sprint fully approved"
    green banner is shown.
@@ -69,6 +69,8 @@ const STATUS_CONFIG = {
 const ISSUE_STATUS_CONFIG = {
   "open":     { label: "Open",      bg: "#fef2f1", text: "#c0362d" },
   "resolved": { label: "Resolved",  bg: "#d4f5e3", text: "#0e9255" },
+  "fixed":    { label: "Fixed",     bg: "#d4f5e3", text: "#0e9255" },
+  "closed":   { label: "Closed",    bg: "#e0e2e7", text: "#3d4350" },
   "wont-fix": { label: "Won't fix", bg: "#e0e2e7", text: "#667085" },
   "pending":  { label: "Pending",   bg: "#fff3cd", text: "#856404" },
 }
@@ -105,6 +107,12 @@ const ISSUES = {
     prod: [
       { id: "PRD-001", title: "OAuth callback fails on slow connections",          reporter: "u7", priority: "high",   status: "resolved", date: "12/02/26" },
       { id: "PRD-002", title: "Session token not revoked on explicit logout",      reporter: "u2", priority: "urgent", status: "resolved", date: "13/02/26" },
+      { id: "PRD-003", title: "Notification badge counter stale after read state sync", reporter: "u4", priority: "medium", status: "fixed", date: "13/02/26" },
+      { id: "PRD-004", title: "Duplicate webhook retry caused duplicate transaction logs", reporter: "u6", priority: "high", status: "fixed", date: "12/02/26" },
+      { id: "PRD-005", title: "Kanban filters reset unexpectedly after browser back", reporter: "u3", priority: "medium", status: "closed", date: "11/02/26" },
+      { id: "PRD-006", title: "Dashboard totals mismatch on timezone boundary", reporter: "u1", priority: "high", status: "resolved", date: "13/02/26" },
+      { id: "PRD-007", title: "File preview crash on oversized image upload", reporter: "u8", priority: "urgent", status: "fixed", date: "14/02/26" },
+      { id: "PRD-008", title: "Email digest scheduler skipped weekend backlog", reporter: "u5", priority: "low", status: "resolved", date: "14/02/26" },
     ],
   },
   "sprint-11": {
@@ -114,7 +122,11 @@ const ISSUES = {
     uat: [
       { id: "UAT-005", title: "KYC upload accepts unsupported file type silently", reporter: "u3", priority: "high",   status: "resolved", date: "27/01/26" },
     ],
-    prod: [],
+    prod: [
+      { id: "PRD-009", title: "KYC upload timeout on unstable 4G connections", reporter: "u7", priority: "high", status: "resolved", date: "29/01/26" },
+      { id: "PRD-010", title: "Session audit logs missing for guest invite flow", reporter: "u4", priority: "medium", status: "fixed", date: "30/01/26" },
+      { id: "PRD-011", title: "Dashboard chart tooltip overflow on iPad view", reporter: "u2", priority: "low", status: "closed", date: "30/01/26" },
+    ],
   },
 }
 
@@ -138,11 +150,11 @@ const TEST_COVERAGE = {
 }
 
 const TABS = [
-  { id: "overview",          label: "Overview" },
-  { id: "uat-log",           label: "UAT Issues Log" },
-  { id: "prod-log",          label: "PROD Issues Log" },
-  { id: "finalized-design",  label: "Finalized Design" },
-  { id: "test-coverage",     label: "Automated Tests Coverage" },
+  { id: "overview",           label: "Overview" },
+  { id: "bug-fixing",         label: "Bug fixing" },
+  { id: "implemented-tasks",  label: "Implemented tasks" },
+  { id: "finalized-design",   label: "Finalized Design" },
+  { id: "test-coverage",      label: "Automated Tests Coverage" },
 ]
 
 /* ── Stakeholders data ──────────────────────────────────────── */
@@ -161,7 +173,7 @@ let root = null
 let els  = {}
 let state = {
   selectedSprintId:   "sprint-12",
-  activeTab:          "finalized-design",
+  activeTab:          "overview",
   sprintDropdownOpen: false,
   sortDir:            "desc",
   approvals:          {}, // { sh1: true, sh2: false, ... }
@@ -181,7 +193,7 @@ function allApproved() {
 function renderPriorityBadge(priority) {
   const cfg = PRIORITY_CONFIG[priority]
   if (!cfg) return ""
-  return `<span class="rr-rn-priority" style="color:${cfg.color}">${ICON[cfg.icon]}<span>${escapeHtml(cfg.label)}</span></span>`
+  return `<span class="rr-kb-priority" style="color:${cfg.color}">${ICON[cfg.icon]}<span>${escapeHtml(cfg.label)}</span></span>`
 }
 
 function renderAvatar(userId) {
@@ -198,6 +210,19 @@ function pctColor(pct) {
   if (pct >= 80) return "#0e9255"
   if (pct >= 60) return "#e7a600"
   return "#c0362d"
+}
+
+function formatReleaseDateCell(value) {
+  const raw = String(value ?? "").trim()
+  if (!raw) return "—"
+  const normalized = raw.replaceAll(".", "/")
+  const parts = normalized.split("/")
+  if (parts.length !== 3) return normalized
+  const [d, m, y] = parts
+  const day = d.padStart(2, "0")
+  const month = m.padStart(2, "0")
+  const year = y.length === 4 ? y.slice(2) : y
+  return `${day}/${month}/${year}`
 }
 
 /* ── Approval section ───────────────────────────────────────── */
@@ -310,54 +335,36 @@ function renderTabNav(activeTab) {
 
 /* ── Overview tab ───────────────────────────────────────────── */
 function renderOverviewTab(sprint) {
-  const allModules = sprint.groups.flatMap(g => g.modules)
-  const total  = allModules.length
-  const done   = allModules.filter(m => m.status === "done" || m.status === "closed").length
-  const tests  = allModules.reduce((sum, m) => sum + m.testPercent, 0) / (total || 1)
-  const tasks  = allModules.reduce((a, m) => a + m.tasksComplete, 0)
-  const taskTt = allModules.reduce((a, m) => a + m.tasksTotal, 0)
+  const modules = sprint.groups.flatMap(group => group.modules)
+  if (!modules.length) {
+    return `<p class="rr-rn-empty">${ICON.checkCircle} No released modules for this sprint.</p>`
+  }
 
-  const stats = [
-    { label: "Total Requirements", value: total,              sub: "in this sprint",     color: "#0067da" },
-    { label: "Completed",          value: done,               sub: `of ${total} modules`, color: "#0e9255" },
-    { label: "Tasks Closed",       value: `${tasks}/${taskTt}`, sub: "tasks completed",  color: "#3d4350" },
-    { label: "Avg. Test Coverage", value: `${tests.toFixed(1)}%`, sub: "unit test coverage", color: pctColor(tests) },
-  ]
-
-  const statCards = stats.map(s => `
-    <div class="rr-rn-stat-card">
-      <span class="rr-rn-stat-value" style="color:${s.color}">${escapeHtml(String(s.value))}</span>
-      <span class="rr-rn-stat-label">${escapeHtml(s.label)}</span>
-      <span class="rr-rn-stat-sub">${escapeHtml(s.sub)}</span>
-    </div>
-  `).join("")
-
-  const moduleRows = sprint.groups.map(group => {
-    const rows = group.modules.map(mod => {
-      const st = STATUS_CONFIG[mod.status] || STATUS_CONFIG["done"]
-      return `
-        <div class="rr-rn-overview-row">
-          <span class="rr-rn-overview-row-id">${escapeHtml(mod.id)}</span>
-          <span class="rr-rn-overview-row-title">${escapeHtml(mod.title)}</span>
-          <span class="rr-rn-overview-row-priority">${renderPriorityBadge(mod.priority)}</span>
-          <span class="rr-rn-overview-row-tasks">${mod.tasksComplete}/${mod.tasksTotal} tasks</span>
-          <span class="rr-rn-overview-row-test" style="color:${pctColor(mod.testPercent)}">${mod.testPercent}%</span>
-          <span class="rr-rn-overview-row-status" style="background:${st.bg};color:${st.text}">${escapeHtml(st.label)}</span>
-        </div>
-      `
-    }).join("")
+  const rows = modules.map((mod) => {
+    const acceptanceLaws = `${mod.tasksComplete}/${mod.tasksTotal}`
+    const unitTests = `${Number(mod.testPercent || 0).toFixed(2)}%`
+    const updateDate = formatReleaseDateCell(mod.lastUpdate || sprint.releaseDate)
     return `
-      <div class="rr-rn-overview-group">
-        <div class="rr-rn-overview-group-label">${escapeHtml(group.label)}</div>
-        ${rows}
+      <div class="rr-rn-overview-row">
+        <span class="rr-rn-overview-row-title"><span class="rr-kb-module-label">${escapeHtml(mod.id)} - ${escapeHtml(mod.title)}</span></span>
+        <span class="rr-rn-overview-row-laws">${escapeHtml(acceptanceLaws)}</span>
+        <span class="rr-rn-overview-row-test" style="color:${pctColor(mod.testPercent)}">${escapeHtml(unitTests)}</span>
+        <span class="rr-rn-overview-row-date">${escapeHtml(updateDate)}</span>
+        <span class="rr-rn-overview-row-status"><span class="rr-rn-status-pill rr-rn-status-pill--released">Released</span></span>
       </div>
     `
   }).join("")
 
   return `
-    <div class="rr-rn-overview">
-      <div class="rr-rn-stats-grid">${statCards}</div>
-      <div class="rr-rn-overview-list">${moduleRows}</div>
+    <div class="rr-rn-overview-table">
+      <div class="rr-rn-overview-head">
+        <span class="rr-rn-overview-th rr-rn-overview-th--req">Requirements</span>
+        <span class="rr-rn-overview-th">Acceptance Laws</span>
+        <span class="rr-rn-overview-th">Unit tests</span>
+        <span class="rr-rn-overview-th">Date</span>
+        <span class="rr-rn-overview-th">Status</span>
+      </div>
+      <div class="rr-rn-overview-body">${rows}</div>
     </div>
   `
 }
@@ -396,6 +403,102 @@ function renderIssuesLogTab(issues, heading) {
   `
 }
 
+const IMPLEMENTED_TASKS = {
+  "sprint-12": {
+    "AUT-M001": [
+      { id: "T-101", title: "Build login form UI and validation states", owner: "u1", date: "07/02/26", status: "done" },
+      { id: "T-102", title: "Add password masking and remember-me persistence", owner: "u3", date: "08/02/26", status: "done" },
+      { id: "T-103", title: "Wire login API with inline error handling", owner: "u1", date: "09/02/26", status: "done" },
+    ],
+    "AUT-M002": [
+      { id: "T-111", title: "Integrate OAuth callback flow for Google", owner: "u2", date: "10/02/26", status: "done" },
+      { id: "T-112", title: "Implement token refresh and revocation handlers", owner: "u6", date: "11/02/26", status: "done" },
+      { id: "T-113", title: "Add retry and failure paths for provider timeouts", owner: "u4", date: "12/02/26", status: "done" },
+    ],
+    "SET-001": [
+      { id: "T-121", title: "Create profile detail editing sections", owner: "u5", date: "08/02/26", status: "done" },
+      { id: "T-122", title: "Attach avatar upload with validation limits", owner: "u8", date: "09/02/26", status: "done" },
+    ],
+    "LOG-001": [
+      { id: "T-131", title: "Harden login API response mapping", owner: "u4", date: "11/02/26", status: "done" },
+      { id: "T-132", title: "Implement audit events for login attempts", owner: "u2", date: "12/02/26", status: "done" },
+    ],
+    "LOG-002": [
+      { id: "T-141", title: "Implement session lifecycle state tracking", owner: "u6", date: "12/02/26", status: "done" },
+      { id: "T-142", title: "Add fallback handling for expired provider tokens", owner: "u1", date: "13/02/26", status: "done" },
+    ],
+    "LOG-003": [
+      { id: "T-151", title: "Build password recovery request and confirmation flow", owner: "u3", date: "12/02/26", status: "done" },
+      { id: "T-152", title: "Add reset-token verification guards", owner: "u3", date: "13/02/26", status: "done" },
+    ],
+    "LOG-004": [
+      { id: "T-161", title: "Implement session token renewal worker", owner: "u7", date: "13/02/26", status: "done" },
+      { id: "T-162", title: "Add explicit logout token revocation path", owner: "u2", date: "14/02/26", status: "done" },
+    ],
+  },
+  "sprint-11": {
+    "ONB-001": [
+      { id: "T-201", title: "Build multi-step onboarding wizard shell", owner: "u1", date: "24/01/26", status: "done" },
+      { id: "T-202", title: "Connect onboarding step validations", owner: "u4", date: "25/01/26", status: "done" },
+    ],
+    "ONB-002": [
+      { id: "T-211", title: "Implement KYC upload dropzone and progress", owner: "u7", date: "26/01/26", status: "done" },
+      { id: "T-212", title: "Add file-type and size server validations", owner: "u7", date: "27/01/26", status: "done" },
+    ],
+    "DSH-001": [
+      { id: "T-221", title: "Build dashboard summary cards and filters", owner: "u5", date: "28/01/26", status: "done" },
+      { id: "T-222", title: "Implement KPI aggregation query", owner: "u2", date: "29/01/26", status: "done" },
+    ],
+  },
+}
+
+function renderImplementedTasksTab(sprint) {
+  const sprintTasks = IMPLEMENTED_TASKS[sprint.id] || {}
+  const moduleGroups = []
+
+  for (const group of sprint.groups) {
+    for (const module of group.modules) {
+      const moduleTasks = sprintTasks[module.id] || []
+      if (!moduleTasks.length) continue
+
+      const taskRows = moduleTasks.map((task) => {
+        const statusCfg = STATUS_CONFIG[task.status] || STATUS_CONFIG.done
+        return `
+          <div class="rr-rn-tasks-row rr-rn-tasks-row--grouped">
+            <span class="rr-rn-tasks-cell rr-rn-tasks-cell--task">${escapeHtml(task.id)} - ${escapeHtml(task.title)}</span>
+            <span class="rr-rn-tasks-cell rr-rn-tasks-cell--owner">${renderAvatar(task.owner)}</span>
+            <span class="rr-rn-tasks-cell rr-rn-tasks-cell--date">${escapeHtml(formatReleaseDateCell(task.date))}</span>
+            <span class="rr-rn-tasks-cell rr-rn-tasks-cell--status" style="background:${statusCfg.bg};color:${statusCfg.text}">${escapeHtml(statusCfg.label)}</span>
+          </div>
+        `
+      }).join("")
+
+      moduleGroups.push(`
+        <section class="rr-rn-tasks-group">
+          <div class="rr-rn-tasks-group-title"><span class="rr-kb-module-label">${escapeHtml(module.id)} - ${escapeHtml(module.title)}</span></div>
+          <div class="rr-rn-tasks-table">
+            <div class="rr-rn-tasks-thead rr-rn-tasks-thead--grouped">
+              <span class="rr-rn-tasks-th rr-rn-tasks-th--task">Task</span>
+              <span class="rr-rn-tasks-th rr-rn-tasks-th--owner">Owner</span>
+              <span class="rr-rn-tasks-th rr-rn-tasks-th--date">Date</span>
+              <span class="rr-rn-tasks-th rr-rn-tasks-th--status">Status</span>
+            </div>
+            <div class="rr-rn-tasks-tbody">${taskRows}</div>
+          </div>
+        </section>
+      `)
+    }
+  }
+
+  if (!moduleGroups.length) {
+    return `<p class="rr-rn-empty">${ICON.checkCircle} No implemented tasks recorded for this sprint.</p>`
+  }
+
+  return `
+    <div class="rr-rn-tasks-groups">${moduleGroups.join("")}</div>
+  `
+}
+
 /* ── Finalized design tab ───────────────────────────────────── */
 function renderFinalizedDesignTab(sprintId) {
   const items = FINALIZED_ITEMS[sprintId] || []
@@ -414,8 +517,7 @@ function renderFinalizedDesignTab(sprintId) {
     return `
       <div class="rr-rn-design-row">
         <span class="rr-rn-design-cell rr-rn-design-cell--req">
-          <span class="rr-rn-design-id">${escapeHtml(item.id)}</span>
-          <span class="rr-rn-design-title">${escapeHtml(item.title)}</span>
+          <span class="rr-rn-design-title"><span class="rr-kb-module-label">${escapeHtml(item.id)} - ${escapeHtml(item.title)}</span></span>
         </span>
         <span class="rr-rn-design-cell rr-rn-design-cell--priority">${renderPriorityBadge(item.priority)}</span>
         <span class="rr-rn-design-cell rr-rn-design-cell--date">${escapeHtml(item.date)}</span>
@@ -487,15 +589,17 @@ function renderTestCoverageTab() {
 
 /* ── Tab content dispatcher ─────────────────────────────────── */
 function renderTabContent(sprint) {
-  const issues = ISSUES[sprint.id] || { stakeholders: [], uat: [], prod: [] }
+  const issues = ISSUES[sprint.id] || { prod: [] }
+  const fixedProdIssues = (issues.prod || []).filter(issue =>
+    issue.status === "resolved" || issue.status === "fixed" || issue.status === "closed"
+  )
   switch (state.activeTab) {
-    case "overview":         return renderOverviewTab(sprint)
-    case "stakeholders-log": return renderIssuesLogTab(issues.stakeholders, "Stakeholders")
-    case "uat-log":          return renderIssuesLogTab(issues.uat, "UAT")
-    case "prod-log":         return renderIssuesLogTab(issues.prod, "PROD")
-    case "finalized-design": return renderFinalizedDesignTab(sprint.id)
-    case "test-coverage":    return renderTestCoverageTab()
-    default:                 return ""
+    case "overview":           return renderOverviewTab(sprint)
+    case "bug-fixing":         return renderIssuesLogTab(fixedProdIssues, "production bug fixing")
+    case "implemented-tasks":  return renderImplementedTasksTab(sprint)
+    case "finalized-design":   return renderFinalizedDesignTab(sprint.id)
+    case "test-coverage":      return renderTestCoverageTab()
+    default:                   return ""
   }
 }
 
@@ -566,7 +670,7 @@ export function mountReleaseNotesFlow() {
   }
 
   // Reset state for fresh mount
-  state.activeTab          = "finalized-design"
+  state.activeTab          = "overview"
   state.sprintDropdownOpen = false
   state.sortDir            = "desc"
   state.approvals          = {}
@@ -609,7 +713,7 @@ function handleClick(e) {
   if (action === "select-sprint") {
     state.selectedSprintId   = btn.dataset.sprintId
     state.sprintDropdownOpen = false
-    state.activeTab          = "finalized-design"
+    state.activeTab          = "overview"
     // Approvals are per-sprint-session — reset them
     state.approvals          = {}
     render()

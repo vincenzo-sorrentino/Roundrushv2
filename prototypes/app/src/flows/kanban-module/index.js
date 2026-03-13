@@ -1,6 +1,7 @@
 /* ──────────────────────────────────────────────────────────────
-   Kanban / Sprint Planning Module — Prototype flow
-   Matches Figma "Desktop - Modules" (304:49110)
+   Current Sprint — Sprints flow
+   Route: /sprints/current
+   Shows the active sprint table with module detail overlay.
    ────────────────────────────────────────────────────────────── */
 
 /* ── SVG icons (Phosphor-style) ───────────────────────────── */
@@ -614,7 +615,7 @@ function renderGroupRow(group, isCollapsed) {
 function renderModuleRow(mod) {
   return `
     <div class="rr-kb-row rr-kb-row--module" data-action="open-detail" data-module-id="${escapeHtml(mod.id)}" role="button" tabindex="0">
-      <span class="rr-kb-cell rr-kb-cell--req rr-kb-cell--indent">
+      <span class="rr-kb-cell rr-kb-cell--req">
         <span class="rr-kb-module-label">${escapeHtml(mod.id)} - ${escapeHtml(mod.title)}</span>
         ${mod.blocker ? renderBlockerIcon() : ""}
       </span>
@@ -731,12 +732,8 @@ function renderSprintTable(sprint, state) {
     return `<p class="rr-kb-empty">${msg}</p>`
   }
 
-  const rows = filteredGroups.map(group => {
-    const isCollapsed = state.collapsedGroups.has(group.id)
-    const groupRow = renderGroupRow(group, isCollapsed)
-    const moduleRows = isCollapsed ? "" : group.modules.map(renderModuleRow).join("")
-    return groupRow + moduleRows
-  }).join("")
+  // Flat list — epic group headers removed, modules shown directly
+  const rows = filteredGroups.flatMap(group => group.modules.map(renderModuleRow)).join("")
 
   return `
     ${renderTableHeader(state)}
@@ -849,6 +846,7 @@ const DETAIL_TABS = [
   { id: "acceptance-laws",   label: "Acceptance Laws" },
   { id: "dependencies",      label: "Dependencies" },
   { id: "tasks",             label: "Tasks" },
+  { id: "unit-tests",        label: "Unit tests" },
   { id: "test-cases",        label: "Test Cases" },
   { id: "uat-issues",        label: "UAT Issues" },
 ]
@@ -1685,7 +1683,118 @@ function getProgressInfo(activeTab, mod, moduleData) {
       label: `${pass}/${total}`,
     }
   }
+  if (activeTab === "unit-tests") {
+    return { percent: mod.testPercent, label: `${mod.testPercent}%` }
+  }
+  if (activeTab === "acceptance-laws") {
+    const statuses = getAcceptanceLawStatuses(mod.id, mod.status)
+    const pass = statuses.filter(s => s === "pass").length
+    return {
+      percent: Math.round((pass / statuses.length) * 100),
+      label: `${pass}/${statuses.length}`,
+    }
+  }
+  if (activeTab === "tasks") {
+    return { percent: computeDetailProgress(moduleData), label: null }
+  }
   return { percent: computeDetailProgress(moduleData), label: null }
+}
+
+/* ── Unit tests tab ─────────────────────────────────────────── */
+const UNIT_TEST_SUITES = [
+  { prefix: "LOG", suites: ["auth.service.spec", "session.service.spec", "token.provider.spec"] },
+  { prefix: "AUT", suites: ["auth.service.spec", "oauth.handler.spec", "jwt.middleware.spec"] },
+  { prefix: "TEM", suites: ["team.service.spec", "roles.guard.spec", "invite.flow.spec"] },
+  { prefix: "REQ", suites: ["requirements.crud.spec", "acceptance-law.validator.spec", "version.log.spec"] },
+  { prefix: "DEP", suites: ["dep-graph.renderer.spec", "cycle.detector.spec", "boundary.analyser.spec"] },
+  { prefix: "SET", suites: ["profile.service.spec", "media.upload.spec"] },
+  { prefix: "KAN", suites: ["sprint.service.spec", "board.filter.spec", "status.transition.spec"] },
+]
+
+const UT_RESULT_CONFIG = {
+  pass:    { label: "Pass",    bg: "#ddf7eb", text: "#0e9255" },
+  fail:    { label: "Fail",    bg: "#fcdad7", text: "#c0362d" },
+  skipped: { label: "Skipped", bg: "#f0f1f3", text: "#667085" },
+}
+
+function getUnitTestSuites(moduleId, moduleStatus) {
+  const prefix = moduleId.split("-")[0].toUpperCase()
+  const suiteEntry = UNIT_TEST_SUITES.find(s => s.prefix === prefix)
+  const suiteNames = suiteEntry ? suiteEntry.suites : ["module.service.spec", "module.handler.spec"]
+  const seed = hashModuleId(moduleId)
+
+  const passBias = {
+    "done":        0.96, "merged-qa": 0.88, "validating": 0.78, "review": 0.72,
+    "in-progress": 0.55, "to-do":     0.20, "blocked":    0.42,
+  }[moduleStatus] ?? 0.55
+
+  return suiteNames.map((name, si) => {
+    const testsCount = 4 + ((seed ^ (si * 0x3f)) >>> 0) % 7
+    const tests = Array.from({ length: testsCount }, (_, ti) => {
+      const rng = ((seed ^ (si * 0x9e37 + ti * 0x1b5e)) * (ti + 0xd1b5)) >>> 0
+      const r = rng / 0xFFFFFFFF
+      const status = r < passBias ? "pass" : r < passBias + 0.06 ? "skipped" : "fail"
+      const descs = [
+        "should return correct result for valid input",
+        "should throw when required param is missing",
+        "should reject unauthorised access",
+        "should handle empty payload gracefully",
+        "should call dependency once per invocation",
+        "should rollback transaction on error",
+        "should emit event after successful completion",
+        "should apply rate limit policy correctly",
+        "should sanitise user-supplied string input",
+        "should return cached result on repeat call",
+      ]
+      return {
+        id: `${moduleId}-UT-${si}-${ti}`,
+        description: descs[((seed + si * 7 + ti * 3) ^ (seed >>> 2)) % descs.length],
+        status,
+        duration: `${((rng % 120) + 5)}ms`,
+      }
+    })
+    const passCount  = tests.filter(t => t.status === "pass").length
+    const failCount  = tests.filter(t => t.status === "fail").length
+    const skipCount  = tests.filter(t => t.status === "skipped").length
+    return { name, tests, passCount, failCount, skipCount }
+  })
+}
+
+function renderUnitTestsTab(mod) {
+  const suites = getUnitTestSuites(mod.id, mod.status)
+  const allTests = suites.flatMap((suite) =>
+    suite.tests.map((test) => ({ suiteName: suite.name, test }))
+  )
+
+  const header = `
+    <div class="rr-tc-thead">
+      <span class="rr-tc-th rr-tc-th--no">No.</span>
+      <span class="rr-tc-th rr-tc-th--desc">Suite</span>
+      <span class="rr-tc-th rr-tc-th--pre">Test case</span>
+      <span class="rr-tc-th rr-tc-th--steps">Duration</span>
+      <span class="rr-tc-th rr-tc-th--result">Result</span>
+    </div>
+  `
+
+  const rows = allTests.map(({ suiteName, test }, index) => {
+    const cfg = UT_RESULT_CONFIG[test.status] ?? UT_RESULT_CONFIG.pass
+    return `
+      <div class="rr-tc-row">
+        <span class="rr-tc-cell rr-tc-cell--no">${index + 1}</span>
+        <span class="rr-tc-cell rr-tc-cell--desc">${escapeHtml(suiteName)}</span>
+        <span class="rr-tc-cell rr-tc-cell--pre">${escapeHtml(test.description)}</span>
+        <span class="rr-tc-cell rr-tc-cell--steps">${escapeHtml(test.duration)}</span>
+        <span class="rr-tc-cell rr-tc-cell--result"><span class="rr-tc-badge" style="background:${cfg.bg};color:${cfg.text}">${escapeHtml(cfg.label)}</span></span>
+      </div>
+    `
+  }).join("")
+
+  return `
+    <div class="rr-tc-table">
+      <div class="rr-tc-thead-wrap">${header}</div>
+      <div class="rr-tc-tbody">${rows}</div>
+    </div>
+  `
 }
 
 /* ── Render test cases tab ──────────────────────────────────── */
@@ -1999,6 +2108,7 @@ function renderDetailTabContent(tabId, mod, moduleData, detailState) {
   if (tabId === "acceptance-laws") return renderAcceptanceLawsTab(mod)
   if (tabId === "tasks") return renderDetailTasksTab(moduleData, detailState)
   if (tabId === "dependencies") return renderDependenciesTab(mod)
+  if (tabId === "unit-tests") return renderUnitTestsTab(mod)
   if (tabId === "test-cases") return renderTestCasesTab(mod)
   if (tabId === "uat-issues") return renderUATIssuesTab(mod, detailState)
 
@@ -2181,11 +2291,12 @@ export function mountKanbanModuleFlow() {
     } else {
       iconBg = "#fef4e6"
       iconHtml = ICON.warning
-      title = "Requirements are not completed"
+      title = "Requirements not fully completed"
       const lines = state.modal.items.map(m => escapeHtml(`${m.id} \u2013 ${m.title}`)).join("<br>")
-      bodyHtml = `Items missing tests cases passing:<br>${lines}`
+      bodyHtml = `The following requirements are not completed:<br><br>${lines}<br><br>You can still close the sprint — incomplete items will be carried over to the next sprint.`
       buttonsHtml = `
         <button type="button" class="rr-modal-btn rr-modal-btn--neutral" data-action="close-sprint-cancel">Cancel</button>
+        <button type="button" class="rr-modal-btn rr-modal-btn--primary" data-action="close-sprint-confirm">Close anyway</button>
       `
     }
 
