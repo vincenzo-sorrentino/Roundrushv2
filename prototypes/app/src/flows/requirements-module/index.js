@@ -2127,6 +2127,23 @@ export function mountRequirementsModuleFlow() {
     if (!modules.length) return
 
     const files = []
+    // Include the epic-level file from the repository, if present
+    try {
+      const epicInfo = EPIC_INFO[epicId] || {}
+      const epicSlug = slugify(epicInfo.title_short || epicId)
+      const epicFileName = `${epicId}-${epicSlug}.md`
+      const epicPath1 = `/requirements/epics/${epicId}-${epicSlug}/${epicFileName}`
+      const epicPath2 = `/requirements/epics/${epicId.toLowerCase()}/${epicFileName}`
+      let epicRes = await fetch(epicPath1)
+      if (!epicRes.ok) epicRes = await fetch(epicPath2)
+      if (epicRes.ok) {
+        const epicText = await epicRes.text()
+        const encoder = new TextEncoder()
+        files.push({ name: epicFileName, data: encoder.encode(epicText) })
+      }
+    } catch (err) {
+      console.warn('Failed fetching epic file for', epicId, err)
+    }
     for (const module of modules) {
       const epicSlug = slugify((EPIC_INFO[epicId] && EPIC_INFO[epicId].title_short) || epicId)
       const moduleSlug = slugify(module.title || module.id)
